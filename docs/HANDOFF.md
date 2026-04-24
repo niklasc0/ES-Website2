@@ -1,8 +1,45 @@
 # Handoff — Energiesozietät WordPress-Paket
 
-**Branch:** `claude/setup-mariadb-database-GCTYP` (bisheriger Stand aus `claude/wordpress-elementor-package-9GzYs` gemerged)
+**Branch:** `claude/setup-mariadb-database-GCTYP` · **Snapshot v1:** `snapshot/v1` (commit `06322bf`)
 **Repo:** `/home/user/ES-Website2`
-**Stand:** ✅ Paket installationsreif — alle 14 Pages rendern lokal, Zips + WXR liegen in `dist/`.
+**Stand:** ✅ v2 (Mockup-Redesign) — 14 Pages rendern lokal, Zips + WXR in `dist/`.
+
+## TL;DR nach Session 3 — Mockup-Redesign (Apr 24 2026)
+
+Auf Basis von User-Feedback + Design-Mockup **ES.Website.3** (GitHub-Release `design-guide`) wurde das Theme optisch komplett überarbeitet. Grundriss (CPTs, Importer, Elementor-Pipeline) bleibt — nur das Design/Layout ist anders.
+
+- ✅ `style.css` neu nach `handoff/tokens.css` des Mockups: **ink #0E1A2B, accent #95D708, paper-warm, sans-only** (Inter + JetBrains Mono). Keine Schatten, nur Hairline-Borders. Stripes über `--paper-warm`/`--paper-cool`. Smooth Elementor-Accordion-Transitions. Klassen: Hero (`H1`), Bereichs-Block (`C3`), Team-Card (größere 4:5-Portraits), Event-Row-Liste, Pub-Row-Liste, Team-Single, Article-Body, Placeholder-Tile `.es-ph-cat`.
+- ✅ `header.php` neu: 3-Teiler **Brand | Nav | (Offene Stellen + Kontakt Buttons)** rechts. Auto-Dark-Variante auf Hauptseiten. Mobile-Nav inkl. Actions. Kontakt und Karriere leben nur in den Buttons, nicht im Menü.
+- ✅ `footer.php` neu: G3-CTA-Band (Sprechen Sie mit uns) + 4-Spalten-Grid (Brand/Büro/Kontakt/Rechtliches) + Copyright-Leiste.
+- ✅ `elementor-builder.php` erweitert: `html()`, `section_html()`, `hero_editorial()` (mit Claims-Grid), `split_text()`, `bereich()`, `cta_dark()`, `pullquote()`, `gf_quote()`, `section_head()`.
+- ✅ `page-blueprints.php` komplett neu nach Mockup `templates.md`:
+  - **Home:** editorial Hero mit Claims-Grid · "Unser Anspruch" auf warm · Leistungen 3 Nummern-Cards · GF-Zitat mit Portrait · News-Teaser (mit Beitragsbildern) · dunkles CTA. **Kein Team-Teaser mehr.**
+  - **Philosophie:** "Transformation ist eine Mammutaufgabe" · 3 Pillar-Cards Fokussiert/Ergebnisorientiert/Kreativ · Pullquote · 4-Perspektiven-Raster · Mandantschaft-Liste · Politikberatung dunkel · CTA.
+  - **Leistungen:** Hero · "Experten für Ihre Beratung" · **3× `bereich()`** mit eigener Einleitung/Nummer/Topic-Grid (Recht→Steuer→Unternehmensberatung) · CTA. Keine globale Einzelleistungen-Liste mehr.
+  - **Rechts-/Steuer-/Unternehmensberatung:** Detail-Hero mit Breadcrumb · Ansprechpartner-Balken mit echten Portraits · sticky Portrait-Split + eigene Topic-Liste · CTA.
+  - **Team:** Hero + Filter-Leiste + 4-col Grid · Netzwerk-Anker (kein harter Cut) · CTA.
+  - **Publikationen:** Hero + Row-Liste (keine Detailseiten, externer Link).
+  - **Karriere:** Split-Hero + offene Positionen + 3 Benefit-Cards + CTA.
+  - **News:** Hero + Featured+Grid (via `[es_news_featured]`) + CTA.
+  - **Veranstaltungen:** Hero + Row-Liste (2-col wide) + CTA.
+  - **Kontakt:** Hero + 2-Spalten (Formular via mailto + 3 Standorte mit Hauptsitz-Badge).
+- ✅ Shortcode-Overhaul:
+  - `[es_team]` mit Feld-Eyebrow, größere Portraits (4:5 aspect ratio)
+  - `[es_news]` mit Kategorie-Badge und `.es-ph-cat`-Fallback, wenn kein Beitragsbild
+  - `[es_veranstaltungen layout="row"]` als Row-Liste (Tag groß · Titel · Art · Ort · Pfeil)
+  - `[es_publikationen]` als Row-Liste ohne Detailseiten (externer Link)
+  - `[es_einzelleistungen]` als Topic-Grid im Bereichs-Block-Look
+  - Neu: `[es_team_photo slug=... size=120]`, `[es_news_featured limit=9]`
+- ✅ Single-Templates (Mockup S1/S3/S4):
+  - **Team:** sticky großes Portrait + **dunkle Contact-Card** mit E-Mail/Tel/Standort/LinkedIn + "Termin vereinbaren" + **vCard-Download**, Role-Eyebrow + großer Name + Role, Schwerpunkte/Werdegang/Publikationen-Sections, Back-Link **ohne Pfeil rechts** (`← Zurück zum Team`).
+  - **News:** schmaler 780px-Header + full-width Featured-Image (Fallback `.es-ph-cat`) + Byline mit Avatar und Lesezeit + Pullquote-Styling für blockquotes.
+  - **Karriere:** Meta-Row (Bereich/Standort/Anstellung/Eintritt) + strukturierte Sections (Rolle/Aufgaben/Profil/Benefits) + dunkler Bewerbungs-Callout mit vorausgefüllter mailto.
+  - **Veranstaltung:** Datecard (Tag groß) + Anmeldung-Möglich-Badge + optionaler dunkler Anmeldung-CTA.
+  - **Publikation:** redirect 302 auf externe Quelle (keine Detailseite mehr).
+  - **Einzelleistung:** schmaler Artikel-Layout mit Breadcrumb zur Beratungsfeld-Seite.
+- ✅ **vCard-Handler** in `functions.php` (`?es_vcard=<team_id>` → `.vcf`-Download).
+- ✅ Theme-Screenshot regeneriert passend zum neuen Design.
+- ✅ Lokal verifiziert: alle 14 Pages HTTP 200 mit Mockup-Markup (`es-bereich`, `es-hero-claims`, `esc-team-card`, `es-article__byline`, ...).
 
 ## TL;DR nach Session 2 (Apr 24 2026)
 
