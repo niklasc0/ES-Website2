@@ -124,7 +124,14 @@ class ESC_MetaBoxes {
 
 	public static function box_karriere( $post ) {
 		self::nonce();
-		self::field( 'Bereich',            'es_department',      get_post_meta( $post->ID, 'es_department', true ) );
+		self::field( 'Rolle / Titel-Kürzel', 'es_department',      get_post_meta( $post->ID, 'es_department', true ) );
+		self::field(
+			'Beratungsbereich',
+			'es_field',
+			get_post_meta( $post->ID, 'es_field', true ),
+			'select',
+			array( 'options' => self::FIELDS )
+		);
 		self::field( 'Standort',           'es_location',        get_post_meta( $post->ID, 'es_location', true ) );
 		self::field( 'Anstellungsart',     'es_employment_type', get_post_meta( $post->ID, 'es_employment_type', true ) );
 

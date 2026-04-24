@@ -452,214 +452,206 @@ class ESC_Page_Blueprints {
 		return $s;
 	}
 
+	/* ========================== Team ========================== */
 	protected static function team_page() {
 		$b = 'ESC_Elementor_Builder';
-		$sections = array();
-
-		$sections[] = $b::hero_editorial( array(
+		$s = array();
+		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Team',
-			'headline_html' => 'Beratung mit<br/>Gesicht.',
-			'lead' => 'In der Energiesozietät hat jahrzehntelange Erfahrung einen agilen und pragmatischen Rahmen bekommen.',
+			'headline_html' => 'Beratung mit<br>Gesicht.',
+			'lead' => '<p>In der Energiesozietät hat jahrzehntelange Erfahrung einen agilen und pragmatischen Rahmen bekommen.</p>',
 			'padding' => 'short',
 		) );
-
-		// Filter + Grid (beides vom Shortcode gerendert, nutzt es_field Meta + ?feld=...)
-		$grid_html = '<div class="es-wrap" style="padding:40px 0 80px;">[es_team columns="4" filter="1"]</div>';
-		$sections[] = $b::section_html( $grid_html );
-
-		// Bottom anchor — keinen harten Cut, sondern weicher Übergang zur CTA
-		$anchor_html  = '<div class="es-wrap" style="padding:80px 0;border-top:1px solid #E4E7EC;">';
-		$anchor_html .= '<div style="display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:center;">';
-		$anchor_html .= '<div><div class="es-eyebrow">Netzwerk</div><h3 style="font-size:32px;font-weight:400;letter-spacing:-0.02em;margin:16px 0 0;">Kooperationen mit namhaften Beratungshäusern.</h3></div>';
-		$anchor_html .= '<div><p style="font-size:17px;line-height:1.65;color:#5A6577;margin:0;">Sollten wir selbst einmal nicht die geeigneten Spezialisten im Team haben, kooperieren wir mit namhaften Beratungsgesellschaften, mit denen wir seit vielen Jahren vertrauensvoll zusammenarbeiten. Sprechen Sie uns gerne direkt an.</p></div>';
-		$anchor_html .= '</div></div>';
-		$sections[] = $b::section_html( $anchor_html, 'warm' );
-
-		$sections[] = $b::cta_dark();
-
-		return $sections;
+		$s[] = $b::section_native( array(
+			'padding' => array( '40', '0', '80', '0' ),
+			'cols' => array( array(
+				$b::wid_shortcode( '[es_team columns="4" filter="1"]' ),
+			) ),
+		) );
+		$s[] = $b::split_native( array(
+			'eyebrow' => 'Netzwerk',
+			'title_html' => 'Kooperationen mit namhaften Beratungshäusern.',
+			'paragraphs' => array(
+				'<p>Sollten wir selbst einmal nicht die geeigneten Spezialisten im Team haben, kooperieren wir mit namhaften Beratungsgesellschaften, mit denen wir seit vielen Jahren vertrauensvoll zusammenarbeiten. Sprechen Sie uns gerne direkt an.</p>',
+			),
+			'variant' => 'warm', 'padding' => 'short',
+		) );
+		$s[] = $b::cta_dark_native();
+		return $s;
 	}
 
+	/* ========================== Publikationen ========================== */
 	protected static function publikationen_page() {
 		$b = 'ESC_Elementor_Builder';
-		$sections = array();
-
-		$sections[] = $b::hero_editorial( array(
+		$s = array();
+		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Publikationen',
-			'headline_html' => 'Bücher,<br/>Kommentare<br/><span style="color:rgba(255,255,255,0.55);">&amp; Fachaufsätze.</span>',
-			'lead' => 'Unser Team veröffentlicht regelmäßig in Fachzeitschriften, Kommentaren und Handbüchern zum Energiewirtschafts-, Vergabe-, Kommunal- und Steuerrecht. Eine Auswahl aus den letzten Jahren.',
+			'headline_html' => 'Bücher,<br>Kommentare<br><span style="color:rgba(255,255,255,0.55);">&amp; Fachaufsätze.</span>',
+			'lead' => '<p>Unser Team veröffentlicht regelmäßig in Fachzeitschriften, Kommentaren und Handbüchern zum Energiewirtschafts-, Vergabe-, Kommunal- und Steuerrecht. Eine Auswahl aus den letzten Jahren.</p>',
 			'padding' => 'short',
 		) );
-
-		$list_html = '<div class="es-wrap" style="padding:80px 0 140px;">[es_publikationen]</div>';
-		$sections[] = $b::section_html( $list_html );
-
-		$sections[] = $b::cta_dark();
-
-		return $sections;
+		$s[] = $b::section_native( array(
+			'padding' => array( '80', '0', '140', '0' ),
+			'cols' => array( array( $b::wid_shortcode( '[es_publikationen]' ) ) ),
+		) );
+		$s[] = $b::cta_dark_native();
+		return $s;
 	}
 
+	/* ========================== Karriere ========================== */
 	protected static function karriere_page() {
 		$b = 'ESC_Elementor_Builder';
-		$sections = array();
+		$s = array();
 
-		// Hero — Split-Variante mit Lead rechts
-		$hero_html  = '<div class="es-wrap" style="padding:100px 0 140px;">';
-		$hero_html .= '<div style="display:grid;grid-template-columns:1.3fr 1fr;gap:64px;align-items:end;">';
-		$hero_html .= '<div>';
-		$hero_html .= '<div class="es-eyebrow es-eyebrow--paper">Karriere</div>';
-		$hero_html .= '<h1 style="font-size:clamp(44px,6vw,80px);line-height:1;font-weight:300;letter-spacing:-0.04em;margin:0;max-width:900px;">Starte gemeinsam<br/>mit uns <span class="text-bg-green">durch.</span></h1>';
-		$hero_html .= '</div>';
-		$hero_html .= '<p style="font-size:19px;line-height:1.55;color:rgba(255,255,255,0.78);font-weight:300;margin:0;">Entfalte Dich selbst in einem jungen, schnell wachsenden Beratungsunternehmen. Wir suchen Persönlichkeiten, die Verantwortung übernehmen wollen.</p>';
-		$hero_html .= '</div></div>';
-		$sections[] = $b::section_html( $hero_html, 'ink' );
+		// Split-Hero: H1 links, Lead rechts (beide Text-Editor + Heading Widgets)
+		$s[] = $b::section_native( array(
+			'variant' => 'ink', 'css_classes' => 'es-hero',
+			'padding' => array( '100', '0', '140', '0' ),
+			'gap' => 'wider',
+			'column_settings' => array( array( '_column_size' => 60 ), array( '_column_size' => 40 ) ),
+			'cols' => array(
+				array(
+					$b::wid_heading( 'Karriere', 'p', 'es-eyebrow es-eyebrow--paper' ),
+					$b::wid_heading( 'Starte gemeinsam<br>mit uns <span class="text-bg-green">durch.</span>', 'h1', 'es-hero__title' ),
+				),
+				array(
+					$b::wid_text( '<p>Entfalte Dich selbst in einem jungen, schnell wachsenden Beratungsunternehmen. Wir suchen Persönlichkeiten, die Verantwortung übernehmen wollen.</p>', 'es-hero__lead' ),
+				),
+			),
+		) );
 
-		// Offene Positionen — via angepasster es_karriere shortcode (kept as-is, grid 3)
-		$pos_html  = '<div class="es-wrap" style="padding:80px 0 100px;">';
-		$pos_html .= '<div style="display:flex;align-items:end;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px;">';
-		$pos_html .= '<h2 style="font-size:clamp(28px,3vw,36px);font-weight:400;letter-spacing:-0.025em;margin:0;">Offene Positionen</h2>';
-		$pos_html .= '<a class="es-link" href="mailto:info@energiesozietaet.de?subject=Initiativbewerbung">Initiativbewerbung →</a>';
-		$pos_html .= '</div>';
-		$pos_html .= '[es_karriere columns="3"]';
-		$pos_html .= '</div>';
-		$sections[] = $b::section_html( $pos_html );
+		$s[] = $b::section_native( array(
+			'padding' => array( '80', '0', '100', '0' ),
+			'cols' => array( array(
+				$b::wid_heading( 'Offene Positionen', 'h2', 'es-section__title' ),
+				$b::wid_shortcode( '[es_karriere columns="3"]' ),
+				$b::wid_html( '<p style="margin-top:32px;"><a class="es-link" href="mailto:info@energiesozietaet.de?subject=Initiativbewerbung">Initiativbewerbung →</a></p>' ),
+			) ),
+		) );
 
-		// Benefits
-		$ben_html  = '<div class="es-wrap" style="padding:120px 0;">';
-		$ben_html .= '<div class="es-eyebrow">Warum wir</div>';
-		$ben_html .= '<h2 style="font-size:clamp(32px,4.2vw,52px);line-height:1.05;font-weight:400;letter-spacing:-0.03em;margin:0 0 56px;max-width:720px;">Was Sie bei uns erwartet.</h2>';
-		$ben_html .= '<div class="esc-grid esc-grid--cols-3" style="gap:24px;">';
-		$benefits = array(
-			array( 'Echte Verantwortung', 'Sie arbeiten von Tag eins direkt am Mandat, mit Mandantenkontakt und eigener Themenverantwortung.' ),
-			array( 'Interdisziplinarität', 'Kein Silodenken. Wir bringen Recht, Steuern und Unternehmensberatung zusammen — und Sie mittendrin.' ),
-			array( 'Persönliche Entwicklung', 'Fortbildung, Promotion, Fachanwaltschaften — wir fördern gezielt und individuell.' ),
-		);
-		foreach ( $benefits as $i => $bn ) {
-			$ben_html .= '<div style="padding:36px;background:#FFFFFF;border:1px solid #E4E7EC;">';
-			$ben_html .= '<div style="font-family:var(--es-font-mono);font-size:12px;color:#95D708;letter-spacing:0.1em;margin-bottom:24px;">0' . ( $i + 1 ) . '</div>';
-			$ben_html .= '<h3 style="font-size:22px;font-weight:500;letter-spacing:-0.015em;margin-bottom:14px;">' . esc_html( $bn[0] ) . '</h3>';
-			$ben_html .= '<p style="font-size:15px;color:#5A6577;line-height:1.55;margin:0;">' . esc_html( $bn[1] ) . '</p>';
-			$ben_html .= '</div>';
-		}
-		$ben_html .= '</div></div>';
-		$sections[] = $b::section_html( $ben_html, 'warm' );
+		$s[] = $b::section_native( array(
+			'variant' => 'warm',
+			'padding' => array( '120', '0', '40', '0' ),
+			'cols' => array( array(
+				$b::wid_heading( 'Warum wir', 'p', 'es-eyebrow' ),
+				$b::wid_heading( 'Was Dich bei uns erwartet.', 'h2', 'es-split__title' ),
+			) ),
+		) );
+		$s[] = $b::cards_native( array(
+			array( '01', 'Echte Verantwortung', 'Du arbeitest von Tag eins direkt am Mandat, mit Mandantenkontakt und eigener Themenverantwortung.' ),
+			array( '02', 'Interdisziplinarität', 'Kein Silodenken. Wir bringen Recht, Steuern und Unternehmensberatung zusammen — und Dich mittendrin.' ),
+			array( '03', 'Persönliche Entwicklung', 'Fortbildung, Promotion, Fachanwaltschaften — wir fördern gezielt und individuell.' ),
+		), 'warm' );
 
-		$sections[] = $b::cta_dark( array(
+		$s[] = $b::cta_dark_native( array(
 			'eyebrow' => 'Noch Fragen?',
 			'title_html' => 'Ein persönliches Gespräch sagt mehr als eine Anzeige.',
-			'sub' => 'Schreiben Sie uns kurz — wir melden uns binnen eines Werktags.',
+			'sub' => 'Schreib uns kurz — wir melden uns binnen eines Werktags.',
 		) );
-
-		return $sections;
+		return $s;
 	}
 
+	/* ========================== News ========================== */
 	protected static function news_page() {
 		$b = 'ESC_Elementor_Builder';
-		$sections = array();
-
-		$sections[] = $b::hero_editorial( array(
+		$s = array();
+		$s[] = $b::hero_native( array(
 			'eyebrow' => 'News',
-			'headline_html' => 'Aus der<br/><span class="text-bg-green">Energiebranche.</span>',
+			'headline_html' => 'Aus der<br><span class="text-bg-green">Energiebranche.</span>',
 			'padding' => 'short',
 		) );
-
-		$list_html = '<div class="es-wrap" style="padding:80px 0 140px;">[es_news_featured limit="9"]</div>';
-		$sections[] = $b::section_html( $list_html );
-
-		$sections[] = $b::cta_dark();
-		return $sections;
+		$s[] = $b::section_native( array(
+			'padding' => array( '80', '0', '140', '0' ),
+			'cols' => array( array( $b::wid_shortcode( '[es_news_featured limit="9"]' ) ) ),
+		) );
+		$s[] = $b::cta_dark_native();
+		return $s;
 	}
 
+	/* ========================== Veranstaltungen ========================== */
 	protected static function veranstaltungen_page() {
 		$b = 'ESC_Elementor_Builder';
-		$sections = array();
-
-		$sections[] = $b::hero_editorial( array(
+		$s = array();
+		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Veranstaltungen',
-			'headline_html' => 'Wo wir<br/>sprechen.',
+			'headline_html' => 'Wo wir<br>sprechen.',
 			'padding' => 'short',
 		) );
-
-		$list_html = '<div class="es-wrap" style="padding:80px 0 140px;">[es_veranstaltungen layout="row"]</div>';
-		$sections[] = $b::section_html( $list_html );
-
-		$sections[] = $b::cta_dark();
-		return $sections;
+		$s[] = $b::section_native( array(
+			'padding' => array( '80', '0', '140', '0' ),
+			'cols' => array( array( $b::wid_shortcode( '[es_veranstaltungen layout="row"]' ) ) ),
+		) );
+		$s[] = $b::cta_dark_native();
+		return $s;
 	}
 
+	/* ========================== Kontakt ========================== */
 	protected static function kontakt_page() {
 		$b = 'ESC_Elementor_Builder';
-		$sections = array();
-
-		$sections[] = $b::hero_editorial( array(
+		$s = array();
+		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Kontakt',
-			'headline_html' => 'Sprechen Sie<br/>mit uns.',
+			'headline_html' => 'Sprechen Sie<br>mit uns.',
 			'padding' => 'short',
 		) );
 
-		// Form + Standorte nebeneinander
-		$html  = '<div class="es-wrap" style="padding:80px 0 140px;">';
-		$html .= '<div style="display:grid;grid-template-columns:1.2fr 1fr;gap:96px;align-items:start;">';
-		// Form
-		$html .= '<div>';
-		$html .= '<div class="es-eyebrow">Schreiben Sie uns</div>';
-		$html .= '<h2 style="font-size:clamp(28px,3.2vw,36px);font-weight:400;letter-spacing:-0.025em;margin:0 0 40px;">Wir antworten innerhalb eines Werktags.</h2>';
-		$html .= '<form action="mailto:info@energiesozietaet.de" method="post" enctype="text/plain" style="display:grid;gap:24px;">';
-		$html .= '<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">';
-		$html .= self::field( 'Vorname', 'vorname' );
-		$html .= self::field( 'Nachname', 'nachname' );
-		$html .= '</div>';
-		$html .= self::field( 'E-Mail', 'email', 'email' );
-		$html .= self::field( 'Unternehmen / Organisation', 'org' );
-		$html .= '<div>';
-		$html .= '<div style="font-size:12px;color:#5A6577;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Betrifft</div>';
-		$html .= '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
-		foreach ( array( 'Rechtsberatung', 'Steuerberatung', 'Unternehmensberatung', 'Karriere', 'Presse', 'Sonstiges' ) as $j => $opt ) {
-			$html .= '<label style="padding:10px 16px;font-size:13px;border-radius:2px;border:1px solid #E4E7EC;cursor:pointer;">';
-			$html .= '<input type="radio" name="thema" value="' . esc_attr( $opt ) . '" style="display:none;" ' . ( 0 === $j ? 'checked' : '' ) . '/> ' . esc_html( $opt );
-			$html .= '</label>';
+		// 2 Spalten: Form links (größer), Standorte rechts (schmaler)
+		// Form-Labels als Heading-Widgets + Form selbst als html (da Formular
+		// in nativer WP-Form-Welt schwierig zu kapseln ist — in der finalen
+		// Produktivversion sollte CF7 / WPForms Shortcode hier stehen)
+		$form_html = '<form action="mailto:info@energiesozietaet.de" method="post" enctype="text/plain" class="es-kontakt-form">'
+			. '<div class="es-kontakt-form__row"><label><span>Vorname</span><input type="text" name="vorname" /></label>'
+			. '<label><span>Nachname</span><input type="text" name="nachname" /></label></div>'
+			. '<label><span>E-Mail</span><input type="email" name="email" /></label>'
+			. '<label><span>Unternehmen / Organisation</span><input type="text" name="org" /></label>'
+			. '<div class="es-kontakt-form__radio-group"><span class="es-kontakt-form__group-label">Betrifft</span>'
+			. '<div class="es-kontakt-form__pills">';
+		foreach ( array( 'Rechtsberatung','Steuerberatung','Unternehmensberatung','Karriere','Presse','Sonstiges' ) as $i => $opt ) {
+			$form_html .= '<label><input type="radio" name="thema" value="' . esc_attr( $opt ) . '"' . ( 0 === $i ? ' checked' : '' ) . '/> ' . esc_html( $opt ) . '</label>';
 		}
-		$html .= '</div></div>';
-		$html .= self::field( 'Ihre Nachricht', 'nachricht', 'textarea' );
-		$html .= '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:16px;">';
-		$html .= '<div style="font-size:12px;color:#5A6577;max-width:400px;">Mit dem Absenden stimmen Sie unserer <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> zu.</div>';
-		$html .= '<button class="es-btn es-btn--primary" type="submit">Nachricht senden →</button>';
-		$html .= '</div>';
-		$html .= '</form></div>';
+		$form_html .= '</div></div>';
+		$form_html .= '<label><span>Ihre Nachricht</span><textarea name="nachricht" rows="5"></textarea></label>';
+		$form_html .= '<div class="es-kontakt-form__submit"><span>Mit dem Absenden stimmen Sie unserer <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> zu.</span>'
+			. '<button class="es-btn es-btn--primary" type="submit">Nachricht senden →</button></div>';
+		$form_html .= '</form>';
 
-		// Standorte
-		$html .= '<div>';
-		$html .= '<div class="es-eyebrow">Unsere Standorte</div>';
+		$loc_html = '<div class="es-kontakt-locations">';
 		$offices = array(
 			array( 'Düsseldorf', array( 'Roßstraße 92 / Kennedyhaus', '40476 Düsseldorf' ), '+49 211 159232-0', true ),
-			array( 'Hamburg', array( 'Caffamacherreihe 8', '20355 Hamburg' ), '+49 211 159232-0', false ),
-			array( 'Mannheim', array( 'Jungbuschstraße 6', '68159 Mannheim' ), '+49 211 159232-0', false ),
+			array( 'Hamburg',    array( 'Caffamacherreihe 8', '20355 Hamburg' ),           '+49 211 159232-0', false ),
+			array( 'Mannheim',   array( 'Jungbuschstraße 6', '68159 Mannheim' ),           '+49 211 159232-0', false ),
 		);
 		foreach ( $offices as $i => $o ) {
-			$border = $i < count( $offices ) - 1 ? 'border-bottom:1px solid #E4E7EC;' : '';
-			$html .= '<div style="padding:28px 0;' . $border . '">';
-			$html .= '<div style="font-size:24px;font-weight:500;letter-spacing:-0.02em;margin-bottom:12px;display:flex;align-items:center;gap:10px;">' . esc_html( $o[0] );
-			if ( $o[3] ) {
-				$html .= '<span style="font-size:10px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;padding:3px 8px;border:1px solid #95D708;border-radius:999px;">Hauptsitz</span>';
-			}
-			$html .= '</div>';
-			foreach ( $o[1] as $ln ) { $html .= '<div style="font-size:15px;color:#5A6577;line-height:1.5;">' . esc_html( $ln ) . '</div>'; }
-			$html .= '<div style="font-size:15px;color:#0E1A2B;margin-top:10px;font-family:var(--es-font-mono);"><a href="tel:' . esc_attr( str_replace( ' ', '', $o[2] ) ) . '">' . esc_html( $o[2] ) . '</a></div>';
-			$html .= '</div>';
+			$loc_html .= '<div class="es-kontakt-location' . ( $i === count( $offices ) - 1 ? ' is-last' : '' ) . '">';
+			$loc_html .= '<div class="es-kontakt-location__head">' . esc_html( $o[0] );
+			if ( $o[3] ) { $loc_html .= ' <span class="es-kontakt-location__badge">Hauptsitz</span>'; }
+			$loc_html .= '</div>';
+			foreach ( $o[1] as $ln ) { $loc_html .= '<div class="es-kontakt-location__line">' . esc_html( $ln ) . '</div>'; }
+			$loc_html .= '<a class="es-kontakt-location__tel" href="tel:' . esc_attr( str_replace( ' ', '', $o[2] ) ) . '">' . esc_html( $o[2] ) . '</a>';
+			$loc_html .= '</div>';
 		}
-		$html .= '<div style="margin-top:40px;padding:28px;background:#F6F4EF;border:1px solid #E4E7EC;">';
-		$html .= '<div class="es-eyebrow" style="margin-bottom:12px;">Allgemeine Anfragen</div>';
-		$html .= '<div style="font-size:17px;font-weight:500;margin-bottom:4px;"><a href="mailto:info@energiesozietaet.de">info@energiesozietaet.de</a></div>';
-		$html .= '<div style="font-size:14px;color:#5A6577;">Für allgemeine und organisatorische Anfragen.</div>';
-		$html .= '</div></div>';
+		$loc_html .= '<div class="es-kontakt-general"><div class="es-eyebrow">Allgemeine Anfragen</div><a href="mailto:info@energiesozietaet.de">info@energiesozietaet.de</a><div>Für allgemeine und organisatorische Anfragen.</div></div></div>';
 
-		$html .= '</div></div>';
-		$sections[] = $b::section_html( $html );
-
-		return $sections;
+		$s[] = $b::section_native( array(
+			'padding' => array( '80', '0', '140', '0' ),
+			'gap' => 'wider',
+			'css_classes' => 'es-kontakt-grid-wrap',
+			'column_settings' => array( array( '_column_size' => 58 ), array( '_column_size' => 42 ) ),
+			'cols' => array(
+				array(
+					$b::wid_heading( 'Schreiben Sie uns', 'p', 'es-eyebrow' ),
+					$b::wid_heading( 'Wir antworten innerhalb eines Werktags.', 'h2', 'es-split__title' ),
+					$b::wid_html( $form_html ),
+				),
+				array(
+					$b::wid_heading( 'Unsere Standorte', 'p', 'es-eyebrow' ),
+					$b::wid_html( $loc_html ),
+				),
+			),
+		) );
+		return $s;
 	}
 
-	/** Kontakt-Form field */
 	protected static function field( $label, $name, $type = 'text' ) {
 		$out  = '<div>';
 		$out .= '<div style="font-size:12px;color:#5A6577;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">' . esc_html( $label ) . '</div>';

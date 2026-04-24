@@ -21,7 +21,7 @@ while ( have_posts() ) : the_post();
 	<section class="es-event-single">
 		<div style="max-width:960px;margin:0 auto;padding:0 24px;">
 			<div class="es-article__crumb">
-				<a href="<?php echo esc_url( home_url( '/veranstaltungen/' ) ); ?>" style="color:inherit;">Veranstaltungen</a>  /  <?php echo esc_html( $kind ); ?>
+				<a href="<?php echo esc_url( home_url( '/veranstaltungen/' ) ); ?>" style="color:inherit;">Veranstaltungen</a>
 			</div>
 
 			<div style="display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap;margin-bottom:28px;">
@@ -55,7 +55,7 @@ while ( have_posts() ) : the_post();
 			</div>
 		<?php endif; ?>
 
-		<div class="es-article__body" style="max-width:860px;margin-left:auto;margin-right:auto;">
+		<div class="es-article__body es-article__body--justify" style="max-width:860px;margin-left:auto;margin-right:auto;padding:0 24px;">
 			<?php the_content(); ?>
 		</div>
 

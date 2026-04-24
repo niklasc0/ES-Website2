@@ -60,6 +60,48 @@
 		document.querySelectorAll('.es-reveal').forEach(function (el) { el.classList.add('is-in', 'is-visible'); });
 	}
 
+	// 3b. Client-side team filter (no page reload)
+	var teamFilter = document.querySelector('.es-team-filter');
+	if (teamFilter) {
+		var teamGrid = teamFilter.parentElement.querySelector('.esc-grid') || document.querySelector('.esc-grid');
+		var countEl = teamFilter.querySelector('.es-team-filter__count');
+		var pills = teamFilter.querySelectorAll('.es-team-filter__pill');
+		pills.forEach(function (pill) {
+			pill.addEventListener('click', function (e) {
+				e.preventDefault();
+				var url = new URL(pill.href, window.location.origin);
+				var feld = url.searchParams.get('feld') || '';
+				// Active-Pill-Wechsel
+				pills.forEach(function (p) { p.classList.remove('is-active'); });
+				pill.classList.add('is-active');
+				// URL ohne Reload updaten
+				var newUrl = new URL(window.location.href);
+				if (feld) { newUrl.searchParams.set('feld', feld); } else { newUrl.searchParams.delete('feld'); }
+				window.history.replaceState(null, '', newUrl.toString());
+				// Karten filtern
+				var cards = teamGrid ? teamGrid.querySelectorAll('.esc-team-card') : [];
+				var visible = 0;
+				cards.forEach(function (c) {
+					var feldOfCard = (c.querySelector('.esc-team-card__feld') || {}).textContent || '';
+					// Map Label → slug
+					var map = { 'Recht': 'rechtsberatung', 'Steuern': 'steuerberatung', 'Unternehmensberatung': 'unternehmensberatung', 'Büroleitung': 'management' };
+					var slugOfCard = map[feldOfCard.trim()] || '';
+					var show = !feld || slugOfCard === feld;
+					c.style.transition = 'opacity 240ms, transform 240ms';
+					if (show) {
+						c.style.display = '';
+						requestAnimationFrame(function () { c.style.opacity = '1'; c.style.transform = 'translateY(0)'; });
+						visible++;
+					} else {
+						c.style.opacity = '0'; c.style.transform = 'translateY(8px)';
+						setTimeout(function () { c.style.display = 'none'; }, 240);
+					}
+				});
+				if (countEl) { countEl.textContent = visible + ' Teammitglieder'; }
+			});
+		});
+	}
+
 	// 4. Smooth anchor scrolling — respects reduced motion
 	var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	if (!prefersReduced) {

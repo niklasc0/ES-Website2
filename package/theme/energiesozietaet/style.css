@@ -1045,3 +1045,74 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
 
 /* Eyebrow als p-Tag mit Klasse auf WIDGET — Elementor hängt Klasse an <p> */
 .es-eyebrow > .elementor-heading-title { margin: 0 !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   Kontakt-Form (native HTML-Block in Elementor-html-Widget)
+   ───────────────────────────────────────────────────────────── */
+.es-kontakt-form { display: grid; gap: 24px; max-width: 640px; }
+.es-kontakt-form label { display: flex; flex-direction: column; gap: 8px; }
+.es-kontakt-form label > span { font-size: 12px; color: var(--es-text-mute); letter-spacing: 0.1em; text-transform: uppercase; }
+.es-kontakt-form input[type="text"], .es-kontakt-form input[type="email"], .es-kontakt-form textarea {
+    width: 100%; border: 0; border-bottom: 1px solid var(--es-ink);
+    background: transparent; padding: 10px 0; font: inherit; font-size: 16px; outline: none;
+}
+.es-kontakt-form textarea { resize: vertical; }
+.es-kontakt-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 600px) { .es-kontakt-form__row { grid-template-columns: 1fr; } }
+.es-kontakt-form__radio-group { display: flex; flex-direction: column; gap: 12px; }
+.es-kontakt-form__group-label { font-size: 12px; color: var(--es-text-mute); letter-spacing: 0.1em; text-transform: uppercase; }
+.es-kontakt-form__pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.es-kontakt-form__pills label {
+    padding: 10px 16px; font-size: 13px; border: var(--es-border); border-radius: var(--es-radius-xs);
+    cursor: pointer; flex-direction: row; align-items: center; gap: 6px;
+}
+.es-kontakt-form__pills input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+.es-kontakt-form__pills label:has(input:checked) { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
+.es-kontakt-form__submit { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; gap: 16px; flex-wrap: wrap; }
+.es-kontakt-form__submit > span { font-size: 12px; color: var(--es-text-mute); max-width: 400px; }
+
+/* Kontakt-Standorte */
+.es-kontakt-locations { display: grid; gap: 0; }
+.es-kontakt-location { padding: 28px 0; border-bottom: var(--es-border); }
+.es-kontakt-location.is-last { border-bottom: 0; }
+.es-kontakt-location__head {
+    font-size: 24px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+}
+.es-kontakt-location__badge {
+    font-size: 10px; color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 3px 8px; border: 1px solid var(--es-accent); border-radius: var(--es-radius-pill);
+}
+.es-kontakt-location__line { font-size: 15px; color: var(--es-text-mute); line-height: 1.5; }
+.es-kontakt-location__tel { font-size: 15px; color: var(--es-ink); font-family: var(--es-font-mono); display: block; margin-top: 10px; }
+.es-kontakt-general {
+    margin-top: 40px; padding: 28px; background: var(--es-paper-warm); border: var(--es-border);
+    border-radius: var(--es-radius-xs);
+}
+.es-kontakt-general .es-eyebrow { margin-bottom: 12px; }
+.es-kontakt-general a { font-size: 17px; font-weight: 500; color: var(--es-ink); display: inline-block; margin-bottom: 4px; }
+.es-kontakt-general > div:last-child { font-size: 14px; color: var(--es-text-mute); }
+
+/* Section-Title generisch */
+.elementor-widget.es-section__title .elementor-heading-title,
+.es-section__title > .elementor-heading-title {
+    font-size: clamp(28px, 3vw, 36px); font-weight: 400; letter-spacing: -0.025em; margin-bottom: 40px;
+}
+
+/* News-Fallback .es-ph-cat — striktere Begrenzung */
+.es-ph-cat {
+    padding: 24px 32px 24px 24px; overflow: hidden;
+    display: flex; align-items: flex-end; justify-content: flex-start;
+}
+.es-ph-cat span {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; text-overflow: ellipsis;
+    max-width: calc(100% - 16px); word-break: break-word;
+    padding-right: 16px;
+}
+
+/* Event-Row: wieder Pin/Kompass entfernen */
+.esc-event-row__loc::before { content: none !important; }
+
+/* Pub-Row: kein Hover-Hintergrund */
+.esc-pub-row:hover { background: transparent !important; }

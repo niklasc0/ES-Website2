@@ -41,16 +41,12 @@ while ( have_posts() ) : the_post();
 		</header>
 
 		<?php if ( $thumb_id ) : ?>
-			<div class="es-article__hero">
+			<figure class="es-article__hero" style="max-width:1040px;margin:0 auto 80px;padding:0 24px;">
 				<?php echo wp_get_attachment_image( $thumb_id, 'es-wide', false, array( 'loading' => 'eager', 'style' => 'width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;' ) ); ?>
-			</div>
-		<?php else : ?>
-			<div class="es-article__hero">
-				<div class="es-ph-cat" style="aspect-ratio:16/9;"><span><?php echo esc_html( $cat_name ); ?></span></div>
-			</div>
+			</figure>
 		<?php endif; ?>
 
-		<div class="es-article__body" style="max-width:860px;margin-left:auto;margin-right:auto;">
+		<div class="es-article__body es-article__body--justify" style="max-width:860px;margin-left:auto;margin-right:auto;padding:0 24px;">
 			<?php the_content(); ?>
 		</div>
 
