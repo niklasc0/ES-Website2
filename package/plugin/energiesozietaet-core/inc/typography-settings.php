@@ -149,6 +149,11 @@ class ESC_Typography_Settings {
 	public static function render() {
 		if ( ! current_user_can( 'manage_options' ) ) { return; }
 		wp_enqueue_media();
+		// Reset-Action
+		if ( isset( $_POST['esc_typo_reset'] ) && check_admin_referer( 'esc_typo_reset' ) ) {
+			delete_option( self::OPT );
+			echo '<div class="notice notice-success is-dismissible"><p>Typografie zurückgesetzt — Theme-Default (Inter) ist wieder aktiv.</p></div>';
+		}
 		?>
 		<div class="wrap">
 			<h1>Typografie</h1>
@@ -174,6 +179,15 @@ class ESC_Typography_Settings {
 					</td></tr>
 				</tbody></table>
 				<?php submit_button(); ?>
+			</form>
+
+			<hr>
+			<form method="post" onsubmit="return confirm('Wirklich auf Theme-Standard zurücksetzen? Alle Font-Einstellungen oben werden gelöscht.');">
+				<?php wp_nonce_field( 'esc_typo_reset' ); ?>
+				<p>
+					<button type="submit" name="esc_typo_reset" value="1" class="button">Auf Standard zurücksetzen</button>
+					<span style="color:#5A6577;margin-left:10px;font-size:13px;">Löscht alle Typo-Overrides. Theme-Default (Inter) wird wieder angewendet.</span>
+				</p>
 			</form>
 		</div>
 		<script>

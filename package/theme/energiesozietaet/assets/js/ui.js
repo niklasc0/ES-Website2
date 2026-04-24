@@ -7,12 +7,14 @@
 	// 0. Mark html as JS-enabled so reveal CSS becomes active
 	document.documentElement.classList.add('js');
 
-	// 1. Mobile nav toggle
+	// 1. Mobile nav toggle — Klasse kommt auf den HEADER (passend zum CSS).
 	var toggle = document.querySelector('.es-nav-toggle');
-	var nav = document.getElementById('es-nav');
-	if (toggle && nav) {
-		toggle.addEventListener('click', function () {
-			var open = nav.classList.toggle('is-open');
+	var header = document.getElementById('es-header');
+	var nav    = document.getElementById('es-nav');
+	if (toggle && header && nav) {
+		toggle.addEventListener('click', function (e) {
+			e.preventDefault();
+			var open = header.classList.toggle('is-nav-open');
 			toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
 			document.body.style.overflow = open ? 'hidden' : '';
 		});
@@ -21,7 +23,7 @@
 			if (window.innerWidth > 1024) return;
 			var a = e.target.closest('a');
 			if (a && !a.closest('.sub-menu')) {
-				nav.classList.remove('is-open');
+				header.classList.remove('is-nav-open');
 				toggle.setAttribute('aria-expanded', 'false');
 				document.body.style.overflow = '';
 			}

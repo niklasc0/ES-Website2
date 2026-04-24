@@ -1553,3 +1553,128 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
     background: var(--es-ink); color: var(--es-accent); aspect-ratio: 16/10;
 }
 .es-linkedin-card .esc-card__meta { color: #0077B5; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v11 — Menü-Dropdown-Kontrast, Mobile, Publikationen, Kontakt
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Submenü (Leistungen-Dropdown) current-item lesbar machen ─── */
+.es-nav .sub-menu a { color: var(--es-ink) !important; background: transparent !important; }
+.es-nav .sub-menu .current-menu-item > a,
+.es-nav .sub-menu .current_page_item > a {
+    color: var(--es-ink) !important;
+    background: var(--es-paper-warm) !important;
+    font-weight: var(--es-fw-medium);
+}
+.es-nav .sub-menu a::after { background: var(--es-accent); bottom: 6px; width: calc(100% - 40px); left: 20px; }
+
+/* ─── Publikationen: doppelte Linie am Jahresende beseitigen ─── */
+.esc-pub-year__items .esc-pub-row:last-child { border-bottom: 0; }
+/* Der Separator zwischen Jahren bleibt via .esc-pub-year border-top. */
+
+/* ─── Kontakt: Allgemeine-Anfragen-Kasten — E-Mail auf eigener Zeile ─── */
+.es-kontakt-general a {
+    display: block; word-break: break-word; font-size: 17px; font-weight: 500;
+    color: var(--es-ink); margin: 6px 0 4px;
+}
+.es-kontakt-general > div:last-child { font-size: 14px; color: var(--es-text-mute); }
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE — ≤ 768px. Gezielt nur mobile Anpassungen; Desktop bleibt.
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+    /* Globale Seitenabstände vereinheitlichen — überall gleich wie bei
+       'Unser Anspruch' (24px). */
+    .es-wrap,
+    .es-wrap--narrow,
+    .es-stage .es-wrap,
+    .es-footer .es-wrap,
+    .elementor-section-boxed > .elementor-container { padding-left: 24px !important; padding-right: 24px !important; }
+    body .es-home-services .elementor-container,
+    body .es-home-news .elementor-container,
+    body .es-cta .elementor-container,
+    body .es-gf-quote .elementor-container { padding-left: 24px !important; padding-right: 24px !important; }
+
+    /* Vertikale Abstände reduzieren — weniger Leerraum zwischen Abschnitten. */
+    .es-stage > .elementor-container,
+    body .es-stage .elementor-section,
+    body .elementor-section.es-stage,
+    body .es-stage { padding-top: 56px !important; padding-bottom: 56px !important; }
+    body .es-stage--ink.es-hero { padding-top: 72px !important; padding-bottom: 64px !important; }
+
+    /* Home News-Teaser: Titel enger an die Karten */
+    .es-home-news .elementor-widget-shortcode { margin-top: 20px !important; }
+    .es-home-news .es-home-news__title .elementor-heading-title,
+    .es-home-news__title > .elementor-heading-title { margin-bottom: 16px !important; }
+
+    /* ─── HOME ─── */
+    /* Intro-Strip: Eyebrow+H2 oben, Paragraph darunter (wird schon
+       durch allgemeines grid-template-columns: 1fr-Stacking gemacht). */
+
+    /* Leistungen Service-Cards: min-height reduzieren */
+    .es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    .es-home-services > .elementor-container > .elementor-column > .elementor-element-populated { min-height: 0 !important; padding: 24px !important; }
+    .es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+    .es-home-services > .elementor-container > .elementor-column > .elementor-element-populated::before { display: none; }
+
+    /* ─── LEISTUNGEN (Übersicht) ─── */
+    /* Bilder der Beratungsgebiete ausblenden auf Mobile */
+    .es-bereich__img { display: none !important; }
+    .es-bereich__top { grid-template-columns: 1fr !important; gap: 24px !important; }
+    .es-bereich__inner { padding: 48px 0 !important; }
+    .es-bereich__title { font-size: 40px !important; line-height: 1.05 !important; }
+    /* Einzelleistungs-Kacheln 2-Spaltig, keine Overflow */
+    .es-bereich__topics { grid-template-columns: repeat(2, 1fr) !important; gap: 0 !important; }
+    .es-bereich__topic { padding: 20px 16px !important; }
+    .es-bereich__topic-name h3 { font-size: 16px !important; }
+    .es-bereich__topic-desc { font-size: 12px !important; padding-left: 12px !important; -webkit-line-clamp: 3; }
+    .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 16px !important; border-left: var(--es-border) !important; }
+
+    /* ─── BERATUNGSFELD-DETAIL ─── */
+    /* Ansprechpartner-Balken: Überschrift oben, Personen gestapelt, Button zentriert */
+    .es-ansprech { flex-direction: column; align-items: stretch; gap: 20px; }
+    .es-ansprech__people { flex-direction: column; align-items: stretch; gap: 16px; }
+    .es-ansprech__people > a { justify-content: flex-start; }
+    .es-ansprech .es-btn,
+    .es-ansprech .es-btn--primary { align-self: center; margin-left: 0 !important; }
+
+    /* "Was wir für Sie tun": Text oben, Einzelleistungs-Kacheln darunter 2-Spaltig */
+    .es-bereich-detail__content > .elementor-container { grid-template-columns: 1fr !important; }
+    .es-bereich-detail__content > .elementor-container > .elementor-column { width: 100% !important; }
+    .es-bereich-detail__content .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: repeat(2, 1fr) !important; gap: 0 !important; }
+    .es-bereich-detail__einzel .es-bereich__topic { padding: 20px 16px !important; }
+    .es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 16px !important; border-left: var(--es-border) !important; }
+
+    /* ─── TEAM ─── */
+    /* Übersicht: 2-Spalten Team-Grid (statt 4) */
+    .esc-grid.esc-grid--cols-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+
+    /* Team-Detail: Bild kleiner + zentriert, Contact-Box zentriert */
+    .es-team-single__grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .es-team-single__col-left { max-width: 320px; margin: 0 auto; position: static !important; }
+    .es-team-single__photo { aspect-ratio: 4/5; }
+    .es-team-single__contact-card { text-align: center; margin-left: auto; margin-right: auto; }
+    .es-team-single__contact-row { text-align: left; }
+    .es-team-single__contact-actions .es-btn { justify-content: center; }
+
+    /* ─── HERO MOBILE ─── */
+    /* Claims: kleineren Text + tighter */
+    .es-hero-claims-inner > .elementor-container { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+    .es-hero-claims-inner .es-hero-claims__wert .elementor-heading-title { font-size: 26px !important; }
+
+    /* Gap innerhalb von .es-stage (Margin zwischen inneren widgets) reduzieren */
+    .es-stage .elementor-widget { margin-bottom: 18px !important; }
+    .es-stage .es-split__title { margin-top: 0 !important; }
+    .es-stage .es-hero__title { margin-bottom: 16px !important; }
+    .es-stage .es-hero__lead { margin-bottom: 24px !important; }
+
+    /* Kontakt: right-column form stays usable */
+    .es-kontakt-general a { font-size: 16px !important; }
+}
+
+/* Extra-enge Screens (≤ 480px): zurück auf 1 Spalte wo noch 2 sinnvoll sind */
+@media (max-width: 480px) {
+    .esc-grid.esc-grid--cols-4 { grid-template-columns: repeat(2, 1fr) !important; }
+    .es-hero-claims-inner > .elementor-container { grid-template-columns: 1fr !important; }
+}
