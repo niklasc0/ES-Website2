@@ -14,7 +14,11 @@ class ESC_Typography_Settings {
 	public static function init() {
 		add_action( 'admin_init',  array( __CLASS__, 'register' ) );
 		add_action( 'admin_menu',  array( __CLASS__, 'menu' ) );
-		add_action( 'wp_head',     array( __CLASS__, 'inject_css' ), 99 );
+		// @font-face früh in den Head, damit der Font sofort vorgeladen wird
+		add_action( 'wp_head',     array( __CLASS__, 'print_font_face' ), 5 );
+		// Overrides im FOOTER nach Elementor — so gewinnen sie in der CSS-
+		// Cascade immer, egal wie spät Elementor nachlädt
+		add_action( 'wp_footer',   array( __CLASS__, 'print_overrides' ), 99999 );
 		// Uploads: woff/woff2 erlauben
 		add_filter( 'upload_mimes', array( __CLASS__, 'allow_font_mimes' ) );
 		add_filter( 'wp_check_filetype_and_ext', array( __CLASS__, 'check_font_ext' ), 10, 4 );
@@ -77,11 +81,17 @@ class ESC_Typography_Settings {
 		);
 	}
 
-	public static function inject_css() {
+	/** Interne Helfer: Font-Stack bauen + @font-face + Override-CSS. */
+	protected static function build_stack( $family ) {
+		return '"' . esc_html( $family ) . '",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
+	}
+
+	/** Wird im wp_head bei Priorität 5 ausgegeben — Font-Face möglichst früh. */
+	public static function print_font_face() {
 		$opts = self::get();
 		if ( empty( $opts['font_family'] ) ) { return; }
 		$family = $opts['font_family'];
-		$src    = array();
+		$src = array();
 		if ( $opts['font_woff2'] ) {
 			$url = wp_get_attachment_url( (int) $opts['font_woff2'] );
 			if ( $url ) { $src[] = 'url(' . esc_url( $url ) . ') format("woff2")'; }
@@ -90,11 +100,37 @@ class ESC_Typography_Settings {
 			$url = wp_get_attachment_url( (int) $opts['font_woff'] );
 			if ( $url ) { $src[] = 'url(' . esc_url( $url ) . ') format("woff")'; }
 		}
-		echo '<style id="esc-typography">';
+		echo '<style id="esc-typography-face">';
 		if ( $src ) {
 			echo '@font-face{font-family:"' . esc_html( $family ) . '";font-style:' . esc_html( $opts['font_style'] ) . ';font-weight:' . esc_html( $opts['font_weight'] ) . ';font-display:swap;src:' . implode( ',', $src ) . ';}';
+			// Preload-Hint für WOFF2 — lädt Font parallel zum ersten Paint
+			$p_url = wp_get_attachment_url( (int) $opts['font_woff2'] );
+			if ( $p_url ) {
+				echo '</style>';
+				echo '<link rel="preload" href="' . esc_url( $p_url ) . '" as="font" type="font/woff2" crossorigin="anonymous">';
+				echo '<style>';
+			}
 		}
-		echo ':root{--es-font-sans:"' . esc_html( $family ) . '",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;--es-font-display:var(--es-font-sans);}';
+		// Die Variablen-Defaults für --es-font-sans setzen wir auch hier, damit
+		// ohne FOUT-Flash direkt die richtige Schrift angewendet wird.
+		$stack = self::build_stack( $family );
+		echo 'html,:root{--es-font-sans:' . $stack . ' !important;--es-font-display:' . $stack . ' !important;}';
+		echo 'html{--e-global-typography-primary-font-family:"' . esc_html( $family ) . '" !important;--e-global-typography-secondary-font-family:"' . esc_html( $family ) . '" !important;--e-global-typography-text-font-family:"' . esc_html( $family ) . '" !important;--e-global-typography-accent-font-family:"' . esc_html( $family ) . '" !important;}';
+		echo 'body,h1,h2,h3,h4,h5,h6,p,a,button,input,select,textarea,blockquote,.elementor-heading-title,.elementor-widget-container,.elementor-widget-text-editor,.elementor-widget-text-editor p,.elementor-button,.es-stage,.es-stage *,.es-brand,.es-nav,.es-footer,.es-footer *{font-family:' . $stack . ' !important;}';
+		echo '</style>';
+	}
+
+	/** Wird im wp_footer mit Priorität 99999 ausgegeben — nach Elementor's
+	 *  Post-CSS-Ladephase und allen per JS nachgeladenen Stylesheets. */
+	public static function print_overrides() {
+		$opts = self::get();
+		if ( empty( $opts['font_family'] ) ) { return; }
+		$family = $opts['font_family'];
+		$stack  = self::build_stack( $family );
+		echo '<style id="esc-typography-override">';
+		echo 'html,:root{--es-font-sans:' . $stack . ' !important;--es-font-display:' . $stack . ' !important;}';
+		echo 'html{--e-global-typography-primary-font-family:"' . esc_html( $family ) . '" !important;--e-global-typography-secondary-font-family:"' . esc_html( $family ) . '" !important;--e-global-typography-text-font-family:"' . esc_html( $family ) . '" !important;--e-global-typography-accent-font-family:"' . esc_html( $family ) . '" !important;}';
+		echo 'body,h1,h2,h3,h4,h5,h6,p,a,button,input,select,textarea,blockquote,.elementor-heading-title,.elementor-widget-container,.elementor-widget-text-editor,.elementor-widget-text-editor p,.elementor-button,.es-stage,.es-stage *,.es-brand,.es-nav,.es-footer,.es-footer *{font-family:' . $stack . ' !important;}';
 		echo '</style>';
 	}
 
