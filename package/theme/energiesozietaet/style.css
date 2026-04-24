@@ -857,3 +857,191 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
 .es-stage--ink .es-btn--paper:hover { background: transparent; color: var(--es-paper); border-color: var(--es-paper); }
 .es-stage--ink .es-btn--ghost-paper { color: var(--es-paper); border-color: rgba(255,255,255,0.4); }
 .es-stage--ink .es-btn--ghost-paper:hover { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }
+
+/* ─────────────────────────────────────────────────────────────
+   Native Elementor widgets — Hero/Split/CTA/Cards stylen via CSS,
+   damit Inhalte im Editor nativ editierbar bleiben.
+   ───────────────────────────────────────────────────────────── */
+
+/* Elementor resets so dass unsere Varianten greifen */
+.es-stage .elementor-heading-title { margin: 0; font-family: var(--es-font-sans); font-weight: var(--es-fw-regular); color: var(--es-ink); letter-spacing: var(--es-ls-headline); line-height: var(--es-lh-snug); }
+.es-stage--ink .elementor-heading-title { color: var(--es-paper); }
+.es-stage .elementor-widget-text-editor { color: inherit; }
+.es-stage--ink .elementor-widget-text-editor p { color: rgba(255,255,255,0.78); }
+
+/* Eyebrow als Heading-Widget p + Klasse */
+.elementor-widget-heading.es-eyebrow .elementor-heading-title,
+.elementor-widget-heading .elementor-heading-title.es-eyebrow {
+    font-size: var(--es-fs-eyebrow); letter-spacing: var(--es-ls-eyebrow);
+    text-transform: uppercase; font-weight: var(--es-fw-medium);
+    color: var(--es-text-mute); display: inline-block; margin-bottom: 20px;
+}
+/* Wenn die Klasse am Widget-Container hängt (Standardfall) */
+.elementor-widget.es-eyebrow .elementor-heading-title,
+.es-eyebrow > .elementor-heading-title {
+    font-size: var(--es-fs-eyebrow); letter-spacing: var(--es-ls-eyebrow);
+    text-transform: uppercase; font-weight: var(--es-fw-medium);
+    color: var(--es-text-mute) !important; margin-bottom: 0;
+}
+.es-eyebrow.es-eyebrow--paper .elementor-heading-title,
+.es-eyebrow--paper > .elementor-heading-title { color: rgba(255,255,255,0.6) !important; }
+.es-eyebrow.es-eyebrow--accent .elementor-heading-title,
+.es-eyebrow--accent > .elementor-heading-title { color: var(--es-accent) !important; }
+
+.elementor-widget.es-eyebrow { margin-bottom: 20px !important; }
+
+/* Hero-Title (H1) */
+.elementor-widget.es-hero__title .elementor-heading-title,
+.es-hero__title > .elementor-heading-title {
+    font-size: clamp(44px, 6vw, 80px); font-weight: var(--es-fw-light);
+    letter-spacing: -0.04em; line-height: 1.02; color: var(--es-paper) !important;
+    max-width: 1100px;
+}
+.elementor-widget.es-hero__title { margin-bottom: 36px !important; }
+.elementor-widget.es-hero__lead .elementor-widget-container p,
+.es-hero__lead p {
+    font-size: 20px; line-height: 1.55; font-weight: 300;
+    color: rgba(255,255,255,0.78); max-width: 780px;
+}
+.elementor-widget.es-hero__lead { margin-bottom: 40px !important; }
+
+/* Split-Section Title (H2) */
+.elementor-widget.es-split__title .elementor-heading-title,
+.es-split__title > .elementor-heading-title {
+    font-size: clamp(32px, 4vw, 52px); line-height: 1.05; font-weight: var(--es-fw-light);
+    letter-spacing: -0.035em; margin-top: 24px !important;
+}
+.elementor-widget.es-split__lead .elementor-widget-container p,
+.es-split__lead p { font-size: 20px; line-height: 1.65; font-weight: 400; color: var(--es-ink); margin-bottom: 24px; }
+.es-stage--ink .es-split__lead p { color: rgba(255,255,255,0.82); }
+.elementor-widget.es-split__body .elementor-widget-container p,
+.es-split__body p { font-size: 17px; line-height: 1.7; color: var(--es-text-mute); }
+.es-stage--ink .es-split__body p { color: rgba(255,255,255,0.6); }
+
+/* CTA-Title */
+.elementor-widget.es-cta__title .elementor-heading-title,
+.es-cta__title > .elementor-heading-title {
+    font-size: clamp(36px, 4.6vw, 64px); line-height: 1.02; font-weight: var(--es-fw-regular);
+    letter-spacing: -0.035em; color: var(--es-paper) !important; max-width: 820px; margin: 0;
+}
+.es-cta__title .es-cta__sub { color: rgba(255,255,255,0.55); }
+.es-cta__buttons { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+
+/* Hero-Button-Row Container */
+.es-hero__buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+
+/* Pillar-Cards (Philosophie, Benefits) */
+.elementor-column.es-card-pillar { padding: 48px 36px !important; background: var(--es-paper); border: var(--es-border); }
+.es-stage--warm .elementor-column.es-card-pillar { background: var(--es-paper); }
+.es-card-pillar__num { font-family: var(--es-font-mono); font-size: 11px; color: var(--es-accent); letter-spacing: 0.16em; margin-bottom: 32px; }
+.elementor-widget.es-card-pillar__title .elementor-heading-title,
+.es-card-pillar__title > .elementor-heading-title { font-size: 30px; line-height: 1.15; font-weight: 400; letter-spacing: -0.025em; margin: 0 0 20px; }
+.elementor-widget.es-card-pillar__desc p,
+.es-card-pillar__desc p { font-size: 15px; color: var(--es-text-mute); line-height: 1.65; margin: 0; }
+
+/* Default Elementor Section-Gap */
+.es-stage .elementor-section.elementor-section-gap-default > .elementor-container { gap: var(--es-space-16); }
+
+/* Beratungsfeld-Detail: 2-Spalten-Einzelleistungen mit mehr Padding */
+.es-bereich-detail__einzel .es-bereich__topics {
+    grid-template-columns: repeat(2, 1fr);
+    border-top: var(--es-border);
+}
+.es-bereich-detail__einzel .es-bereich__topic { padding: 36px 28px; }
+.es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) {
+    padding-left: 36px; border-left: var(--es-border);
+}
+@media (max-width: 768px) {
+    .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: 1fr; }
+    .es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 28px; border-left: 0; }
+}
+
+/* Publikationen-Row: Hover-Tint entfernen, nur CTA-Farbe */
+.esc-pub-row:hover { background: transparent; }
+.esc-pub-row:hover .esc-pub-row__cta { color: var(--es-accent); border-bottom-color: var(--es-accent); }
+
+/* Event-Row: kein Icon mehr vor Location */
+.esc-event-row__loc::before { content: none; }
+
+/* News/Event-Article Body: Blocksatz-Option */
+.es-article__body { text-align: left; }
+.es-article__body--justify { text-align: justify; hyphens: auto; }
+
+/* Kontakt: rechte Spalte schmaler */
+.es-kontakt-grid { grid-template-columns: 1.4fr 1fr !important; gap: 96px; }
+@media (max-width: 900px) {
+    .es-kontakt-grid { grid-template-columns: 1fr !important; gap: 48px; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Native-Home: Service-Cards (3-col native widgets)
+   ───────────────────────────────────────────────────────────── */
+.elementor-column.es-service-card > .elementor-widget-wrap,
+.elementor-column.es-service-card .elementor-element-populated {
+    padding: 36px !important;
+    border: var(--es-border);
+    background: var(--es-paper);
+    min-height: 380px;
+    transition: background 200ms var(--es-easing), border-color 200ms var(--es-easing), transform 200ms var(--es-easing);
+}
+.elementor-column.es-service-card:hover .elementor-element-populated {
+    background: var(--es-paper-warm); border-color: var(--es-ink); transform: translateY(-2px);
+}
+.es-service-card__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; }
+.es-service-card__num  { font-family: var(--es-font-mono); font-size: 12px; color: var(--es-text-soft); letter-spacing: 0.1em; }
+.es-service-card__dot  { width: 6px; height: 6px; border-radius: 999px; background: var(--es-accent); display: inline-block; }
+.elementor-widget.es-service-card__title .elementor-heading-title,
+.es-service-card__title > .elementor-heading-title {
+    font-size: 28px; line-height: 1.1; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.elementor-widget.es-service-card__body .elementor-widget-container p,
+.es-service-card__body p { font-size: 15px; color: var(--es-text-mute); line-height: 1.55; }
+
+/* News-Title auf Home */
+.elementor-widget.es-home-news__title .elementor-heading-title,
+.es-home-news__title > .elementor-heading-title {
+    font-size: clamp(32px, 4.2vw, 52px); line-height: 1.05; font-weight: var(--es-fw-regular); letter-spacing: -0.03em; margin-bottom: 48px;
+}
+
+.elementor-widget.es-home-services-head__title .elementor-heading-title,
+.es-home-services-head__title > .elementor-heading-title {
+    font-size: clamp(36px, 4.4vw, 52px); line-height: 1.05; font-weight: var(--es-fw-regular); letter-spacing: -0.03em; margin-bottom: 20px;
+}
+
+/* Mandantschaft-Liste */
+.es-mandanten { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; border-top: var(--es-border); }
+.es-mandanten li {
+    padding: 22px 32px 22px 0; border-bottom: var(--es-border);
+    display: flex; align-items: center; gap: 16px;
+    font-size: 17px; font-weight: 400; letter-spacing: -0.01em;
+}
+.es-mandanten li:nth-child(2n) { padding-right: 0; padding-left: 32px; border-left: var(--es-border); }
+.es-mandanten__num { font-family: var(--es-font-mono); font-size: 11px; color: var(--es-text-soft); letter-spacing: 0.08em; }
+@media (max-width: 700px) {
+    .es-mandanten { grid-template-columns: 1fr; }
+    .es-mandanten li, .es-mandanten li:nth-child(2n) { padding-left: 0; padding-right: 0; border-left: 0; }
+}
+
+/* Ansprechpartner-Balken */
+.es-ansprech { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+.es-ansprech__people { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; flex: 1; }
+.es-ansprech__people > a { display: flex; align-items: center; gap: 14px; color: var(--es-ink); }
+.es-ansprech__photo { width: 52px; height: 52px; border-radius: 999px; overflow: hidden; background: var(--es-paper-warm); flex-shrink: 0; }
+.es-ansprech__photo img { width: 100%; height: 100%; object-fit: cover; }
+.es-ansprech__name { font-size: 15px; font-weight: 500; }
+.es-ansprech__role { font-size: 12px; color: var(--es-text-mute); margin-top: 2px; }
+.es-ansprech .es-btn { margin-left: auto; }
+
+/* Kontakt: right column narrower already defined above */
+
+/* Service-Cards + Mandanten auch für es-stage--warm Hintergrund */
+.es-stage--warm .elementor-column.es-service-card .elementor-element-populated { background: var(--es-paper); }
+
+/* Sicherstellen, dass Elementor-Button-Widget unsere Custom-Klassen greift */
+.elementor-widget-button .elementor-button {
+    border-radius: var(--es-radius-xs); font-family: var(--es-font-sans);
+    font-weight: var(--es-fw-medium); letter-spacing: -0.01em; padding: 14px 22px;
+}
+
+/* Eyebrow als p-Tag mit Klasse auf WIDGET — Elementor hängt Klasse an <p> */
+.es-eyebrow > .elementor-heading-title { margin: 0 !important; }

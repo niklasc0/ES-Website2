@@ -106,13 +106,15 @@ class ESC_Shortcodes {
 			) );
 		}
 		$q = new WP_Query( $args );
-		if ( ! $q->have_posts() ) { return ''; }
+		if ( ! $q->have_posts() ) {
+			return '<div class="es-bereich__topics-empty" style="padding:24px 0;color:#5A6577;font-size:14px;">In diesem Bereich sind noch keine Einzelleistungen angelegt.</div>';
+		}
 
+		$cols = max( 1, min( 3, (int) ( $atts['columns'] ?? 3 ) ) );
 		ob_start(); ?>
-		<div class="es-bereich__topics" style="grid-template-columns:repeat(3,1fr);">
-			<?php $j = 0; while ( $q->have_posts() ) : $q->the_post();
-				$sub = get_post_meta( get_the_ID(), 'es_subtitle', true );
-				$num = str_pad( (string) ( $j + 1 ), 2, '0', STR_PAD_LEFT ); ?>
+		<div class="es-bereich__topics" style="grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);">
+			<?php while ( $q->have_posts() ) : $q->the_post();
+				$sub = get_post_meta( get_the_ID(), 'es_subtitle', true ); ?>
 				<a class="es-bereich__topic" href="<?php the_permalink(); ?>">
 					<div class="es-bereich__topic-name">
 						<span></span>
@@ -120,7 +122,7 @@ class ESC_Shortcodes {
 					</div>
 					<p class="es-bereich__topic-desc"><?php echo esc_html( $sub ? wp_trim_words( wp_strip_all_tags( $sub ), 18, '…' ) : self::excerpt( get_post(), 18 ) ); ?></p>
 				</a>
-			<?php $j++; endwhile; wp_reset_postdata(); ?>
+			<?php endwhile; wp_reset_postdata(); ?>
 		</div>
 		<?php
 		return ob_get_clean();

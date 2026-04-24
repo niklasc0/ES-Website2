@@ -259,18 +259,24 @@ class ESC_Elementor_Builder {
 	public static function bereich( $args ) {
 		$args = array_merge( array(
 			'n' => '01', 'title' => '', 'title_html' => '', 'sub' => '', 'lede' => '', 'link' => '',
+			'field' => '',                 // Wenn gesetzt, zieht bereich() die Einzelleistungen dynamisch
 			'topics' => array(), 'stripe' => 'odd', 'image_html' => '',
 		), $args );
 		$warm = 'even' === $args['stripe'] ? ' es-bereich--warm' : '';
-		// title_html erlaubt z.B. "Unternehmens<br/>beratung"
 		$h2_content = $args['title_html'] ? $args['title_html'] : esc_html( $args['title'] );
 
+		// Dynamik: wenn $field gesetzt und keine Topics vorgegeben, ruft der
+		// Shortcode [es_einzelleistungen] bei Render-Zeit die aktuellen Einzel-
+		// leistungen ab. Neue Einträge erscheinen automatisch.
+		$use_shortcode = ( $args['field'] && empty( $args['topics'] ) );
 		$topics_html = '';
-		foreach ( $args['topics'] as $j => $topic ) {
-			$topics_html .= '<a class="es-bereich__topic" href="#' . esc_attr( sanitize_title( $topic[0] ) ) . '">';
-			$topics_html .= '<div class="es-bereich__topic-name"><span></span><h3>' . esc_html( $topic[0] ) . '</h3></div>';
-			$topics_html .= '<p class="es-bereich__topic-desc">' . esc_html( $topic[1] ) . '</p>';
-			$topics_html .= '</a>';
+		if ( ! $use_shortcode ) {
+			foreach ( $args['topics'] as $topic ) {
+				$topics_html .= '<a class="es-bereich__topic" href="#' . esc_attr( sanitize_title( $topic[0] ) ) . '">';
+				$topics_html .= '<div class="es-bereich__topic-name"><span></span><h3>' . esc_html( $topic[0] ) . '</h3></div>';
+				$topics_html .= '<p class="es-bereich__topic-desc">' . esc_html( $topic[1] ) . '</p>';
+				$topics_html .= '</a>';
+			}
 		}
 
 		$img_html = $args['image_html'];
@@ -291,8 +297,10 @@ class ESC_Elementor_Builder {
 		$html .= '<div>' . $img_html . '</div>';
 		$html .= '</div>';
 
-		if ( $topics_html ) {
-			$html .= '<div class="es-bereich__topics-label">Themenfelder · ' . esc_html( $args['title'] ) . '</div>';
+		$html .= '<div class="es-bereich__topics-label">Einzelleistungen · ' . esc_html( $args['title'] ) . '</div>';
+		if ( $use_shortcode ) {
+			$html .= '[es_einzelleistungen beratungsfeld="' . esc_attr( $args['field'] ) . '" columns="3" link="1"]';
+		} else {
 			$html .= '<div class="es-bereich__topics">' . $topics_html . '</div>';
 		}
 		$html .= '</div></div></section>';
@@ -396,6 +404,328 @@ class ESC_Elementor_Builder {
 		$html = '<div class="es-wrap" style="padding:' . $padding . ';">' . $shortcode . '</div>';
 		return self::section_html( $html, $variant );
 	}
+	/* ======================================================================
+	 * NATIVE ELEMENTOR WIDGET HELPERS
+	 * Erzeugen echte heading/text-editor/button/image-Widgets in Elementor-
+	 * Spalten. Zweck: im Editor klick- und änderbar ohne HTML-Kenntnisse.
+	 * ====================================================================== */
+
+	/** Elementor heading widget. */
+	public static function wid_heading( $title, $tag = 'h2', $css_class = '', $align = 'left' ) {
+		return array(
+			'id'         => self::id(),
+			'elType'     => 'widget',
+			'widgetType' => 'heading',
+			'settings'   => array(
+				'title'       => $title,
+				'header_size' => $tag,
+				'align'       => $align,
+				'_css_classes'=> $css_class,
+			),
+		);
+	}
+
+	/** Elementor text-editor widget (content is WYSIWYG-editable). */
+	public static function wid_text( $html, $css_class = '' ) {
+		return array(
+			'id'         => self::id(),
+			'elType'     => 'widget',
+			'widgetType' => 'text-editor',
+			'settings'   => array(
+				'editor'      => wpautop_safe( $html ),
+				'_css_classes'=> $css_class,
+			),
+		);
+	}
+
+	/** Elementor button widget. */
+	public static function wid_button( $label, $url, $css_class = '' ) {
+		return array(
+			'id'         => self::id(),
+			'elType'     => 'widget',
+			'widgetType' => 'button',
+			'settings'   => array(
+				'text'         => $label,
+				'link'         => array( 'url' => $url, 'is_external' => '', 'nofollow' => '' ),
+				'_css_classes' => $css_class, // stylen wir via Theme-CSS (.es-btn-*)
+			),
+		);
+	}
+
+	/** Elementor image widget. */
+	public static function wid_image( $src_or_id = '', $alt = '' ) {
+		$img = array( 'url' => is_string( $src_or_id ) ? $src_or_id : '', 'id' => is_numeric( $src_or_id ) ? (int) $src_or_id : '' );
+		return array(
+			'id'         => self::id(),
+			'elType'     => 'widget',
+			'widgetType' => 'image',
+			'settings'   => array(
+				'image'      => $img,
+				'image_size' => 'full',
+				'align'      => 'center',
+				'caption_source' => 'none',
+			),
+		);
+	}
+
+	/** Elementor inline html widget (for purely decorative markup without editable text). */
+	public static function wid_html( $html, $css_class = '' ) {
+		return array(
+			'id'         => self::id(),
+			'elType'     => 'widget',
+			'widgetType' => 'html',
+			'settings'   => array(
+				'html'        => $html,
+				'_css_classes'=> $css_class,
+			),
+		);
+	}
+
+	/** Elementor shortcode widget. */
+	public static function wid_shortcode( $shortcode, $css_class = '' ) {
+		return array(
+			'id'         => self::id(),
+			'elType'     => 'widget',
+			'widgetType' => 'shortcode',
+			'settings'   => array(
+				'shortcode'   => $shortcode,
+				'_css_classes'=> $css_class,
+			),
+		);
+	}
+
+	/**
+	 * Native section wrapper with css_classes + variant-based background.
+	 * $args = [
+	 *   'cols'        => [ [...widgets], [...widgets] ],
+	 *   'variant'     => ''|'ink'|'warm'|'cool',
+	 *   'css_classes' => 'extra classes',
+	 *   'padding'     => [top, right, bottom, left] px (default 120/0/120/0 on desktop),
+	 *   'content_width' => 1280,
+	 *   'gap'         => 'default'|'wider'|'no',
+	 *   'column_settings' => optional per-column settings array of arrays
+	 *   'column_classes'  => string (added to every column),
+	 * ]
+	 */
+	public static function section_native( $args ) {
+		$args = array_merge( array(
+			'cols' => array( array() ),
+			'variant' => '',
+			'css_classes' => '',
+			'padding' => array( '120', '0', '120', '0' ),
+			'content_width' => 1280,
+			'gap' => 'default',
+			'column_settings' => array(),
+			'column_classes' => '',
+		), $args );
+
+		$classes = 'es-stage ' . ( $args['variant'] ? 'es-stage--' . $args['variant'] . ' ' : '' ) . $args['css_classes'];
+		$classes = trim( $classes );
+
+		$settings = array(
+			'layout'        => 'boxed',
+			'content_width' => array( 'unit' => 'px', 'size' => (int) $args['content_width'] ),
+			'padding'       => array( 'unit' => 'px', 'top' => (string) $args['padding'][0], 'right' => (string) $args['padding'][1], 'bottom' => (string) $args['padding'][2], 'left' => (string) $args['padding'][3], 'isLinked' => false ),
+			'gap'           => $args['gap'],
+			'_css_classes'  => $classes,
+		);
+		if ( 'ink' === $args['variant'] ) {
+			$settings['background_background'] = 'classic';
+			$settings['background_color']      = '#0E1A2B';
+		} elseif ( 'warm' === $args['variant'] ) {
+			$settings['background_background'] = 'classic';
+			$settings['background_color']      = '#F6F4EF';
+		} elseif ( 'cool' === $args['variant'] ) {
+			$settings['background_background'] = 'classic';
+			$settings['background_color']      = '#F3F5F8';
+		}
+
+		$col_cfgs = array();
+		foreach ( $args['cols'] as $i => $widgets ) {
+			$col_settings = isset( $args['column_settings'][ $i ] ) ? (array) $args['column_settings'][ $i ] : array();
+			if ( ! empty( $args['column_classes'] ) ) {
+				$col_settings['_css_classes'] = trim( ( $col_settings['_css_classes'] ?? '' ) . ' ' . $args['column_classes'] );
+			}
+			$col_cfgs[] = array( 'widgets' => $widgets, 'settings' => $col_settings );
+		}
+
+		return self::section( $col_cfgs, $settings );
+	}
+
+	/**
+	 * Native editorial hero — heading + lead + buttons (+ optional html claims grid)
+	 * $args = [
+	 *   eyebrow, headline_html (mit <br>, <em>, <span class=text-bg-green>),
+	 *   lead, buttons [[label, url, style]], claims [[wert, label]], padding
+	 * ]
+	 */
+	public static function hero_native( $args ) {
+		$args = array_merge( array(
+			'eyebrow' => '', 'headline_html' => '', 'lead' => '',
+			'buttons' => array(), 'claims' => array(), 'padding' => 'default',
+		), $args );
+
+		$pad = ( 'tall' === $args['padding'] ) ? array( '140', '0', '140', '0' ) : ( ( 'short' === $args['padding'] ) ? array( '100', '0', '100', '0' ) : array( '120', '0', '120', '0' ) );
+
+		$widgets = array();
+		if ( $args['eyebrow'] ) {
+			$widgets[] = self::wid_heading( $args['eyebrow'], 'p', 'es-eyebrow es-eyebrow--paper' );
+		}
+		if ( $args['headline_html'] ) {
+			$widgets[] = self::wid_heading( $args['headline_html'], 'h1', 'es-hero__title' );
+		}
+		if ( $args['lead'] ) {
+			$widgets[] = self::wid_text( $args['lead'], 'es-hero__lead' );
+		}
+		if ( ! empty( $args['buttons'] ) ) {
+			$btn_html = '<div class="es-hero__buttons">';
+			foreach ( $args['buttons'] as $b ) {
+				$style = isset( $b[2] ) ? $b[2] : 'paper';
+				$btn_html .= '<a class="es-btn es-btn--' . esc_attr( $style ) . '" href="' . esc_url( $b[1] ) . '">' . esc_html( $b[0] ) . ' →</a>';
+			}
+			$btn_html .= '</div>';
+			// Buttons via HTML-Widget damit die Varianten nebeneinander stehen.
+			$widgets[] = self::wid_html( $btn_html );
+		}
+		if ( ! empty( $args['claims'] ) ) {
+			$claims_html = '<div class="es-hero-claims">';
+			foreach ( $args['claims'] as $c ) {
+				$claims_html .= '<div><div class="es-hero-claims__wert">' . esc_html( $c[0] ) . '</div><div class="es-hero-claims__label">' . esc_html( $c[1] ) . '</div></div>';
+			}
+			$claims_html .= '</div>';
+			$widgets[] = self::wid_html( $claims_html );
+		}
+
+		return self::section_native( array(
+			'cols' => array( $widgets ),
+			'variant' => 'ink',
+			'css_classes' => 'es-hero',
+			'padding' => $pad,
+			'content_width' => 1280,
+		) );
+	}
+
+	/**
+	 * Native split-text (C1): 2 cols, col1 eyebrow+H2, col2 paragraphs.
+	 * $args = [ eyebrow, title, paragraphs[], variant, padding ]
+	 */
+	public static function split_native( $args ) {
+		$args = array_merge( array(
+			'eyebrow' => '', 'title' => '', 'title_html' => '',
+			'paragraphs' => array(), 'variant' => '', 'padding' => 'default',
+			'extra_after' => null, // optional widget(s) to append after paragraphs
+		), $args );
+
+		$pad = ( 'short' === $args['padding'] ) ? array( '80', '0', '80', '0' ) : array( '120', '0', '120', '0' );
+		$title_class = 'es-split__title';
+
+		$col1 = array();
+		if ( $args['eyebrow'] ) {
+			$col1[] = self::wid_heading( $args['eyebrow'], 'p', 'es-eyebrow' . ( 'ink' === $args['variant'] ? ' es-eyebrow--paper' : '' ) );
+		}
+		if ( $args['title_html'] ) {
+			$col1[] = self::wid_heading( $args['title_html'], 'h2', $title_class );
+		} elseif ( $args['title'] ) {
+			$col1[] = self::wid_heading( $args['title'], 'h2', $title_class );
+		}
+
+		$col2 = array();
+		foreach ( (array) $args['paragraphs'] as $i => $p ) {
+			$col2[] = self::wid_text( $p, 0 === $i ? 'es-split__lead' : 'es-split__body' );
+		}
+		if ( ! empty( $args['extra_after'] ) ) {
+			foreach ( (array) $args['extra_after'] as $w ) { $col2[] = $w; }
+		}
+
+		return self::section_native( array(
+			'cols' => array( $col1, $col2 ),
+			'variant' => $args['variant'],
+			'css_classes' => 'es-split',
+			'padding' => $pad,
+			'gap' => 'wider',
+			'column_settings' => array(
+				array( '_column_size' => 38 ),
+				array( '_column_size' => 62 ),
+			),
+		) );
+	}
+
+	/**
+	 * Native dark CTA (G3) — 2 cols, col1 eyebrow+H2, col2 buttons.
+	 */
+	public static function cta_dark_native( $args = array() ) {
+		$args = array_merge( array(
+			'eyebrow' => 'Kontakt',
+			'title_html' => 'Sprechen Sie mit uns.',
+			'sub' => 'Unaufgeregt, direkt, fachlich.',
+			'buttons' => array(
+				array( 'Termin vereinbaren', '/kontakt/', 'paper' ),
+				array( 'Unser Team', '/team/', 'ghost-paper' ),
+			),
+		), $args );
+
+		$title_full = $args['title_html'];
+		if ( $args['sub'] ) {
+			$title_full .= '<br><span class="es-cta__sub">' . $args['sub'] . '</span>';
+		}
+
+		$col1 = array(
+			self::wid_heading( $args['eyebrow'], 'p', 'es-eyebrow es-eyebrow--accent' ),
+			self::wid_heading( $title_full, 'h2', 'es-cta__title' ),
+		);
+
+		$btn_html = '<div class="es-cta__buttons">';
+		foreach ( $args['buttons'] as $b ) {
+			$style = isset( $b[2] ) ? $b[2] : 'paper';
+			$btn_html .= '<a class="es-btn es-btn--' . esc_attr( $style ) . '" href="' . esc_url( $b[1] ) . '">' . esc_html( $b[0] ) . ' →</a>';
+		}
+		$btn_html .= '</div>';
+		$col2 = array( self::wid_html( $btn_html ) );
+
+		return self::section_native( array(
+			'cols' => array( $col1, $col2 ),
+			'variant' => 'ink',
+			'css_classes' => 'es-cta',
+			'padding' => array( '120', '0', '120', '0' ),
+			'gap' => 'wider',
+			'column_settings' => array(
+				array( '_column_size' => 66, 'align_self' => 'flex-end' ),
+				array( '_column_size' => 34, 'align_self' => 'flex-end' ),
+			),
+		) );
+	}
+
+	/**
+	 * Native cards grid (C2/pillars): n Spalten, jede hat number+heading+text.
+	 * $items = [ [number, title, desc], ... ]
+	 */
+	public static function cards_native( $items, $variant = '' ) {
+		$cols = array();
+		$col_settings = array();
+		foreach ( $items as $it ) {
+			$num   = isset( $it[0] ) ? $it[0] : '';
+			$title = isset( $it[1] ) ? $it[1] : '';
+			$desc  = isset( $it[2] ) ? $it[2] : '';
+			$widgets = array();
+			if ( $num ) {
+				$widgets[] = self::wid_html( '<div class="es-card-pillar__num">' . esc_html( $num ) . ' —</div>' );
+			}
+			$widgets[] = self::wid_heading( $title, 'h3', 'es-card-pillar__title' );
+			$widgets[] = self::wid_text( $desc, 'es-card-pillar__desc' );
+			$cols[] = $widgets;
+			$col_settings[] = array();
+		}
+		return self::section_native( array(
+			'cols' => $cols,
+			'variant' => $variant,
+			'css_classes' => 'es-cards-grid',
+			'column_classes' => 'es-card-pillar',
+			'padding' => array( '40', '0', '120', '0' ),
+			'gap' => 'default',
+			'column_settings' => $col_settings,
+		) );
+	}
+
 }
 
 /** Safe wpautop-like helper. */

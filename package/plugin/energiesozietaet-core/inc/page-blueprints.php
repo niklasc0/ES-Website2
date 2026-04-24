@@ -112,15 +112,16 @@ class ESC_Page_Blueprints {
 	/* ==========================================================================
 	 * Home
 	 * ========================================================================== */
+	/* ========================== Home ========================== */
 	protected static function home( $data ) {
 		$b = 'ESC_Elementor_Builder';
-		$sections = array();
+		$s = array();
 
-		// 1. Hero — editorial dark, headline mit Accent-Span, claim grid
-		$sections[] = $b::hero_editorial( array(
+		// 1. Hero
+		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Recht · Steuern · Beratung',
 			'headline_html' => 'Expertise trifft <span class="text-bg-green">Leidenschaft.</span>',
-			'lead' => 'Wir sind ein <em>junges, innovatives Beratungsunternehmen</em>, dessen langjährig erfahrene Rechtsanwälte, Steuer- und Unternehmensberater sich der <em>Transformation der öffentlichen Hand und der Energiewirtschaft</em> verschrieben haben. Wir arbeiten hoch spezialisiert, fachübergreifend und fokussiert an den Themen unserer Zeit.',
+			'lead' => '<p>Wir sind ein <em>junges, innovatives Beratungsunternehmen</em>, dessen langjährig erfahrene Rechtsanwälte, Steuer- und Unternehmensberater sich der <em>Transformation der öffentlichen Hand und der Energiewirtschaft</em> verschrieben haben. Wir arbeiten hoch spezialisiert, fachübergreifend und fokussiert an den Themen unserer Zeit.</p>',
 			'buttons' => array(
 				array( 'Leistungen entdecken', '/leistungen/', 'paper' ),
 				array( 'Unser Team kennenlernen', '/team/', 'ghost-paper' ),
@@ -134,170 +135,170 @@ class ESC_Page_Blueprints {
 			'padding' => 'tall',
 		) );
 
-		// 2. Intro-Strip — "Unser Anspruch"
-		$intro_html  = '<div class="es-wrap" style="padding:100px 0;">';
-		$intro_html .= '<div style="display:grid;grid-template-columns:1fr 1.6fr;gap:96px;align-items:start;">';
-		$intro_html .= '<div><div class="es-eyebrow">Unser Anspruch</div></div>';
-		$intro_html .= '<div>';
-		$intro_html .= '<p style="font-size:26px;line-height:1.35;font-weight:400;letter-spacing:-0.015em;color:#0E1A2B;margin:0;">Wir arbeiten <em>hoch spezialisiert</em>, fachübergreifend und fokussiert an den Themen unserer Zeit — unaufgeregt, ergebnisorientiert und mit individuellen Persönlichkeiten.</p>';
-		$intro_html .= '<div style="margin-top:36px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;">';
-		$intro_html .= '<a class="es-link" href="/philosophie/">Unsere Philosophie</a>';
-		$intro_html .= '<span style="color:#8591A3;">·</span>';
-		$intro_html .= '<a class="es-link" href="/team/">Unser Team</a>';
-		$intro_html .= '</div></div></div></div>';
-		$sections[] = $b::section_html( $intro_html, 'warm' );
-
-		// 3. Leistungen — 3 Cards (grounded by shared container + top-border + bottom-rule)
-		$services_html  = '<div class="es-wrap" style="padding:140px 0 120px;">';
-		$services_html .= '<div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:56px;gap:48px;">';
-		$services_html .= '<div>';
-		$services_html .= '<div class="es-eyebrow">Leistungen</div>';
-		$services_html .= '<h2 style="font-size:clamp(36px,4.4vw,52px);line-height:1.05;font-weight:400;letter-spacing:-0.03em;margin:0;">Interdisziplinäre Beratung.<br/><span style="color:#5A6577;">Drei Felder, ein Gedanke.</span></h2>';
-		$services_html .= '<p style="font-size:17px;line-height:1.55;margin-top:20px;color:#5A6577;max-width:620px;">Wir denken Lösungen vom Ende her: strategische, betriebswirtschaftliche, juristische und steuerliche Themen stellen wir in den Gesamtkontext.</p>';
-		$services_html .= '</div>';
-		$services_html .= '<a class="es-link" href="/leistungen/" style="flex-shrink:0;">Alle Leistungen ansehen →</a>';
-		$services_html .= '</div>';
-		$services_html .= '<div class="esc-grid esc-grid--cols-3" style="border-top:1px solid #E4E7EC;padding-top:0;">';
-		$cards = array(
-			array( '01', 'Rechtsberatung',             '/rechtsberatung/',       'Energierecht, Vergaberecht, Regulierung, M&A, Gesellschaftsrecht. Wir stellen juristische Lösungen in den Gesamtkontext.' ),
-			array( '02', 'Steuerberatung',             '/steuerberatung/',       'Fortlaufende Steuerberatung, Gestaltungsberatung und herausfordernde Neustrukturierungen für Versorger und Kommunen.' ),
-			array( '03', 'Unternehmens&shy;beratung',  '/unternehmensberatung/', 'Wir navigieren Sie durch strategische, wirtschaftliche und finanzielle Fragestellungen der Transformation.' ),
-		);
-		foreach ( $cards as $c ) {
-			$services_html .= '<a class="esc-card" href="' . esc_url( $c[2] ) . '" style="border-top:0;min-height:380px;padding:36px;">';
-			$services_html .= '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:100px;"><div style="font-family:var(--es-font-mono);font-size:12px;color:#8591A3;letter-spacing:0.1em;">' . $c[0] . ' / 03</div><div style="width:6px;height:6px;border-radius:999px;background:#95D708;"></div></div>';
-			$services_html .= '<h3 style="font-size:28px;line-height:1.1;font-weight:500;letter-spacing:-0.02em;margin-bottom:16px;min-height:1.1em;">' . $c[1] . '</h3>';
-			$services_html .= '<p style="font-size:15px;color:#5A6577;line-height:1.55;margin-bottom:32px;">' . esc_html( $c[3] ) . '</p>';
-			$services_html .= '<span class="es-link" style="margin-top:auto;">Mehr erfahren →</span>';
-			$services_html .= '</a>';
-		}
-		$services_html .= '</div></div>';
-		$sections[] = $b::section_html( $services_html );
-
-		// 4. GF Quote (mit Portrait) — "Unser Anspruch"
-		$sections[] = $b::gf_quote( array(
-			'quote' => 'Wir wollen mit unserer langjährigen Beratungs- und Netzwerkerfahrung unsere Mandantschaft bei den anstehenden Transformationen begleiten — und mit den individuellen Persönlichkeiten unseres Teams Mehrwert bieten.',
+		// 2. Intro (Split Text warm)
+		$s[] = $b::split_native( array(
+			'eyebrow' => 'Unser Anspruch',
+			'paragraphs' => array(
+				'<p style="font-size:26px;line-height:1.35;letter-spacing:-0.015em;color:#0E1A2B;">Wir arbeiten <em>hoch spezialisiert</em>, fachübergreifend und fokussiert an den Themen unserer Zeit — unaufgeregt, ergebnisorientiert und mit individuellen Persönlichkeiten.</p>',
+				'<p><a class="es-link" href="/philosophie/">Unsere Philosophie</a> · <a class="es-link" href="/team/">Unser Team</a></p>',
+			),
+			'variant' => 'warm',
+			'padding' => 'short',
 		) );
 
-		// 5. News teaser — 3 Karten mit Beitragsbild
-		$news_html  = '<div class="es-wrap" style="padding:140px 0;">';
-		$news_html .= '<div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:56px;gap:48px;flex-wrap:wrap;">';
-		$news_html .= '<div><div class="es-eyebrow">Aktuelles · Neu</div><h2 style="font-size:clamp(36px,4.2vw,52px);line-height:1.05;font-weight:400;letter-spacing:-0.03em;margin:0;">Fachbeiträge.</h2></div>';
-		$news_html .= '<a class="es-link" href="/news/">Alle Beiträge ansehen →</a></div>';
-		$news_html .= '[es_news limit="3" columns="3"]';
-		$news_html .= '</div>';
-		$sections[] = $b::section_html( $news_html );
-
-		// 6. CTA dark
-		$sections[] = $b::cta_dark( array(
-			'title_html' => 'Sprechen Sie mit uns.',
-			'sub' => 'Unaufgeregt, direkt, fachlich.',
-			'buttons' => array(
-				array( 'Termin vereinbaren', '/kontakt/', 'paper' ),
-				array( 'Unser Team', '/team/', 'ghost-paper' ),
+		// 3. Leistungen-3-Cards (Heading+Text+Link in 3 Columns)
+		$s[] = $b::section_native( array(
+			'variant' => '',
+			'css_classes' => 'es-home-services-head',
+			'padding' => array( '120', '0', '40', '0' ),
+			'cols' => array(
+				array(
+					$b::wid_heading( 'Leistungen', 'p', 'es-eyebrow' ),
+					$b::wid_heading( 'Interdisziplinäre Beratung.<br><span style="color:#5A6577;">Drei Felder, ein Gedanke.</span>', 'h2', 'es-home-services-head__title' ),
+					$b::wid_text( '<p>Wir denken Lösungen vom Ende her: strategische, betriebswirtschaftliche, juristische und steuerliche Themen stellen wir in den Gesamtkontext.</p>' ),
+				),
+			),
+		) );
+		// 3 Service-Cards in 3 columns
+		$s[] = $b::section_native( array(
+			'variant' => '',
+			'css_classes' => 'es-home-services',
+			'padding' => array( '0', '0', '120', '0' ),
+			'column_classes' => 'es-service-card',
+			'cols' => array(
+				array(
+					$b::wid_html( '<div class="es-service-card__head"><span class="es-service-card__num">01 / 03</span><span class="es-service-card__dot"></span></div>' ),
+					$b::wid_heading( 'Rechtsberatung', 'h3', 'es-service-card__title' ),
+					$b::wid_text( '<p>Energierecht, Vergaberecht, Regulierung, M&A, Gesellschaftsrecht. Wir stellen juristische Lösungen in den Gesamtkontext.</p>', 'es-service-card__body' ),
+					$b::wid_html( '<a class="es-link" href="/rechtsberatung/">Mehr erfahren →</a>' ),
+				),
+				array(
+					$b::wid_html( '<div class="es-service-card__head"><span class="es-service-card__num">02 / 03</span><span class="es-service-card__dot"></span></div>' ),
+					$b::wid_heading( 'Steuerberatung', 'h3', 'es-service-card__title' ),
+					$b::wid_text( '<p>Fortlaufende Steuerberatung, Gestaltungsberatung und herausfordernde Neustrukturierungen für Versorger und Kommunen.</p>', 'es-service-card__body' ),
+					$b::wid_html( '<a class="es-link" href="/steuerberatung/">Mehr erfahren →</a>' ),
+				),
+				array(
+					$b::wid_html( '<div class="es-service-card__head"><span class="es-service-card__num">03 / 03</span><span class="es-service-card__dot"></span></div>' ),
+					$b::wid_heading( 'Unternehmensberatung', 'h3', 'es-service-card__title' ),
+					$b::wid_text( '<p>Wir navigieren Sie durch strategische, wirtschaftliche und finanzielle Fragestellungen der Transformation.</p>', 'es-service-card__body' ),
+					$b::wid_html( '<a class="es-link" href="/unternehmensberatung/">Mehr erfahren →</a>' ),
+				),
 			),
 		) );
 
-		return $sections;
+		// 4. GF Quote (bleibt als gf_quote-Helper — enthält bereits Image+Blockquote)
+		$s[] = $b::gf_quote( array(
+			'quote' => 'Wir wollen mit unserer langjährigen Beratungs- und Netzwerkerfahrung unsere Mandantschaft bei den anstehenden Transformationen begleiten — und mit den individuellen Persönlichkeiten unseres Teams Mehrwert bieten.',
+		) );
+
+		// 5. News Teaser (shortcode widget)
+		$s[] = $b::section_native( array(
+			'css_classes' => 'es-home-news',
+			'padding' => array( '120', '0', '120', '0' ),
+			'cols' => array( array(
+				$b::wid_heading( 'Aktuelles · Neu', 'p', 'es-eyebrow' ),
+				$b::wid_heading( 'Fachbeiträge.', 'h2', 'es-home-news__title' ),
+				$b::wid_shortcode( '[es_news limit="3" columns="3"]' ),
+				$b::wid_html( '<p style="margin-top:32px;"><a class="es-link" href="/news/">Alle Beiträge ansehen →</a></p>' ),
+			) ),
+		) );
+
+		// 6. CTA
+		$s[] = $b::cta_dark_native();
+		return $s;
 	}
 
 
 	/* ==========================================================================
 	 * Philosophie
 	 * ========================================================================== */
+	/* ========================== Philosophie ========================== */
 	protected static function philosophie() {
 		$b = 'ESC_Elementor_Builder';
-		$sections = array();
+		$s = array();
 
-		$sections[] = $b::hero_editorial( array(
+		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Philosophie',
-			'headline_html' => 'Transformation ist eine<br/><span class="text-bg-green">Mammutaufgabe.</span>',
-			'lead' => 'Dafür braucht es viele. Das schafft niemand allein. Wir — das Team der Energiesozietät — verstehen uns als einer der vielen.',
+			'headline_html' => 'Transformation ist eine<br><span class="text-bg-green">Mammutaufgabe.</span>',
+			'lead' => '<p>Dafür braucht es viele. Das schafft niemand allein. Wir — das Team der Energiesozietät — verstehen uns als einer der vielen.</p>',
 			'padding' => 'tall',
 		) );
 
-		// Fokussiert · Ergebnisorientiert · Kreativ — 3 Pillar Cards auf warm
-		$pillars_html  = '<div class="es-wrap" style="padding:140px 0;">';
-		$pillars_html .= '<div style="display:grid;grid-template-columns:1fr 2fr;gap:96px;margin-bottom:120px;">';
-		$pillars_html .= '<div><div class="es-eyebrow">Wie wir arbeiten</div>';
-		$pillars_html .= '<h2 style="font-size:clamp(32px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-0.035em;margin-top:24px;">Fokussiert.<br/>Ergebnis&shy;orientiert.<br/><span class="text-bg-green">Kreativ.</span></h2></div>';
-		$pillars_html .= '<div style="padding-top:32px;">';
-		$pillars_html .= '<p style="font-size:20px;line-height:1.65;color:#0E1A2B;margin-bottom:28px;font-weight:300;">Wir sind Experten. Wir arbeiten hoch spezialisiert. Wir entwickeln ganzheitliche Lösungen, die strategische, betriebs- und finanzwirtschaftliche, juristische sowie steuerliche Fragen immer im Gesamtkontext betrachten.</p>';
-		$pillars_html .= '<p style="font-size:17px;line-height:1.7;color:#5A6577;">Das erfordert interdisziplinäres Denken, langjährige Erfahrung und die Bereitschaft, neu zu denken — gerade dort, wo sich Energiemärkte, regulatorische Rahmen und politische Entscheidungsprozesse gleichzeitig verändern.</p>';
-		$pillars_html .= '</div></div>';
-		$pillars_html .= '<div class="esc-grid esc-grid--cols-3" style="gap:16px;">';
-		$pillars = array(
-			array( '01', 'Fokussiert', 'Wir arbeiten hoch spezialisiert an den Themen unserer Zeit. Kein Bauchladen, sondern vertiefte Expertise dort, wo die Transformation entschieden wird: in der Energieversorgung, in der Kommunalwirtschaft, beim Bund und bei den Ländern.' ),
-			array( '02', 'Ergebnisorientiert', 'Wir denken Lösungen vom Ende her. Strategische, technische, betriebs- und finanzwirtschaftliche, juristische sowie steuerliche Lösungen stellen wir in den Gesamtkontext — damit unsere Mandanten tragfähige Entscheidungen treffen können.' ),
-			array( '03', 'Kreativ', 'Neue Fragestellungen verlangen neue Antworten. Wir verbinden langjährige Erfahrung aus Big-Four-Gesellschaften, spezialisierten Kanzleien und der Industrie mit einem agilen, pragmatischen Arbeitsrahmen.' ),
-		);
-		foreach ( $pillars as $p ) {
-			$pillars_html .= '<div style="padding:48px 36px;background:#FFFFFF;border:1px solid #E4E7EC;">';
-			$pillars_html .= '<div style="font-family:var(--es-font-mono);font-size:11px;color:#95D708;letter-spacing:0.16em;margin-bottom:32px;">' . $p[0] . ' —</div>';
-			$pillars_html .= '<h3 style="font-size:30px;line-height:1.15;font-weight:400;letter-spacing:-0.025em;margin-bottom:20px;">' . esc_html( $p[1] ) . '</h3>';
-			$pillars_html .= '<p style="font-size:15px;color:#5A6577;line-height:1.65;margin:0;">' . esc_html( $p[2] ) . '</p>';
-			$pillars_html .= '</div>';
-		}
-		$pillars_html .= '</div></div>';
-		$sections[] = $b::section_html( $pillars_html, 'warm' );
+		// Split: "Wie wir arbeiten — Fokussiert/Ergebnisorientiert/Kreativ"
+		$s[] = $b::split_native( array(
+			'eyebrow' => 'Wie wir arbeiten',
+			'title_html' => 'Fokussiert.<br>Ergebnis&shy;orientiert.<br><span class="text-bg-green">Kreativ.</span>',
+			'paragraphs' => array(
+				'<p>Wir sind Experten. Wir arbeiten hoch spezialisiert. Wir entwickeln ganzheitliche Lösungen, die strategische, betriebs- und finanzwirtschaftliche, juristische sowie steuerliche Fragen immer im Gesamtkontext betrachten.</p>',
+				'<p>Das erfordert interdisziplinäres Denken, langjährige Erfahrung und die Bereitschaft, neu zu denken — gerade dort, wo sich Energiemärkte, regulatorische Rahmen und politische Entscheidungsprozesse gleichzeitig verändern.</p>',
+			),
+			'variant' => 'warm',
+			'padding' => 'default',
+		) );
 
-		// Pullquote
-		$sections[] = $b::pullquote(
+		// 3 Pillar Cards
+		$s[] = $b::cards_native( array(
+			array( '01', 'Fokussiert',          'Wir arbeiten hoch spezialisiert an den Themen unserer Zeit. Kein Bauchladen, sondern vertiefte Expertise dort, wo die Transformation entschieden wird.' ),
+			array( '02', 'Ergebnisorientiert',  'Wir denken Lösungen vom Ende her. Strategische, technische, betriebs- und finanzwirtschaftliche, juristische sowie steuerliche Lösungen stellen wir in den Gesamtkontext.' ),
+			array( '03', 'Kreativ',             'Neue Fragestellungen verlangen neue Antworten. Wir verbinden langjährige Erfahrung aus Big-Four-Gesellschaften, spezialisierten Kanzleien und der Industrie mit einem agilen, pragmatischen Arbeitsrahmen.' ),
+		), 'warm' );
+
+		// Pullquote (bleibt als gf-Helper gerendert im Panel)
+		$s[] = $b::pullquote(
 			'„Unsere Mandanten bewegen sich in einem <span class="text-bg-green">hochkomplexen</span> und <span class="text-bg-green">sich kontinuierlich wandelnden</span> Umfeld. In diesem Umfeld treffen sie Entscheidungen, die ihre Unternehmen und Kommunen über Jahrzehnte prägen werden."',
 			'Unsere Überzeugung'
 		);
 
-		// Interdisziplinär — 4 Cards (Ingenieure/Kaufleute/Rechtsanwälte/Steuerberater)
-		$intd_html  = '<div class="es-wrap" style="padding:140px 0;">';
-		$intd_html .= '<div class="es-eyebrow">Interdisziplinär</div>';
-		$intd_html .= '<h2 style="font-size:clamp(32px,4vw,52px);line-height:1.05;font-weight:400;letter-spacing:-0.03em;margin:0 0 24px;max-width:720px;">Ein Team aus vier Perspektiven.</h2>';
-		$intd_html .= '<p style="font-size:17px;line-height:1.55;color:#5A6577;max-width:720px;margin:0 0 64px;">Ingenieure, Kaufleute, Rechtsanwälte und Steuerberater erarbeiten mit unseren Mandanten ganzheitliche, tragfähige Lösungen als Grundlage für gut abgewogene Entscheidungen.</p>';
-		$intd_html .= '<div class="esc-grid esc-grid--cols-4" style="gap:16px;">';
-		$perspective = array(
-			array( 'Ingenieure', 'Technische Lösungen und Machbarkeit im Energiesystem.' ),
-			array( 'Kaufleute', 'Betriebs- und finanzwirtschaftliche Bewertung und Strukturierung.' ),
-			array( 'Rechtsanwälte', 'Juristische Gestaltung im regulatorischen Gesamtkontext.' ),
-			array( 'Steuerberater', 'Steuerliche Struktur, Compliance und Gestaltungsspielräume.' ),
-		);
-		foreach ( $perspective as $m ) {
-			$intd_html .= '<div style="padding:36px 28px;background:#FFFFFF;border:1px solid #E4E7EC;">';
-			$intd_html .= '<div style="width:4px;height:28px;background:#95D708;margin-bottom:24px;"></div>';
-			$intd_html .= '<div style="font-size:20px;font-weight:500;letter-spacing:-0.015em;margin-bottom:10px;">' . esc_html( $m[0] ) . '</div>';
-			$intd_html .= '<div style="font-size:13px;color:#5A6577;line-height:1.6;">' . esc_html( $m[1] ) . '</div>';
-			$intd_html .= '</div>';
+		// 4 Perspektiven
+		$s[] = $b::section_native( array(
+			'variant' => 'warm',
+			'padding' => array( '120', '0', '40', '0' ),
+			'cols' => array( array(
+				$b::wid_heading( 'Interdisziplinär', 'p', 'es-eyebrow' ),
+				$b::wid_heading( 'Ein Team aus vier Perspektiven.', 'h2', 'es-split__title' ),
+				$b::wid_text( '<p>Ingenieure, Kaufleute, Rechtsanwälte und Steuerberater erarbeiten mit unseren Mandanten ganzheitliche, tragfähige Lösungen als Grundlage für gut abgewogene Entscheidungen.</p>' ),
+			) ),
+		) );
+		$s[] = $b::cards_native( array(
+			array( '', 'Ingenieure',    'Technische Lösungen und Machbarkeit im Energiesystem.' ),
+			array( '', 'Kaufleute',     'Betriebs- und finanzwirtschaftliche Bewertung und Strukturierung.' ),
+			array( '', 'Rechtsanwälte', 'Juristische Gestaltung im regulatorischen Gesamtkontext.' ),
+			array( '', 'Steuerberater', 'Steuerliche Struktur, Compliance und Gestaltungsspielräume.' ),
+		), 'warm' );
+
+		// Mandantschaft (Split mit Liste)
+		$items_html  = '<ul class="es-mandanten">';
+		foreach ( array(
+			'Energieversorgungsunternehmen','Stadtwerke & kommunale Unternehmen','Bund & Länder',
+			'Kommunen & Einrichtungen der öffentlichen Hand','Infrastrukturdienstleister','Investoren',
+		) as $i => $m ) {
+			$items_html .= '<li><span class="es-mandanten__num">' . str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ) . '</span> ' . esc_html( $m ) . '</li>';
 		}
-		$intd_html .= '</div></div>';
-		$sections[] = $b::section_html( $intd_html, 'warm' );
+		$items_html .= '</ul>';
+		$s[] = $b::split_native( array(
+			'eyebrow' => 'Mandantschaft',
+			'title_html' => 'Wen wir beraten.',
+			'paragraphs' => array(
+				'<p>Mit unserem Beratungsangebot adressieren wir Energieversorgungsunternehmen, Bund, Länder und Kommunen sowie deren Einrichtungen und Unternehmen. Hinzu kommen private und öffentliche Infrastrukturdienstleister und Investoren.</p>',
+			),
+			'extra_after' => array( $b::wid_html( $items_html ) ),
+			'padding' => 'default',
+		) );
 
-		// Mandantschaft
-		$mand_html  = '<div class="es-wrap" style="padding:140px 0;">';
-		$mand_html .= '<div style="display:grid;grid-template-columns:1fr 1.4fr;gap:96px;align-items:start;">';
-		$mand_html .= '<div><div class="es-eyebrow">Mandantschaft</div>';
-		$mand_html .= '<h2 style="font-size:clamp(32px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-0.035em;margin-top:24px;">Wen wir beraten.</h2></div>';
-		$mand_html .= '<div><p style="font-size:19px;line-height:1.65;color:#0E1A2B;margin:0 0 40px;">Mit unserem Beratungsangebot adressieren wir Energieversorgungsunternehmen, Bund, Länder und Kommunen sowie deren Einrichtungen und Unternehmen. Hinzu kommen private und öffentliche Infrastrukturdienstleister und Investoren.</p>';
-		$mand_html .= '<div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #E4E7EC;">';
-		$mandanten = array( 'Energieversorgungsunternehmen', 'Stadtwerke & kommunale Unternehmen', 'Bund & Länder', 'Kommunen & Einrichtungen der öffentlichen Hand', 'Infrastrukturdienstleister', 'Investoren' );
-		foreach ( $mandanten as $i => $m ) {
-			$right = ( $i % 2 === 0 ) ? 'border-right:1px solid #E4E7EC;padding-right:32px;' : 'padding-left:32px;';
-			$mand_html .= '<div style="padding:22px 0;border-bottom:1px solid #E4E7EC;' . $right . 'font-size:17px;font-weight:400;letter-spacing:-0.01em;display:flex;align-items:center;gap:16px;">';
-			$mand_html .= '<span style="font-family:var(--es-font-mono);font-size:11px;color:#8591A3;letter-spacing:0.08em;">' . str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ) . '</span>' . esc_html( $m );
-			$mand_html .= '</div>';
-		}
-		$mand_html .= '</div></div></div></div>';
-		$sections[] = $b::section_html( $mand_html );
+		// Politikberatung (Split ink)
+		$s[] = $b::split_native( array(
+			'eyebrow' => 'Politikberatung',
+			'title_html' => 'Lösungen, die im<br>politischen Prozess<br><span class="text-bg-green">Akzeptanz finden.</span>',
+			'paragraphs' => array(
+				'<p>Wir haben ein ausgeprägtes Verständnis von Energiemärkten, Verwaltungsorganisationen und ihren politischen Entscheidungsprozessen. Politikberatung ist integraler Bestandteil unserer Tätigkeit, um die Projekte unserer Mandanten zum Erfolg zu führen.</p>',
+				'<p>Wir entwickeln Konzepte für die Kommunikation von Lösungen im politischen Entscheidungsprozess — mit dem Ziel, bestmögliche Lösungen zu präsentieren, die eine breite Akzeptanz finden.</p>',
+			),
+			'variant' => 'ink',
+			'padding' => 'default',
+		) );
 
-		// Politikberatung — dunkel
-		$pol_html  = '<div class="es-wrap" style="padding:140px 0;">';
-		$pol_html .= '<div style="display:grid;grid-template-columns:1fr 1.4fr;gap:96px;">';
-		$pol_html .= '<div><div class="es-eyebrow es-eyebrow--paper">Politikberatung</div>';
-		$pol_html .= '<h2 style="font-size:clamp(32px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-0.035em;color:#FFFFFF;margin-top:24px;">Lösungen, die im<br/>politischen Prozess<br/><span class="text-bg-green">Akzeptanz finden.</span></h2></div>';
-		$pol_html .= '<div style="padding-top:24px;">';
-		$pol_html .= '<p style="font-size:20px;line-height:1.65;color:rgba(255,255,255,0.82);margin-bottom:28px;font-weight:300;">Wir haben ein ausgeprägtes Verständnis von Energiemärkten, Verwaltungsorganisationen und ihren politischen Entscheidungsprozessen. Politikberatung ist integraler Bestandteil unserer Tätigkeit, um die Projekte unserer Mandanten zum Erfolg zu führen.</p>';
-		$pol_html .= '<p style="font-size:16px;line-height:1.7;color:rgba(255,255,255,0.6);">Wir entwickeln Konzepte für die Kommunikation von Lösungen im politischen Entscheidungsprozess — mit dem Ziel, bestmögliche Lösungen zu präsentieren, die eine breite Akzeptanz finden.</p>';
-		$pol_html .= '</div></div></div>';
-		$sections[] = $b::section_html( $pol_html, 'ink' );
-
-		$sections[] = $b::cta_dark( array(
+		$s[] = $b::cta_dark_native( array(
 			'eyebrow' => 'Kontakt',
 			'title_html' => 'Haben wir Ihr Interesse geweckt?',
 			'sub' => 'Möchten Sie uns kennenlernen?',
@@ -306,60 +307,62 @@ class ESC_Page_Blueprints {
 				array( 'Unser Team', '/team/', 'ghost-paper' ),
 			),
 		) );
-
-		return $sections;
+		return $s;
 	}
 
 
 	/* ==========================================================================
 	 * Leistungen (Übersicht) + Beratungsfeld-Detail
 	 * ========================================================================== */
+	/* ========================== Leistungen (Übersicht) + Beratungsfeld-Detail ========================== */
 	protected static function leistungen( $data ) {
 		$b = 'ESC_Elementor_Builder';
-		$sections = array();
+		$s = array();
 
-		$sections[] = $b::hero_editorial( array(
+		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Leistungen',
-			'headline_html' => 'Interdisziplinäre<br/><span class="text-bg-green">Beratung.</span>',
-			'lead' => 'Wir denken Lösungen vom Ende her: strategische, technische, betriebs- und finanzwirtschaftliche, juristische und steuerliche Lösungen stellen wir dafür in den Gesamtkontext.',
+			'headline_html' => 'Interdisziplinäre<br><span class="text-bg-green">Beratung.</span>',
+			'lead' => '<p>Wir denken Lösungen vom Ende her: strategische, technische, betriebs- und finanzwirtschaftliche, juristische und steuerliche Lösungen stellen wir dafür in den Gesamtkontext.</p>',
 			'padding' => 'short',
 		) );
 
-		// Kontext-Strip: Experten für Ihre Beratung
-		$ctx_html  = '<div class="es-wrap" style="padding:100px 0;border-bottom:1px solid #E4E7EC;">';
-		$ctx_html .= '<div style="display:grid;grid-template-columns:1fr 2fr;gap:96px;">';
-		$ctx_html .= '<div><div class="es-eyebrow">Unser Anspruch</div>';
-		$ctx_html .= '<h2 style="font-size:clamp(32px,3.6vw,42px);line-height:1.1;font-weight:300;letter-spacing:-0.03em;margin-top:24px;">Experten für Ihre Beratung.</h2></div>';
-		$ctx_html .= '<div style="padding-top:16px;">';
-		$ctx_html .= '<p style="font-size:18px;line-height:1.7;color:#0E1A2B;margin-bottom:24px;">Die Energiesozietät ist seit ihrer Gründung Ende 2023 dynamisch gewachsen und verfügt heute über ein Team mit großem Erfahrungsschatz. Viele Teammitglieder haben jahrelang erfolgreich in Big-Four-Gesellschaften, spezialisierten Beratungsgesellschaften und Kanzleien gearbeitet.</p>';
-		$ctx_html .= '<p style="font-size:16px;line-height:1.7;color:#5A6577;">Sollten wir selbst einmal nicht die geeigneten Spezialisten im Team haben, um Ihre Fragen bestmöglich zu beantworten, kooperieren wir mit namhaften Beratungsgesellschaften, mit denen wir seit vielen Jahren vertrauensvoll zusammenarbeiten.</p>';
-		$ctx_html .= '</div></div></div>';
-		$sections[] = $b::section_html( $ctx_html, 'warm' );
+		$s[] = $b::split_native( array(
+			'eyebrow' => 'Unser Anspruch',
+			'title_html' => 'Experten für Ihre Beratung.',
+			'paragraphs' => array(
+				'<p>Die Energiesozietät ist seit ihrer Gründung Ende 2023 dynamisch gewachsen und verfügt heute über ein Team mit großem Erfahrungsschatz. Viele Teammitglieder haben jahrelang erfolgreich in Big-Four-Gesellschaften, spezialisierten Beratungsgesellschaften und Kanzleien gearbeitet.</p>',
+				'<p>Sollten wir selbst einmal nicht die geeigneten Spezialisten im Team haben, um Ihre Fragen bestmöglich zu beantworten, kooperieren wir mit namhaften Beratungsgesellschaften, mit denen wir seit vielen Jahren vertrauensvoll zusammenarbeiten.</p>',
+			),
+			'variant' => 'warm',
+			'padding' => 'short',
+		) );
 
-		// 3 Bereiche als abgesetzte Sections mit eigener Einleitung
+		// 3 Bereichs-Blöcke mit dynamischen Einzelleistungen (auto-Permalink-Links)
 		$bf = self::beratungsfelder();
 		$titles_html = array(
-			'rechtsberatung'       => 'Rechts&shy;<br/>beratung',
-			'steuerberatung'       => 'Steuer&shy;<br/>beratung',
-			'unternehmensberatung' => 'Unternehmens&shy;<br/>beratung',
+			'rechtsberatung'       => 'Rechts&shy;<br>beratung',
+			'steuerberatung'       => 'Steuer&shy;<br>beratung',
+			'unternehmensberatung' => 'Unternehmens&shy;<br>beratung',
 		);
 		$i = 0;
 		foreach ( array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' ) as $slug ) {
 			$cfg = $bf[ $slug ];
-			$sections[] = $b::bereich( array(
+			$s[] = $b::bereich( array(
 				'n' => $cfg['n'],
 				'title' => $cfg['title'],
 				'title_html' => $titles_html[ $slug ],
 				'sub' => $cfg['sub'],
 				'lede' => $cfg['lede'],
 				'link' => '/' . $slug . '/',
-				'topics' => $cfg['topics'],
+				'field' => $slug,        // dynamische Einzelleistungen, Links auf Permalink
+				'topics' => array(),     // nicht hartcodiert — wird zur Laufzeit geholt
 				'stripe' => ( $i % 2 === 0 ) ? 'odd' : 'even',
 			) );
 			$i++;
 		}
 
-		$sections[] = $b::cta_dark( array(
+		$s[] = $b::cta_dark_native( array(
+			'eyebrow' => 'Kontakt',
 			'title_html' => 'Haben wir Ihr Interesse geweckt?',
 			'sub' => 'Möchten Sie uns kennenlernen?',
 			'buttons' => array(
@@ -367,83 +370,87 @@ class ESC_Page_Blueprints {
 				array( 'Unser Team', '/team/', 'ghost-paper' ),
 			),
 		) );
-
-		return $sections;
+		return $s;
 	}
 
 	protected static function beratungsfeld_detail( $slug, $data ) {
 		$b = 'ESC_Elementor_Builder';
 		$bf = self::beratungsfelder();
 		$d = $bf[ $slug ];
-		$sections = array();
+		$s = array();
 
-		// Hero mit Breadcrumb
-		$hero_html  = '<div class="es-wrap" style="padding:80px 0 110px;">';
-		$hero_html .= '<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:40px;font-family:var(--es-font-mono);letter-spacing:0.06em;"><a href="/leistungen/" style="color:inherit;">Leistungen</a>  /  ' . esc_html( $d['title'] ) . '</div>';
-		$hero_html .= '<div style="display:grid;grid-template-columns:1.3fr 1fr;gap:96px;align-items:end;">';
-		$hero_html .= '<div>';
-		$hero_html .= '<div class="es-eyebrow" style="color:#95D708;">' . esc_html( $d['n'] ) . ' · ' . esc_html( $d['title'] ) . '</div>';
-		$hero_html .= '<h1 style="font-size:clamp(44px,5.6vw,72px);line-height:1.02;font-weight:300;letter-spacing:-0.035em;margin:0;color:#FFFFFF;">' . esc_html( $d['long_title'] ) . '</h1>';
-		$hero_html .= '</div>';
-		$hero_html .= '<p style="font-size:17px;line-height:1.55;color:rgba(255,255,255,0.72);margin:0;">' . esc_html( $d['lede'] ) . '</p>';
-		$hero_html .= '</div></div>';
-		$sections[] = $b::section_html( $hero_html, 'ink' );
+		// Hero mit Breadcrumb (H1 + Lead)
+		$crumb_html = '<div class="es-article__crumb" style="margin-bottom:28px;"><a href="/leistungen/" style="color:inherit;">Leistungen</a>  /  ' . esc_html( $d['title'] ) . '</div>';
+		$s[] = $b::section_native( array(
+			'variant' => 'ink',
+			'css_classes' => 'es-hero',
+			'padding' => array( '80', '0', '110', '0' ),
+			'cols' => array( array(
+				$b::wid_html( $crumb_html ),
+				$b::wid_heading( $d['n'] . ' · ' . $d['title'], 'p', 'es-eyebrow es-eyebrow--accent' ),
+				$b::wid_heading( $d['long_title'], 'h1', 'es-hero__title' ),
+				$b::wid_text( '<p>' . esc_html( $d['lede'] ) . '</p>', 'es-hero__lead' ),
+			) ),
+		) );
 
-		// Ansprechpartner-Balken (mit Foto in rund, 52px)
-		$ap_html  = '<div class="es-wrap" style="padding:28px 0;border-bottom:1px solid #E4E7EC;">';
-		$ap_html .= '<div style="display:grid;grid-template-columns:auto 1fr auto;gap:48px;align-items:center;">';
-		$ap_html .= '<div class="es-eyebrow" style="margin:0;">Ihre Ansprechpartner</div>';
-		$ap_html .= '<div style="display:flex;gap:40px;align-items:center;flex-wrap:wrap;">';
+		// Ansprechpartner-Balken (zwei Personen + CTA)
+		$ap_html  = '<div class="es-ansprech"><div class="es-eyebrow" style="margin:0 40px 0 0;flex-shrink:0;">Ihre Ansprechpartner</div>';
+		$ap_html .= '<div class="es-ansprech__people">';
 		foreach ( $d['ansprechpartner'] as $p ) {
-			$ap_html .= '<a href="/teammitglied/' . esc_attr( $p[0] ) . '/" style="display:flex;align-items:center;gap:14px;color:#0E1A2B;">';
-			$ap_html .= '<div style="width:52px;height:52px;border-radius:999px;overflow:hidden;background:#F6F4EF;flex-shrink:0;">[es_team_photo slug="' . esc_attr( $p[0] ) . '" size=52]</div>';
-			$ap_html .= '<div><div style="font-size:15px;font-weight:500;">' . esc_html( $p[1] ) . '</div><div style="font-size:12px;color:#5A6577;margin-top:2px;">' . esc_html( $p[2] ) . '</div></div>';
+			$ap_html .= '<a href="/teammitglied/' . esc_attr( $p[0] ) . '/">';
+			$ap_html .= '<div class="es-ansprech__photo">[es_team_photo slug="' . esc_attr( $p[0] ) . '" size=52]</div>';
+			$ap_html .= '<div><div class="es-ansprech__name">' . esc_html( $p[1] ) . '</div><div class="es-ansprech__role">' . esc_html( $p[2] ) . '</div></div>';
 			$ap_html .= '</a>';
 		}
 		$ap_html .= '</div>';
-		$ap_html .= '<a class="es-btn es-btn--primary" style="padding:12px 18px;font-size:13px;" href="/kontakt/">Termin anfragen →</a>';
-		$ap_html .= '</div></div>';
-		$sections[] = $b::section_html( $ap_html, 'warm' );
+		$ap_html .= '<a class="es-btn es-btn--primary" href="/kontakt/">Termin anfragen →</a></div>';
+		$s[] = $b::section_native( array(
+			'variant' => 'warm',
+			'padding' => array( '28', '0', '28', '0' ),
+			'cols' => array( array( $b::wid_html( $ap_html ) ) ),
+		) );
 
-		// Content — Text links (schmaler), Einzelleistungen rechts (mehr Platz)
-		$cs_html  = '<div class="es-wrap" style="padding:140px 0;">';
-		$cs_html .= '<div style="display:grid;grid-template-columns:1fr 1.6fr;gap:96px;align-items:start;">';
-		$cs_html .= '<div style="position:sticky;top:40px;">';
-		$cs_html .= '<div class="es-eyebrow" style="margin-bottom:20px;">Was wir für Sie tun</div>';
-		$cs_html .= '<h2 style="font-size:clamp(28px,3.2vw,40px);line-height:1.15;font-weight:400;letter-spacing:-0.025em;margin:0 0 32px;">' . esc_html( $d['long_title'] ) . '</h2>';
-		foreach ( $d['long_copy'] as $j => $p ) {
-			$cs_html .= '<p style="font-size:17px;line-height:1.65;color:#5A6577;margin:0 0 24px;">' . esc_html( $p ) . '</p>';
-		}
-		$cs_html .= '</div>';
-		$cs_html .= '<div>';
-		$cs_html .= '<div class="es-eyebrow" style="margin-bottom:20px;">Einzelleistungen · ' . esc_html( $d['title'] ) . '</div>';
-		$cs_html .= '[es_einzelleistungen beratungsfeld="' . esc_attr( $slug ) . '" columns="2"]';
-		$cs_html .= '</div></div></div>';
-		$sections[] = $b::section_html( $cs_html );
+		// Content Split: Text links (native Widgets), Einzelleistungen rechts (2 Spalten, mehr Padding)
+		$s[] = $b::section_native( array(
+			'css_classes' => 'es-bereich-detail__content',
+			'padding' => array( '120', '0', '120', '0' ),
+			'gap' => 'wider',
+			'column_settings' => array(
+				array( '_column_size' => 40 ),
+				array( '_column_size' => 60 ),
+			),
+			'cols' => array(
+				array(
+					$b::wid_heading( 'Was wir für Sie tun', 'p', 'es-eyebrow' ),
+					$b::wid_heading( $d['long_title'], 'h2', 'es-split__title' ),
+					$b::wid_text( '<p>' . esc_html( $d['long_copy'][0] ) . '</p>' ),
+					$b::wid_text( '<p>' . esc_html( $d['long_copy'][1] ) . '</p>' ),
+				),
+				array(
+					$b::wid_heading( 'Einzelleistungen · ' . $d['title'], 'p', 'es-eyebrow' ),
+					$b::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $slug ) . '" columns="2" wrapper="es-bereich-detail__einzel"]', 'es-bereich-detail__einzel' ),
+				),
+			),
+		) );
 
 		// Publikationen & Fachbeiträge — 3 neueste getaggt mit Beratungsfeld
-		$pub_html  = '<div class="es-wrap" style="padding:120px 0;">';
-		$pub_html .= '<div style="display:flex;align-items:end;justify-content:space-between;margin-bottom:48px;gap:16px;flex-wrap:wrap;">';
-		$pub_html .= '<div><div class="es-eyebrow" style="margin-bottom:16px;">Aus diesem Feld</div>';
-		$pub_html .= '<h2 style="font-size:clamp(28px,3.4vw,40px);font-weight:400;letter-spacing:-0.03em;margin:0;">Publikationen &amp; Fachbeiträge</h2></div>';
-		$pub_html .= '<a class="es-link" href="/publikationen/?feld=' . esc_attr( $slug ) . '">Alle Publikationen →</a>';
-		$pub_html .= '</div>';
-		$pub_html .= '[es_pub_teaser field="' . esc_attr( $slug ) . '" limit="3"]';
-		$pub_html .= '</div>';
-		$sections[] = $b::section_html( $pub_html, 'warm' );
+		$s[] = $b::section_native( array(
+			'variant' => 'warm',
+			'padding' => array( '120', '0', '120', '0' ),
+			'cols' => array( array(
+				$b::wid_heading( 'Aus diesem Feld', 'p', 'es-eyebrow' ),
+				$b::wid_heading( 'Publikationen & Fachbeiträge', 'h2', 'es-home-news__title' ),
+				$b::wid_shortcode( '[es_pub_teaser field="' . esc_attr( $slug ) . '" limit="3"]' ),
+				$b::wid_html( '<p style="margin-top:32px;"><a class="es-link" href="/publikationen/?feld=' . esc_attr( $slug ) . '">Alle Publikationen →</a></p>' ),
+			) ),
+		) );
 
-		$sections[] = $b::cta_dark( array(
+		$s[] = $b::cta_dark_native( array(
 			'title_html' => 'Ihre Fragestellung — unsere Expertise.',
 			'sub' => 'Wir freuen uns auf Ihre Anfrage.',
 		) );
-
-		return $sections;
+		return $s;
 	}
-
-
-	/* ==========================================================================
-	 * Team-Übersicht, Publikationen, Karriere, News, Veranstaltungen, Kontakt
-	 * ========================================================================== */
 
 	protected static function team_page() {
 		$b = 'ESC_Elementor_Builder';
