@@ -18,6 +18,44 @@ class ESC_Shortcodes {
 		add_shortcode( 'es_publikationen',   array( __CLASS__, 'publikationen' ) );
 		add_shortcode( 'es_news_featured',   array( __CLASS__, 'news_featured' ) );
 		add_shortcode( 'es_pub_teaser',      array( __CLASS__, 'pub_teaser' ) );
+		add_shortcode( 'es_ansprechpartner', array( __CLASS__, 'ansprechpartner' ) );
+	}
+
+	/**
+	 * [es_ansprechpartner members="slug1,slug2" cta_url="/kontakt/" cta_label="Termin anfragen"]
+	 * Rendert die Ansprechpartner-Bar (Foto + Name + Rolle) + CTA-Button.
+	 * Member-Slugs werden in der Reihenfolge der Argumente gerendert.
+	 */
+	public static function ansprechpartner( $atts ) {
+		$atts = shortcode_atts( array(
+			'members'   => '',
+			'cta_url'   => '/kontakt/',
+			'cta_label' => 'Termin anfragen',
+			'eyebrow'   => 'Ihre Ansprechpartner',
+		), $atts, 'es_ansprechpartner' );
+		$slugs = array_filter( array_map( 'trim', explode( ',', (string) $atts['members'] ) ) );
+		if ( empty( $slugs ) ) { return ''; }
+		ob_start(); ?>
+		<div class="es-ansprech">
+			<div class="es-eyebrow" style="margin:0 40px 0 0;flex-shrink:0;"><?php echo esc_html( $atts['eyebrow'] ); ?></div>
+			<div class="es-ansprech__people">
+				<?php foreach ( $slugs as $slug ) :
+					$p = get_page_by_path( $slug, OBJECT, 'es_team' );
+					if ( ! $p ) { continue; }
+					$role = (string) get_post_meta( $p->ID, 'es_role', true ); ?>
+					<a href="<?php echo esc_url( get_permalink( $p ) ); ?>">
+						<div class="es-ansprech__photo"><?php echo do_shortcode( '[es_team_photo slug="' . esc_attr( $slug ) . '" size=52]' ); ?></div>
+						<div>
+							<div class="es-ansprech__name"><?php echo esc_html( $p->post_title ); ?></div>
+							<div class="es-ansprech__role"><?php echo esc_html( $role ); ?></div>
+						</div>
+					</a>
+				<?php endforeach; ?>
+			</div>
+			<a class="es-btn es-btn--primary" href="<?php echo esc_url( $atts['cta_url'] ); ?>"><?php echo esc_html( $atts['cta_label'] ); ?> →</a>
+		</div>
+		<?php
+		return ob_get_clean();
 	}
 
 	/**

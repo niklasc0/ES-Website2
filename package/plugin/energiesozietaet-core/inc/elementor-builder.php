@@ -291,6 +291,10 @@ class ESC_Elementor_Builder {
 		$html .= '<h2 class="es-bereich__title">' . $h2_content . '</h2>';
 		$html .= '<p class="es-bereich__lede">' . esc_html( $args['lede'] ) . '</p>';
 		if ( $args['link'] ) {
+			// Button als es-btn-Klasse, aber via CSS wirkt visuell wie ein
+			// Primary-Button. (Native Button-Widgets passen hier schlecht, da
+			// die ganze Section HTML-basiert ist — Umbau auf section_native
+			// wäre ein grösserer Umbau, den der User explizit bewahren will.)
 			$html .= '<a class="es-btn es-btn--primary" href="' . esc_url( $args['link'] ) . '">Zu ' . esc_html( $args['title'] ) . ' →</a>';
 		}
 		$html .= '</div>';
@@ -365,24 +369,32 @@ class ESC_Elementor_Builder {
 	 * GF Quote with portrait placeholder (Home page).
 	 */
 	public static function gf_quote( $args ) {
+		// Native Version: 2-Col Section, Photo-HTML links (nicht editierbarer
+		// Decor), Eyebrow + Zitat (Heading) + Name/Rolle (Text) rechts —
+		// alle textlichen Inhalte via Elementor-Widget editierbar.
 		$args = array_merge( array(
-			'quote' => '',
-			'name'  => 'Prof. Dr. Sven-Joachim Otto',
-			'role'  => 'Partner · Geschäftsführer',
-			'photo_shortcode' => '[es_team_photo slug="prof-dr-sven-joachim-otto" size=120]',
+			'quote'           => '',
+			'name'            => 'Prof. Dr. Sven-Joachim Otto',
+			'role'            => 'Partner · Geschäftsführer',
+			'photo_slug'      => 'prof-dr-sven-joachim-otto',
+			'eyebrow'         => 'Unser Anspruch',
 		), $args );
-
-		$html  = '<div class="es-wrap" style="padding:140px 0;">';
-		$html .= '<div class="es-eyebrow" style="margin-bottom:48px;">Unser Anspruch</div>';
-		$html .= '<div style="display:grid;grid-template-columns:auto 1fr;gap:56px;align-items:center;">';
-		$html .= '<div style="width:180px;height:180px;border-radius:999px;overflow:hidden;background:#F6F4EF;">' . do_shortcode( $args['photo_shortcode'] ) . '</div>';
-		$html .= '<div>';
-		$html .= '<blockquote style="margin:0;font-size:clamp(26px,2.8vw,40px);line-height:1.25;font-weight:300;letter-spacing:-0.02em;max-width:900px;color:#0E1A2B;">„' . $args['quote'] . '"</blockquote>';
-		$html .= '<div style="margin-top:32px;">';
-		$html .= '<div style="font-size:16px;font-weight:500;">' . esc_html( $args['name'] ) . '</div>';
-		$html .= '<div style="font-size:13px;color:#5A6577;margin-top:2px;">' . esc_html( $args['role'] ) . '</div>';
-		$html .= '</div></div></div></div>';
-		return self::section_html( $html, 'warm' );
+		$photo_html = '<div class="es-gf-quote__photo">' . do_shortcode( '[es_team_photo slug="' . esc_attr( $args['photo_slug'] ) . '" size=180]' ) . '</div>';
+		return self::section_native( array(
+			'variant' => 'warm',
+			'css_classes' => 'es-gf-quote',
+			'padding' => array( '140', '0', '140', '0' ),
+			'gap' => 'wider',
+			'column_settings' => array( array( '_column_size' => 22 ), array( '_column_size' => 78 ) ),
+			'cols' => array(
+				array( self::wid_html( $photo_html ) ),
+				array(
+					self::wid_heading( $args['eyebrow'], 'p', 'es-eyebrow' ),
+					self::wid_heading( '„' . $args['quote'] . '"', 'h2', 'es-gf-quote__text' ),
+					self::wid_text( '<p class="es-gf-quote__name">' . esc_html( $args['name'] ) . '</p><p class="es-gf-quote__role">' . esc_html( $args['role'] ) . '</p>' ),
+				),
+			),
+		) );
 	}
 
 	/** Section head (eyebrow + h2 + lede), centered or left. */
@@ -590,22 +602,31 @@ class ESC_Elementor_Builder {
 			$widgets[] = self::wid_text( $args['lead'], 'es-hero__lead' );
 		}
 		if ( ! empty( $args['buttons'] ) ) {
-			$btn_html = '<div class="es-hero__buttons">';
 			foreach ( $args['buttons'] as $b ) {
 				$style = isset( $b[2] ) ? $b[2] : 'paper';
-				$btn_html .= '<a class="es-btn es-btn--' . esc_attr( $style ) . '" href="' . esc_url( $b[1] ) . '">' . esc_html( $b[0] ) . ' →</a>';
+				$widgets[] = self::wid_button( $b[0] . ' →', $b[1], 'es-hero__button es-btn--' . $style );
 			}
-			$btn_html .= '</div>';
-			// Buttons via HTML-Widget damit die Varianten nebeneinander stehen.
-			$widgets[] = self::wid_html( $btn_html );
 		}
+		// Claims-Grid als native widgets pro Spalte — editierbar im Elementor.
 		if ( ! empty( $args['claims'] ) ) {
-			$claims_html = '<div class="es-hero-claims">';
+			$claim_cols = array();
 			foreach ( $args['claims'] as $c ) {
-				$claims_html .= '<div><div class="es-hero-claims__wert">' . esc_html( $c[0] ) . '</div><div class="es-hero-claims__label">' . esc_html( $c[1] ) . '</div></div>';
+				$claim_cols[] = array(
+					self::wid_heading( $c[0], 'div', 'es-hero-claims__wert' ),
+					self::wid_heading( $c[1], 'div', 'es-hero-claims__label' ),
+				);
 			}
-			$claims_html .= '</div>';
-			$widgets[] = self::wid_html( $claims_html );
+			$widgets[] = self::section( array_map( function( $cw ) { return array( 'widgets' => $cw ); }, $claim_cols ), array(
+				'structure'     => '40',
+				'layout'        => 'boxed',
+				'gap'           => 'default',
+				'css_classes'   => 'es-hero-claims-inner',
+				'_css_classes'  => 'es-hero-claims-inner',
+				'padding'       => array( 'unit' => 'px', 'top' => '40', 'right' => '0', 'bottom' => '0', 'left' => '0', 'isLinked' => false ),
+			) );
+			// Mark it as inner section
+			$last_idx = count( $widgets ) - 1;
+			$widgets[ $last_idx ]['isInner'] = true;
 		}
 
 		return self::section_native( array(
@@ -686,13 +707,12 @@ class ESC_Elementor_Builder {
 			self::wid_heading( $title_full, 'h2', 'es-cta__title' ),
 		);
 
-		$btn_html = '<div class="es-cta__buttons">';
+		// Native Elementor Button-Widgets statt HTML
+		$col2 = array();
 		foreach ( $args['buttons'] as $b ) {
 			$style = isset( $b[2] ) ? $b[2] : 'paper';
-			$btn_html .= '<a class="es-btn es-btn--' . esc_attr( $style ) . '" href="' . esc_url( $b[1] ) . '">' . esc_html( $b[0] ) . ' →</a>';
+			$col2[] = self::wid_button( $b[0] . ' →', $b[1], 'es-cta__button es-btn--' . $style );
 		}
-		$btn_html .= '</div>';
-		$col2 = array( self::wid_html( $btn_html ) );
 
 		return self::section_native( array(
 			'cols' => array( $col1, $col2 ),

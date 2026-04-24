@@ -30,6 +30,7 @@ require_once ESC_DIR . 'inc/importer.php';
 require_once ESC_DIR . 'inc/admin.php';
 require_once ESC_DIR . 'inc/footer-settings.php';
 require_once ESC_DIR . 'inc/karriere-settings.php';
+require_once ESC_DIR . 'inc/typography-settings.php';
 
 /**
  * Activation: flush rewrite rules after CPTs registered.

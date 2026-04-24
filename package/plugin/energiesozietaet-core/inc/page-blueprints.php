@@ -394,21 +394,16 @@ class ESC_Page_Blueprints {
 			) ),
 		) );
 
-		// Ansprechpartner-Balken (zwei Personen + CTA)
-		$ap_html  = '<div class="es-ansprech"><div class="es-eyebrow" style="margin:0 40px 0 0;flex-shrink:0;">Ihre Ansprechpartner</div>';
-		$ap_html .= '<div class="es-ansprech__people">';
-		foreach ( $d['ansprechpartner'] as $p ) {
-			$ap_html .= '<a href="/teammitglied/' . esc_attr( $p[0] ) . '/">';
-			$ap_html .= '<div class="es-ansprech__photo">[es_team_photo slug="' . esc_attr( $p[0] ) . '" size=52]</div>';
-			$ap_html .= '<div><div class="es-ansprech__name">' . esc_html( $p[1] ) . '</div><div class="es-ansprech__role">' . esc_html( $p[2] ) . '</div></div>';
-			$ap_html .= '</a>';
-		}
-		$ap_html .= '</div>';
-		$ap_html .= '<a class="es-btn es-btn--primary" href="/kontakt/">Termin anfragen →</a></div>';
+		// Ansprechpartner-Balken (Shortcode → im Elementor-Editor via
+		// Shortcode-Widget editierbar: members="slug1,slug2")
+		$ansprech_slugs = array();
+		foreach ( $d['ansprechpartner'] as $p ) { $ansprech_slugs[] = $p[0]; }
 		$s[] = $b::section_native( array(
 			'variant' => 'warm',
 			'padding' => array( '28', '0', '28', '0' ),
-			'cols' => array( array( $b::wid_html( $ap_html ) ) ),
+			'cols' => array( array(
+				$b::wid_shortcode( '[es_ansprechpartner members="' . esc_attr( implode( ',', $ansprech_slugs ) ) . '" cta_url="/kontakt/" cta_label="Termin anfragen"]' ),
+			) ),
 		) );
 
 		// Content Split: Text links (native Widgets), Einzelleistungen rechts (2 Spalten, mehr Padding)
