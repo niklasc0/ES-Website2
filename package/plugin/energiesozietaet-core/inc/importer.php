@@ -74,9 +74,27 @@ class ESC_Importer {
 			return new WP_Error( 'esc_no_data', 'content.json nicht gefunden.' );
 		}
 		$json = file_get_contents( $file );
+		// Sicherheitsnetz: doppelt-encodete UTF-8-Sequenzen reparieren
+		// (z.B. 'Ã¤' → 'ä'). Tritt auf, wenn die Quelle aus latin1-mb4 stammt.
+		$json = self::fix_mojibake( $json );
 		$data = json_decode( $json, true );
 		if ( ! is_array( $data ) ) { return new WP_Error( 'esc_bad_data', 'content.json ist fehlerhaft.' ); }
 		return $data;
+	}
+
+	/**
+	 * Heuristische Mojibake-Reparatur für UTF-8-Strings, die als Latin-1
+	 * gelesen und dann erneut als UTF-8 codiert wurden.
+	 */
+	protected static function fix_mojibake( $text ) {
+		if ( strpos( $text, 'Ã' ) === false && strpos( $text, "\xC2" ) === false ) { return $text; }
+		$replace = array(
+			'Ã¤' => 'ä', 'Ã¶' => 'ö', 'Ã¼' => 'ü', 'ÃŸ' => 'ß',
+			'Ãœ' => 'Ü', 'Ã„' => 'Ä', 'Ã–' => 'Ö',
+			'Ã©' => 'é', 'Ã¨' => 'è', 'Ã ' => 'à', 'Ã¡' => 'á',
+			'Â§' => '§', 'Â°' => '°', 'Â´' => '´',
+		);
+		return strtr( $text, $replace );
 	}
 
 	/** Import bundled media into the WP media library. */

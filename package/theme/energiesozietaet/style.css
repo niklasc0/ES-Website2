@@ -1759,3 +1759,27 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
     body .es-bereich-detail__content > .elementor-container { flex-direction: column !important; }
     body .es-bereich-detail__content > .elementor-container > .elementor-column { width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v13 — Beratungsfeld Text-Spalte volle Breite ≤ 1024
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    /* Volle Breite + Reset auf Standard-Block, damit nichts ausgegrenzt
+       bleibt durch flex-basis */
+    body .es-bereich-detail__content > .elementor-container {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        gap: 32px !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column {
+        width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important;
+    }
+    /* Direkt-Kinder der Spalten dürfen ebenfalls volle Breite nehmen */
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-element-populated {
+        width: 100% !important;
+    }
+    /* Sticky position (von Desktop) auf mobile auflösen */
+    body .es-bereich-detail__content > .elementor-container > .elementor-column[style*="position: sticky"],
+    body .es-bereich-detail__content > .elementor-container > .elementor-column { position: static !important; top: auto !important; }
+}
