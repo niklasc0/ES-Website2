@@ -1,57 +1,94 @@
 # Energiesozietät — WordPress-Paket
 
-**Work-in-progress** custom WordPress package (Theme + Plugin + Demo-Importer) für die Energiesozietät-Kanzleiwebsite. Auto-generierte Elementor-Seiten auf Basis der bestehenden Site-Inhalte.
+Custom WordPress-Paket (Theme + Plugin + Demo-Content-Importer) für die Energiesozietät-Kanzleiwebsite. Alle Seiten sind Elementor-basiert und voll editierbar.
 
-> **Dieser Commit ist ein Checkpoint.** Das Paket ist noch nicht installationsreif. Stand und To-dos siehe [`docs/HANDOFF.md`](docs/HANDOFF.md).
+## Lieferung
 
-## Struktur
+| Datei | Zweck |
+|---|---|
+| `dist/energiesozietaet-theme.zip` | Theme-Zip für WP-Upload unter *Design → Themes* |
+| `dist/energiesozietaet-core.zip`  | Companion-Plugin (CPTs, Shortcodes, Importer, 26 Team-Fotos, 368 KB content.json) |
+| `dist/energiesozietaet-content.wxr.xml` | WXR-Export des vollständig importierten Demo-Inhalts (zusätzliche Option für Tools → Import) |
+
+Die beiden Zips plus ein Klick im Importer reichen aus, um eine leere WordPress-Installation in die komplette Kanzleiseite zu verwandeln.
+
+## Installation (Kurz)
+
+1. Frische WordPress 6.0+ mit PHP 7.4+ (getestet mit WP 6.7.2, PHP 8.4).
+2. Unter *Plugins → Installieren → Plugin hochladen* das offizielle **Elementor**-Plugin installieren und aktivieren.
+3. *Design → Themes → Theme hinzufügen → Hochladen*: `energiesozietaet-theme.zip` → aktivieren.
+4. *Plugins → Installieren → Plugin hochladen*: `energiesozietaet-core.zip` → aktivieren.
+5. *Einstellungen → Permalinks*: **Beitragsname** (`/%postname%/`) auswählen und speichern.
+6. *Werkzeuge → Energiesozietät-Demo* öffnen und **Inhalte jetzt importieren** klicken.
+
+Nach dem Import liegen an:
+
+- **14 Seiten** (Home, Philosophie, Leistungen + 3 Beratungsfelder, Team, Publikationen, Karriere, News, Veranstaltungen, Kontakt, Impressum, Datenschutzerklärung) — alle mit Elementor-Layouts
+- **26 Teammitglieder** mit Fotos
+- **19 Einzelleistungen** mit Taxonomie Beratungsfeld (Rechtsberatung/Steuerberatung/Unternehmensberatung)
+- **3 Stellenangebote**, **4 Veranstaltungen**, **13 News-Artikel**, **12 Publikationen**
+- **Hauptmenü** (Primary) inkl. Leistungen-Dropdown
+- Homepage auf *Home* gesetzt, Footer-Menü, Legal-Seiten verlinkt
+
+Einzelne Seiten sind nachträglich im Elementor-Editor frei umbaubar. Der Import ist idempotent: erneut klicken erzeugt keine Duplikate. „Import erzwingen" überschreibt Inhalte mit identischem Slug.
+
+## Paketstruktur (Quelle)
 
 ```
 package/
-├── theme/energiesozietaet/            # Custom Theme (Elementor-kompatibel)
-│   ├── style.css                      # Design-Tokens, Typo, Animationen
-│   ├── functions.php                  # Setup, Menüs, Editor-Palette, TinyMCE-Styles
-│   ├── header.php, footer.php, ...    # Templates
-│   ├── single-es_team.php             # CPT Single-Templates (6 Stück)
-│   ├── archive.php                    # CPT-Archive
-│   ├── assets/js/ui.js                # Nav-Toggle, Scroll-Reveal
-│   └── assets/css/elementor.css       # Elementor-Overrides
+├── theme/energiesozietaet/                # Theme
+│   ├── style.css                          # Design-Tokens (Akzent #94d707, Ink #0f1720), Typo, Animationen
+│   ├── functions.php                      # Setup, Enqueue, Menüs, Editor-Palette, TinyMCE-Style-Dropdown
+│   ├── header.php, footer.php, index.php, page.php, archive.php
+│   ├── single-es_team.php                 # Pro CPT ein Single-Template
+│   ├── single-es_einzelleistung.php
+│   ├── single-es_karriere.php
+│   ├── single-es_veranstaltung.php
+│   ├── single-es_news.php
+│   ├── single-es_publikation.php
+│   ├── assets/js/ui.js                    # Nav-Toggle, Header-Condense, IntersectionObserver-Reveal
+│   ├── assets/css/elementor.css           # Elementor-Button/Accordion-Overrides
+│   ├── inc/template-helpers.php, inc/walker-menu.php
+│   └── screenshot.png
 │
-└── plugin/energiesozietaet-core/      # Companion-Plugin
-    ├── energiesozietaet-core.php      # Bootstrap
+└── plugin/energiesozietaet-core/          # Companion-Plugin
+    ├── energiesozietaet-core.php          # Bootstrap
     ├── inc/
-    │   ├── cpts.php                   # 6 CPTs + Taxonomie Beratungsfeld
-    │   ├── meta-boxes.php             # Rolle, E-Mail, LinkedIn, Bullets ...
-    │   ├── shortcodes.php             # [es_team], [es_einzelleistungen] u.a.
-    │   ├── elementor-widgets.php      # Shortcode → Elementor-Widget
-    │   ├── elementor-builder.php      # Programmatic Elementor-JSON
-    │   ├── page-blueprints.php        # Pro-Seite Elementor-Layouts (Stub!)
-    │   ├── importer.php               # Demo-Content-Importer
-    │   └── admin.php                  # Werkzeuge → Demo importieren
-    ├── assets/css/grid.css            # Grid-Stylings
+    │   ├── cpts.php                       # 6 CPTs + Taxonomien
+    │   ├── meta-boxes.php                 # Rolle, Bullets, Daten, Links …
+    │   ├── shortcodes.php                 # [es_team], [es_einzelleistungen] etc.
+    │   ├── elementor-widgets.php          # Shortcodes als Elementor-Widgets
+    │   ├── elementor-builder.php          # Programmatischer Elementor-JSON-Builder
+    │   ├── page-blueprints.php            # Konkrete Elementor-Layouts pro Seite
+    │   ├── importer.php                   # Demo-Content-Importer (idempotent)
+    │   └── admin.php                      # Werkzeuge → Importer-Button
+    ├── assets/css/grid.css                # Styling der Grid-Shortcodes
     └── data/
-        ├── content.json               # 368 KB — alle Originaltexte + Metadaten
-        └── media/team/*.jpg           # 26 Team-Fotos
+        ├── content.json                   # 368 KB — Originaltexte + Metadaten
+        └── media/team/*.jpg               # 26 Team-Portraits
 ```
 
 ## Design-Eckdaten
 
-- **Akzent:** `#94d707` (bestehende Kanzleifarbe) — zurückhaltend, nur Akzente
-- **Dunkle Balken:** `#0f1720` Ink (Header/Hero/Footer) wie im Original beibehalten
+- **Akzentfarbe:** `#94d707` — zurückhaltend, nur für Akzente
+- **Dunkle Balken:** `#0f1720` (Header, Hero, Footer) wie im Original beibehalten
 - **Typografie:** Fraunces (Display, Serif) + Manrope (Body, Sans) via Google Fonts
-- **Animation:** subtile Fade-in-up beim Scrollen (IntersectionObserver), Hover-Lift auf Karten, Menüunterstrich-Wipe. Respektiert `prefers-reduced-motion`.
-- **Mehrfarbige Text-Spans:** CSS-Klassen `text-bg-green`, `es-underline-accent`, `es-ink-text`, `es-muted-text`, `es-highlight` — via TinyMCE "Style"-Dropdown einfügbar.
+- **Animation:** subtile Fade-in-up beim Scrollen, Hover-Lift, Menu-Unterstrich-Wipe. Respektiert `prefers-reduced-motion`.
+- **Farbige Inline-Spans:** CSS-Klassen `text-bg-green`, `es-highlight`, `es-ink-text`, `es-muted-text`, `es-underline-accent` — im TinyMCE-Editor über das „Stil"-Dropdown einfügbar.
+- **Keine Drittanbieter-Elementor-Addons:** es kommen ausschliesslich Standard-Elementor-Widgets zum Einsatz (Heading, Text-Editor, Button, Image, Spacer, Divider, Icon-List, Icon-Box, Accordion, Shortcode).
 
 ## Custom Post Types
 
-| CPT | Slug | Taxonomien | Besonderheit |
-|---|---|---|---|
-| Team | `es_team` | — | Focus-Accordion-Meta |
-| Einzelleistungen | `es_einzelleistung` | `es_beratungsfeld` (Recht/Steuer/Unternehmen) | Auto-Grid im passenden Beratungsfeld |
-| Karriere | `es_karriere` | — | Bereich, Standort, Anstellungsart |
-| Veranstaltungen | `es_veranstaltung` | — | Start-/Enddatum, Ort |
-| News | `es_news` | `es_news_kategorie` | — |
-| Publikationen | `es_publikation` | — | Externer Link |
+| CPT | Label | Einzel-URL | Übersicht (Page) | Taxonomie |
+|---|---|---|---|---|
+| `es_team` | Teammitglied | `/teammitglied/<slug>/` | `/team/` | — |
+| `es_einzelleistung` | Einzelleistung | `/leistung/<slug>/` | `/leistungen/` & je Beratungsfeld | `es_beratungsfeld` |
+| `es_karriere` | Stellenangebot | `/stelle/<slug>/` | `/karriere/` | — |
+| `es_veranstaltung` | Veranstaltung | `/veranstaltung/<slug>/` | `/veranstaltungen/` | — |
+| `es_news` | News-Beitrag | `/news-artikel/<slug>/` | `/news/` | `es_news_kategorie` |
+| `es_publikation` | Publikation | `/publikation/<slug>/` | `/publikationen/` | — |
+
+Die Übersichtsseiten (Pages) enthalten alle das entsprechende Grid-Shortcode. CPT-Archive sind bewusst deaktiviert, damit es keine Slug-Kollisionen mit den Pages gibt.
 
 ## Shortcodes / Elementor-Widgets
 
@@ -64,21 +101,34 @@ package/
 [es_publikationen columns="2"]
 ```
 
-Die gleichen Funktionen gibt es als Elementor-Widgets unter der Kategorie **Energiesozietät**.
+Die gleichen Blöcke stehen im Elementor-Editor in der Kategorie **Energiesozietät** bereit.
 
-## Installation (geplant, noch nicht finalisiert)
+## Entwicklung / Rebuild
 
-1. WordPress 6.0+ mit PHP 7.4+
-2. Elementor-Plugin installieren und aktivieren
-3. Theme-Zip und Plugin-Zip hochladen (Erstellung der Zips steht noch aus)
-4. Unter _Einstellungen → Permalinks_ "Beitragsname" auswählen
-5. Unter _Werkzeuge → Energiesozietät-Demo_ auf **Inhalte jetzt importieren** klicken
-6. Fertig: 14 Seiten, 26 Team-Mitglieder, 19 Einzelleistungen, 3 Jobs, 4 Events, 13 News, 12 Publikationen + Hauptmenü
+```bash
+# Zips neu bauen
+./tools/build-dist.sh
 
-## Nächste Schritte
+# Syntax-Check aller PHP-Dateien
+find package -name '*.php' -exec php -l {} \; | grep -v "No syntax errors"
+```
 
-Siehe [`docs/HANDOFF.md`](docs/HANDOFF.md) — Liste der offenen Punkte (Page-Blueprints ausbauen, lokale WP-Verifikation, Zip-Packaging, finale `.wpress`-Erzeugung).
+Lokaler Smoke-Test (WP + MariaDB + Elementor) — Kurzfassung, vollständige Anleitung im [`docs/HANDOFF.md`](docs/HANDOFF.md):
+
+```bash
+# 1. MariaDB lokal starten (Unix-Socket /tmp/mariadb.sock)
+# 2. WP 6.7+ nach _work/wordpress entpacken, wp-config.php anlegen
+# 3. Plugin + Theme als Symlink nach wp-content/
+# 4. Import + Smoke-Test via CLI-Skript:
+php _work/wp_import.php force
+php -S 127.0.0.1:8080 -t _work/wordpress
+curl -s http://127.0.0.1:8080/leistungen/ | grep -c 'esc-card'
+```
 
 ## Branch
 
-Entwicklungsbranch: `claude/wordpress-elementor-package-9GzYs`
+Aktueller Entwicklungsbranch: `claude/setup-mariadb-database-GCTYP`
+
+## Stand
+
+Paket ist installationsreif. Alle 14 Seiten rendern (lokaler Test mit WP 6.7.2 + Elementor 3.20.0 + PHP 8.4 erfolgreich). Einzelheiten zur Verifikation + zu den internen Design-Entscheidungen stehen in [`docs/HANDOFF.md`](docs/HANDOFF.md).

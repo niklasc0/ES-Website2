@@ -1,8 +1,10 @@
 # Working artefacts (600 MB+ extracted .wpress, DB dumps, temp scripts)
 _work/
 
-# Build outputs
-dist/
+# Build outputs — we DO commit dist/*.zip + .wxr.xml as release-ready artifacts,
+# but ignore other intermediate files that may land here.
+dist/*.tmp
+dist/*.bak
 
 # OS & editor
 .DS_Store

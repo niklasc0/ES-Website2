@@ -342,9 +342,9 @@ class ESC_Importer {
 			update_option( 'show_on_front', 'page' );
 			update_option( 'page_on_front', (int) $map['page:home'] );
 		}
-		if ( ! empty( $map['page:news'] ) ) {
-			update_option( 'page_for_posts', (int) $map['page:news'] );
-		}
+		// NOTE: Do NOT set page_for_posts to the "news" page — we want /news/ to render
+		// the Elementor-composed page (which itself embeds the es_news CPT grid).
+		update_option( 'page_for_posts', 0 );
 		// Pretty permalinks (for pages + CPTs)
 		if ( get_option( 'permalink_structure' ) === '' ) {
 			update_option( 'permalink_structure', '/%postname%/' );

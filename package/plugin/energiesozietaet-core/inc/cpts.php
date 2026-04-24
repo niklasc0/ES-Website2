@@ -44,36 +44,40 @@ class ESC_CPTs {
 	}
 
 	public static function register_cpts() {
+		// Individual-post rewrite slugs are namespaced so they never collide with the
+		// top-level static pages (team, karriere, news, veranstaltungen, publikationen
+		// and the leistungen/<beratungsfeld>/ pages). The static pages carry the grid
+		// shortcode and serve as the canonical overview — CPT archives are disabled.
 		self::cpt( 'es_team', 'Teammitglied', 'Team', array(
 			'menu_icon'    => 'dashicons-groups',
-			'rewrite'      => array( 'slug' => 'team' ),
-			'has_archive'  => 'team',
+			'rewrite'      => array( 'slug' => 'teammitglied', 'with_front' => false ),
+			'has_archive'  => false,
 			'supports'     => array( 'title', 'editor', 'thumbnail', 'revisions', 'excerpt', 'page-attributes', 'custom-fields', 'elementor' ),
 		) );
 		self::cpt( 'es_einzelleistung', 'Einzelleistung', 'Einzelleistungen', array(
 			'menu_icon'    => 'dashicons-portfolio',
-			'rewrite'      => array( 'slug' => 'leistung' ),
-			'has_archive'  => 'leistungen-uebersicht',
+			'rewrite'      => array( 'slug' => 'leistung', 'with_front' => false ),
+			'has_archive'  => false,
 		) );
 		self::cpt( 'es_karriere', 'Stellenangebot', 'Karriere', array(
 			'menu_icon'    => 'dashicons-businessperson',
-			'rewrite'      => array( 'slug' => 'stelle' ),
-			'has_archive'  => 'stellenangebote',
+			'rewrite'      => array( 'slug' => 'stelle', 'with_front' => false ),
+			'has_archive'  => false,
 		) );
 		self::cpt( 'es_veranstaltung', 'Veranstaltung', 'Veranstaltungen', array(
 			'menu_icon'    => 'dashicons-calendar-alt',
-			'rewrite'      => array( 'slug' => 'veranstaltung' ),
-			'has_archive'  => 'termine',
+			'rewrite'      => array( 'slug' => 'veranstaltung', 'with_front' => false ),
+			'has_archive'  => false,
 		) );
 		self::cpt( 'es_news', 'News-Beitrag', 'News', array(
 			'menu_icon'    => 'dashicons-megaphone',
-			'rewrite'      => array( 'slug' => 'news-artikel' ),
-			'has_archive'  => 'newsroom',
+			'rewrite'      => array( 'slug' => 'news-artikel', 'with_front' => false ),
+			'has_archive'  => false,
 		) );
 		self::cpt( 'es_publikation', 'Publikation', 'Publikationen', array(
 			'menu_icon'    => 'dashicons-book',
-			'rewrite'      => array( 'slug' => 'publikation' ),
-			'has_archive'  => 'publikationen-uebersicht',
+			'rewrite'      => array( 'slug' => 'publikation', 'with_front' => false ),
+			'has_archive'  => false,
 		) );
 	}
 

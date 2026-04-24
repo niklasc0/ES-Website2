@@ -1,8 +1,21 @@
 # Handoff — Energiesozietät WordPress-Paket
 
-**Branch:** `claude/wordpress-elementor-package-9GzYs`
-**Repo:** `/home/user/ES-Website2` (no commits yet, all files uncommitted)
-**Stand:** Phase 4 von 7 (Importer-Grundgerüst fertig, Page-Blueprints fehlen)
+**Branch:** `claude/setup-mariadb-database-GCTYP` (bisheriger Stand aus `claude/wordpress-elementor-package-9GzYs` gemerged)
+**Repo:** `/home/user/ES-Website2`
+**Stand:** ✅ Paket installationsreif — alle 14 Pages rendern lokal, Zips + WXR liegen in `dist/`.
+
+## TL;DR nach Session 2 (Apr 24 2026)
+
+- ✅ `package/plugin/energiesozietaet-core/inc/page-blueprints.php` vollständig mit echten Elementor-Layouts befüllt (Hero, Icon-Boxen, Grids, Accordion, CTA, 2-Spalten-Kontakt)
+- ✅ CPT-Slug-Kollisionen behoben in `inc/cpts.php`: Einzel-URLs leben unter `/teammitglied/`, `/stelle/`, `/veranstaltung/`, `/news-artikel/`, `/publikation/`, `/leistung/`; alle CPT-Archive deaktiviert, damit die statischen Pages `/team/`, `/karriere/`, `/news/`, `/veranstaltungen/`, `/publikationen/` (und `/leistungen/` nebst 3 Beratungsfeld-Pages) gewinnen
+- ✅ `inc/importer.php::configure_site()`: `page_for_posts` wird explizit auf `0` gesetzt — sonst würde `/news/` als leerer Blog gerendert statt als Elementor-Page mit eigenem Grid
+- ✅ Theme-Screenshot als PNG (1200×900, GD-generiert, mit Hero-Titel und 3-Spalten-Preview)
+- ✅ Lokale Verifikation mit WP 6.7.2 + Elementor 3.20.0 + PHP 8.4 + MariaDB 10.11 via Unix-Socket — alle 14 Pages liefern HTTP 200 mit erwarteten Titeln und Grid-Inhalten
+- ✅ `dist/energiesozietaet-theme.zip` (93 KB), `dist/energiesozietaet-core.zip` (3.8 MB), `dist/energiesozietaet-content.wxr.xml` (511 KB)
+- ✅ `tools/build-dist.sh` für Rebuild der beiden Zips
+- ✅ `README.md` mit vollständiger Installationsanleitung
+
+Ursprünglicher Auftragskontext + Design-Entscheidungen bleibt weiter unten stehen.
 
 ## Auftrag (Originalvorgaben)
 
@@ -106,43 +119,65 @@ Die Originalseite nutzt `<span class="text-bg-green">…</span>` für grünen Ak
 - `inc/shortcodes.php` — `[es_team]`, `[es_einzelleistungen beratungsfeld="…"]`, `[es_karriere]`, `[es_veranstaltungen]`, `[es_news]`, `[es_publikationen]`
 - `inc/elementor-widgets.php` + `inc/widgets/class-grid-widget.php` — Elementor-Widgets via Shortcode-Wrapper unter "Energiesozietät"-Kategorie
 - `inc/elementor-builder.php` — Helper-Klasse `ESC_Elementor_Builder::section/heading/text/button/spacer/divider/image/shortcode/icon_list/icon_box/accordion/hero()`
-- `inc/importer.php` — `ESC_Importer::run($force)` + `::reset()` + Method `import_pages()` ruft `ESC_Page_Blueprints::all()` auf. **ACHTUNG:** `ESC_Page_Blueprints` ist noch NICHT implementiert — siehe "Nächste Schritte".
+- `inc/importer.php` — `ESC_Importer::run($force)` + `::reset()`; `import_pages()` ruft `ESC_Page_Blueprints::all()` auf.
+- `inc/page-blueprints.php` — alle 14 Pages mit echten Elementor-Layouts (Hero, Icon-Boxen, Akkordeon, Grid-Shortcodes, Dark-CTA-Bänder).
+- `inc/admin.php` — Werkzeuge → Energiesozietät-Demo (Normal/Force Buttons, Notices, Nonce).
 - `assets/css/grid.css` — Styling für Grid-Shortcodes
 
-### ❌ FEHLT noch:
+### ✅ Fertig in Session 2:
 
-1. **`inc/page-blueprints.php`** (kritisch) — Klasse `ESC_Page_Blueprints` mit Methode `all()` die für jeden Slug ein Array zurückgibt:
-   ```php
-   [ 'home' => [ 'title' => 'Home', 'menu_order' => 1,
-                 'elementor' => [ /* Array von Sections via ESC_Elementor_Builder */ ],
-                 'page_settings' => 'a:…' ],
-     'philosophie' => [ … ],
-     …
-     'impressum' => [ 'title' => 'Impressum', 'post_content' => $data['legal_impressum'], 'elementor' => [] ],
-     'datenschutzerklaerung' => [ 'title' => 'Datenschutzerklärung', 'post_content' => $data['legal_datenschutzerklaerung'] ] ]
-   ```
-   Eingeschlossen vom `importer.php` — `require_once ESC_DIR . 'inc/page-blueprints.php';` in `energiesozietaet-core.php` ergänzen!
+1. **`inc/page-blueprints.php`** mit Hero + mehreren Sections pro Seite
+2. **CPT-Slug-Fix** in `inc/cpts.php`: Einzel-URLs unter `/teammitglied/`, `/stelle/`, `/veranstaltung/`, `/news-artikel/`, `/publikation/`, `/leistung/`; alle CPT-Archive deaktiviert
+3. **Importer-Fix**: `page_for_posts = 0` — damit `/news/` als Elementor-Page rendert
+4. **Theme-Screenshot** (PNG 1200×900, GD-generiert)
+5. **Lokale Verifikation**: WP 6.7.2 + Elementor 3.20.0 + PHP 8.4 + MariaDB 10.11 — alle 14 Pages HTTP 200
+6. **`dist/` Bundle**: `energiesozietaet-theme.zip`, `energiesozietaet-core.zip`, `energiesozietaet-content.wxr.xml`
+7. **`tools/build-dist.sh`** — Rebuild-Script
+8. **README.md** komplett mit Installationsanleitung
 
-2. **`inc/admin.php`** — Admin-Menü unter "Werkzeuge" mit Button "Demo-Inhalte importieren" (POST mit Nonce ruft `ESC_Importer::run($force)` auf). Wird bereits von Bootstrap eingebunden (`require_once ESC_DIR . 'inc/admin.php'`) — Datei fehlt!
+### Optional / nicht umgesetzt:
 
-3. **screenshot.png** fürs Theme (1200×900, WP-konform). Aktuell nur SVG vorhanden. PHP-GD kann das generieren.
+- **.wpress-Export**: Wurde bewusst nicht erzeugt. Das All-in-One-WP-Migration-Plugin ist Freemium, und da die Zips + WXR bereits alles abdecken, ist es für die Zielinstallation nicht notwendig. Falls doch gewünscht: im lokalen WP das Plugin installieren → *All-in-One WP Migration → Export → File* → Ergebnis-`.wpress` in `dist/` legen.
 
-4. **Lokale WP-Umgebung starten** — noch nicht gemacht:
-   - WP 6.9 runterladen (MariaDB läuft schon)
-   - `wp-config.php` mit Socket-Connection
-   - PHP-Builtin-Server: `php -S 127.0.0.1:8080 -t /path/to/wp`
-   - Elementor + Classic Editor Plugin installieren (Elementor via `wp plugin install elementor --activate` wenn wp-cli da ist, sonst manuell Zip)
-   - Theme + unser Plugin aktivieren → Importer triggern → Seite prüfen
+## Lokales Test-Harness (Session 2)
 
-5. **Zip-Packaging** via `cd package/theme && zip -r ../../dist/energiesozietaet-theme.zip energiesozietaet` und analog fürs Plugin
+Kann bei Bedarf zum Re-Verifizieren wiederverwendet werden:
 
-6. **WXR-Export** — optional, aus der lokalen WP-Instanz nach dem Import via wp-cli (`wp export`) oder manuell WXR-Datei bauen aus content.json
+```bash
+# 1. MariaDB bootstrapen (falls verloren)
+apt-get install -y mariadb-server
+mariadb-install-db --user=mysql --datadir=/var/lib/mysql-local --skip-test-db
+mariadbd --user=mysql --datadir=/var/lib/mysql-local \
+  --socket=/tmp/mariadb.sock --skip-networking \
+  --pid-file=/tmp/mariadb.pid &>/tmp/mariadb.log &
+sleep 2
+mysql --socket=/tmp/mariadb.sock -u root \
+  -e "CREATE DATABASE IF NOT EXISTS wp_es CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;"
 
-7. **.wpress-Export** — nach Verifikation: All-in-One-WP-Migration Plugin in WP installieren → Export → .wpress rausziehen. **Oder** selbst mit dem Extractor-Format wieder packen.
+# 2. WordPress
+cd /home/user/ES-Website2/_work
+curl -sL "https://github.com/WordPress/WordPress/archive/refs/tags/6.7.2.tar.gz" -o wp.tar.gz
+tar xzf wp.tar.gz && mv WordPress-6.7.2 wordpress
+# wp-config.php schreiben (DB_HOST=localhost:/tmp/mariadb.sock, DB_NAME=wp_es, user=root, no password)
+php wp_install.php         # wp_install.php siehe Session-2-History: ruft wp_install('Energiesozietät',...)
 
-8. **README.md** — Installationsanleitung (Theme-Upload, Plugin-Upload, Permalinks, Importer-Klick)
+# 3. Elementor
+curl -sL "https://github.com/elementor/elementor/archive/refs/tags/3.20.1.tar.gz" -o elementor.tar.gz
+tar xzf elementor.tar.gz
+mv elementor-3.20.1 wordpress/wp-content/plugins/elementor
 
-9. **Commit + Push** auf `claude/wordpress-elementor-package-9GzYs`
+# 4. Theme + Plugin symlinken, aktivieren, importieren
+ln -sf /home/user/ES-Website2/package/theme/energiesozietaet wordpress/wp-content/themes/energiesozietaet
+ln -sf /home/user/ES-Website2/package/plugin/energiesozietaet-core wordpress/wp-content/plugins/energiesozietaet-core
+php wp_setup.php           # switch_theme + activate_plugin
+php wp_import.php force    # ESC_Importer::run(true)
+
+# 5. Smoke-Test
+cd wordpress && php -S 127.0.0.1:8080 -t . &
+curl -sL http://127.0.0.1:8080/leistungen/ | grep -c 'esc-card'
+```
+
+Die CLI-Skripte (`wp_install.php`, `wp_setup.php`, `wp_import.php`, `wp_export.php`) liegen in `_work/` und sind dort per `.gitignore` ausgeklammert.
 
 ## Design-Entscheidungen (nicht mehr neu denken)
 
