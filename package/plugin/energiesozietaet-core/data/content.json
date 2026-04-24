@@ -880,7 +880,19 @@
       "bullets": [],
       "employment_type": "Vollzeit",
       "location": "Düsseldorf",
-      "field": "unternehmensberatung"
+      "field": "unternehmensberatung",
+      "tasks": [
+        "Verantwortung für komplexe Projekte in Energiewirtschaft und öffentlicher Hand",
+        "Führung von Projektteams und enger Austausch mit Mandanten auf C-Level",
+        "Entwicklung von Strategien, Business Cases und Transformationsfahrplänen",
+        "Mitwirkung an Akquise und Weiterentwicklung unseres Leistungsangebots"
+      ],
+      "profile": [
+        "Mehrjährige Berufserfahrung in Beratung oder Industrie, idealerweise im Energieumfeld",
+        "Abgeschlossenes Studium (Wirtschaft, Jura, Ingenieurwesen o.ä.)",
+        "Souveränes Auftreten, strukturiertes Arbeiten, hohe Eigenverantwortung",
+        "Teamgeist und Freude an interdisziplinärer Zusammenarbeit"
+      ]
     },
     {
       "id": 2427,
@@ -891,7 +903,19 @@
       "bullets": [],
       "employment_type": "Vollzeit",
       "location": "Düsseldorf",
-      "field": "unternehmensberatung"
+      "field": "unternehmensberatung",
+      "tasks": [
+        "Mitarbeit an Beratungsprojekten mit direktem Mandantenkontakt",
+        "Analyse und Aufbereitung komplexer Sachverhalte aus Energiewirtschaft und öffentlicher Hand",
+        "Erstellung von Präsentationen, Business Cases und Strategie-Papieren",
+        "Unterstützung in allen Projektphasen — von der Konzeption bis zur Umsetzung"
+      ],
+      "profile": [
+        "Abgeschlossenes Studium mit sehr guten Ergebnissen",
+        "Erste Erfahrung (Praktika, Werkstudententätigkeit) im Beratungs- oder Energieumfeld von Vorteil",
+        "Analytisches Denken und Freude am strukturierten Arbeiten",
+        "Sehr gute Deutschkenntnisse, sicherer Umgang mit PowerPoint und Excel"
+      ]
     },
     {
       "id": 2438,
@@ -902,7 +926,18 @@
       "bullets": [],
       "employment_type": "Werkstudent",
       "location": "Düsseldorf",
-      "field": "unternehmensberatung"
+      "field": "unternehmensberatung",
+      "tasks": [
+        "Recherche und Aufbereitung aktueller Themen aus Energie-, Kommunal- und Steuerrecht",
+        "Unterstützung bei Mandatsarbeit, Publikationen und Vortragsvorbereitungen",
+        "Mitarbeit an internen Projekten und Wissensmanagement"
+      ],
+      "profile": [
+        "Studium der Rechts-, Wirtschafts- oder Verwaltungswissenschaften",
+        "Interesse an Energiewirtschaft und öffentlicher Hand",
+        "Strukturierte Arbeitsweise und Neugier auf interdisziplinäre Fragestellungen",
+        "Freiraum für Studium, Examen oder Promotion — flexible Zeitmodelle möglich"
+      ]
     }
   ],
   "veranstaltungen": [

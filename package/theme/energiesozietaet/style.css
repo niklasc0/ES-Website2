@@ -1116,3 +1116,180 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
 
 /* Pub-Row: kein Hover-Hintergrund */
 .esc-pub-row:hover { background: transparent !important; }
+
+/* ═════════════════════════════════════════════════════════════
+   FIX v5 — Element-Tag-basierte Styles + Column-Styling via
+   Section-Selektor (stabiler als Column-Classes in Elementor)
+   ═════════════════════════════════════════════════════════════ */
+
+/* 1) Elementor's eigene Heading-Title-Regeln entschärfen, damit
+   unsere Tag-basierten h1/h2/h3/h4 Stil-Regeln greifen und
+   Tag-Änderungen (h1↔h2) im Editor tatsächlich die Größe ändern. */
+:where(.elementor-heading-title) { font-weight: inherit; font-size: inherit; line-height: inherit; letter-spacing: inherit; font-family: inherit; color: inherit; margin: 0; }
+
+/* Tag-basierte Größen innerhalb von Stages */
+.es-stage h1, .es-stage .elementor-heading-title.elementor-size-xxl { font-size: clamp(44px, 6vw, 80px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.02; }
+.es-stage h2, .es-stage .elementor-heading-title.elementor-size-xl  { font-size: clamp(32px, 4vw, 52px); font-weight: 400; letter-spacing: -0.03em; line-height: 1.05; }
+.es-stage h3, .es-stage .elementor-heading-title.elementor-size-large { font-size: clamp(22px, 2.4vw, 32px); font-weight: 500; letter-spacing: -0.015em; line-height: 1.15; }
+.es-stage h4, .es-stage .elementor-heading-title.elementor-size-medium { font-size: clamp(18px, 1.6vw, 24px); font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
+
+/* Dark-Stage Farben */
+.es-stage--ink h1, .es-stage--ink h2, .es-stage--ink h3, .es-stage--ink h4 { color: var(--es-paper) !important; }
+
+/* Akzent-Span in H1/H2 — gleiche Stärke wie der Rest */
+.es-stage .elementor-heading-title .text-bg-green,
+.es-stage .text-bg-green { color: var(--es-accent); font-weight: inherit; font-style: normal; }
+
+/* 2) Hero-spezifische Größen per h1 innerhalb .es-hero */
+.es-hero .es-hero__title h1.elementor-heading-title,
+.es-hero .es-hero__title h2.elementor-heading-title,
+.es-hero .es-hero__title .elementor-heading-title {
+    font-size: clamp(44px, 6vw, 80px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.02;
+    color: var(--es-paper); max-width: 1100px;
+}
+.es-hero .es-hero__title h2.elementor-heading-title { font-size: clamp(32px, 4vw, 56px); }
+
+/* 3) Hero-Claims Farben explizit auf hell (für dunkle Section) */
+.es-stage--ink .es-hero-claims__wert { color: var(--es-paper); }
+.es-stage--ink .es-hero-claims__label { color: rgba(255,255,255,0.55); }
+
+/* 4) Service-Cards (Home) — stylen via Section-Parent */
+.es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-home-services > .elementor-container > .elementor-column > .elementor-element-populated {
+    padding: 36px !important;
+    background: var(--es-paper);
+    border: var(--es-border);
+    min-height: 380px;
+    transition: background 240ms var(--es-easing), border-color 240ms var(--es-easing), transform 240ms var(--es-easing);
+}
+.es-home-services > .elementor-container > .elementor-column:hover > .elementor-widget-wrap,
+.es-home-services > .elementor-container > .elementor-column:hover > .elementor-element-populated {
+    background: var(--es-paper-warm); border-color: var(--es-ink); transform: translateY(-2px);
+}
+
+/* 5) Pillar-Cards (Philosophie 3 Säulen) */
+.es-cards-grid > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-cards-grid > .elementor-container > .elementor-column > .elementor-element-populated {
+    padding: 48px 36px !important;
+    background: var(--es-paper);
+    border: var(--es-border);
+}
+/* 4-Perspektiven-Grid hat gleichen Section-Class, braucht schmaleres Padding */
+.es-cards-grid.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-cards-grid.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated {
+    padding: 36px 28px !important; position: relative;
+}
+.es-cards-grid.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+.es-cards-grid.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated::before {
+    content: ""; position: absolute; top: 36px; left: 28px; width: 4px; height: 28px; background: var(--es-accent);
+}
+.es-cards-grid.es-cards-grid--quads .es-card-pillar__title { margin-top: 24px; }
+
+/* 6) Pullquote — Panel wenn Wrapper es-pullquote hat */
+.es-pullquote-panel {
+    background: var(--es-paper); border: var(--es-border);
+    padding: var(--es-space-16) var(--es-space-12);
+    max-width: 1080px; margin: 0 auto; text-align: center;
+}
+.es-stage--warm .es-pullquote-panel { background: var(--es-paper); }
+.es-pullquote-panel .elementor-heading-title { font-size: clamp(26px, 3.2vw, 48px); font-weight: 300; letter-spacing: -0.025em; line-height: 1.25; color: var(--es-ink); margin: 0; }
+.es-pullquote-panel p { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--es-accent); font-weight: 500; margin-top: 40px; }
+
+/* 7) Submenu — kein BG-Wechsel auf Hover, nur grüner Unterstrich */
+.es-nav .sub-menu a { background: transparent !important; }
+.es-nav .sub-menu a:hover { color: var(--es-ink) !important; background: transparent !important; }
+.es-nav .sub-menu a::after { background: var(--es-accent); }
+
+/* 8) Footer — Button "Termin vereinbaren" absichern */
+.es-footer .es-btn--paper {
+    background: var(--es-paper); color: var(--es-ink) !important;
+    border-color: var(--es-paper);
+}
+.es-footer .es-btn--paper:hover {
+    background: transparent; color: var(--es-paper) !important; border-color: var(--es-paper);
+}
+.es-footer .es-btn--ghost-paper { color: var(--es-paper) !important; border-color: rgba(255,255,255,0.4); }
+.es-footer .es-btn--ghost-paper:hover { background: var(--es-paper); color: var(--es-ink) !important; border-color: var(--es-paper); }
+
+/* 9) Footer Link-Hover-Animation */
+.es-footer__col li a, .es-footer__bar li a, .es-footer__brand-name-link {
+    position: relative; display: inline-block;
+    color: rgba(255,255,255,0.8); transition: color 200ms var(--es-easing);
+}
+.es-footer__col li a::after, .es-footer__bar li a::after {
+    content: ""; position: absolute; left: 0; bottom: -2px; width: 100%; height: 1px;
+    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform 240ms var(--es-easing);
+}
+.es-footer__col li a:hover, .es-footer__bar li a:hover { color: var(--es-accent); }
+.es-footer__col li a:hover::after, .es-footer__bar li a:hover::after { transform: scaleX(1); }
+
+/* 10) Leistungen (Bereichs-Block) — einzelleistungen-Card Borders komplett */
+.es-bereich-detail__einzel .es-bereich__topic {
+    border: var(--es-border);
+    padding: 28px;
+    background: var(--es-paper);
+    transition: border-color 200ms var(--es-easing), background 200ms var(--es-easing);
+}
+.es-bereich-detail__einzel .es-bereich__topics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    border-top: 0;
+}
+.es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) {
+    padding-left: 28px; border-left: var(--es-border);
+}
+.es-bereich-detail__einzel .es-bereich__topic:hover { border-color: var(--es-ink); background: var(--es-paper-warm); }
+@media (max-width: 768px) {
+    .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: 1fr; }
+    .es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 28px; border-left: var(--es-border); }
+}
+
+/* 11) Events: ALLE Icons weg vor Ort */
+.esc-event-row__loc::before { content: none !important; }
+.esc-event-row__loc { padding-left: 0; }
+
+/* 12) Karriere Body: kein zusätzliches Padding-Left */
+.es-stelle-single .es-article__body { padding: 0; max-width: none; margin: 0 0 24px; }
+.es-stelle-single .es-article__body p { margin: 0 0 20px; }
+.es-stelle-single ul { padding-left: 20px !important; }
+
+/* 13) Beratungsfeld-Detail: Text-Spalte etwas breiter */
+.es-bereich-detail__content > .elementor-container > .elementor-column:nth-child(1) { width: 42% !important; }
+.es-bereich-detail__content > .elementor-container > .elementor-column:nth-child(2) { width: 58% !important; }
+@media (max-width: 900px) {
+    .es-bereich-detail__content > .elementor-container > .elementor-column { width: 100% !important; }
+}
+
+/* 14) Einzelleistungen-Kurztext: max. 3 Zeilen + ellipsis (Topic-Grid) */
+.es-bereich__topic-desc {
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Pullquote native — Wrapper Section */
+.es-pullquote-panel-wrap > .elementor-container {
+    max-width: 1080px; margin: 0 auto;
+}
+.es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-element-populated {
+    background: var(--es-paper); border: var(--es-border);
+    padding: 64px 48px !important; text-align: center;
+}
+.es-pullquote__quote .elementor-heading-title { font-size: clamp(26px, 3.2vw, 48px) !important; font-weight: 300 !important; letter-spacing: -0.025em !important; line-height: 1.25 !important; color: var(--es-ink); margin: 0; }
+.es-pullquote__attr p { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--es-accent); font-weight: 500; margin-top: 40px !important; }
+
+/* Home Intro-Strip — größere H2 "Wir arbeiten hoch spezialisiert ..." */
+.es-home-intro__headline .elementor-heading-title { font-size: clamp(28px, 3.2vw, 44px) !important; font-weight: 400 !important; letter-spacing: -0.025em !important; line-height: 1.2 !important; color: var(--es-ink); margin: 0 !important; }
+.es-home-intro__headline .text-bg-green { color: var(--es-accent); font-weight: inherit; }
+
+/* Home news section title mit weniger bottom-margin */
+.es-home-news .elementor-widget-shortcode { margin-top: 48px; }
+
+/* Karriere-Single: Body ohne Einrückung, normale List-Styles */
+.es-stelle-single__body { font-size: 17px; line-height: 1.7; color: var(--es-ink); text-align: justify; hyphens: auto; margin-bottom: 16px; }
+.es-stelle-single__body p { margin: 0 0 20px; padding: 0; text-indent: 0; }
+.es-stelle-single__body p:last-child { margin-bottom: 0; }
+.es-stelle-single__list { font-size: 16px; line-height: 1.7; color: var(--es-ink); padding-left: 20px; margin: 0 0 40px; list-style: disc; }
+.es-stelle-single__list li { margin-bottom: 8px; padding-left: 4px; }
+.es-stelle-single__list li::marker { color: var(--es-accent); }

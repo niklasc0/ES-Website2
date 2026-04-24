@@ -1,14 +1,34 @@
 <?php
 /**
- * Site footer (G2 + G3 per mockup).
- *
- * G3 · Footer-CTA (dark) als Pre-Footer-Bar (nur anzeigen, wenn die Seite nicht
- * selbst bereits mit einer Dark-CTA endet — gesteuert via Body-Class es-no-cta).
- * G2 · 3-Spalten-Footer mit Brand · Büro · Kontakt · Rechtliches.
+ * Site footer.
+ * Inhalte kommen aus den Footer-Einstellungen (Einstellungen → Footer
+ * (Energiesozietät)). Fallback: Klassen bleiben rein dekorativ, wenn das
+ * Plugin fehlt.
  *
  * @package Energiesozietaet
  */
 $es_no_cta = is_page( array( 'kontakt', 'impressum', 'datenschutzerklaerung' ) ) || is_404();
+
+// Optionen vom Plugin laden (mit Defaults falls Plugin inaktiv)
+if ( class_exists( 'ESC_Footer_Settings' ) ) {
+	$opts = ESC_Footer_Settings::get();
+	$parse_lines = array( 'ESC_Footer_Settings', 'parse_lines' );
+	$parse_links = array( 'ESC_Footer_Settings', 'parse_links' );
+} else {
+	$opts = array();
+	$parse_lines = function( $s ) { return array_values( array_filter( array_map( 'trim', preg_split( '/\r?\n/', (string) $s ) ) ) ); };
+	$parse_links = function( $s ) {
+		$out = array();
+		foreach ( preg_split( '/\r?\n/', (string) $s ) as $ln ) {
+			$ln = trim( $ln ); if ( '' === $ln ) continue;
+			$parts = array_map( 'trim', explode( '|', $ln, 2 ) );
+			$out[] = array( 'label' => $parts[0], 'url' => $parts[1] ?? '' );
+		}
+		return $out;
+	};
+}
+$g = function( $k, $default = '' ) use ( $opts ) { return $opts[ $k ] ?? $default; };
+$copyright = str_replace( '{year}', date_i18n( 'Y' ), (string) $g( 'copyright', '© {year} Energiesozietät GmbH' ) );
 ?>
 </main><!-- /#es-main -->
 
@@ -17,15 +37,21 @@ $es_no_cta = is_page( array( 'kontakt', 'impressum', 'datenschutzerklaerung' ) )
 	<div class="es-footer__cta">
 		<div class="es-wrap es-footer__cta-grid">
 			<div>
-				<div class="es-eyebrow es-eyebrow--accent"><?php esc_html_e( 'Kontakt', 'energiesozietaet' ); ?></div>
+				<div class="es-eyebrow es-eyebrow--accent"><?php echo esc_html( $g( 'cta_eyebrow', 'Kontakt' ) ); ?></div>
 				<h2>
-					<?php esc_html_e( 'Sprechen Sie mit uns.', 'energiesozietaet' ); ?><br/>
-					<span class="es-footer__cta-sub"><?php esc_html_e( 'Unaufgeregt, direkt, fachlich.', 'energiesozietaet' ); ?></span>
+					<?php echo esc_html( $g( 'cta_title', 'Sprechen Sie mit uns.' ) ); ?>
+					<?php if ( $g( 'cta_subtitle' ) ) : ?>
+						<br/><span class="es-footer__cta-sub"><?php echo wp_kses_post( $g( 'cta_subtitle' ) ); ?></span>
+					<?php endif; ?>
 				</h2>
 			</div>
 			<div class="es-footer__cta-actions">
-				<a class="es-btn es-btn--paper" href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>"><?php esc_html_e( 'Termin vereinbaren', 'energiesozietaet' ); ?> →</a>
-				<a class="es-btn es-btn--ghost-paper" href="mailto:info@energiesozietaet.de">info@energiesozietaet.de</a>
+				<?php if ( $g( 'cta_btn1_label' ) ) : ?>
+					<a class="es-btn es-btn--paper" href="<?php echo esc_url( $g( 'cta_btn1_url', '#' ) ); ?>"><?php echo esc_html( $g( 'cta_btn1_label' ) ); ?> →</a>
+				<?php endif; ?>
+				<?php if ( $g( 'cta_btn2_label' ) ) : ?>
+					<a class="es-btn es-btn--ghost-paper" href="<?php echo esc_url( $g( 'cta_btn2_url', '#' ) ); ?>"><?php echo esc_html( $g( 'cta_btn2_label' ) ); ?></a>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
@@ -35,56 +61,55 @@ $es_no_cta = is_page( array( 'kontakt', 'impressum', 'datenschutzerklaerung' ) )
 		<div class="es-wrap">
 			<div class="es-footer__grid">
 				<div>
-					<div class="es-footer__brand-name">Energiesozietät GmbH</div>
-					<div class="es-footer__brand-sub">Recht · Steuern · Beratung</div>
-					<p class="es-footer__brand-claim"><?php esc_html_e( 'Beratung mit Leidenschaft — Ergebnisse, die weitertragen.', 'energiesozietaet' ); ?></p>
-					<div class="es-footer__badges">
-						<span class="es-footer__badge">BVÖD</span>
-						<span class="es-footer__badge">Forum Contracting</span>
-						<span class="es-footer__badge">VKU</span>
-					</div>
+					<div class="es-footer__brand-name"><?php echo esc_html( $g( 'brand_name', 'Energiesozietät GmbH' ) ); ?></div>
+					<div class="es-footer__brand-sub"><?php echo esc_html( $g( 'brand_sub', 'Recht · Steuern · Beratung' ) ); ?></div>
+					<p class="es-footer__brand-claim"><?php echo wp_kses_post( $g( 'brand_claim' ) ); ?></p>
+					<?php $badges = call_user_func( $parse_lines, $g( 'badges' ) ); if ( $badges ) : ?>
+						<div class="es-footer__badges">
+							<?php foreach ( $badges as $b ) : ?><span class="es-footer__badge"><?php echo esc_html( $b ); ?></span><?php endforeach; ?>
+						</div>
+					<?php endif; ?>
 				</div>
 
 				<div class="es-footer__col">
-					<h4><?php esc_html_e( 'Anschrift', 'energiesozietaet' ); ?></h4>
+					<h4><?php echo esc_html( $g( 'col_anschrift_heading', 'Anschrift' ) ); ?></h4>
 					<ul>
-						<li>Energiesozietät GmbH</li>
-						<li>Roßstraße 92 / Kennedyhaus</li>
-						<li>40476 Düsseldorf</li>
+						<?php foreach ( call_user_func( $parse_lines, $g( 'col_anschrift_lines' ) ) as $ln ) : ?>
+							<li><?php echo esc_html( $ln ); ?></li>
+						<?php endforeach; ?>
 					</ul>
 				</div>
 
 				<div class="es-footer__col">
-					<h4><?php esc_html_e( 'Kontakt', 'energiesozietaet' ); ?></h4>
+					<h4><?php echo esc_html( $g( 'col_kontakt_heading', 'Kontakt' ) ); ?></h4>
 					<ul>
-						<li><a href="tel:+492111592320">+49 211 159232-0</a></li>
-						<li><a href="mailto:info@energiesozietaet.de">info@energiesozietaet.de</a></li>
-						<li><a href="https://www.linkedin.com/company/energiesozietaet/" rel="noopener" target="_blank">LinkedIn ↗</a></li>
+						<?php foreach ( call_user_func( $parse_links, $g( 'col_kontakt_lines' ) ) as $link ) : ?>
+							<li>
+								<?php if ( $link['url'] ) : ?><a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo esc_html( $link['label'] ); ?></a><?php else : ?><?php echo esc_html( $link['label'] ); ?><?php endif; ?>
+							</li>
+						<?php endforeach; ?>
 					</ul>
 				</div>
 
 				<div class="es-footer__col">
-					<h4><?php esc_html_e( 'Rechtliches', 'energiesozietaet' ); ?></h4>
-					<?php
-					if ( has_nav_menu( 'legal' ) ) {
-						wp_nav_menu( array( 'theme_location' => 'legal', 'container' => false, 'depth' => 1 ) );
-					} else { ?>
-						<ul>
-							<li><a href="<?php echo esc_url( home_url( '/impressum/' ) ); ?>">Impressum</a></li>
-							<li><a href="<?php echo esc_url( home_url( '/datenschutzerklaerung/' ) ); ?>">Datenschutz</a></li>
-						</ul>
-					<?php } ?>
+					<h4><?php echo esc_html( $g( 'col_legal_heading', 'Rechtliches' ) ); ?></h4>
+					<ul>
+						<?php foreach ( call_user_func( $parse_links, $g( 'col_legal_lines' ) ) as $link ) : ?>
+							<li>
+								<?php if ( $link['url'] ) : ?><a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo esc_html( $link['label'] ); ?></a><?php else : ?><?php echo esc_html( $link['label'] ); ?><?php endif; ?>
+							</li>
+						<?php endforeach; ?>
+					</ul>
 				</div>
 			</div>
 
-			<div class="es-wrap">
-				<div class="es-footer__bar">
-					<span>© <?php echo esc_html( date_i18n( 'Y' ) ); ?> Energiesozietät GmbH · <?php esc_html_e( 'Alle Rechte vorbehalten.', 'energiesozietaet' ); ?></span>
-					<ul>
-						<li><a href="<?php echo esc_url( home_url( '/impressum/' ) ); ?>"><?php esc_html_e( 'Impressum', 'energiesozietaet' ); ?></a></li>
-						<li><a href="<?php echo esc_url( home_url( '/datenschutzerklaerung/' ) ); ?>"><?php esc_html_e( 'Datenschutz', 'energiesozietaet' ); ?></a></li>
-					</ul>
-				</div>
+			<div class="es-footer__bar">
+				<span><?php echo esc_html( $copyright ); ?></span>
+				<ul>
+					<?php foreach ( call_user_func( $parse_links, $g( 'col_legal_lines' ) ) as $link ) : ?>
+						<?php if ( $link['url'] ) : ?><li><a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo esc_html( $link['label'] ); ?></a></li><?php endif; ?>
+					<?php endforeach; ?>
+				</ul>
 			</div>
 		</div>
 	</div>

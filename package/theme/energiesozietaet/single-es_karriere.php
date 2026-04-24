@@ -35,9 +35,14 @@ while ( have_posts() ) : the_post();
 	if ( ! $location ) { $location = 'Düsseldorf'; }
 	$emp_type   = es_meta( 'es_employment_type' );
 	if ( ! $emp_type ) { $emp_type = 'Vollzeit' === $emp_type ? 'Vollzeit' : ( $emp_type ? $emp_type : 'Vollzeit' ); }
-	$bullets    = es_meta( 'es_bullets' );
-	$profile    = es_meta( 'es_profile' );
-	$benefits   = es_meta( 'es_benefits' );
+	// Neue Felder: es_tasks (Aufgaben) + es_profile (Profil). Legacy-Fallback: es_bullets.
+	$tasks    = es_meta( 'es_tasks' );
+	if ( empty( $tasks ) ) {
+		$legacy = es_meta( 'es_bullets' );
+		if ( is_array( $legacy ) && ! empty( $legacy ) ) { $tasks = $legacy; }
+	}
+	$profile  = es_meta( 'es_profile' );
+	$benefits = es_meta( 'es_benefits' );
 	?>
 
 	<section class="es-stelle-single">
@@ -56,27 +61,19 @@ while ( have_posts() ) : the_post();
 			</div>
 
 			<div class="es-stelle-single__section-title">Über die Rolle</div>
-			<div class="es-article__body es-article__body--justify" style="font-size:18px;line-height:1.7;color:#0E1A2B;"><?php the_content(); ?></div>
+			<div class="es-stelle-single__body"><?php the_content(); ?></div>
 
-			<?php if ( is_array( $bullets ) && ! empty( $bullets ) ) : ?>
-				<div class="es-stelle-single__section-title">Deine Aufgaben</div>
-				<ul style="font-size:16px;line-height:1.7;color:#0E1A2B;padding-left:20px;">
-					<?php foreach ( $bullets as $b ) : ?><li style="margin-bottom:8px;"><?php echo wp_kses_post( $b ); ?></li><?php endforeach; ?>
+			<?php if ( is_array( $tasks ) && ! empty( $tasks ) ) : ?>
+				<div class="es-stelle-single__section-title">Was erwarten Dich für Aufgaben?</div>
+				<ul class="es-stelle-single__list">
+					<?php foreach ( $tasks as $t ) : ?><li><?php echo wp_kses_post( $t ); ?></li><?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
 
 			<?php if ( is_array( $profile ) && ! empty( $profile ) ) : ?>
 				<div class="es-stelle-single__section-title">Dein Profil</div>
-				<ul style="font-size:16px;line-height:1.7;color:#0E1A2B;padding-left:20px;">
-					<?php foreach ( $profile as $p ) : ?><li style="margin-bottom:8px;"><?php echo esc_html( $p ); ?></li><?php endforeach; ?>
-				</ul>
-			<?php else : ?>
-				<div class="es-stelle-single__section-title">Dein Profil</div>
-				<ul style="font-size:16px;line-height:1.7;color:#0E1A2B;padding-left:20px;">
-					<li style="margin-bottom:8px;">Abgeschlossenes Studium oder vergleichbare Qualifikation</li>
-					<li style="margin-bottom:8px;">Freude an interdisziplinärer Arbeit und direktem Mandantenkontakt</li>
-					<li style="margin-bottom:8px;">Hohes Maß an Eigenverantwortung und Teamgeist</li>
-					<li style="margin-bottom:8px;">Sehr gute Deutschkenntnisse; Englisch von Vorteil</li>
+				<ul class="es-stelle-single__list">
+					<?php foreach ( $profile as $p ) : ?><li><?php echo wp_kses_post( $p ); ?></li><?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
 

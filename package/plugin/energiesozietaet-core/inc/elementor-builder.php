@@ -345,14 +345,20 @@ class ESC_Elementor_Builder {
 	 * Pullquote section — huge centered quote on warm background.
 	 */
 	public static function pullquote( $quote_html, $attribution = '' ) {
-		$html  = '<div class="es-wrap" style="padding:140px 0;">';
-		$html .= '<div class="es-pullquote-panel" style="text-align:center;">';
-		$html .= '<blockquote style="margin:0;font-size:clamp(26px,3.2vw,48px);line-height:1.25;font-weight:300;letter-spacing:-0.025em;color:#0E1A2B;">' . $quote_html . '</blockquote>';
+		// Native Version: Wrapper-Section mit Klasse es-pullquote-panel, Inhalt
+		// aus Heading-Widget (quote) + Text-Widget (attribution). Komplett im
+		// Elementor-Editor klickbar.
+		$widgets = array(
+			self::wid_heading( $quote_html, 'h2', 'es-pullquote__quote' ),
+		);
 		if ( $attribution ) {
-			$html .= '<div style="margin-top:40px;font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:#95D708;font-weight:500;">' . esc_html( $attribution ) . '</div>';
+			$widgets[] = self::wid_text( '<p>' . esc_html( $attribution ) . '</p>', 'es-pullquote__attr' );
 		}
-		$html .= '</div></div>';
-		return self::section_html( $html );
+		return self::section_native( array(
+			'cols' => array( $widgets ),
+			'css_classes' => 'es-pullquote-panel-wrap',
+			'padding' => array( '120', '0', '120', '0' ),
+		) );
 	}
 
 	/**
@@ -527,7 +533,11 @@ class ESC_Elementor_Builder {
 			'content_width' => array( 'unit' => 'px', 'size' => (int) $args['content_width'] ),
 			'padding'       => array( 'unit' => 'px', 'top' => (string) $args['padding'][0], 'right' => (string) $args['padding'][1], 'bottom' => (string) $args['padding'][2], 'left' => (string) $args['padding'][3], 'isLinked' => false ),
 			'gap'           => $args['gap'],
-			'_css_classes'  => $classes,
+			// Elementor's Advanced tab: "CSS Classes" field. Elementor rendert
+			// beide Schlüssel — _css_classes wird zuverlässig an die section
+			// weitergereicht, css_classes ist für ältere Versionen.
+			'css_classes'  => $classes,
+			'_css_classes' => $classes,
 		);
 		if ( 'ink' === $args['variant'] ) {
 			$settings['background_background'] = 'classic';
@@ -544,7 +554,9 @@ class ESC_Elementor_Builder {
 		foreach ( $args['cols'] as $i => $widgets ) {
 			$col_settings = isset( $args['column_settings'][ $i ] ) ? (array) $args['column_settings'][ $i ] : array();
 			if ( ! empty( $args['column_classes'] ) ) {
-				$col_settings['_css_classes'] = trim( ( $col_settings['_css_classes'] ?? '' ) . ' ' . $args['column_classes'] );
+				$cc = trim( ( $col_settings['css_classes'] ?? '' ) . ' ' . $args['column_classes'] );
+				$col_settings['css_classes']  = $cc;
+				$col_settings['_css_classes'] = $cc;
 			}
 			$col_cfgs[] = array( 'widgets' => $widgets, 'settings' => $col_settings );
 		}
@@ -699,7 +711,7 @@ class ESC_Elementor_Builder {
 	 * Native cards grid (C2/pillars): n Spalten, jede hat number+heading+text.
 	 * $items = [ [number, title, desc], ... ]
 	 */
-	public static function cards_native( $items, $variant = '' ) {
+	public static function cards_native( $items, $variant = '', $extra_classes = '' ) {
 		$cols = array();
 		$col_settings = array();
 		foreach ( $items as $it ) {
@@ -718,7 +730,7 @@ class ESC_Elementor_Builder {
 		return self::section_native( array(
 			'cols' => $cols,
 			'variant' => $variant,
-			'css_classes' => 'es-cards-grid',
+			'css_classes' => trim( 'es-cards-grid ' . $extra_classes ),
 			'column_classes' => 'es-card-pillar',
 			'padding' => array( '40', '0', '120', '0' ),
 			'gap' => 'default',

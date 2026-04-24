@@ -114,13 +114,20 @@ class ESC_Shortcodes {
 		ob_start(); ?>
 		<div class="es-bereich__topics" style="grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);">
 			<?php while ( $q->have_posts() ) : $q->the_post();
-				$sub = get_post_meta( get_the_ID(), 'es_subtitle', true ); ?>
+				$sub_raw  = trim( wp_strip_all_tags( (string) get_post_meta( get_the_ID(), 'es_subtitle', true ) ) );
+				$body_raw = $sub_raw ? $sub_raw : trim( wp_strip_all_tags( get_the_content() ) );
+				// Trunc nach dem ersten Satzpunkt — maximal 160 Zeichen Fallback
+				if ( preg_match( '/^(.{20,160}?[\.!\?])\s/u', $body_raw, $m ) ) {
+					$short = $m[1];
+				} else {
+					$short = wp_trim_words( $body_raw, 20, '…' );
+				} ?>
 				<a class="es-bereich__topic" href="<?php the_permalink(); ?>">
 					<div class="es-bereich__topic-name">
 						<span></span>
 						<h3><?php the_title(); ?></h3>
 					</div>
-					<p class="es-bereich__topic-desc"><?php echo esc_html( $sub ? wp_trim_words( wp_strip_all_tags( $sub ), 18, '…' ) : self::excerpt( get_post(), 18 ) ); ?></p>
+					<p class="es-bereich__topic-desc"><?php echo esc_html( $short ); ?></p>
 				</a>
 			<?php endwhile; wp_reset_postdata(); ?>
 		</div>

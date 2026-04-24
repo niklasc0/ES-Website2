@@ -204,6 +204,12 @@ class ESC_Importer {
 			update_post_meta( $id, 'es_location',        (string) ( $k['location']  ?? 'Düsseldorf' ) );
 			update_post_meta( $id, 'es_employment_type', (string) ( $k['employment_type'] ?? 'Vollzeit' ) );
 			update_post_meta( $id, 'es_field',           (string) ( $k['field']     ?? 'unternehmensberatung' ) );
+			// Demo-Aufgaben + -Profil: übernehme bullets als Fallback nur falls nichts Eigenes da.
+			$tasks   = isset( $k['tasks'] )   ? $k['tasks']   : ( $k['bullets'] ?? array() );
+			$profile = isset( $k['profile'] ) ? $k['profile'] : array();
+			if ( $tasks )   { update_post_meta( $id, 'es_tasks',   $tasks ); }
+			if ( $profile ) { update_post_meta( $id, 'es_profile', $profile ); }
+			// Legacy-Kompatibilität für ältere Templates
 			if ( ! empty( $k['bullets'] ) ) { update_post_meta( $id, 'es_bullets', $k['bullets'] ); }
 			$map[ 'karriere:' . $k['slug'] ] = $id;
 		}

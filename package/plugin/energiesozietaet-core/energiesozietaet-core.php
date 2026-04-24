@@ -28,6 +28,7 @@ require_once ESC_DIR . 'inc/elementor-builder.php';
 require_once ESC_DIR . 'inc/page-blueprints.php';
 require_once ESC_DIR . 'inc/importer.php';
 require_once ESC_DIR . 'inc/admin.php';
+require_once ESC_DIR . 'inc/footer-settings.php';
 
 /**
  * Activation: flush rewrite rules after CPTs registered.

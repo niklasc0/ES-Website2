@@ -135,11 +135,12 @@ class ESC_Page_Blueprints {
 			'padding' => 'tall',
 		) );
 
-		// 2. Intro (Split Text warm)
+		// 2. Intro (Split Text warm) — H2 als eigentliche Überschrift, Eyebrow klein
 		$s[] = $b::split_native( array(
 			'eyebrow' => 'Unser Anspruch',
+			'title_html' => 'Hoch spezialisiert.<br>Fachübergreifend.<br><span class="text-bg-green">Ergebnisorientiert.</span>',
 			'paragraphs' => array(
-				'<p style="font-size:26px;line-height:1.35;letter-spacing:-0.015em;color:#0E1A2B;">Wir arbeiten <em>hoch spezialisiert</em>, fachübergreifend und fokussiert an den Themen unserer Zeit — unaufgeregt, ergebnisorientiert und mit individuellen Persönlichkeiten.</p>',
+				'<p>Wir arbeiten hoch spezialisiert, fachübergreifend und fokussiert an den Themen unserer Zeit — unaufgeregt, ergebnisorientiert und mit individuellen Persönlichkeiten.</p>',
 				'<p><a class="es-link" href="/philosophie/">Unsere Philosophie</a> · <a class="es-link" href="/team/">Unser Team</a></p>',
 			),
 			'variant' => 'warm',
@@ -265,7 +266,7 @@ class ESC_Page_Blueprints {
 			array( '', 'Kaufleute',     'Betriebs- und finanzwirtschaftliche Bewertung und Strukturierung.' ),
 			array( '', 'Rechtsanwälte', 'Juristische Gestaltung im regulatorischen Gesamtkontext.' ),
 			array( '', 'Steuerberater', 'Steuerliche Struktur, Compliance und Gestaltungsspielräume.' ),
-		), 'warm' );
+		), 'warm', 'es-cards-grid--quads' );
 
 		// Mandantschaft (Split mit Liste)
 		$items_html  = '<ul class="es-mandanten">';

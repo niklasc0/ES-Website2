@@ -135,10 +135,21 @@ class ESC_MetaBoxes {
 		self::field( 'Standort',           'es_location',        get_post_meta( $post->ID, 'es_location', true ) );
 		self::field( 'Anstellungsart',     'es_employment_type', get_post_meta( $post->ID, 'es_employment_type', true ) );
 
-		$bullets = get_post_meta( $post->ID, 'es_bullets', true );
-		$txt = is_array( $bullets ) ? implode( "\n", $bullets ) : '';
-		echo '<p><label><strong>Aufgaben / Anforderungen (Bullet-Liste)</strong></label>';
-		echo '<textarea name="es_bullets_raw" rows="6" style="width:100%;">' . esc_textarea( $txt ) . '</textarea></p>';
+		// Aufgaben (Was erwarten Dich für Aufgaben?) — Legacy-Fallback: es_bullets
+		$tasks = get_post_meta( $post->ID, 'es_tasks', true );
+		if ( empty( $tasks ) ) {
+			$legacy = get_post_meta( $post->ID, 'es_bullets', true );
+			if ( is_array( $legacy ) ) { $tasks = $legacy; }
+		}
+		$tasks_txt = is_array( $tasks ) ? implode( "\n", $tasks ) : '';
+		echo '<p><label><strong>Was erwarten Dich für Aufgaben?</strong><br /><em style="color:#667;font-weight:400;">Eine Aufgabe pro Zeile — wird als Bullet-Liste ausgegeben.</em></label>';
+		echo '<textarea name="es_tasks_raw" rows="6" style="width:100%;">' . esc_textarea( $tasks_txt ) . '</textarea></p>';
+
+		// Profil (Dein Profil)
+		$profile = get_post_meta( $post->ID, 'es_profile', true );
+		$profile_txt = is_array( $profile ) ? implode( "\n", $profile ) : '';
+		echo '<p><label><strong>Dein Profil</strong><br /><em style="color:#667;font-weight:400;">Eine Anforderung pro Zeile — wird als Bullet-Liste ausgegeben.</em></label>';
+		echo '<textarea name="es_profile_raw" rows="6" style="width:100%;">' . esc_textarea( $profile_txt ) . '</textarea></p>';
 	}
 
 	public static function box_veranst( $post ) {
@@ -210,6 +221,20 @@ class ESC_MetaBoxes {
 			$bullets = array();
 			foreach ( $lines as $l ) { $l = trim( $l ); if ( $l ) { $bullets[] = wp_kses_post( $l ); } }
 			update_post_meta( $post_id, 'es_bullets', $bullets );
+		}
+
+		if ( isset( $_POST['es_tasks_raw'] ) ) {
+			$lines = preg_split( '/\r?\n/', wp_unslash( $_POST['es_tasks_raw'] ) );
+			$arr = array();
+			foreach ( $lines as $l ) { $l = trim( $l ); if ( $l ) { $arr[] = wp_kses_post( $l ); } }
+			update_post_meta( $post_id, 'es_tasks', $arr );
+		}
+
+		if ( isset( $_POST['es_profile_raw'] ) ) {
+			$lines = preg_split( '/\r?\n/', wp_unslash( $_POST['es_profile_raw'] ) );
+			$arr = array();
+			foreach ( $lines as $l ) { $l = trim( $l ); if ( $l ) { $arr[] = wp_kses_post( $l ); } }
+			update_post_meta( $post_id, 'es_profile', $arr );
 		}
 
 		if ( isset( $_POST['es_focus_areas_raw'] ) ) {
