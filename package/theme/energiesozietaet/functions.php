@@ -1,0 +1,211 @@
+<?php
+/**
+ * Energiesozietät — theme bootstrap.
+ *
+ * @package Energiesozietaet
+ */
+
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+
+define( 'ES_THEME_VERSION', '1.0.0' );
+define( 'ES_THEME_DIR', get_template_directory() );
+define( 'ES_THEME_URI', get_template_directory_uri() );
+
+/**
+ * Theme supports.
+ */
+function es_theme_setup() {
+	load_theme_textdomain( 'energiesozietaet', ES_THEME_DIR . '/languages' );
+	add_theme_support( 'automatic-feed-links' );
+	add_theme_support( 'title-tag' );
+	add_theme_support( 'post-thumbnails' );
+	add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ) );
+	add_theme_support( 'custom-logo', array(
+		'height'      => 40,
+		'width'       => 200,
+		'flex-height' => true,
+		'flex-width'  => true,
+	) );
+	add_theme_support( 'editor-styles' );
+	add_theme_support( 'responsive-embeds' );
+	add_theme_support( 'align-wide' );
+	add_theme_support( 'custom-units' );
+	add_theme_support( 'elementor' );
+
+	register_nav_menus( array(
+		'primary' => __( 'Hauptmenü', 'energiesozietaet' ),
+		'footer'  => __( 'Footer-Menü', 'energiesozietaet' ),
+		'legal'   => __( 'Rechtliches (Footer)', 'energiesozietaet' ),
+	) );
+
+	add_theme_support( 'editor-color-palette', array(
+		array( 'name' => __( 'Tinte', 'energiesozietaet' ),     'slug' => 'ink',       'color' => '#0f1720' ),
+		array( 'name' => __( 'Tinte hell', 'energiesozietaet' ),'slug' => 'ink-2',     'color' => '#1a2330' ),
+		array( 'name' => __( 'Papier', 'energiesozietaet' ),    'slug' => 'paper',     'color' => '#ffffff' ),
+		array( 'name' => __( 'Soft', 'energiesozietaet' ),      'slug' => 'soft',      'color' => '#f6f7f5' ),
+		array( 'name' => __( 'Akzent', 'energiesozietaet' ),    'slug' => 'accent',    'color' => '#94d707' ),
+		array( 'name' => __( 'Akzent dunkel', 'energiesozietaet' ), 'slug' => 'accent-deep', 'color' => '#7bbc02' ),
+		array( 'name' => __( 'Text', 'energiesozietaet' ),      'slug' => 'text',      'color' => '#1a1f26' ),
+		array( 'name' => __( 'Muted', 'energiesozietaet' ),     'slug' => 'muted',     'color' => '#5a6270' ),
+	) );
+
+	add_image_size( 'es-team', 900, 900, true );
+	add_image_size( 'es-card', 900, 600, true );
+	add_image_size( 'es-wide', 1800, 900, true );
+}
+add_action( 'after_setup_theme', 'es_theme_setup' );
+
+/**
+ * Enqueue styles & scripts.
+ */
+function es_theme_enqueue_assets() {
+	wp_enqueue_style(
+		'es-fonts',
+		'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,450;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap',
+		array(),
+		null
+	);
+	wp_enqueue_style( 'energiesozietaet', get_stylesheet_uri(), array( 'es-fonts' ), ES_THEME_VERSION );
+	wp_enqueue_script( 'energiesozietaet-ui', ES_THEME_URI . '/assets/js/ui.js', array(), ES_THEME_VERSION, true );
+}
+add_action( 'wp_enqueue_scripts', 'es_theme_enqueue_assets' );
+
+/**
+ * Add preconnects to Google Fonts.
+ */
+function es_resource_hints( $urls, $relation_type ) {
+	if ( 'preconnect' === $relation_type ) {
+		$urls[] = array( 'href' => 'https://fonts.gstatic.com', 'crossorigin' );
+		$urls[] = 'https://fonts.googleapis.com';
+	}
+	return $urls;
+}
+add_filter( 'wp_resource_hints', 'es_resource_hints', 10, 2 );
+
+/**
+ * Elementor global colors + fonts — makes every Elementor page pick up our design tokens.
+ */
+function es_elementor_globals() {
+	if ( ! did_action( 'elementor/loaded' ) ) { return; }
+	// Replace Elementor's kit globals so they reflect our brand.
+	add_filter( 'elementor/theme/get_location_templates/template_id', '__return_false' );
+}
+add_action( 'init', 'es_elementor_globals' );
+
+/**
+ * Register page templates used by the importer.
+ */
+require_once ES_THEME_DIR . '/inc/template-helpers.php';
+require_once ES_THEME_DIR . '/inc/walker-menu.php';
+
+/**
+ * Body class helpers.
+ */
+function es_body_classes( $classes ) {
+	$classes[] = 'es-theme';
+	if ( is_page() || is_singular() ) {
+		$post = get_queried_object();
+		if ( $post ) { $classes[] = 'es-single-' . sanitize_html_class( $post->post_name ); }
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'es_body_classes' );
+
+/**
+ * Elementor compat — expose text-bg-green class to Elementor's rich text editors.
+ */
+function es_elementor_editor_stylesheets( $post_css ) {
+	if ( ! is_admin() ) { return $post_css; }
+	return $post_css;
+}
+add_filter( 'elementor/frontend/after_register_styles', function() {
+	wp_enqueue_style( 'es-elementor-overrides', ES_THEME_URI . '/assets/css/elementor.css', array(), ES_THEME_VERSION );
+} );
+
+/**
+ * Editor toolbar: add colored-text classes usable via TinyMCE "Formats".
+ */
+function es_tinymce_formats( $formats ) {
+	$formats = is_array( $formats ) ? $formats : array();
+	$formats[] = array(
+		'title' => 'Akzent Grün (#94d707)',
+		'inline' => 'span',
+		'classes' => 'text-bg-green',
+	);
+	$formats[] = array(
+		'title' => 'Akzent Grün unterstrichen',
+		'inline' => 'span',
+		'classes' => 'es-underline-accent',
+	);
+	$formats[] = array(
+		'title' => 'Highlight (Tinte)',
+		'inline' => 'span',
+		'classes' => 'es-ink-text',
+	);
+	$formats[] = array(
+		'title' => 'Dezent (Muted)',
+		'inline' => 'span',
+		'classes' => 'es-muted-text',
+	);
+	$formats[] = array(
+		'title' => 'Highlight Hintergrund',
+		'inline' => 'span',
+		'classes' => 'es-highlight',
+	);
+	return $formats;
+}
+add_filter( 'tiny_mce_before_init', function( $init ) {
+	$style_formats = array();
+	foreach ( es_tinymce_formats( array() ) as $f ) { $style_formats[] = $f; }
+	$init['style_formats'] = wp_json_encode( $style_formats );
+	$init['block_formats'] = 'Absatz=p;Überschrift 2=h2;Überschrift 3=h3;Überschrift 4=h4';
+	return $init;
+} );
+
+add_filter( 'mce_buttons_2', function( $buttons ) {
+	if ( ! in_array( 'styleselect', $buttons, true ) ) { array_unshift( $buttons, 'styleselect' ); }
+	return $buttons;
+} );
+
+/**
+ * Allow the span+class used for accent text in classic + Elementor editors.
+ */
+function es_kses_allow_spans( $tags, $context ) {
+	if ( 'post' === $context ) {
+		if ( ! isset( $tags['span'] ) ) { $tags['span'] = array(); }
+		$tags['span']['class'] = true;
+	}
+	return $tags;
+}
+add_filter( 'wp_kses_allowed_html', 'es_kses_allow_spans', 10, 2 );
+
+/**
+ * Simple excerpt.
+ */
+function es_excerpt( $post, $length = 28 ) {
+	if ( ! $post ) { return ''; }
+	if ( ! empty( $post->post_excerpt ) ) { return wp_strip_all_tags( $post->post_excerpt ); }
+	return wp_trim_words( wp_strip_all_tags( $post->post_content ), $length, '…' );
+}
+
+/**
+ * Light-weight fallback header menu if no menu assigned.
+ */
+function es_fallback_menu() {
+	$items = array(
+		home_url( '/' )                        => __( 'Home', 'energiesozietaet' ),
+		home_url( '/philosophie/' )            => __( 'Philosophie', 'energiesozietaet' ),
+		home_url( '/leistungen/' )             => __( 'Leistungen', 'energiesozietaet' ),
+		home_url( '/team/' )                   => __( 'Team', 'energiesozietaet' ),
+		home_url( '/publikationen/' )          => __( 'Publikationen', 'energiesozietaet' ),
+		home_url( '/karriere/' )               => __( 'Karriere', 'energiesozietaet' ),
+		home_url( '/news/' )                   => __( 'News', 'energiesozietaet' ),
+		home_url( '/veranstaltungen/' )        => __( 'Veranstaltungen', 'energiesozietaet' ),
+		home_url( '/kontakt/' )                => __( 'Kontakt', 'energiesozietaet' ),
+	);
+	echo '<ul>';
+	foreach ( $items as $url => $label ) {
+		printf( '<li><a href="%s">%s</a></li>', esc_url( $url ), esc_html( $label ) );
+	}
+	echo '</ul>';
+}
