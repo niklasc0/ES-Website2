@@ -182,6 +182,43 @@ function es_kses_allow_spans( $tags, $context ) {
 add_filter( 'wp_kses_allowed_html', 'es_kses_allow_spans', 10, 2 );
 
 /**
+ * vCard-Download für Team-Mitglieder.
+ * Route: /?es_vcard=<post_id>
+ */
+function es_vcard_handler() {
+	if ( empty( $_GET['es_vcard'] ) ) { return; }
+	$id = (int) $_GET['es_vcard'];
+	$p  = get_post( $id );
+	if ( ! $p || 'es_team' !== $p->post_type ) { return; }
+
+	$name_parts = explode( ' ', trim( get_the_title( $p ) ) );
+	$given      = array_shift( $name_parts );
+	$family     = implode( ' ', $name_parts );
+	$role       = (string) get_post_meta( $id, 'es_role', true );
+	$email      = (string) get_post_meta( $id, 'es_email', true );
+	$phone      = (string) get_post_meta( $id, 'es_phone', true );
+	$location   = (string) get_post_meta( $id, 'es_location', true );
+
+	$vcard  = "BEGIN:VCARD\r\nVERSION:3.0\r\n";
+	$vcard .= "N:" . $family . ';' . $given . ";;;\r\n";
+	$vcard .= "FN:" . get_the_title( $p ) . "\r\n";
+	$vcard .= "ORG:Energiesozietät GmbH\r\n";
+	if ( $role ) { $vcard .= "TITLE:" . $role . "\r\n"; }
+	if ( $email ) { $vcard .= "EMAIL;TYPE=WORK:" . $email . "\r\n"; }
+	if ( $phone ) { $vcard .= "TEL;TYPE=WORK,VOICE:" . $phone . "\r\n"; }
+	$vcard .= "ADR;TYPE=WORK:;;Roßstraße 92 / Kennedyhaus;Düsseldorf;;40476;Deutschland\r\n";
+	$vcard .= "URL:" . home_url( '/teammitglied/' . $p->post_name . '/' ) . "\r\n";
+	$vcard .= "END:VCARD\r\n";
+
+	$filename = sanitize_file_name( sanitize_title( get_the_title( $p ) ) . '.vcf' );
+	header( 'Content-Type: text/vcard; charset=UTF-8' );
+	header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+	echo $vcard;
+	exit;
+}
+add_action( 'init', 'es_vcard_handler' );
+
+/**
  * Simple excerpt.
  */
 function es_excerpt( $post, $length = 28 ) {

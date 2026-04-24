@@ -9,37 +9,65 @@ while ( have_posts() ) : the_post();
 	$start_date = es_meta( 'es_start_date' );
 	$end_date   = es_meta( 'es_end_date' );
 	$location   = es_meta( 'es_location' );
-	$date_str   = '';
-	if ( $start_date ) {
-		$ts = strtotime( $start_date );
-		$date_str = $ts ? date_i18n( 'j. F Y', $ts ) : $start_date;
-		if ( $end_date && $end_date !== $start_date ) {
-			$ts2 = strtotime( $end_date );
-			if ( $ts2 ) { $date_str .= ' – ' . date_i18n( 'j. F Y', $ts2 ); }
-		}
-	}
+	$kind       = es_meta( 'es_kind' );
+	if ( ! $kind ) { $kind = 'Veranstaltung'; }
+	$reg_url    = es_meta( 'es_registration_url' );
+	$thumb_id   = get_post_thumbnail_id();
 
-	es_page_head( array(
-		'eyebrow' => $date_str ? $date_str : 'Veranstaltung',
-		'title'   => get_the_title(),
-		'crumbs'  => array( array( 'Veranstaltungen', home_url( '/veranstaltungen/' ) ), array( get_the_title() ) ),
-	) );
-	?>
+	$ts  = $start_date ? strtotime( $start_date ) : false;
+	$ts2 = $end_date ? strtotime( $end_date ) : false;
+	$upcoming = $ts && $ts >= time(); ?>
 
-	<section class="es-section">
-		<div class="es-wrap">
-			<?php if ( has_post_thumbnail() ) : ?>
-				<figure style="margin:0 0 40px; border-radius:var(--es-radius-lg); overflow:hidden;"><?php the_post_thumbnail( 'es-wide' ); ?></figure>
+	<section class="es-event-single">
+		<div class="es-wrap es-wrap--narrow">
+			<div class="es-article__crumb">
+				<a href="<?php echo esc_url( home_url( '/veranstaltungen/' ) ); ?>" style="color:inherit;">Veranstaltungen</a>  /  <?php echo esc_html( $kind ); ?>
+			</div>
+
+			<?php if ( $ts ) : ?>
+				<div class="es-event-single__datecard">
+					<strong><?php echo esc_html( date_i18n( 'd', $ts ) ); ?></strong>
+					<span><?php echo esc_html( date_i18n( 'M Y', $ts ) ); ?></span>
+					<?php if ( $ts2 && $ts2 !== $ts ) : ?>
+						<span style="color:#8591A3;margin:0 8px;">—</span>
+						<strong style="color:#0E1A2B;"><?php echo esc_html( date_i18n( 'd', $ts2 ) ); ?></strong>
+						<span><?php echo esc_html( date_i18n( 'M Y', $ts2 ) ); ?></span>
+					<?php endif; ?>
+				</div>
 			<?php endif; ?>
 
-			<div class="es-prose"><?php the_content(); ?></div>
+			<div class="es-article__eyebrow"><?php echo esc_html( $kind ); ?><?php if ( $upcoming ) : ?> · <span style="color:#95D708;">Anmeldung möglich</span><?php endif; ?></div>
+			<h1 class="es-article__title"><?php the_title(); ?></h1>
 
-			<?php if ( $location ) : ?>
-				<p style="color:var(--es-muted); margin-top:24px;"><strong style="color:var(--es-ink);">Ort:</strong> <?php echo esc_html( $location ); ?></p>
+			<div class="es-stelle-single__meta-row">
+				<?php if ( $location ) : ?><div>📍 <strong>Ort:</strong> <?php echo esc_html( $location ); ?></div><?php endif; ?>
+				<?php if ( $ts ) : ?><div>🗓 <strong>Datum:</strong> <?php echo esc_html( date_i18n( 'j. F Y', $ts ) ); ?><?php if ( $ts2 && $ts2 !== $ts ) echo ' – ' . esc_html( date_i18n( 'j. F Y', $ts2 ) ); ?></div><?php endif; ?>
+			</div>
+		</div>
+
+		<?php if ( $thumb_id ) : ?>
+			<div class="es-article__hero">
+				<?php echo wp_get_attachment_image( $thumb_id, 'es-wide', false, array( 'loading' => 'eager', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); ?>
+			</div>
+		<?php endif; ?>
+
+		<div class="es-article__body">
+			<?php the_content(); ?>
+		</div>
+
+		<div class="es-wrap es-wrap--narrow" style="padding-top:56px;">
+			<?php if ( $reg_url && $upcoming ) : ?>
+				<div style="padding:32px;background:#0E1A2B;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;">
+					<div>
+						<div style="color:#95D708;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;">Anmeldung</div>
+						<div style="font-size:20px;font-weight:500;letter-spacing:-0.015em;">Sichern Sie sich Ihren Platz.</div>
+					</div>
+					<a class="es-btn es-btn--paper" href="<?php echo esc_url( $reg_url ); ?>" target="_blank" rel="noopener">Jetzt anmelden →</a>
+				</div>
 			<?php endif; ?>
-
-			<hr class="es-divider" />
-			<?php es_back_link( home_url( '/veranstaltungen/' ), 'Alle Veranstaltungen' ); ?>
+			<div style="margin-top:56px;">
+				<a class="es-team-single__back" href="<?php echo esc_url( home_url( '/veranstaltungen/' ) ); ?>">← Alle Veranstaltungen</a>
+			</div>
 		</div>
 	</section>
 

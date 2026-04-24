@@ -299,7 +299,7 @@ class ESC_Elementor_Builder {
 	/**
 	 * Dark CTA band (G3).
 	 */
-	public static function cta_dark( $args ) {
+	public static function cta_dark( $args = array() ) {
 		$args = array_merge( array(
 			'eyebrow' => 'Kontakt',
 			'title_html' => 'Sprechen Sie mit uns.',
