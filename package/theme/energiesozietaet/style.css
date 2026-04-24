@@ -786,3 +786,74 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
     -webkit-mask-size: contain; mask-size: contain;
     vertical-align: -2px;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Team-Filter (on /team/)
+   ───────────────────────────────────────────────────────────── */
+.es-team-filter {
+    display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+    padding: 20px 0; border-bottom: var(--es-border);
+}
+.es-team-filter__pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.es-team-filter__pill {
+    padding: 8px 14px; font-size: 13px; border-radius: var(--es-radius-xs);
+    border: var(--es-border); color: var(--es-ink); background: transparent;
+    transition: background 200ms var(--es-easing), color 200ms var(--es-easing);
+}
+.es-team-filter__pill:hover { background: var(--es-paper-warm); color: var(--es-ink); }
+.es-team-filter__pill.is-active { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
+.es-team-filter__count { margin-left: auto; font-size: 13px; color: var(--es-text-mute); }
+
+/* ─────────────────────────────────────────────────────────────
+   Publikationen — Jahres-Gruppen (L2 nach Mockup)
+   ───────────────────────────────────────────────────────────── */
+.esc-pub-years { display: block; }
+.esc-pub-year {
+    display: grid; grid-template-columns: 120px 1fr; gap: var(--es-space-12);
+    padding-top: var(--es-space-14); padding-bottom: var(--es-space-4);
+    border-top: var(--es-border);
+}
+.esc-pub-year__label { position: sticky; top: 100px; align-self: start; }
+.esc-pub-year__num { font-size: 48px; font-weight: var(--es-fw-light); letter-spacing: -0.03em; line-height: 1; }
+.esc-pub-year__count { font-size: 12px; color: var(--es-text-mute); margin-top: 8px; font-family: var(--es-font-mono); }
+
+.esc-pub-row {
+    display: grid; grid-template-columns: 140px 1fr 220px;
+    gap: var(--es-space-8); align-items: baseline;
+    padding: var(--es-space-6) 0;
+    border-bottom: var(--es-border);
+    color: var(--es-ink);
+}
+.esc-pub-row:hover { background: var(--es-paper-warm); }
+.esc-pub-row--nolink { color: var(--es-text-mute); }
+.esc-pub-row__cat {
+    font-size: 11px; color: var(--es-accent);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    font-family: var(--es-font-mono);
+}
+.esc-pub-row__title { font-size: 19px; font-weight: var(--es-fw-medium); letter-spacing: -0.015em; line-height: 1.3; margin: 0 0 6px; }
+.esc-pub-row__author { font-size: 13px; color: var(--es-text-mute); margin: 0; }
+.esc-pub-row__cta {
+    justify-self: end; display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: var(--es-fw-medium); color: var(--es-ink);
+    padding-bottom: 2px; border-bottom: 1px solid currentColor;
+    white-space: nowrap;
+}
+.esc-pub-row:hover .esc-pub-row__cta { color: var(--es-accent); border-bottom-color: var(--es-accent); }
+.esc-pub-row__arrow { font-size: 16px; }
+
+@media (max-width: 900px) {
+    .esc-pub-year { grid-template-columns: 1fr; gap: 20px; }
+    .esc-pub-year__label { position: static; }
+    .esc-pub-year__num { font-size: 32px; }
+    .esc-pub-row { grid-template-columns: 1fr; gap: 8px; }
+    .esc-pub-row__cta { justify-self: start; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Button inside .es-stage--ink nochmal hart absichern
+   ───────────────────────────────────────────────────────────── */
+.es-stage--ink .es-btn--paper { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }
+.es-stage--ink .es-btn--paper:hover { background: transparent; color: var(--es-paper); border-color: var(--es-paper); }
+.es-stage--ink .es-btn--ghost-paper { color: var(--es-paper); border-color: rgba(255,255,255,0.4); }
+.es-stage--ink .es-btn--ghost-paper:hover { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }

@@ -258,14 +258,15 @@ class ESC_Elementor_Builder {
 	 */
 	public static function bereich( $args ) {
 		$args = array_merge( array(
-			'n' => '01', 'title' => '', 'sub' => '', 'lede' => '', 'link' => '',
+			'n' => '01', 'title' => '', 'title_html' => '', 'sub' => '', 'lede' => '', 'link' => '',
 			'topics' => array(), 'stripe' => 'odd', 'image_html' => '',
 		), $args );
 		$warm = 'even' === $args['stripe'] ? ' es-bereich--warm' : '';
+		// title_html erlaubt z.B. "Unternehmens<br/>beratung"
+		$h2_content = $args['title_html'] ? $args['title_html'] : esc_html( $args['title'] );
 
 		$topics_html = '';
 		foreach ( $args['topics'] as $j => $topic ) {
-			$num = str_pad( (string) ( $j + 1 ), 2, '0', STR_PAD_LEFT );
 			$topics_html .= '<a class="es-bereich__topic" href="#' . esc_attr( sanitize_title( $topic[0] ) ) . '">';
 			$topics_html .= '<div class="es-bereich__topic-name"><span></span><h3>' . esc_html( $topic[0] ) . '</h3></div>';
 			$topics_html .= '<p class="es-bereich__topic-desc">' . esc_html( $topic[1] ) . '</p>';
@@ -281,7 +282,7 @@ class ESC_Elementor_Builder {
 		$html .= '<div class="es-bereich__top">';
 		$html .= '<div>';
 		$html .= '<div class="es-bereich__meta"><span class="es-bereich__num">' . esc_html( $args['n'] ) . ' / 03</span><span class="es-bereich__sep"></span><span class="es-bereich__sub">' . esc_html( $args['sub'] ) . '</span></div>';
-		$html .= '<h2 class="es-bereich__title">' . esc_html( $args['title'] ) . '</h2>';
+		$html .= '<h2 class="es-bereich__title">' . $h2_content . '</h2>';
 		$html .= '<p class="es-bereich__lede">' . esc_html( $args['lede'] ) . '</p>';
 		if ( $args['link'] ) {
 			$html .= '<a class="es-btn es-btn--primary" href="' . esc_url( $args['link'] ) . '">Zu ' . esc_html( $args['title'] ) . ' →</a>';
@@ -336,13 +337,14 @@ class ESC_Elementor_Builder {
 	 * Pullquote section — huge centered quote on warm background.
 	 */
 	public static function pullquote( $quote_html, $attribution = '' ) {
-		$html  = '<div class="es-wrap" style="padding:140px 0;text-align:center;">';
-		$html .= '<blockquote style="margin:0;font-size:clamp(28px,3.6vw,56px);line-height:1.2;font-weight:300;letter-spacing:-0.025em;max-width:1040px;margin-inline:auto;color:#0E1A2B;">' . $quote_html . '</blockquote>';
+		$html  = '<div class="es-wrap" style="padding:140px 0;">';
+		$html .= '<div class="es-pullquote-panel" style="text-align:center;">';
+		$html .= '<blockquote style="margin:0;font-size:clamp(26px,3.2vw,48px);line-height:1.25;font-weight:300;letter-spacing:-0.025em;color:#0E1A2B;">' . $quote_html . '</blockquote>';
 		if ( $attribution ) {
-			$html .= '<div style="margin-top:48px;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#8591A3;">' . esc_html( $attribution ) . '</div>';
+			$html .= '<div style="margin-top:40px;font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:#95D708;font-weight:500;">' . esc_html( $attribution ) . '</div>';
 		}
-		$html .= '</div>';
-		return self::section_html( $html, 'warm' );
+		$html .= '</div></div>';
+		return self::section_html( $html );
 	}
 
 	/**

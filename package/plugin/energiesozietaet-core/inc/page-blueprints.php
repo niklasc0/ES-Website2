@@ -159,14 +159,14 @@ class ESC_Page_Blueprints {
 		$services_html .= '</div>';
 		$services_html .= '<div class="esc-grid esc-grid--cols-3" style="border-top:1px solid #E4E7EC;padding-top:0;">';
 		$cards = array(
-			array( '01', 'Rechtsberatung',       '/rechtsberatung/',       'Energierecht, Vergaberecht, Regulierung, M&A, Gesellschaftsrecht. Wir stellen juristische Lösungen in den Gesamtkontext.' ),
-			array( '02', 'Steuerberatung',       '/steuerberatung/',       'Fortlaufende Steuerberatung, Gestaltungsberatung und herausfordernde Neustrukturierungen für Versorger und Kommunen.' ),
-			array( '03', 'Unternehmensberatung', '/unternehmensberatung/', 'Wir navigieren Sie durch strategische, wirtschaftliche und finanzielle Fragestellungen der Transformation.' ),
+			array( '01', 'Rechtsberatung',             '/rechtsberatung/',       'Energierecht, Vergaberecht, Regulierung, M&A, Gesellschaftsrecht. Wir stellen juristische Lösungen in den Gesamtkontext.' ),
+			array( '02', 'Steuerberatung',             '/steuerberatung/',       'Fortlaufende Steuerberatung, Gestaltungsberatung und herausfordernde Neustrukturierungen für Versorger und Kommunen.' ),
+			array( '03', 'Unternehmens&shy;beratung',  '/unternehmensberatung/', 'Wir navigieren Sie durch strategische, wirtschaftliche und finanzielle Fragestellungen der Transformation.' ),
 		);
 		foreach ( $cards as $c ) {
 			$services_html .= '<a class="esc-card" href="' . esc_url( $c[2] ) . '" style="border-top:0;min-height:380px;padding:36px;">';
 			$services_html .= '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:100px;"><div style="font-family:var(--es-font-mono);font-size:12px;color:#8591A3;letter-spacing:0.1em;">' . $c[0] . ' / 03</div><div style="width:6px;height:6px;border-radius:999px;background:#95D708;"></div></div>';
-			$services_html .= '<h3 style="font-size:28px;line-height:1.1;font-weight:500;letter-spacing:-0.02em;margin-bottom:16px;">' . esc_html( $c[1] ) . '</h3>';
+			$services_html .= '<h3 style="font-size:28px;line-height:1.1;font-weight:500;letter-spacing:-0.02em;margin-bottom:16px;min-height:1.1em;">' . $c[1] . '</h3>';
 			$services_html .= '<p style="font-size:15px;color:#5A6577;line-height:1.55;margin-bottom:32px;">' . esc_html( $c[3] ) . '</p>';
 			$services_html .= '<span class="es-link" style="margin-top:auto;">Mehr erfahren →</span>';
 			$services_html .= '</a>';
@@ -338,12 +338,18 @@ class ESC_Page_Blueprints {
 
 		// 3 Bereiche als abgesetzte Sections mit eigener Einleitung
 		$bf = self::beratungsfelder();
+		$titles_html = array(
+			'rechtsberatung'       => 'Rechts&shy;<br/>beratung',
+			'steuerberatung'       => 'Steuer&shy;<br/>beratung',
+			'unternehmensberatung' => 'Unternehmens&shy;<br/>beratung',
+		);
 		$i = 0;
 		foreach ( array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' ) as $slug ) {
 			$cfg = $bf[ $slug ];
 			$sections[] = $b::bereich( array(
 				'n' => $cfg['n'],
 				'title' => $cfg['title'],
+				'title_html' => $titles_html[ $slug ],
 				'sub' => $cfg['sub'],
 				'lede' => $cfg['lede'],
 				'link' => '/' . $slug . '/',
@@ -377,14 +383,14 @@ class ESC_Page_Blueprints {
 		$hero_html .= '<div style="display:grid;grid-template-columns:1.3fr 1fr;gap:96px;align-items:end;">';
 		$hero_html .= '<div>';
 		$hero_html .= '<div class="es-eyebrow" style="color:#95D708;">' . esc_html( $d['n'] ) . ' · ' . esc_html( $d['title'] ) . '</div>';
-		$hero_html .= '<h1 style="font-size:clamp(44px,5.6vw,72px);line-height:1.02;font-weight:300;letter-spacing:-0.035em;margin:0;">' . esc_html( $d['long_title'] ) . '</h1>';
+		$hero_html .= '<h1 style="font-size:clamp(44px,5.6vw,72px);line-height:1.02;font-weight:300;letter-spacing:-0.035em;margin:0;color:#FFFFFF;">' . esc_html( $d['long_title'] ) . '</h1>';
 		$hero_html .= '</div>';
 		$hero_html .= '<p style="font-size:17px;line-height:1.55;color:rgba(255,255,255,0.72);margin:0;">' . esc_html( $d['lede'] ) . '</p>';
 		$hero_html .= '</div></div>';
 		$sections[] = $b::section_html( $hero_html, 'ink' );
 
-		// Ansprechpartner-Balken
-		$ap_html  = '<div class="es-wrap" style="padding:36px 0;border-bottom:1px solid #E4E7EC;">';
+		// Ansprechpartner-Balken (mit Foto in rund, 52px)
+		$ap_html  = '<div class="es-wrap" style="padding:28px 0;border-bottom:1px solid #E4E7EC;">';
 		$ap_html .= '<div style="display:grid;grid-template-columns:auto 1fr auto;gap:48px;align-items:center;">';
 		$ap_html .= '<div class="es-eyebrow" style="margin:0;">Ihre Ansprechpartner</div>';
 		$ap_html .= '<div style="display:flex;gap:40px;align-items:center;flex-wrap:wrap;">';
@@ -399,26 +405,32 @@ class ESC_Page_Blueprints {
 		$ap_html .= '</div></div>';
 		$sections[] = $b::section_html( $ap_html, 'warm' );
 
-		// Content split — Text links, Topic-Grid rechts
+		// Content — Text links (schmaler), Einzelleistungen rechts (mehr Platz)
 		$cs_html  = '<div class="es-wrap" style="padding:140px 0;">';
-		$cs_html .= '<div style="display:grid;grid-template-columns:1fr 1.2fr;gap:96px;align-items:start;">';
+		$cs_html .= '<div style="display:grid;grid-template-columns:1fr 1.6fr;gap:96px;align-items:start;">';
 		$cs_html .= '<div style="position:sticky;top:40px;">';
-		$cs_html .= '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
-		$cs_html .= '<div style="aspect-ratio:3/4;background:#F6F4EF;overflow:hidden;">[es_team_photo slug="' . esc_attr( $d['ansprechpartner'][0][0] ) . '" size=400]</div>';
-		$cs_html .= '<div style="aspect-ratio:3/4;background:#F6F4EF;overflow:hidden;margin-top:48px;">[es_team_photo slug="' . esc_attr( $d['ansprechpartner'][1][0] ) . '" size=400]</div>';
-		$cs_html .= '</div></div>';
-		$cs_html .= '<div>';
 		$cs_html .= '<div class="es-eyebrow" style="margin-bottom:20px;">Was wir für Sie tun</div>';
 		$cs_html .= '<h2 style="font-size:clamp(28px,3.2vw,40px);line-height:1.15;font-weight:400;letter-spacing:-0.025em;margin:0 0 32px;">' . esc_html( $d['long_title'] ) . '</h2>';
 		foreach ( $d['long_copy'] as $j => $p ) {
-			$mb = $j === count( $d['long_copy'] ) - 1 ? '48' : '24';
-			$cs_html .= '<p style="font-size:17px;line-height:1.65;color:#5A6577;margin:0 0 ' . $mb . 'px;">' . esc_html( $p ) . '</p>';
+			$cs_html .= '<p style="font-size:17px;line-height:1.65;color:#5A6577;margin:0 0 24px;">' . esc_html( $p ) . '</p>';
 		}
+		$cs_html .= '</div>';
+		$cs_html .= '<div>';
 		$cs_html .= '<div class="es-eyebrow" style="margin-bottom:20px;">Einzelleistungen · ' . esc_html( $d['title'] ) . '</div>';
-		$cs_html .= '<div class="es-bereich__topics" style="grid-template-columns:1fr 1fr;">';
 		$cs_html .= '[es_einzelleistungen beratungsfeld="' . esc_attr( $slug ) . '" columns="2"]';
-		$cs_html .= '</div></div></div></div>';
+		$cs_html .= '</div></div></div>';
 		$sections[] = $b::section_html( $cs_html );
+
+		// Publikationen & Fachbeiträge — 3 neueste getaggt mit Beratungsfeld
+		$pub_html  = '<div class="es-wrap" style="padding:120px 0;">';
+		$pub_html .= '<div style="display:flex;align-items:end;justify-content:space-between;margin-bottom:48px;gap:16px;flex-wrap:wrap;">';
+		$pub_html .= '<div><div class="es-eyebrow" style="margin-bottom:16px;">Aus diesem Feld</div>';
+		$pub_html .= '<h2 style="font-size:clamp(28px,3.4vw,40px);font-weight:400;letter-spacing:-0.03em;margin:0;">Publikationen &amp; Fachbeiträge</h2></div>';
+		$pub_html .= '<a class="es-link" href="/publikationen/?feld=' . esc_attr( $slug ) . '">Alle Publikationen →</a>';
+		$pub_html .= '</div>';
+		$pub_html .= '[es_pub_teaser field="' . esc_attr( $slug ) . '" limit="3"]';
+		$pub_html .= '</div>';
+		$sections[] = $b::section_html( $pub_html, 'warm' );
 
 		$sections[] = $b::cta_dark( array(
 			'title_html' => 'Ihre Fragestellung — unsere Expertise.',
@@ -444,22 +456,8 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 
-		// Filter-Strip (statisch, zunächst nur "Alle")
-		$filter_html  = '<div class="es-wrap" style="padding:20px 0;border-bottom:1px solid #E4E7EC;">';
-		$filter_html .= '<div style="display:flex;align-items:center;gap:28px;">';
-		$filter_html .= '<div class="es-eyebrow" style="margin:0;">Filter</div>';
-		$filter_html .= '<div style="display:flex;gap:6px;">';
-		foreach ( array( array( 'Alle', '/team/', true ), array( 'Rechtsberatung', '/rechtsberatung/', false ), array( 'Steuerberatung', '/steuerberatung/', false ), array( 'Unternehmensberatung', '/unternehmensberatung/', false ) ) as $f ) {
-			$active = $f[2];
-			$filter_html .= '<a href="' . esc_url( $f[1] ) . '" style="padding:8px 14px;font-size:13px;border-radius:2px;border:1px solid ' . ( $active ? '#0E1A2B' : '#E4E7EC' ) . ';background:' . ( $active ? '#0E1A2B' : 'transparent' ) . ';color:' . ( $active ? '#FFFFFF' : '#0E1A2B' ) . ';">' . esc_html( $f[0] ) . '</a>';
-		}
-		$filter_html .= '</div>';
-		$filter_html .= '<div style="margin-left:auto;font-size:13px;color:#5A6577;">Alle Berufsträger &amp; Mitarbeiter</div>';
-		$filter_html .= '</div></div>';
-		$sections[] = $b::section_html( $filter_html );
-
-		// Grid
-		$grid_html = '<div class="es-wrap" style="padding:80px 0 80px;">[es_team columns="4"]</div>';
+		// Filter + Grid (beides vom Shortcode gerendert, nutzt es_field Meta + ?feld=...)
+		$grid_html = '<div class="es-wrap" style="padding:40px 0 80px;">[es_team columns="4" filter="1"]</div>';
 		$sections[] = $b::section_html( $grid_html );
 
 		// Bottom anchor — keinen harten Cut, sondern weicher Übergang zur CTA

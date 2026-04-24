@@ -46,7 +46,7 @@ $es_no_cta = is_page( array( 'kontakt', 'impressum', 'datenschutzerklaerung' ) )
 				</div>
 
 				<div class="es-footer__col">
-					<h4><?php esc_html_e( 'Büro', 'energiesozietaet' ); ?></h4>
+					<h4><?php esc_html_e( 'Anschrift', 'energiesozietaet' ); ?></h4>
 					<ul>
 						<li>Energiesozietät GmbH</li>
 						<li>Roßstraße 92 / Kennedyhaus</li>

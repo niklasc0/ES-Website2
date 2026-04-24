@@ -19,7 +19,7 @@ while ( have_posts() ) : the_post();
 	?>
 
 	<section class="es-stelle-single">
-		<div class="es-wrap es-wrap--narrow">
+		<div style="max-width:960px;margin:0 auto;padding:0 24px;">
 			<div class="es-article__crumb">
 				<a href="<?php echo esc_url( home_url( '/karriere/' ) ); ?>" style="color:inherit;">Karriere</a>  /  Offene Stelle
 			</div>

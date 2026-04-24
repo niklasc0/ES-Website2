@@ -1,9 +1,9 @@
 <?php
 /**
- * Single Team-Mitglied — nach Mockup S3 Team-Einzelprofil.
- * Links: sticky großes Portrait + Kontakt-Karte (ink) mit Termin-CTA + vCard.
- * Rechts: Role-Eyebrow, Name, Bio, Schwerpunkte, Werdegang, Publikationen,
- * Zurück-Link (ohne Pfeil rechts).
+ * Single Team-Mitglied — nach Mockup S3.
+ * Position über dem Namen (groß), keine Duplicate-Rolle, Kontakt-Box mit
+ * E-Mail + Telefon, vCard-Download automatisch, Sections Schwerpunkte,
+ * Werdegang, Publikationen (Reverse-Lookup via es_author_ids).
  *
  * @package Energiesozietaet
  */
@@ -22,10 +22,12 @@ while ( have_posts() ) : the_post();
 	$thumb_id = get_post_thumbnail_id();
 	$vcard    = add_query_arg( array( 'es_vcard' => $post_id ), home_url( '/' ) );
 
-	// Related Publications — via Autor-Meta (wenn vorhanden)
+	// Related Publications via es_author_ids
 	$related_pubs = new WP_Query( array(
-		'post_type' => 'es_publikation', 'posts_per_page' => 3,
-		'meta_query' => array( array( 'key' => 'es_author', 'value' => get_the_title(), 'compare' => 'LIKE' ) ),
+		'post_type' => 'es_publikation',
+		'posts_per_page' => 6,
+		'orderby' => 'date', 'order' => 'DESC',
+		'meta_query' => array( array( 'key' => 'es_author_ids', 'value' => 'i:' . (int) $post_id . ';', 'compare' => 'LIKE' ) ),
 	) );
 	?>
 
@@ -45,7 +47,7 @@ while ( have_posts() ) : the_post();
 					</div>
 
 					<div class="es-team-single__contact-card">
-						<div class="es-eyebrow" style="margin-bottom:16px;">Kontakt</div>
+						<div class="es-eyebrow" style="margin-bottom:16px;color:#95D708;">Kontakt</div>
 						<?php if ( $email ) : ?>
 							<div class="es-team-single__contact-row">
 								<small>E-Mail</small>
@@ -80,9 +82,6 @@ while ( have_posts() ) : the_post();
 						<div class="es-team-single__role-eyebrow"><?php echo esc_html( $role ); ?></div>
 					<?php endif; ?>
 					<h1 class="es-team-single__name"><?php the_title(); ?></h1>
-					<?php if ( $role ) : ?>
-						<p class="es-team-single__role"><?php echo esc_html( $role ); ?></p>
-					<?php endif; ?>
 
 					<div class="es-team-single__bio"><?php the_content(); ?></div>
 
@@ -128,11 +127,12 @@ while ( have_posts() ) : the_post();
 							<div class="es-team-single__pubs">
 								<?php while ( $related_pubs->have_posts() ) : $related_pubs->the_post();
 									$link = es_meta( 'es_link' );
-									$href = $link ? $link : get_permalink(); ?>
-									<a href="<?php echo esc_url( $href ); ?>"<?php echo $link ? ' target="_blank" rel="noopener"' : ''; ?>>
-										<?php the_title(); ?> <?php echo $link ? '↗' : '→'; ?>
-									</a>
-								<?php endwhile; wp_reset_postdata(); ?>
+									if ( $link ) : ?>
+										<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener"><?php the_title(); ?> ↗</a>
+									<?php else : ?>
+										<span><?php the_title(); ?></span>
+									<?php endif;
+								endwhile; wp_reset_postdata(); ?>
 							</div>
 						</div>
 					<?php endif; ?>

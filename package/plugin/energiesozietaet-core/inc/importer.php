@@ -151,10 +151,17 @@ class ESC_Importer {
 				'menu_order'   => $order++,
 			) );
 			if ( ! $id ) { continue; }
-			update_post_meta( $id, 'es_role',        (string) $t['role'] );
-			update_post_meta( $id, 'es_more_bio',    (string) $t['more_bio'] );
+			update_post_meta( $id, 'es_role',     (string) $t['role'] );
+			update_post_meta( $id, 'es_more_bio', (string) ( $t['more_bio'] ?? '' ) );
+			update_post_meta( $id, 'es_email',    (string) ( $t['email'] ?? '' ) );
+			update_post_meta( $id, 'es_phone',    (string) ( $t['phone'] ?? '+49 211 159232-0' ) );
+			update_post_meta( $id, 'es_location', (string) ( $t['location'] ?? 'Düsseldorf' ) );
+			update_post_meta( $id, 'es_field',    (string) ( $t['field'] ?? 'rechtsberatung' ) );
 			if ( ! empty( $t['focus_areas'] ) ) {
 				update_post_meta( $id, 'es_focus_areas', $t['focus_areas'] );
+			}
+			if ( ! empty( $t['career'] ) ) {
+				update_post_meta( $id, 'es_career', $t['career'] );
 			}
 			if ( ! empty( $media_map[ 'team:' . $t['slug'] ] ) ) {
 				set_post_thumbnail( $id, $media_map[ 'team:' . $t['slug'] ] );
@@ -193,9 +200,9 @@ class ESC_Importer {
 				'post_excerpt' => wp_trim_words( wp_strip_all_tags( (string) $k['description'] ), 26, '…' ),
 			) );
 			if ( ! $id ) { continue; }
-			update_post_meta( $id, 'es_department',      (string) $k['department'] );
-			update_post_meta( $id, 'es_location',        'Düsseldorf' );
-			update_post_meta( $id, 'es_employment_type', 'Vollzeit' );
+			update_post_meta( $id, 'es_department',      (string) ( $k['department'] ?? 'Consulting' ) );
+			update_post_meta( $id, 'es_location',        (string) ( $k['location']  ?? 'Düsseldorf' ) );
+			update_post_meta( $id, 'es_employment_type', (string) ( $k['employment_type'] ?? 'Vollzeit' ) );
 			if ( ! empty( $k['bullets'] ) ) { update_post_meta( $id, 'es_bullets', $k['bullets'] ); }
 			$map[ 'karriere:' . $k['slug'] ] = $id;
 		}
@@ -240,15 +247,30 @@ class ESC_Importer {
 	protected static function import_publikationen( $items, &$map ) {
 		foreach ( $items as $i => $p ) {
 			$slug = sanitize_title( $p['title'] );
+			$post_date = ! empty( $p['date'] ) ? date( 'Y-m-d H:i:s', strtotime( (string) $p['date'] ) ) : current_time( 'mysql' );
 			$id = self::upsert_post( array(
 				'post_type'    => 'es_publikation',
 				'post_name'    => $slug,
 				'post_title'   => $p['title'],
-				'post_content' => wpautop_safe( (string) $p['body'] ),
-				'post_excerpt' => wp_trim_words( wp_strip_all_tags( (string) $p['body'] ), 24, '…' ),
+				'post_content' => wpautop_safe( (string) ( $p['body'] ?? '' ) ),
+				'post_excerpt' => wp_trim_words( wp_strip_all_tags( (string) ( $p['body'] ?? '' ) ), 24, '…' ),
+				'post_date'    => $post_date,
+				'post_date_gmt'=> $post_date,
 			) );
 			if ( ! $id ) { continue; }
-			if ( ! empty( $p['link'] ) ) { update_post_meta( $id, 'es_link', $p['link'] ); }
+			if ( ! empty( $p['link'] ) )   { update_post_meta( $id, 'es_link',   $p['link'] ); }
+			if ( ! empty( $p['cat'] ) )    { update_post_meta( $id, 'es_cat',    $p['cat'] ); }
+			if ( ! empty( $p['author'] ) ) { update_post_meta( $id, 'es_author', $p['author'] ); }
+			if ( ! empty( $p['source'] ) ) { update_post_meta( $id, 'es_source', $p['source'] ); }
+			if ( ! empty( $p['date'] ) )   { update_post_meta( $id, 'es_publication_date', $p['date'] ); }
+			// Team-Autor-IDs per slug → post_id
+			$author_ids = array();
+			foreach ( (array) ( $p['author_slugs'] ?? array() ) as $aslug ) {
+				if ( ! empty( $map[ 'team:' . $aslug ] ) ) { $author_ids[] = (int) $map[ 'team:' . $aslug ]; }
+			}
+			update_post_meta( $id, 'es_author_ids', $author_ids );
+			// Beratungsfelder
+			update_post_meta( $id, 'es_fields', (array) ( $p['fields'] ?? array() ) );
 			$map[ 'pub:' . $slug ] = $id;
 		}
 	}

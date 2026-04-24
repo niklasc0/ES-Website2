@@ -42,19 +42,19 @@ while ( have_posts() ) : the_post();
 
 		<?php if ( $thumb_id ) : ?>
 			<div class="es-article__hero">
-				<?php echo wp_get_attachment_image( $thumb_id, 'es-wide', false, array( 'loading' => 'eager', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); ?>
+				<?php echo wp_get_attachment_image( $thumb_id, 'es-wide', false, array( 'loading' => 'eager', 'style' => 'width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;' ) ); ?>
 			</div>
 		<?php else : ?>
 			<div class="es-article__hero">
-				<div class="es-ph-cat"><span><?php echo esc_html( $cat_name ); ?></span></div>
+				<div class="es-ph-cat" style="aspect-ratio:16/9;"><span><?php echo esc_html( $cat_name ); ?></span></div>
 			</div>
 		<?php endif; ?>
 
-		<div class="es-article__body">
+		<div class="es-article__body" style="max-width:860px;margin-left:auto;margin-right:auto;">
 			<?php the_content(); ?>
 		</div>
 
-		<div class="es-wrap es-wrap--narrow" style="padding-top:80px;">
+		<div style="max-width:860px;margin:80px auto 0;padding:0 24px;">
 			<a class="es-team-single__back" href="<?php echo esc_url( home_url( '/news/' ) ); ?>">← Zurück zu den News</a>
 		</div>
 	</article>

@@ -17,6 +17,7 @@ class ESC_Shortcodes {
 		add_shortcode( 'es_news',            array( __CLASS__, 'news' ) );
 		add_shortcode( 'es_publikationen',   array( __CLASS__, 'publikationen' ) );
 		add_shortcode( 'es_news_featured',   array( __CLASS__, 'news_featured' ) );
+		add_shortcode( 'es_pub_teaser',      array( __CLASS__, 'pub_teaser' ) );
 	}
 
 	/**
@@ -129,35 +130,72 @@ class ESC_Shortcodes {
 		$atts = shortcode_atts( array(
 			'columns' => 4,
 			'limit'   => -1,
+			'field'   => '', // rechtsberatung|steuerberatung|unternehmensberatung|management
+			'filter'  => '0', // "1" → rendert Filter-Pills oben
 			'orderby' => 'menu_order title',
 			'order'   => 'ASC',
 		), $atts, 'es_team' );
-		$q = new WP_Query( array(
+		$active_field = isset( $_GET['feld'] ) ? sanitize_text_field( wp_unslash( $_GET['feld'] ) ) : (string) $atts['field'];
+		$q_args = array(
 			'post_type'      => 'es_team',
 			'posts_per_page' => (int) $atts['limit'],
 			'orderby'        => $atts['orderby'],
 			'order'          => $atts['order'],
-		) );
-		if ( ! $q->have_posts() ) { return ''; }
+		);
+		if ( $active_field ) {
+			$q_args['meta_query'] = array( array( 'key' => 'es_field', 'value' => $active_field ) );
+		}
+		$q = new WP_Query( $q_args );
 		$cols = max( 2, min( 4, (int) $atts['columns'] ) );
-		ob_start(); ?>
+
+		$filter_html = '';
+		if ( '1' === (string) $atts['filter'] ) {
+			$fields = array(
+				''                     => 'Alle',
+				'rechtsberatung'       => 'Rechtsberatung',
+				'steuerberatung'       => 'Steuerberatung',
+				'unternehmensberatung' => 'Unternehmensberatung',
+				'management'           => 'Büroleitung',
+			);
+			$base = remove_query_arg( 'feld' );
+			$filter_html = '<div class="es-team-filter">';
+			$filter_html .= '<div class="es-eyebrow" style="margin:0 28px 0 0;">Filter</div><div class="es-team-filter__pills">';
+			foreach ( $fields as $slug => $label ) {
+				$url = $slug ? esc_url( add_query_arg( 'feld', $slug ) ) : esc_url( $base );
+				$active = ( (string) $active_field === (string) $slug ) ? ' is-active' : '';
+				$filter_html .= '<a class="es-team-filter__pill' . $active . '" href="' . $url . '">' . esc_html( $label ) . '</a>';
+			}
+			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $q->found_posts . ' Teammitglieder</div></div>';
+		}
+
+		if ( ! $q->have_posts() ) {
+			$empty = '<p style="color:#5A6577;font-size:15px;">Aktuell keine Teammitglieder in diesem Bereich.</p>';
+			return $filter_html . $empty;
+		}
+
+		$labels = array(
+			'rechtsberatung' => 'Recht',
+			'steuerberatung' => 'Steuern',
+			'unternehmensberatung' => 'Unternehmensberatung',
+			'management' => 'Büroleitung',
+		);
+
+		ob_start();
+		echo $filter_html;
+		?>
 		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?>">
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$role     = get_post_meta( get_the_ID(), 'es_role', true );
 				$thumb_id = get_post_thumbnail_id();
-				// Derive feld label from role (Rechtsanwalt → Recht, Steuerberater → Steuern, else Unternehmensberatung)
-				$feld = '';
-				if ( preg_match( '/Rechts?(anwalt|anwältin)/i', (string) $role ) || stripos( (string) $role, 'Rechtsberatung' ) !== false ) { $feld = 'Recht'; }
-				elseif ( stripos( (string) $role, 'Steuer' ) !== false ) { $feld = 'Steuern'; }
-				else { $feld = 'Unternehmensberatung'; }
-				?>
+				$field    = (string) get_post_meta( get_the_ID(), 'es_field', true );
+				$feld_lbl = $labels[ $field ] ?? ( $field ? ucfirst( $field ) : '' ); ?>
 				<a class="esc-team-card es-reveal" href="<?php the_permalink(); ?>">
 					<div class="esc-team-card__photo">
 						<?php if ( $thumb_id ) { echo wp_get_attachment_image( $thumb_id, 'es-team', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); }
 						else { echo '<span class="esc-team-card__initial">' . esc_html( mb_substr( get_the_title(), 0, 1 ) ) . '</span>'; } ?>
 					</div>
 					<div class="esc-team-card__body">
-						<div class="esc-team-card__feld"><?php echo esc_html( $feld ); ?></div>
+						<?php if ( $feld_lbl ) : ?><div class="esc-team-card__feld"><?php echo esc_html( $feld_lbl ); ?></div><?php endif; ?>
 						<h3 class="esc-team-card__name"><?php the_title(); ?></h3>
 						<p class="esc-team-card__role"><?php echo esc_html( $role ); ?></p>
 					</div>
@@ -282,32 +320,90 @@ class ESC_Shortcodes {
 	}
 
 	public static function publikationen( $atts ) {
-		// Keine Detailseiten — Publikationen führen direkt zur externen Quelle wenn vorhanden.
-		$atts = shortcode_atts( array( 'layout' => 'list', 'limit' => -1 ), $atts, 'es_publikationen' );
-		$q = new WP_Query( array( 'post_type' => 'es_publikation', 'posts_per_page' => (int) $atts['limit'], 'orderby' => 'date', 'order' => 'DESC' ) );
+		// Jahres-gruppierte Liste nach Datum sortiert. Kein Detail — externer Link führt direkt zur Quelle.
+		$atts = shortcode_atts( array( 'layout' => 'years', 'limit' => -1, 'field' => '' ), $atts, 'es_publikationen' );
+		$q_args = array( 'post_type' => 'es_publikation', 'posts_per_page' => (int) $atts['limit'], 'orderby' => 'date', 'order' => 'DESC' );
+		if ( $atts['field'] ) {
+			$q_args['meta_query'] = array( array( 'key' => 'es_fields', 'value' => sanitize_text_field( $atts['field'] ), 'compare' => 'LIKE' ) );
+		}
+		$q = new WP_Query( $q_args );
+		if ( ! $q->have_posts() ) { return '<p style="color:#5A6577;">Keine Publikationen gefunden.</p>'; }
+
+		// Gruppierung nach Jahr
+		$years = array();
+		while ( $q->have_posts() ) { $q->the_post();
+			$years[ get_the_date( 'Y' ) ][] = get_the_ID();
+		}
+		wp_reset_postdata();
+		krsort( $years );
+
+		ob_start();
+		?>
+		<div class="esc-pub-years">
+			<?php foreach ( $years as $year => $ids ) : ?>
+				<div class="esc-pub-year">
+					<aside class="esc-pub-year__label">
+						<div class="esc-pub-year__num"><?php echo esc_html( $year ); ?></div>
+						<div class="esc-pub-year__count"><?php echo (int) count( $ids ); ?> Einträge</div>
+					</aside>
+					<div class="esc-pub-year__items">
+						<?php foreach ( $ids as $pid ) :
+							$link = (string) get_post_meta( $pid, 'es_link', true );
+							$src  = (string) get_post_meta( $pid, 'es_source', true );
+							$auth = (string) get_post_meta( $pid, 'es_author', true );
+							$cat  = (string) get_post_meta( $pid, 'es_cat', true );
+							if ( ! $cat ) { $cat = 'Fachbeitrag'; }
+							if ( $link ) : ?>
+								<a class="esc-pub-row" href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
+							<?php else : ?>
+								<div class="esc-pub-row esc-pub-row--nolink">
+							<?php endif; ?>
+								<div class="esc-pub-row__cat"><?php echo esc_html( $cat ); ?></div>
+								<div>
+									<h3 class="esc-pub-row__title"><?php echo esc_html( get_the_title( $pid ) ); ?></h3>
+									<?php if ( $auth || $src ) : ?>
+										<p class="esc-pub-row__author">
+											<?php echo esc_html( $auth ); ?><?php if ( $auth && $src ) echo ' · '; ?><?php echo esc_html( $src ); ?>
+										</p>
+									<?php endif; ?>
+								</div>
+								<?php if ( $link ) : ?>
+									<span class="esc-pub-row__cta">Zur Publikation <span class="esc-pub-row__arrow">→</span></span>
+								<?php else : ?>
+									<span></span>
+								<?php endif; ?>
+							<?php echo $link ? '</a>' : '</div>'; ?>
+						<?php endforeach; ?>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+		<?php return ob_get_clean();
+	}
+
+	/** Fachbeiträge im Beratungsfeld — 3 neueste mit Card-Layout. */
+	public static function pub_teaser( $atts ) {
+		$atts = shortcode_atts( array( 'field' => '', 'limit' => 3 ), $atts, 'es_pub_teaser' );
+		$q_args = array( 'post_type' => 'es_publikation', 'posts_per_page' => (int) $atts['limit'], 'orderby' => 'date', 'order' => 'DESC' );
+		if ( $atts['field'] ) {
+			$q_args['meta_query'] = array( array( 'key' => 'es_fields', 'value' => sanitize_text_field( $atts['field'] ), 'compare' => 'LIKE' ) );
+		}
+		$q = new WP_Query( $q_args );
 		if ( ! $q->have_posts() ) { return ''; }
 		ob_start(); ?>
-		<div class="esc-pub-list" style="border-top:1px solid #E4E7EC;">
+		<div class="esc-grid esc-grid--cols-3">
 			<?php while ( $q->have_posts() ) : $q->the_post();
-				$link = get_post_meta( get_the_ID(), 'es_link', true );
-				$href = $link ? $link : '';
-				$src  = get_post_meta( get_the_ID(), 'es_source', true );
-				$auth = get_post_meta( get_the_ID(), 'es_author', true );
-				$cat  = get_post_meta( get_the_ID(), 'es_cat', true );
-				if ( ! $cat ) { $cat = 'Fachbeitrag'; } ?>
-				<?php if ( $href ) : ?>
-					<a class="esc-pub-row" href="<?php echo esc_url( $href ); ?>" target="_blank" rel="noopener">
-				<?php else : ?>
-					<div class="esc-pub-row" style="cursor:default;">
-				<?php endif; ?>
-					<div class="esc-pub-row__cat"><?php echo esc_html( $cat ); ?></div>
-					<div>
-						<h3 class="esc-pub-row__title"><?php the_title(); ?></h3>
-						<?php if ( $auth ) : ?><p class="esc-pub-row__author"><?php echo esc_html( $auth ); ?></p><?php endif; ?>
-					</div>
-					<div class="esc-pub-row__src"><?php echo esc_html( $src ? $src : ( $href ? 'Externe Quelle ↗' : '' ) ); ?></div>
-					<div class="esc-pub-row__arrow"><?php echo $href ? '↗' : ''; ?></div>
-				<?php echo $href ? '</a>' : '</div>'; ?>
+				$link = (string) get_post_meta( get_the_ID(), 'es_link', true );
+				$cat  = (string) get_post_meta( get_the_ID(), 'es_cat', true ); if ( ! $cat ) { $cat = 'Fachbeitrag'; }
+				$src  = (string) get_post_meta( get_the_ID(), 'es_source', true );
+				$tag  = $link ? 'a' : 'article';
+				$href = $link ? ' href="' . esc_url( $link ) . '" target="_blank" rel="noopener"' : ''; ?>
+				<<?php echo $tag; ?> class="esc-card"<?php echo $href; ?> style="padding:32px;">
+					<div class="esc-card__meta"><?php echo esc_html( $cat ); ?></div>
+					<h3 style="font-size:19px;font-weight:500;line-height:1.3;letter-spacing:-0.01em;margin:16px 0 20px;"><?php the_title(); ?></h3>
+					<?php if ( $src ) : ?><div style="font-size:12px;color:#8591A3;font-family:var(--es-font-mono);margin-bottom:20px;"><?php echo esc_html( $src ); ?></div><?php endif; ?>
+					<span class="esc-card__link"><?php echo $link ? 'Zur Publikation ↗' : 'Lesen'; ?></span>
+				</<?php echo $tag; ?>>
 			<?php endwhile; wp_reset_postdata(); ?>
 		</div>
 		<?php return ob_get_clean();
