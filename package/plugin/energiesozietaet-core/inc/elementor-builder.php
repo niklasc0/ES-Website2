@@ -71,7 +71,10 @@ class ESC_Elementor_Builder {
 			$settings['background_background'] = 'classic';
 			$settings['background_color']      = '#F3F5F8';
 		}
-		return self::section( array( array( 'widgets' => array( self::html( $html ) ) ) ), $settings );
+		// Stage-Wrapper damit CSS-Selektoren wie .es-stage--ink h1 greifen
+		$stage_class = $variant ? 'es-stage es-stage--' . $variant : 'es-stage';
+		$wrapped = '<div class="' . esc_attr( $stage_class ) . '">' . $html . '</div>';
+		return self::section( array( array( 'widgets' => array( self::html( $wrapped ) ) ) ), $settings );
 	}
 
 	/** Heading widget (kept for legacy call sites). */

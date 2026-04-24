@@ -4,6 +4,9 @@
 (function () {
 	'use strict';
 
+	// 0. Mark html as JS-enabled so reveal CSS becomes active
+	document.documentElement.classList.add('js');
+
 	// 1. Mobile nav toggle
 	var toggle = document.querySelector('.es-nav-toggle');
 	var nav = document.getElementById('es-nav');
@@ -47,14 +50,14 @@
 		var obs = new IntersectionObserver(function (entries) {
 			entries.forEach(function (e) {
 				if (e.isIntersecting) {
-					e.target.classList.add('is-visible');
+					e.target.classList.add('is-in', 'is-visible');
 					obs.unobserve(e.target);
 				}
 			});
-		}, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+		}, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
 		document.querySelectorAll('.es-reveal').forEach(function (el) { obs.observe(el); });
 	} else {
-		document.querySelectorAll('.es-reveal').forEach(function (el) { el.classList.add('is-visible'); });
+		document.querySelectorAll('.es-reveal').forEach(function (el) { el.classList.add('is-in', 'is-visible'); });
 	}
 
 	// 4. Smooth anchor scrolling — respects reduced motion
