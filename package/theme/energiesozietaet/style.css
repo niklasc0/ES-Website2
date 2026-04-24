@@ -1678,3 +1678,84 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
     .esc-grid.esc-grid--cols-4 { grid-template-columns: repeat(2, 1fr) !important; }
     .es-hero-claims-inner > .elementor-container { grid-template-columns: 1fr !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v12 — präzise Mobile-Korrekturen (≤ 768px)
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+    /* A) Beratungsfeld-Detail: Spalten wirklich stapeln (Elementor nutzt
+       flex, nicht grid — daher hier explizit flex-direction:column und
+       Spaltenweite auf 100%). */
+    body .es-bereich-detail__content > .elementor-container {
+        flex-direction: column !important;
+        flex-wrap: wrap !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    /* B) Section-Padding auf Mobile noch dezenter (war 56px, jetzt 40 / 32
+       je nach Section-Typ). Wir greifen nicht über .es-stage pauschal,
+       sondern über Elementor's eigene Section-Klasse damit die Inline-
+       Padding-Regeln aus post-CSS gewinnen. */
+    body .elementor-section.es-stage > .elementor-container { padding-top: 40px !important; padding-bottom: 40px !important; }
+    body .elementor-section.es-stage.es-hero > .elementor-container { padding-top: 64px !important; padding-bottom: 56px !important; }
+    body .elementor-section.es-stage > .elementor-container { padding-left: 24px !important; padding-right: 24px !important; }
+    /* Der Padding-Wert wandert über Elementor in $section-padding (oben);
+       die Section selbst hat zusätzlich data-style oder via post.css
+       padding gesetzt — wir überschreiben die wichtigsten Custom-Sections: */
+    body .elementor-section.es-stage { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+    /* C) Vertikale Abstände innerhalb von .es-stage-Sections — Widget-
+       Margins reduzieren */
+    body .es-stage .elementor-widget { margin-bottom: 16px !important; }
+    body .es-stage .elementor-widget:last-child { margin-bottom: 0 !important; }
+
+    /* D) Home: Leistungen-Headline → enger an die Cards */
+    body .es-home-services-head > .elementor-container { padding-top: 40px !important; padding-bottom: 8px !important; }
+    body .es-home-services > .elementor-container { padding-top: 0 !important; padding-bottom: 40px !important; }
+    body .es-home-services > .elementor-container > .elementor-column { width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important; margin-bottom: 12px; }
+    body .es-home-services > .elementor-container { flex-direction: column !important; }
+
+    /* E) Home GF-Quote + News: Spacing tighter */
+    body .es-gf-quote > .elementor-container { padding-top: 40px !important; padding-bottom: 40px !important; }
+    body .es-home-news > .elementor-container { padding-top: 40px !important; padding-bottom: 40px !important; }
+    body .es-home-news .es-home-news__title .elementor-heading-title { margin-bottom: 16px !important; }
+
+    /* F) Home Intro-Strip ('Unser Anspruch') schon kompakt — angleichen */
+    body .es-split > .elementor-container { padding-top: 40px !important; padding-bottom: 40px !important; }
+    body .es-split > .elementor-container > .elementor-column { width: 100% !important; flex: 1 1 100% !important; max-width: 100% !important; margin-bottom: 8px; }
+    body .es-split > .elementor-container { flex-direction: column !important; }
+
+    /* G) Beratungsfeld-Detail Ansprechpartner-Bar: Padding oben/unten nicht
+       riesig + mehr Luft zwischen Personen und Button */
+    body .es-stage--warm .es-ansprech { gap: 24px; }
+    body .es-stage--warm .es-ansprech .es-btn { margin-top: 8px !important; }
+    /* Section-Padding der Ansprechpartner-Section enger */
+    body .es-bereich-detail__content + .es-stage--warm > .elementor-container,
+    body .es-stage--warm .es-ansprech ~ * { /* no-op selector for safety */ }
+    /* Direkt auf die Ansprechpartner-Section: sie hat keine eigene Klasse,
+       daher per generischer Regel: alle warm-Sections mit Ansprechpartner
+       enger machen */
+
+    /* H) Philosophie: Section mit "Wie wir arbeiten" und "Interdisziplinär"
+       — engere Abstände */
+    body .es-cards-grid > .elementor-container { padding-top: 24px !important; padding-bottom: 40px !important; }
+    body .es-cards-grid > .elementor-container > .elementor-column { width: 100% !important; flex: 1 1 100% !important; max-width: 100% !important; margin-bottom: 12px; }
+    body .es-cards-grid > .elementor-container { flex-direction: column !important; }
+
+    /* I) Section, die NUR Eyebrow + H2 + Text enthält, ohne unten Abstand */
+    body .es-stage > .elementor-container > .elementor-column > .elementor-widget-wrap > .elementor-widget:last-child,
+    body .es-stage > .elementor-container > .elementor-column > .elementor-element-populated > .elementor-widget:last-child { margin-bottom: 0 !important; }
+}
+
+/* ─── Fallback: auch bei Tablet (769–1024) sollen Beratungsfeld-Spalten
+   eine spaltige Ansicht zeigen, weil 60/40-Layout unter ~900px kippt ─── */
+@media (min-width: 769px) and (max-width: 1024px) {
+    body .es-bereich-detail__content > .elementor-container { flex-direction: column !important; }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column { width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important; }
+}
