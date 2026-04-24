@@ -289,8 +289,9 @@ class ESC_Importer {
 			foreach ( $existing as $item ) { wp_delete_post( $item->ID, true ); }
 		}
 
+		// Kontakt + Karriere leben in den Header-Buttons rechts — nicht im Hauptmenü.
 		$order = array(
-			'home', 'philosophie', 'leistungen', 'team', 'publikationen', 'karriere', 'news', 'veranstaltungen', 'kontakt',
+			'philosophie', 'leistungen', 'team', 'publikationen', 'news', 'veranstaltungen',
 		);
 		$leistungen_children = array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' );
 

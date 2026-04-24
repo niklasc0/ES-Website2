@@ -39,14 +39,14 @@ function es_theme_setup() {
 	) );
 
 	add_theme_support( 'editor-color-palette', array(
-		array( 'name' => __( 'Tinte', 'energiesozietaet' ),     'slug' => 'ink',       'color' => '#0f1720' ),
-		array( 'name' => __( 'Tinte hell', 'energiesozietaet' ),'slug' => 'ink-2',     'color' => '#1a2330' ),
-		array( 'name' => __( 'Papier', 'energiesozietaet' ),    'slug' => 'paper',     'color' => '#ffffff' ),
-		array( 'name' => __( 'Soft', 'energiesozietaet' ),      'slug' => 'soft',      'color' => '#f6f7f5' ),
-		array( 'name' => __( 'Akzent', 'energiesozietaet' ),    'slug' => 'accent',    'color' => '#94d707' ),
-		array( 'name' => __( 'Akzent dunkel', 'energiesozietaet' ), 'slug' => 'accent-deep', 'color' => '#7bbc02' ),
-		array( 'name' => __( 'Text', 'energiesozietaet' ),      'slug' => 'text',      'color' => '#1a1f26' ),
-		array( 'name' => __( 'Muted', 'energiesozietaet' ),     'slug' => 'muted',     'color' => '#5a6270' ),
+		array( 'name' => __( 'Tinte', 'energiesozietaet' ),        'slug' => 'ink',        'color' => '#0E1A2B' ),
+		array( 'name' => __( 'Tinte weich', 'energiesozietaet' ),  'slug' => 'ink-soft',   'color' => '#1A2740' ),
+		array( 'name' => __( 'Papier', 'energiesozietaet' ),       'slug' => 'paper',      'color' => '#FFFFFF' ),
+		array( 'name' => __( 'Papier warm', 'energiesozietaet' ),  'slug' => 'paper-warm', 'color' => '#F6F4EF' ),
+		array( 'name' => __( 'Papier kühl', 'energiesozietaet' ),  'slug' => 'paper-cool', 'color' => '#F3F5F8' ),
+		array( 'name' => __( 'Akzent', 'energiesozietaet' ),       'slug' => 'accent',     'color' => '#95D708' ),
+		array( 'name' => __( 'Text', 'energiesozietaet' ),         'slug' => 'text',       'color' => '#0E1A2B' ),
+		array( 'name' => __( 'Muted', 'energiesozietaet' ),        'slug' => 'muted',      'color' => '#5A6577' ),
 	) );
 
 	add_image_size( 'es-team', 900, 900, true );
@@ -59,9 +59,11 @@ add_action( 'after_setup_theme', 'es_theme_setup' );
  * Enqueue styles & scripts.
  */
 function es_theme_enqueue_assets() {
+	// Inter + JetBrains Mono — sans-only system per Mockup.
+	// (Ideal wäre selbst gehostet; bis dahin Google-Fonts mit display=swap.)
 	wp_enqueue_style(
 		'es-fonts',
-		'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,450;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap',
+		'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap',
 		array(),
 		null
 	);
@@ -192,18 +194,16 @@ function es_excerpt( $post, $length = 28 ) {
  * Light-weight fallback header menu if no menu assigned.
  */
 function es_fallback_menu() {
+	// Kontakt + Karriere leben in den Header-Buttons rechts — nicht im Hauptmenü.
 	$items = array(
-		home_url( '/' )                        => __( 'Home', 'energiesozietaet' ),
-		home_url( '/philosophie/' )            => __( 'Philosophie', 'energiesozietaet' ),
-		home_url( '/leistungen/' )             => __( 'Leistungen', 'energiesozietaet' ),
-		home_url( '/team/' )                   => __( 'Team', 'energiesozietaet' ),
-		home_url( '/publikationen/' )          => __( 'Publikationen', 'energiesozietaet' ),
-		home_url( '/karriere/' )               => __( 'Karriere', 'energiesozietaet' ),
-		home_url( '/news/' )                   => __( 'News', 'energiesozietaet' ),
-		home_url( '/veranstaltungen/' )        => __( 'Veranstaltungen', 'energiesozietaet' ),
-		home_url( '/kontakt/' )                => __( 'Kontakt', 'energiesozietaet' ),
+		home_url( '/philosophie/' )     => __( 'Philosophie', 'energiesozietaet' ),
+		home_url( '/leistungen/' )      => __( 'Leistungen', 'energiesozietaet' ),
+		home_url( '/team/' )            => __( 'Team', 'energiesozietaet' ),
+		home_url( '/publikationen/' )   => __( 'Publikationen', 'energiesozietaet' ),
+		home_url( '/news/' )            => __( 'News', 'energiesozietaet' ),
+		home_url( '/veranstaltungen/' ) => __( 'Veranstaltungen', 'energiesozietaet' ),
 	);
-	echo '<ul>';
+	echo '<ul class="es-nav__list">';
 	foreach ( $items as $url => $label ) {
 		printf( '<li><a href="%s">%s</a></li>', esc_url( $url ), esc_html( $label ) );
 	}
