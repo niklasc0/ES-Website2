@@ -33,42 +33,87 @@ class ESC_Shortcodes {
 		return $thumb ? $thumb : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#8591A3;font-size:48px;">' . esc_html( mb_substr( $p->post_title, 0, 1 ) ) . '</div>';
 	}
 
-	/** News archive with featured (first) + grid — L3 block. */
+	/** News archive: Featured-Post + paginiertes Grid. Unterstützt Per-Page
+	 *  Auswahl via ?pp=8|16|32 und Seiten via ?npage=N. */
 	public static function news_featured( $atts ) {
-		$atts = shortcode_atts( array( 'limit' => 6 ), $atts, 'es_news_featured' );
-		$q = new WP_Query( array( 'post_type' => 'es_news', 'posts_per_page' => (int) $atts['limit'] ) );
-		if ( ! $q->have_posts() ) { return ''; }
-		ob_start();
-		$i = 0;
-		?>
+		$atts = shortcode_atts( array( 'limit' => 9 ), $atts, 'es_news_featured' );
+		$allowed_pp = array( 8, 16, 32 );
+		$pp = isset( $_GET['pp'] ) ? (int) $_GET['pp'] : 8;
+		if ( ! in_array( $pp, $allowed_pp, true ) ) { $pp = 8; }
+		$page = isset( $_GET['npage'] ) ? max( 1, (int) $_GET['npage'] ) : 1;
+
+		// Featured-Artikel = neuester
+		$fq = new WP_Query( array( 'post_type' => 'es_news', 'posts_per_page' => 1, 'orderby' => 'date', 'order' => 'DESC' ) );
+		if ( ! $fq->have_posts() ) { return ''; }
+		$fq->the_post();
+		$f_id    = get_the_ID();
+		$f_thumb = get_post_thumbnail_id();
+		$f_img   = $f_thumb ? wp_get_attachment_image( $f_thumb, 'es-wide', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>';
+		$f_title   = get_the_title();
+		$f_link    = get_permalink();
+		$f_date    = get_the_date();
+		$f_excerpt = self::excerpt( get_post(), 36 );
+		wp_reset_postdata();
+
+		// Rest paginiert, ohne Featured
+		$rq = new WP_Query( array(
+			'post_type'      => 'es_news',
+			'posts_per_page' => $pp,
+			'paged'          => $page,
+			'post__not_in'   => array( $f_id ),
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+		) );
+		$total_pages = (int) $rq->max_num_pages;
+		$base = remove_query_arg( array( 'pp', 'npage' ) );
+
+		ob_start(); ?>
 		<div class="es-news-archive">
-			<?php while ( $q->have_posts() ) : $q->the_post(); $i++;
-				$thumb_id = get_post_thumbnail_id();
-				$img = $thumb_id ? wp_get_attachment_image( $thumb_id, 'es-wide', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>';
-				if ( 1 === $i ) : ?>
-					<a href="<?php the_permalink(); ?>" style="display:grid;grid-template-columns:1.3fr 1fr;gap:56px;margin-bottom:80px;color:#0E1A2B;">
-						<div style="aspect-ratio:16/10;overflow:hidden;background:#F6F4EF;"><?php echo $img; ?></div>
-						<div style="align-self:center;">
-							<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;font-family:var(--es-font-mono);">Featured · <?php echo esc_html( get_the_date() ); ?></div>
-							<h2 style="font-size:clamp(28px,3.4vw,48px);line-height:1.1;font-weight:400;letter-spacing:-0.03em;margin:0 0 24px;"><?php the_title(); ?></h2>
-							<p style="font-size:16px;color:#5A6577;line-height:1.6;margin:0 0 32px;"><?php echo esc_html( self::excerpt( get_post(), 36 ) ); ?></p>
-							<span class="es-link">Weiterlesen →</span>
+			<a class="es-news-archive__featured" href="<?php echo esc_url( $f_link ); ?>" style="display:grid;grid-template-columns:1.3fr 1fr;gap:56px;margin-bottom:56px;color:#0E1A2B;">
+				<div style="aspect-ratio:16/10;overflow:hidden;background:#F6F4EF;"><?php echo $f_img; ?></div>
+				<div style="align-self:center;">
+					<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;font-family:var(--es-font-mono);">Featured &middot; <?php echo esc_html( $f_date ); ?></div>
+					<h2 style="font-size:clamp(28px,3.4vw,48px);line-height:1.1;font-weight:400;letter-spacing:-0.03em;margin:0 0 24px;"><?php echo esc_html( $f_title ); ?></h2>
+					<p style="font-size:16px;color:#5A6577;line-height:1.6;margin:0 0 32px;"><?php echo esc_html( $f_excerpt ); ?></p>
+					<span class="es-link">Weiterlesen &rarr;</span>
+				</div>
+			</a>
+
+			<?php if ( $rq->have_posts() ) : ?>
+			<div class="es-news-toolbar">
+				<div class="es-news-toolbar__pp">
+					<span class="es-news-toolbar__label">Pro Seite</span>
+					<?php foreach ( $allowed_pp as $opt ) :
+						$url = esc_url( add_query_arg( array( 'pp' => $opt, 'npage' => 1 ), $base ) ); ?>
+						<a class="es-news-toolbar__pill<?php echo $opt === $pp ? ' is-active' : ''; ?>" href="<?php echo $url; ?>"><?php echo (int) $opt; ?></a>
+					<?php endforeach; ?>
+				</div>
+				<?php if ( $total_pages > 1 ) :
+					$prev = $page > 1 ? $page - 1 : 0;
+					$next = $page < $total_pages ? $page + 1 : 0; ?>
+				<div class="es-news-toolbar__pager">
+					<a class="es-news-toolbar__pill<?php echo $prev ? '' : ' is-disabled'; ?>" href="<?php echo $prev ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $prev ), $base ) ) : '#'; ?>"<?php echo $prev ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>&larr; Vorherige</a>
+					<span class="es-news-toolbar__status">Seite <?php echo (int) $page; ?> / <?php echo (int) $total_pages; ?></span>
+					<a class="es-news-toolbar__pill<?php echo $next ? '' : ' is-disabled'; ?>" href="<?php echo $next ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $next ), $base ) ) : '#'; ?>"<?php echo $next ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>Nächste &rarr;</a>
+				</div>
+				<?php endif; ?>
+			</div>
+
+			<div class="es-news-archive__grid">
+				<?php while ( $rq->have_posts() ) : $rq->the_post();
+					$thumb_id = get_post_thumbnail_id();
+					$img = $thumb_id ? wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>'; ?>
+					<a href="<?php the_permalink(); ?>" style="display:grid;grid-template-columns:200px 1fr;gap:28px;color:#0E1A2B;">
+						<div style="width:200px;height:160px;overflow:hidden;background:#F6F4EF;"><?php echo $img; ?></div>
+						<div>
+							<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;font-family:var(--es-font-mono);"><?php echo esc_html( get_the_date() ); ?></div>
+							<h3 style="font-size:20px;font-weight:500;line-height:1.25;letter-spacing:-0.015em;margin:0 0 10px;"><?php the_title(); ?></h3>
+							<p style="font-size:14px;color:#5A6577;line-height:1.5;margin:0;"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
 						</div>
 					</a>
-					<div style="border-top:1px solid #E4E7EC;padding-top:56px;">
-						<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:56px;">
-				<?php else : ?>
-							<a href="<?php the_permalink(); ?>" style="display:grid;grid-template-columns:200px 1fr;gap:28px;color:#0E1A2B;">
-								<div style="width:200px;height:160px;overflow:hidden;background:#F6F4EF;"><?php echo $img; ?></div>
-								<div>
-									<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;font-family:var(--es-font-mono);"><?php echo esc_html( get_the_date() ); ?></div>
-									<h3 style="font-size:20px;font-weight:500;line-height:1.25;letter-spacing:-0.015em;margin:0 0 10px;"><?php the_title(); ?></h3>
-									<p style="font-size:14px;color:#5A6577;line-height:1.5;margin:0;"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
-								</div>
-							</a>
-				<?php endif;
-			endwhile; wp_reset_postdata(); ?>
-			</div></div>
+				<?php endwhile; wp_reset_postdata(); ?>
+			</div>
+			<?php endif; ?>
 		</div>
 		<?php
 		return ob_get_clean();
@@ -260,7 +305,7 @@ class ESC_Shortcodes {
 						</div>
 						<h3 class="esc-event-row__title"><?php the_title(); ?></h3>
 						<div class="esc-event-row__kind"><?php echo esc_html( $kind ? $kind : 'Veranstaltung' ); ?></div>
-						<div class="esc-event-row__loc">📍 <?php echo esc_html( $loc ? $loc : 'Düsseldorf' ); ?></div>
+						<div class="esc-event-row__loc"><?php echo esc_html( $loc ? $loc : 'Düsseldorf' ); ?></div>
 						<div class="esc-event-row__arrow">→</div>
 					</a>
 				<?php endwhile; wp_reset_postdata(); ?>

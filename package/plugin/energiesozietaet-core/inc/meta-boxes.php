@@ -134,6 +134,7 @@ class ESC_MetaBoxes {
 		);
 		self::field( 'Standort',           'es_location',        get_post_meta( $post->ID, 'es_location', true ) );
 		self::field( 'Anstellungsart',     'es_employment_type', get_post_meta( $post->ID, 'es_employment_type', true ) );
+		self::field( 'Eintrittsdatum',     'es_start_date',      get_post_meta( $post->ID, 'es_start_date', true ), 'date' );
 
 		// Aufgaben (Was erwarten Dich für Aufgaben?) — Legacy-Fallback: es_bullets
 		$tasks = get_post_meta( $post->ID, 'es_tasks', true );
@@ -198,8 +199,8 @@ class ESC_MetaBoxes {
 		$scalars = array(
 			'es_role','es_email','es_phone','es_linkedin','es_location','es_field','es_more_bio',
 			'es_subtitle','es_closing',
-			'es_department','es_employment_type',
-			'es_start_date','es_end_date','es_kind','es_registration_url',
+			'es_department','es_employment_type','es_start_date',
+			'es_end_date','es_kind','es_registration_url',
 			'es_cat','es_source','es_publication_date','es_link','es_author',
 		);
 		foreach ( $scalars as $k ) {

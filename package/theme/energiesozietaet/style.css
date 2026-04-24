@@ -1293,3 +1293,119 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
 .es-stelle-single__list { font-size: 16px; line-height: 1.7; color: var(--es-ink); padding-left: 20px; margin: 0 0 40px; list-style: disc; }
 .es-stelle-single__list li { margin-bottom: 8px; padding-left: 4px; }
 .es-stelle-single__list li::marker { color: var(--es-accent); }
+
+/* ═════════════════════════════════════════════════════════════
+   FIX v6 — PUNKTGENAU, keine globalen Umbauten
+   ═════════════════════════════════════════════════════════════ */
+
+/* 1) HEADING-TAG wirkt auf Größe. Elementor's .elementor-size-*
+   haben (0,2,0) Specificity — unsere Tag-Regeln würden verlieren.
+   Deshalb !important auf die Tag-Basiswerte. So ändert sich Text
+   wirklich, wenn im Editor H2↔H1 gewechselt wird. */
+.es-stage h1, .es-stage .elementor-heading-title[class*=elementor-size] ~ .nope {}
+.es-stage h1.elementor-heading-title,
+.es-stage h1 { font-size: clamp(44px, 6vw, 80px) !important; font-weight: 300 !important; letter-spacing: -0.04em !important; line-height: 1.02 !important; }
+.es-stage h2.elementor-heading-title,
+.es-stage h2 { font-size: clamp(32px, 4vw, 52px) !important; font-weight: 400 !important; letter-spacing: -0.03em !important; line-height: 1.1 !important; }
+.es-stage h3.elementor-heading-title,
+.es-stage h3 { font-size: clamp(22px, 2.4vw, 32px) !important; font-weight: 500 !important; letter-spacing: -0.015em !important; line-height: 1.18 !important; }
+.es-stage h4.elementor-heading-title,
+.es-stage h4 { font-size: clamp(18px, 1.6vw, 24px) !important; font-weight: 500 !important; letter-spacing: -0.01em !important; line-height: 1.25 !important; }
+.es-stage h5.elementor-heading-title,
+.es-stage h5 { font-size: 16px !important; font-weight: 500 !important; line-height: 1.3 !important; }
+.es-stage h6.elementor-heading-title,
+.es-stage h6 { font-size: 14px !important; font-weight: 500 !important; line-height: 1.3 !important; }
+.es-stage p.elementor-heading-title,
+.es-stage p { font-size: inherit; line-height: inherit; }
+/* Akzent-Span immer gleiche Stärke wie Parent-Heading */
+.es-stage .elementor-heading-title .text-bg-green,
+.es-stage .text-bg-green { font-weight: inherit !important; font-style: normal; color: var(--es-accent); }
+
+/* Aber: wenn in der .es-hero__title Widget-Klasse nochmal etwas
+   Spezifisches gesetzt wird — greift unsere !important-Tag-Regel
+   trotzdem. Das ist gewollt. */
+
+/* 2) Split-Column: Eyebrow + H2 direkt zusammen, nicht unten
+   auseinandergestretcht. Column-Vertikal-Align top. */
+.es-split > .elementor-container > .elementor-column { align-self: flex-start; }
+.es-stage .es-split__title { margin-top: 8px !important; }
+.es-stage .es-split__title .elementor-heading-title { margin-top: 0 !important; }
+
+/* 3) Home Beratungsfeld-Kacheln: genau wie News-Kacheln animiert
+   (Top-Balken grün slide-in beim Hover + subtile Hebung). */
+.es-home-services > .elementor-container > .elementor-column { position: relative; overflow: hidden; }
+.es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-home-services > .elementor-container > .elementor-column > .elementor-element-populated { position: relative; }
+.es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+.es-home-services > .elementor-container > .elementor-column > .elementor-element-populated::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform 300ms var(--es-easing);
+    z-index: 2;
+}
+.es-home-services > .elementor-container > .elementor-column:hover > .elementor-widget-wrap::before,
+.es-home-services > .elementor-container > .elementor-column:hover > .elementor-element-populated::before {
+    transform: scaleX(1);
+}
+
+/* 4) Philosophie 3-Pillar Kacheln — weiß, Border dunkler, Schatten
+   durch stärkere Border statt nur Hairline */
+.es-cards-grid:not(.es-cards-grid--quads) > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-cards-grid:not(.es-cards-grid--quads) > .elementor-container > .elementor-column > .elementor-element-populated {
+    background: var(--es-paper) !important;
+    border: 1px solid var(--es-rule) !important;
+    padding: 48px 36px !important;
+    transition: border-color 240ms var(--es-easing), transform 240ms var(--es-easing);
+}
+.es-cards-grid:not(.es-cards-grid--quads) > .elementor-container > .elementor-column:hover > .elementor-widget-wrap,
+.es-cards-grid:not(.es-cards-grid--quads) > .elementor-container > .elementor-column:hover > .elementor-element-populated {
+    border-color: var(--es-ink) !important; transform: translateY(-2px);
+}
+
+/* 5) Philosophie 4-Perspektiven nach Mockup:
+   weiß auf warm, 4×28px Akzentbar oben-links, Titel+Desc darunter */
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated {
+    background: var(--es-paper) !important;
+    border: 1px solid var(--es-rule) !important;
+    padding: 36px 28px !important;
+    position: relative;
+}
+/* Bar via ::before (neu vor allem, da ich alten Selektor umbenenne) */
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated::before {
+    content: ""; display: block; width: 4px; height: 28px;
+    background: var(--es-accent); margin-bottom: 24px;
+}
+.es-cards-grid--quads .es-card-pillar__title .elementor-heading-title { font-size: 20px !important; font-weight: 500 !important; letter-spacing: -0.015em !important; line-height: 1.25 !important; margin: 0 0 10px !important; }
+.es-cards-grid--quads .es-card-pillar__desc p { font-size: 13px; color: var(--es-text-mute); line-height: 1.6; margin: 0; }
+
+/* 6) Einzelleistungen in Bereichs-Block: Heading auf vorige Größe (20px) */
+.es-bereich__topic-name h3 { font-size: 20px !important; font-weight: 500 !important; letter-spacing: -0.015em !important; line-height: 1.25 !important; margin: 0 !important; }
+
+/* 7) Veranstaltungen — PIN komplett entfernen (unicode + icon) */
+.esc-event-row__loc { padding-left: 0 !important; }
+.esc-event-row__loc::before { content: none !important; display: none !important; }
+.esc-event-row__loc::after { content: none !important; }
+
+/* 8) Karriere-Breadcrumb: "Karriere" only (CSS blendet den Rest aus
+   falls Template-Update nicht greift — aber wir machen den wirklichen
+   Fix im Template) */
+
+/* News-Toolbar */
+.es-news-toolbar {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: 16px; border-top: var(--es-border); padding: 20px 0; margin-bottom: 40px;
+}
+.es-news-toolbar__pp, .es-news-toolbar__pager { display: flex; gap: 8px; align-items: center; }
+.es-news-toolbar__label { font-size: 12px; color: var(--es-text-mute); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 8px; }
+.es-news-toolbar__status { font-size: 13px; color: var(--es-text-mute); padding: 0 8px; }
+.es-news-toolbar__pill {
+    padding: 8px 14px; font-size: 13px; border: var(--es-border); border-radius: var(--es-radius-xs);
+    color: var(--es-ink); background: transparent; transition: all 200ms var(--es-easing);
+}
+.es-news-toolbar__pill:hover { background: var(--es-paper-warm); color: var(--es-ink); }
+.es-news-toolbar__pill.is-active { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
+.es-news-toolbar__pill.is-disabled { opacity: 0.4; pointer-events: none; cursor: default; }
+.es-news-archive__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 56px; }
+@media (max-width: 768px) { .es-news-archive__grid { grid-template-columns: 1fr; } }

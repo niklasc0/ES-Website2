@@ -341,9 +341,9 @@ class ESC_Page_Blueprints {
 		// 3 Bereichs-Blöcke mit dynamischen Einzelleistungen (auto-Permalink-Links)
 		$bf = self::beratungsfelder();
 		$titles_html = array(
-			'rechtsberatung'       => 'Rechts&shy;<br>beratung',
-			'steuerberatung'       => 'Steuer&shy;<br>beratung',
-			'unternehmensberatung' => 'Unternehmens&shy;<br>beratung',
+			'rechtsberatung'       => 'Rechts-<br>beratung',
+			'steuerberatung'       => 'Steuer-<br>beratung',
+			'unternehmensberatung' => 'Unternehmens-<br>beratung',
 		);
 		$i = 0;
 		foreach ( array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' ) as $slug ) {
