@@ -205,7 +205,17 @@ class ESC_Page_Blueprints {
 			) ),
 		) );
 
-		// 6. CTA
+		// 6. LinkedIn-Feed (warmer Streifen), passt visuell ins News-Raster
+		$s[] = $b::section_native( array(
+			'variant' => 'warm',
+			'css_classes' => 'es-home-linkedin',
+			'padding' => array( '120', '0', '120', '0' ),
+			'cols' => array( array(
+				$b::wid_shortcode( '[es_linkedin_posts limit="3" title="Aus unserem LinkedIn" eyebrow="LinkedIn"]' ),
+			) ),
+		) );
+
+		// 7. CTA
 		$s[] = $b::cta_dark_native();
 		return $s;
 	}

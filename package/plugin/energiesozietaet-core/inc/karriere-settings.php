@@ -61,9 +61,10 @@ class ESC_Karriere_Settings {
 	}
 
 	public static function menu() {
-		add_options_page(
-			'Karriere-Einstellungen',
-			'Karriere (Energiesozietät)',
+		add_submenu_page(
+			'edit.php?post_type=es_karriere',
+			'Globale Informationen',
+			'Globale Informationen',
 			'manage_options',
 			'esc-karriere',
 			array( __CLASS__, 'render' )
@@ -81,7 +82,7 @@ class ESC_Karriere_Settings {
 		if ( ! current_user_can( 'manage_options' ) ) { return; }
 		?>
 		<div class="wrap">
-			<h1>Karriere-Einstellungen</h1>
+			<h1>Globale Informationen</h1>
 			<p>Globale Textbausteine für alle Stellen-Detailseiten. Die Mailto-URL im Bewerbungs-Button wird pro Stelle automatisch generiert.</p>
 			<form method="post" action="options.php">
 				<?php settings_fields( 'esc_karriere_group' ); ?>

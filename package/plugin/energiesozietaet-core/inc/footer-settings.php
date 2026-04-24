@@ -96,9 +96,10 @@ class ESC_Footer_Settings {
 	}
 
 	public static function menu() {
-		add_options_page(
-			'Footer-Einstellungen',
-			'Footer (Energiesozietät)',
+		add_submenu_page(
+			'themes.php',
+			'Footer',
+			'Footer',
 			'manage_options',
 			'esc-footer',
 			array( __CLASS__, 'render' )

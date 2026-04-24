@@ -38,10 +38,8 @@ $es_is_dark = in_array( $es_current_slug, $es_dark_slugs, true );
 <header class="es-header<?php echo $es_is_dark ? ' es-header--dark' : ''; ?>" id="es-header" data-variant="<?php echo $es_is_dark ? 'dark' : 'light'; ?>">
 	<div class="es-wrap es-header__inner">
 		<a class="es-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Energiesozietät — Zur Startseite">
-			<?php if ( has_custom_logo() ) :
-				$logo_id  = get_theme_mod( 'custom_logo' );
-				$logo_src = $logo_id ? wp_get_attachment_image_url( $logo_id, 'full' ) : '';
-			?>
+			<?php $logo_src = function_exists( 'es_get_header_logo_url' ) ? es_get_header_logo_url( $es_is_dark ? 'dark' : 'light' ) : ''; ?>
+			<?php if ( $logo_src ) : ?>
 				<img class="es-brand__logo" src="<?php echo esc_url( $logo_src ); ?>" alt="<?php bloginfo( 'name' ); ?>" />
 			<?php else : ?>
 				<span class="es-brand__mark" aria-hidden="true">ES</span>

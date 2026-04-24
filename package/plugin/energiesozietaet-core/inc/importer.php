@@ -44,6 +44,7 @@ class ESC_Importer {
 		self::import_veranstaltungen( $data['veranstaltungen'], $map );
 		self::import_news( $data['news'], $map );
 		self::import_publikationen( $data['publikationen'], $map );
+		self::import_linkedin( isset( $data['linkedin'] ) ? $data['linkedin'] : array(), $map );
 
 		// 3. Create pages (so we have IDs for menu)
 		self::import_pages( $map, $data );
@@ -248,6 +249,27 @@ class ESC_Importer {
 			) );
 			if ( ! $id ) { continue; }
 			$map[ 'news:' . $n['slug'] ] = $id;
+		}
+	}
+
+	protected static function import_linkedin( $items, &$map ) {
+		if ( empty( $items ) || ! is_array( $items ) ) { return; }
+		foreach ( $items as $it ) {
+			$slug = sanitize_title( $it['title'] ?? '' );
+			if ( ! $slug ) { continue; }
+			$post_date = ! empty( $it['date'] ) ? date( 'Y-m-d H:i:s', strtotime( (string) $it['date'] ) ) : current_time( 'mysql' );
+			$id = self::upsert_post( array(
+				'post_type'    => 'es_linkedin',
+				'post_name'    => $slug,
+				'post_title'   => (string) ( $it['title'] ?? '' ),
+				'post_content' => wpautop_safe( (string) ( $it['body'] ?? '' ) ),
+				'post_date'    => $post_date,
+				'post_date_gmt'=> $post_date,
+			) );
+			if ( ! $id ) { continue; }
+			if ( ! empty( $it['url'] ) )  { update_post_meta( $id, 'es_li_url',  $it['url'] ); }
+			if ( ! empty( $it['date'] ) ) { update_post_meta( $id, 'es_li_date', $it['date'] ); }
+			$map[ 'linkedin:' . $slug ] = $id;
 		}
 	}
 

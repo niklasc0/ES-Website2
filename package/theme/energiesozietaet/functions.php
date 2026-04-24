@@ -182,6 +182,50 @@ function es_kses_allow_spans( $tags, $context ) {
 add_filter( 'wp_kses_allowed_html', 'es_kses_allow_spans', 10, 2 );
 
 /**
+ * Customizer: zwei separate Logo-Felder (dunkler Header, heller Header).
+ * Fallback: WP custom_logo (Site Identity).
+ */
+function es_customize_register( $wp_customize ) {
+	$wp_customize->add_section( 'es_logos', array(
+		'title'    => __( 'Logos (Energiesozietät)', 'energiesozietaet' ),
+		'priority' => 30,
+	) );
+
+	$wp_customize->add_setting( 'es_logo_dark',  array( 'default' => 0, 'sanitize_callback' => 'absint' ) );
+	$wp_customize->add_setting( 'es_logo_light', array( 'default' => 0, 'sanitize_callback' => 'absint' ) );
+
+	$wp_customize->add_control( new WP_Customize_Media_Control( $wp_customize, 'es_logo_dark', array(
+		'label'       => __( 'Logo für dunkle Menüleisten', 'energiesozietaet' ),
+		'description' => __( 'Version für weiße Schrift auf dunklem Ink-Hintergrund (Home, Philosophie, Leistungen …).', 'energiesozietaet' ),
+		'section'     => 'es_logos',
+		'mime_type'   => 'image',
+	) ) );
+
+	$wp_customize->add_control( new WP_Customize_Media_Control( $wp_customize, 'es_logo_light', array(
+		'label'       => __( 'Logo für helle Menüleisten', 'energiesozietaet' ),
+		'description' => __( 'Version für dunkle Schrift auf hellem Hintergrund (Einzelseiten, News-Detail, Legal …).', 'energiesozietaet' ),
+		'section'     => 'es_logos',
+		'mime_type'   => 'image',
+	) ) );
+}
+add_action( 'customize_register', 'es_customize_register' );
+
+/**
+ * Gibt die Logo-URL zurück passend zur Header-Variante ('dark'|'light').
+ * Fallback-Kette: spezifisches Logo → WP custom_logo → ''.
+ */
+function es_get_header_logo_url( $variant = 'dark' ) {
+	$key = 'dark' === $variant ? 'es_logo_dark' : 'es_logo_light';
+	$id  = (int) get_theme_mod( $key, 0 );
+	if ( $id ) { return wp_get_attachment_image_url( $id, 'full' ); }
+	if ( has_custom_logo() ) {
+		$logo_id = get_theme_mod( 'custom_logo' );
+		if ( $logo_id ) { return wp_get_attachment_image_url( $logo_id, 'full' ); }
+	}
+	return '';
+}
+
+/**
  * vCard-Download für Team-Mitglieder.
  * Route: /?es_vcard=<post_id>
  */

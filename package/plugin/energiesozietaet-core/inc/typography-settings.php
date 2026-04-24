@@ -67,9 +67,10 @@ class ESC_Typography_Settings {
 	}
 
 	public static function menu() {
-		add_options_page(
+		add_submenu_page(
+			'themes.php',
 			'Typografie',
-			'Typografie (Energiesozietät)',
+			'Typografie',
 			'manage_options',
 			'esc-typography',
 			array( __CLASS__, 'render' )

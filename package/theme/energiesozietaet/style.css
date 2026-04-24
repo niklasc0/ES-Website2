@@ -1526,3 +1526,30 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
 /* Der pub_teaser Shortcode setzt .esc-card mit h3 inline 19px — falls CSS
    sie überschreibt, das hier auf den h3-Tag in der Card zurücksetzen */
 .esc-grid .esc-card h3 { font-size: 19px !important; font-weight: 500 !important; line-height: 1.3 !important; letter-spacing: -0.01em !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v8 — Punktgenau
+   ═══════════════════════════════════════════════════════════════ */
+
+/* A) Perspektiven-Kacheln: Abstand zwischen Akzentstrich und Titel */
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated::before {
+    width: 4px; height: 28px;
+    background: var(--es-accent);
+    margin-bottom: 40px !important; /* deutlich mehr Abstand */
+    display: block; content: "";
+    position: static !important;
+}
+.es-cards-grid--quads .es-card-pillar__title,
+.es-cards-grid--quads .elementor-widget.es-card-pillar__title { margin-top: 0 !important; }
+.es-cards-grid--quads .es-card-pillar__title .elementor-heading-title { margin: 0 0 10px !important; }
+
+/* B) LinkedIn-Feed auf der Startseite */
+.es-linkedin-feed { }
+.es-linkedin-feed__head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 48px; flex-wrap: wrap; gap: 16px; }
+.es-linkedin-feed__title { font-size: clamp(32px, 4.2vw, 52px); line-height: 1.05; font-weight: 400; letter-spacing: -0.03em; margin: 0; }
+.es-linkedin-card .esc-card__media.es-linkedin-card__icon {
+    display: flex; align-items: center; justify-content: center;
+    background: var(--es-ink); color: var(--es-accent); aspect-ratio: 16/10;
+}
+.es-linkedin-card .esc-card__meta { color: #0077B5; }
