@@ -1783,3 +1783,205 @@ html.js .es-reveal.is-visible { opacity: 1; transform: none; }
     body .es-bereich-detail__content > .elementor-container > .elementor-column[style*="position: sticky"],
     body .es-bereich-detail__content > .elementor-container > .elementor-column { position: static !important; top: auto !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v14 — Sticky-Header, BTT-Button, Scroll-Down, Mobile-Menu,
+   Mobile-Arrows, Hyphenation
+   ═══════════════════════════════════════════════════════════════ */
+
+/* A) Sticky Header (wenn html.es-header-sticky) */
+html.es-header-sticky .es-header {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: saturate(120%) blur(8px);
+    -webkit-backdrop-filter: saturate(120%) blur(8px);
+}
+html.es-header-sticky .es-header.is-condensed { box-shadow: 0 1px 0 rgba(15,23,32,0.06); }
+html.es-header-sticky .es-header--dark { background: rgba(14,26,43,0.92); }
+html.es-header-sticky .es-header:not(.es-header--dark) { background: rgba(255,255,255,0.92); }
+
+/* B) Back-To-Top */
+.es-btt {
+    position: fixed; right: 24px; bottom: 24px; z-index: 999;
+    width: 48px; height: 48px; border-radius: 999px;
+    background: var(--es-accent); color: var(--es-ink);
+    border: 0; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    opacity: 0; transform: translateY(8px) scale(0.96); pointer-events: none;
+    transition: opacity 240ms var(--es-easing), transform 240ms var(--es-easing), background 200ms var(--es-easing);
+    box-shadow: 0 6px 20px rgba(15,23,32,0.18);
+}
+.es-btt[hidden] { display: inline-flex !important; }
+.es-btt.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+.es-btt:hover { background: var(--es-ink); color: var(--es-accent); }
+.es-btt:focus-visible { outline: 2px solid var(--es-ink); outline-offset: 2px; }
+
+/* C) Hero Scroll-Down (Home) */
+.es-hero-scroll {
+    position: absolute; right: 32px; bottom: 24px; z-index: 3;
+    display: inline-flex; flex-direction: column; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.78);
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;
+    text-decoration: none;
+}
+.es-hero-scroll svg { animation: esBob 1.6s ease-in-out infinite; }
+.es-hero-scroll:hover { color: var(--es-accent); }
+@keyframes esBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+@media (prefers-reduced-motion: reduce) { .es-hero-scroll svg { animation: none; } }
+@media (max-width: 600px) { .es-hero-scroll { right: 18px; bottom: 16px; font-size: 10px; } }
+
+/* D) Mobile-Pfeile: kein Emoji-Style erzwingen.
+   Variation-Selector unterdrücken, statt-Pfeil als Inline-SVG nicht
+   möglich für bestehende Texte → text-rendering und font-variant-Tweak. */
+.es-link, .esc-card__link, .esc-pub-row__cta, .es-news-toolbar__pill,
+a, span, p, li {
+    text-rendering: optimizeLegibility;
+    font-variant-emoji: text;     /* Chromium 124+ */
+}
+/* Strikt: 'text-style' Variation auf jegliche ↗ / ↑ / → / ← */
+.es-link::after, .esc-card__link::after { font-variant-emoji: text; }
+
+/* E) Mobile-Menu: Vollbild-Overlay + größere Schrift + Hamburger ↔ X */
+@media (max-width: 1024px) {
+    .es-header.is-nav-open .es-nav {
+        position: fixed !important; top: 0; left: 0; right: 0; bottom: 0;
+        width: 100vw; height: 100vh; max-height: none;
+        background: var(--es-paper);
+        z-index: 90;
+        overflow-y: auto;
+        padding: 96px 24px 32px;
+        display: flex !important; flex-direction: column;
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav { background: var(--es-ink); color: var(--es-paper); }
+    .es-header.is-nav-open .es-nav ul { width: 100%; padding: 0; gap: 8px; }
+    .es-header.is-nav-open .es-nav li { width: 100%; }
+    .es-header.is-nav-open .es-nav a {
+        display: block; padding: 18px 0; font-size: 22px; font-weight: 500;
+        letter-spacing: -0.015em; border-bottom: var(--es-border);
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav a { border-bottom-color: var(--es-ink-line); color: var(--es-paper); }
+    .es-header.is-nav-open .es-header__actions {
+        display: flex !important; padding: 24px 0 0; gap: 12px;
+        flex-direction: column; width: 100%;
+    }
+    .es-header.is-nav-open .es-header__actions > a {
+        width: 100%; justify-content: center; padding: 14px 16px; font-size: 14px;
+    }
+
+    /* Hamburger ↔ X */
+    .es-nav-toggle { position: relative; z-index: 100; width: 40px; height: 40px; }
+    .es-nav-toggle .bar,
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        transition: transform 200ms var(--es-easing), opacity 150ms var(--es-easing);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar {
+        background: transparent; transform: scaleX(0);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        transform: translateY(0) rotate(45deg);
+        background: currentColor;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        transform: translateY(0) rotate(-45deg);
+        background: currentColor;
+    }
+}
+
+/* F) News (mobile): Beitragsbild ausblenden in Liste, Title-Hyphenation */
+@media (max-width: 600px) {
+    .es-news-archive__grid > a { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .es-news-archive__grid > a > div:first-child { display: none !important; }
+    .es-news-archive__featured { grid-template-columns: 1fr !important; gap: 24px !important; }
+    .es-news-archive__featured > div:first-child { aspect-ratio: 16/9 !important; }
+}
+
+/* G) Universal: Title-Hyphenation auf langen Wörtern (mobile) */
+@media (max-width: 768px) {
+    .es-article__title,
+    .es-team-single__name,
+    .es-bereich__title,
+    .es-stage h1,
+    .es-stage h2,
+    .es-stage h3 {
+        hyphens: auto;
+        -webkit-hyphens: auto;
+        overflow-wrap: anywhere;
+        word-break: normal;
+    }
+}
+
+/* H) Karriere Bewerbungsbox (mobile) — Single Column */
+@media (max-width: 768px) {
+    .es-stelle-single > div > div[style*="grid-template-columns:1fr auto"] {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        text-align: center;
+    }
+    .es-stelle-single > div > div[style*="grid-template-columns:1fr auto"] > a {
+        justify-self: center;
+    }
+}
+
+/* I) News-Pagination soll auch oberhalb der Liste erscheinen — wird unten
+   im Shortcode gerendert; CSS muss nur sicherstellen, dass beide gleich
+   aussehen (kein zusätzliches Styling nötig). */
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v15 — Split-Right-Col Top-Align, GF-Photo-Layout, Topic-Cards
+   ═══════════════════════════════════════════════════════════════ */
+
+/* A) Split-Section: Right-Col (Inhalt) bündig mit Title (nicht Eyebrow).
+   Eyebrow nimmt ~32–40px (font-size 11px + margin-bottom 8px + display
+   inline-block). Wir versetzen den ersten Widget der rechten Spalte
+   um diese Höhe nach unten — nur Desktop. */
+@media (min-width: 1025px) {
+    .es-split > .elementor-container > .elementor-column:nth-child(2) > .elementor-widget-wrap > .elementor-widget:first-child,
+    .es-split > .elementor-container > .elementor-column:nth-child(2) > .elementor-element-populated > .elementor-widget:first-child {
+        margin-top: 32px !important;
+    }
+}
+
+/* B) GF-Quote: Photo unter Zitat, links neben Name+Rolle */
+.es-gf-quote .es-gf-quote__author {
+    display: flex; align-items: center; gap: 16px; margin-top: 24px;
+}
+.es-gf-quote .es-gf-quote__photo {
+    width: 88px; height: 88px; border-radius: 999px; overflow: hidden;
+    background: var(--es-paper-warm); flex-shrink: 0;
+}
+.es-gf-quote .es-gf-quote__photo img { width: 100%; height: 100%; object-fit: cover; }
+.es-gf-quote .es-gf-quote__author-text { display: flex; flex-direction: column; }
+.es-gf-quote .es-gf-quote__name { margin: 0; font-size: 16px; font-weight: 500; color: var(--es-ink); }
+.es-gf-quote .es-gf-quote__role { margin: 2px 0 0; font-size: 13px; color: var(--es-text-mute); }
+
+/* C) Beratungsgebiete: Topic-Cards zentriert + Text-Spalten volle Breite
+   im Mobile/Tablet-Stack */
+@media (max-width: 1024px) {
+    body .es-bereich-detail__content > .elementor-container > .elementor-column .elementor-widget-shortcode { width: 100% !important; }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column .elementor-widget-shortcode .elementor-widget-container { width: 100% !important; }
+    body .es-bereich-detail__einzel .es-bereich__topics {
+        grid-template-columns: repeat(2, 1fr) !important;
+        max-width: 100% !important;
+        margin-left: 0 !important; margin-right: 0 !important;
+    }
+    body .es-bereich-detail__einzel .es-bereich__topic { padding: 24px 18px !important; }
+}
+@media (max-width: 600px) {
+    body .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: 1fr !important; }
+}
+
+/* D) Topic-Cards generell auf Mobile zentriert (Inhalt mittig im Card) */
+@media (max-width: 768px) {
+    .es-bereich__topic { text-align: left; }
+    .es-bereich__topic-name { justify-content: flex-start; }
+}
+
+/* E) Header: Skip-Link aus Vollbild-Mobile-Menu sicher ausblenden */
+.es-header.is-nav-open .screen-reader-text { display: none; }
+
+/* F) Hyphens auf .esc-card Title für lange News-Titel mobile */
+@media (max-width: 600px) {
+    .esc-card__title, .es-news-archive__featured h2, .es-news-archive__grid h3 {
+        hyphens: auto; -webkit-hyphens: auto; overflow-wrap: anywhere;
+    }
+}

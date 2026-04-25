@@ -301,7 +301,7 @@ class ESC_Elementor_Builder {
 		$html .= '<div>' . $img_html . '</div>';
 		$html .= '</div>';
 
-		$html .= '<div class="es-bereich__topics-label">Einzelleistungen · ' . esc_html( $args['title'] ) . '</div>';
+		$html .= '<div class="es-bereich__topics-label">Beratungsfelder</div>';
 		if ( $use_shortcode ) {
 			$html .= '[es_einzelleistungen beratungsfeld="' . esc_attr( $args['field'] ) . '" columns="3" link="1"]';
 		} else {
@@ -379,21 +379,26 @@ class ESC_Elementor_Builder {
 			'photo_slug'      => 'prof-dr-sven-joachim-otto',
 			'eyebrow'         => 'Unser Anspruch',
 		), $args );
-		$photo_html = '<div class="es-gf-quote__photo">' . do_shortcode( '[es_team_photo slug="' . esc_attr( $args['photo_slug'] ) . '" size=180]' ) . '</div>';
+		// Layout: Eyebrow + Zitat oben (volle Breite) — darunter Portrait links
+		// neben Name/Rolle. Portrait via HTML-Widget (rundes Bild), Name/Rolle
+		// als native Text-Widgets editierbar.
+		$photo_html = '<div class="es-gf-quote__photo">' . do_shortcode( '[es_team_photo slug="' . esc_attr( $args['photo_slug'] ) . '" size=88]' ) . '</div>';
+		$author_html = '<div class="es-gf-quote__author">'
+			. $photo_html
+			. '<div class="es-gf-quote__author-text">'
+			. '<p class="es-gf-quote__name">' . esc_html( $args['name'] ) . '</p>'
+			. '<p class="es-gf-quote__role">' . esc_html( $args['role'] ) . '</p>'
+			. '</div>'
+			. '</div>';
 		return self::section_native( array(
 			'variant' => 'warm',
 			'css_classes' => 'es-gf-quote',
-			'padding' => array( '140', '0', '140', '0' ),
-			'gap' => 'wider',
-			'column_settings' => array( array( '_column_size' => 22 ), array( '_column_size' => 78 ) ),
-			'cols' => array(
-				array( self::wid_html( $photo_html ) ),
-				array(
-					self::wid_heading( $args['eyebrow'], 'p', 'es-eyebrow' ),
-					self::wid_heading( '„' . $args['quote'] . '"', 'h2', 'es-gf-quote__text' ),
-					self::wid_text( '<p class="es-gf-quote__name">' . esc_html( $args['name'] ) . '</p><p class="es-gf-quote__role">' . esc_html( $args['role'] ) . '</p>' ),
-				),
-			),
+			'padding' => array( '120', '0', '120', '0' ),
+			'cols' => array( array(
+				self::wid_heading( $args['eyebrow'], 'p', 'es-eyebrow' ),
+				self::wid_heading( '„' . $args['quote'] . '"', 'h2', 'es-gf-quote__text' ),
+				self::wid_html( $author_html ),
+			) ),
 		) );
 	}
 
@@ -677,8 +682,8 @@ class ESC_Elementor_Builder {
 			'padding' => $pad,
 			'gap' => 'wider',
 			'column_settings' => array(
-				array( '_column_size' => 38 ),
-				array( '_column_size' => 62 ),
+				array( '_column_size' => 45 ),
+				array( '_column_size' => 55 ),
 			),
 		) );
 	}

@@ -216,7 +216,6 @@ class ESC_Page_Blueprints {
 		) );
 
 		// 7. CTA
-		$s[] = $b::cta_dark_native();
 		return $s;
 	}
 
@@ -278,22 +277,16 @@ class ESC_Page_Blueprints {
 			array( '', 'Steuerberater', 'Steuerliche Struktur, Compliance und Gestaltungsspielräume.' ),
 		), 'warm', 'es-cards-grid--quads' );
 
-		// Mandantschaft (Split mit Liste)
-		$items_html  = '<ul class="es-mandanten">';
-		foreach ( array(
-			'Energieversorgungsunternehmen','Stadtwerke & kommunale Unternehmen','Bund & Länder',
-			'Kommunen & Einrichtungen der öffentlichen Hand','Infrastrukturdienstleister','Investoren',
-		) as $i => $m ) {
-			$items_html .= '<li><span class="es-mandanten__num">' . str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ) . '</span> ' . esc_html( $m ) . '</li>';
-		}
-		$items_html .= '</ul>';
+		// Mandantschaft — Liste als Shortcode, im Elementor-Editor anpassbar
 		$s[] = $b::split_native( array(
 			'eyebrow' => 'Mandantschaft',
 			'title_html' => 'Wen wir beraten.',
 			'paragraphs' => array(
 				'<p>Mit unserem Beratungsangebot adressieren wir Energieversorgungsunternehmen, Bund, Länder und Kommunen sowie deren Einrichtungen und Unternehmen. Hinzu kommen private und öffentliche Infrastrukturdienstleister und Investoren.</p>',
 			),
-			'extra_after' => array( $b::wid_html( $items_html ) ),
+			'extra_after' => array(
+				$b::wid_shortcode( '[es_mandanten items="Energieversorgungsunternehmen|Stadtwerke &amp; kommunale Unternehmen|Bund &amp; Länder|Kommunen &amp; Einrichtungen der öffentlichen Hand|Infrastrukturdienstleister|Investoren"]' ),
+			),
 			'padding' => 'default',
 		) );
 
@@ -307,16 +300,6 @@ class ESC_Page_Blueprints {
 			),
 			'variant' => 'ink',
 			'padding' => 'default',
-		) );
-
-		$s[] = $b::cta_dark_native( array(
-			'eyebrow' => 'Kontakt',
-			'title_html' => 'Haben wir Ihr Interesse geweckt?',
-			'sub' => 'Möchten Sie uns kennenlernen?',
-			'buttons' => array(
-				array( 'Kontakt aufnehmen', '/kontakt/', 'paper' ),
-				array( 'Unser Team', '/team/', 'ghost-paper' ),
-			),
 		) );
 		return $s;
 	}
@@ -371,16 +354,6 @@ class ESC_Page_Blueprints {
 			) );
 			$i++;
 		}
-
-		$s[] = $b::cta_dark_native( array(
-			'eyebrow' => 'Kontakt',
-			'title_html' => 'Haben wir Ihr Interesse geweckt?',
-			'sub' => 'Möchten Sie uns kennenlernen?',
-			'buttons' => array(
-				array( 'Kontakt aufnehmen', '/kontakt/', 'paper' ),
-				array( 'Unser Team', '/team/', 'ghost-paper' ),
-			),
-		) );
 		return $s;
 	}
 
@@ -450,11 +423,6 @@ class ESC_Page_Blueprints {
 				$b::wid_html( '<p style="margin-top:32px;"><a class="es-link" href="/publikationen/?feld=' . esc_attr( $slug ) . '">Alle Publikationen →</a></p>' ),
 			) ),
 		) );
-
-		$s[] = $b::cta_dark_native( array(
-			'title_html' => 'Ihre Fragestellung — unsere Expertise.',
-			'sub' => 'Wir freuen uns auf Ihre Anfrage.',
-		) );
 		return $s;
 	}
 
@@ -482,7 +450,6 @@ class ESC_Page_Blueprints {
 			),
 			'variant' => 'warm', 'padding' => 'short',
 		) );
-		$s[] = $b::cta_dark_native();
 		return $s;
 	}
 
@@ -500,7 +467,6 @@ class ESC_Page_Blueprints {
 			'padding' => array( '80', '0', '140', '0' ),
 			'cols' => array( array( $b::wid_shortcode( '[es_publikationen]' ) ) ),
 		) );
-		$s[] = $b::cta_dark_native();
 		return $s;
 	}
 
@@ -548,12 +514,6 @@ class ESC_Page_Blueprints {
 			array( '02', 'Interdisziplinarität', 'Kein Silodenken. Wir bringen Recht, Steuern und Unternehmensberatung zusammen — und Dich mittendrin.' ),
 			array( '03', 'Persönliche Entwicklung', 'Fortbildung, Promotion, Fachanwaltschaften — wir fördern gezielt und individuell.' ),
 		), 'warm' );
-
-		$s[] = $b::cta_dark_native( array(
-			'eyebrow' => 'Noch Fragen?',
-			'title_html' => 'Ein persönliches Gespräch sagt mehr als eine Anzeige.',
-			'sub' => 'Schreib uns kurz — wir melden uns binnen eines Werktags.',
-		) );
 		return $s;
 	}
 
@@ -570,7 +530,6 @@ class ESC_Page_Blueprints {
 			'padding' => array( '80', '0', '140', '0' ),
 			'cols' => array( array( $b::wid_shortcode( '[es_news_featured limit="9"]' ) ) ),
 		) );
-		$s[] = $b::cta_dark_native();
 		return $s;
 	}
 
@@ -587,7 +546,6 @@ class ESC_Page_Blueprints {
 			'padding' => array( '80', '0', '140', '0' ),
 			'cols' => array( array( $b::wid_shortcode( '[es_veranstaltungen layout="row"]' ) ) ),
 		) );
-		$s[] = $b::cta_dark_native();
 		return $s;
 	}
 

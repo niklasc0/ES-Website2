@@ -19,6 +19,25 @@ class ESC_Shortcodes {
 		add_shortcode( 'es_news_featured',   array( __CLASS__, 'news_featured' ) );
 		add_shortcode( 'es_pub_teaser',      array( __CLASS__, 'pub_teaser' ) );
 		add_shortcode( 'es_ansprechpartner', array( __CLASS__, 'ansprechpartner' ) );
+		add_shortcode( 'es_mandanten',       array( __CLASS__, 'mandanten' ) );
+	}
+
+	/**
+	 * [es_mandanten items="A|B|C|..."]
+	 * Rendert eine 2-Spalten-Liste mit nummerierten Einträgen. Pipe-getrennt.
+	 */
+	public static function mandanten( $atts ) {
+		$atts  = shortcode_atts( array( 'items' => '' ), $atts, 'es_mandanten' );
+		$items = array_values( array_filter( array_map( 'trim', explode( '|', html_entity_decode( (string) $atts['items'], ENT_QUOTES, 'UTF-8' ) ) ) ) );
+		if ( empty( $items ) ) { return ''; }
+		ob_start(); ?>
+		<ul class="es-mandanten">
+			<?php foreach ( $items as $i => $it ) : ?>
+				<li><span class="es-mandanten__num"><?php echo esc_html( str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span> <?php echo esc_html( $it ); ?></li>
+			<?php endforeach; ?>
+		</ul>
+		<?php
+		return ob_get_clean();
 	}
 
 	/**
@@ -151,6 +170,18 @@ class ESC_Shortcodes {
 					</a>
 				<?php endwhile; wp_reset_postdata(); ?>
 			</div>
+
+			<?php if ( $total_pages > 1 ) :
+				$prev = $page > 1 ? $page - 1 : 0;
+				$next = $page < $total_pages ? $page + 1 : 0; ?>
+			<div class="es-news-toolbar es-news-toolbar--bottom">
+				<div class="es-news-toolbar__pager">
+					<a class="es-news-toolbar__pill<?php echo $prev ? '' : ' is-disabled'; ?>" href="<?php echo $prev ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $prev ), $base ) ) : '#'; ?>"<?php echo $prev ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>&larr; Vorherige</a>
+					<span class="es-news-toolbar__status">Seite <?php echo (int) $page; ?> / <?php echo (int) $total_pages; ?></span>
+					<a class="es-news-toolbar__pill<?php echo $next ? '' : ' is-disabled'; ?>" href="<?php echo $next ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $next ), $base ) ) : '#'; ?>"<?php echo $next ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>Nächste &rarr;</a>
+				</div>
+			</div>
+			<?php endif; ?>
 			<?php endif; ?>
 		</div>
 		<?php

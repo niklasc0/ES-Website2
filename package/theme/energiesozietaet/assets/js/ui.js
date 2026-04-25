@@ -31,7 +31,6 @@
 	}
 
 	// 2. Condense header on scroll
-	var header = document.getElementById('es-header');
 	if (header) {
 		var condense = function () {
 			header.classList.toggle('is-condensed', window.scrollY > 12);
@@ -102,6 +101,39 @@
 				if (countEl) { countEl.textContent = visible + ' Teammitglieder'; }
 			});
 		});
+	}
+
+	// 3c. Back-to-top button
+	var btt = document.querySelector('.es-btt');
+	if (btt) {
+		var threshold = parseInt(document.documentElement.dataset.escBtt || '400', 10);
+		var bttToggle = function () {
+			if (window.scrollY > threshold) { btt.removeAttribute('hidden'); btt.classList.add('is-visible'); }
+			else { btt.classList.remove('is-visible'); }
+		};
+		bttToggle();
+		window.addEventListener('scroll', bttToggle, { passive: true });
+		btt.addEventListener('click', function (e) {
+			e.preventDefault();
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		});
+	}
+
+	// 3d. Hero Scroll-Down indicator (auf Home-Hero, wenn aktiviert)
+	if (document.documentElement.classList.contains('es-hero-scroll-on')) {
+		var hero = document.querySelector('.es-hero.elementor-section');
+		if (hero && document.body.classList.contains('home') === false ? document.body.classList.contains('page-id-108') || document.body.classList.contains('home') : true) {
+			// Nur wenn wir auf der Home sind → page slug "home"
+			var isHome = document.body.classList.contains('home') || /\bes-single-home\b/.test(document.body.className);
+			if (isHome && hero) {
+				var sd = document.createElement('a');
+				sd.className = 'es-hero-scroll';
+				sd.href = '#es-main';
+				sd.setAttribute('aria-label', 'Weiter scrollen');
+				sd.innerHTML = '<span>Weiter</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>';
+				hero.appendChild(sd);
+			}
+		}
 	}
 
 	// 4. Smooth anchor scrolling — respects reduced motion
