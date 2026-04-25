@@ -2681,3 +2681,130 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
         transform: rotate(-45deg) !important;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v22 — Header-Visibility, Hamburger/X klar sichtbar, Kacheln 2-col
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+
+    /* (1) HAMBURGER — 3 gleich breite Linien, gleicher Abstand.
+       Container hat feste Höhe, Pseudos absolut positioniert. */
+    .es-nav-toggle {
+        position: relative !important;
+        z-index: 9999 !important;
+        width: 28px !important; height: 22px !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: 0 !important;
+        cursor: pointer;
+        display: inline-flex !important;
+        align-items: center !important; justify-content: center !important;
+    }
+    .es-nav-toggle .bar {
+        position: relative !important;
+        display: block !important;
+        width: 22px !important; height: 2px !important;
+        background-color: currentColor !important;
+        transform: none !important;
+        transition: background-color 150ms var(--es-easing) !important;
+    }
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        content: "" !important;
+        position: absolute !important;
+        left: 0 !important;
+        width: 22px !important; height: 2px !important;
+        background-color: currentColor !important;
+        opacity: 1 !important;
+        transition: top 200ms var(--es-easing), transform 200ms var(--es-easing) !important;
+    }
+    .es-nav-toggle .bar::before { top: -7px !important; transform: none !important; }
+    .es-nav-toggle .bar::after  { top:  7px !important; transform: none !important; }
+
+    /* X-State — beide Pseudos rotieren auf top:0 zum Kreuz, mid weg */
+    .es-header.is-nav-open .es-nav-toggle .bar {
+        background-color: transparent !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        top: 0 !important;
+        transform: rotate(45deg) !important;
+        background-color: currentColor !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        top: 0 !important;
+        transform: rotate(-45deg) !important;
+        background-color: currentColor !important;
+    }
+
+    /* X/Hamburger Farbe per Header-Variante explizit erzwingen */
+    .es-header:not(.es-header--dark) .es-nav-toggle { color: var(--es-ink) !important; }
+    .es-header.es-header--dark         .es-nav-toggle { color: var(--es-paper) !important; }
+
+
+    /* (2) HEADER bleibt SICHTBAR beim Öffnen — komplett opak, fixed
+       am Top, höchster z-index. Wir setzen ihn beim Open auf
+       position:fixed (statt sticky) damit kein Containing-Block-Bug. */
+    body .es-header.is-nav-open {
+        position: fixed !important;
+        top: 0 !important; left: 0 !important; right: 0 !important;
+        z-index: 9990 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    body .es-header.is-nav-open:not(.es-header--dark) {
+        background-color: var(--es-paper) !important;
+    }
+    body .es-header.es-header--dark.is-nav-open {
+        background-color: var(--es-ink) !important;
+    }
+
+    /* Body bekommt Padding-Top wenn Menu offen, damit kein Layout-Sprung */
+    body:has(.es-header.is-nav-open) { padding-top: var(--es-header-h, 78px); }
+
+    /* Nav: fixed direkt unter dem Header */
+    body .es-header.is-nav-open .es-nav {
+        position: fixed !important;
+        top: var(--es-header-h, 78px) !important;
+        left: 0 !important; right: 0 !important; bottom: auto !important;
+        width: 100vw !important;
+        max-height: calc(100vh - var(--es-header-h, 78px)) !important;
+        z-index: 9980 !important;
+        overflow-y: auto;
+        padding: 16px 24px 24px !important;
+        display: flex !important;
+        flex-direction: column;
+        background-color: var(--es-paper) !important;
+        border-top: var(--es-border);
+    }
+    body .es-header.es-header--dark.is-nav-open .es-nav {
+        background-color: var(--es-ink) !important;
+        color: var(--es-paper) !important;
+        border-top-color: var(--es-ink-line);
+    }
+}
+
+/* (3) BERATUNGSFELD-Kacheln Mobile → 2 nebeneinander, immer */
+@media (max-width: 1024px) {
+    .es-bereich-detail__einzel-stacked,
+    .es-bereich-detail__einzel-stacked > .es-bereich__topics,
+    .es-bereich-detail__content--stacked .es-bereich__topics,
+    .es-bereich-detail__content--stacked .es-bereich-detail__einzel-stacked .es-bereich__topics {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        margin: 0 !important;
+        border-top: 0 !important;
+    }
+    .es-bereich-detail__content--stacked .es-bereich__topic,
+    .es-bereich-detail__einzel-stacked .es-bereich__topic {
+        border: 1px solid var(--es-rule) !important;
+        background: var(--es-paper) !important;
+        padding: 18px 14px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+}
+
