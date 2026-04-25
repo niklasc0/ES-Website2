@@ -2876,3 +2876,62 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
     }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   FIX v24 — Sub-Menus auf Mobile aus, Stacked-Section voll, Übersicht-Kacheln Außenrahmen
+   ═══════════════════════════════════════════════════════════════ */
+
+/* (1) Sub-Items im Mobile-Menue komplett ausblenden */
+@media (max-width: 1024px) {
+    #es-nav .sub-menu,
+    .es-nav .sub-menu {
+        display: none !important;
+    }
+}
+
+/* (2) Stacked-Section: maximal-aggressive Selektoren mit doppelter Klasse
+   damit Spezifitaet alle frueheren Regeln und Elementor-Inline-CSS schlaegt. */
+@media (max-width: 1024px) {
+    body section.elementor-section.es-bereich-detail__content--stacked.es-bereich-detail__content--stacked,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    body section.elementor-section.es-bereich-detail__content--stacked.es-bereich-detail__content--stacked > .elementor-container,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked > .elementor-container.elementor-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        padding: 0 24px !important;
+    }
+    body section.elementor-section.es-bereich-detail__content--stacked.es-bereich-detail__content--stacked > .elementor-container > .elementor-column,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked > .elementor-container > .elementor-column.elementor-element {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked .elementor-widget-wrap,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked .elementor-element-populated,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked .elementor-widget {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* (3) Leistungsuebersicht-Kacheln: Aussenrahmen links/rechts hinzufuegen.
+   Selektor zielt nur auf die Uebersichts-Variante (im .es-bereich__inner). */
+.es-bereich__inner > .es-bereich__topics {
+    border-left: var(--es-border);
+    border-right: var(--es-border);
+}
+.es-bereich__inner > .es-bereich__topics > .es-bereich__topic {
+    padding-left: var(--es-space-8);
+    padding-right: var(--es-space-8);
+}
+@media (max-width: 1024px) {
+    .es-bereich__inner > .es-bereich__topics > .es-bereich__topic {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}
+
