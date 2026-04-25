@@ -2808,3 +2808,71 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
     }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   FIX v23 — Header bleibt am Top sichtbar, Stacked-Section volle Breite
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+
+    /* (1) HEADER: per ID-Selector → Spezifitaet (1,1,0) schlaegt
+       die alte v21-Regel mit (0,3,1). Damit greift position:fixed
+       auch wenn html.es-header-sticky aktiv ist. */
+    #es-header.is-nav-open {
+        position: fixed !important;
+        top: 0 !important; left: 0 !important; right: 0 !important;
+        z-index: 9990 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    #es-header.is-nav-open:not(.es-header--dark) {
+        background-color: var(--es-paper) !important;
+    }
+    #es-header.es-header--dark.is-nav-open {
+        background-color: var(--es-ink) !important;
+    }
+
+    /* Body: KEIN padding-top mehr — das hat den sticky-Header bei
+       scrollY=0 nach unten geschoben. Stattdessen Scroll-Lock per
+       overflow:hidden, damit Body-Content nicht durchblitzt. */
+    body:has(.es-header.is-nav-open) {
+        padding-top: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* Nav: weiterhin fixed unter dem Header — ID-Selector damit
+       v21/v22-Regeln zuverlaessig ueberschrieben werden. */
+    #es-header.is-nav-open #es-nav,
+    #es-header.is-nav-open .es-nav {
+        position: fixed !important;
+        top: var(--es-header-h, 78px) !important;
+        left: 0 !important; right: 0 !important; bottom: auto !important;
+        width: 100vw !important;
+        max-height: calc(100vh - var(--es-header-h, 78px)) !important;
+        z-index: 9980 !important;
+        overflow-y: auto;
+    }
+}
+
+/* (2) BERATUNGSFELD-Stacked-Section: Section + Column auf 100% Breite
+   forcen. Vorher griffen nur Regeln fuer .es-bereich-detail__content
+   (ohne --stacked) → die Mobile-Section war effektiv default Elementor-
+   Spalte mit 50% Breite. */
+@media (max-width: 1024px) {
+    body .es-bereich-detail__content--stacked,
+    body .es-bereich-detail__content--stacked > .elementor-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column !important;
+    }
+    body .es-bereich-detail__content--stacked > .elementor-container > .elementor-column,
+    body .es-bereich-detail__content--stacked > .elementor-container > .elementor-column.elementor-element {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+    body .es-bereich-detail__content--stacked > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    body .es-bereich-detail__content--stacked > .elementor-container > .elementor-column > .elementor-element-populated {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
