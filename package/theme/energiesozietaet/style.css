@@ -2985,3 +2985,47 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
     }
 }
 
+/* Beratungsfeld-Detail Kacheln (2-Spalten) — saubere Aussen- und
+   Innenrahmen. Container traegt top + left, jede Kachel right + bottom →
+   durchgehende Linien an allen Innen- und Aussenkanten. Ueberschreibt
+   die default 3-Spalten-Regeln auf Z. 476-490. */
+.es-bereich-detail__split-tiles .es-bereich__topics {
+    border-top: var(--es-border) !important;
+    border-left: var(--es-border) !important;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
+}
+.es-bereich-detail__split-tiles .es-bereich__topic {
+    padding: 32px 28px !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: var(--es-border) !important;
+    border-bottom: var(--es-border) !important;
+}
+@media (max-width: 1024px) {
+    /* Mobile: Container traegt alle 4 Aussenraender, Kacheln nur Innen-
+       trenner. Bei 2 Kacheln in einer Zeile: rechte Kachel hat keinen
+       right-Border (Container hat right), linke Kachel border-right
+       als Trenner. Letzte Reihe: bottom kommt vom Container. */
+    .es-bereich-detail__split-tiles .es-bereich__topics {
+        border: var(--es-border) !important;
+        border-top: var(--es-border) !important;
+    }
+    .es-bereich-detail__split-tiles .es-bereich__topic {
+        padding: 18px 14px !important;
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-bottom: var(--es-border) !important;
+        border-right: 0 !important;
+    }
+    /* In 2-Spalten Mobile Layout: erste Kachel jeder Reihe (ungerade nth)
+       bekommt right-Border als Trenner zur naechsten */
+    .es-bereich-detail__split-tiles .es-bereich__topic:nth-child(2n+1) {
+        border-right: var(--es-border) !important;
+    }
+    /* Letzte Reihe: kein bottom-Border (sonst doppelt mit Container) */
+    .es-bereich-detail__split-tiles .es-bereich__topic:nth-last-child(-n+2) {
+        border-bottom: 0 !important;
+    }
+}
+

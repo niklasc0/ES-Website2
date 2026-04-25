@@ -408,7 +408,8 @@ class ESC_Page_Blueprints {
 					$b::wid_text( '<p>' . esc_html( $d['long_copy'][1] ) . '</p>' ),
 				),
 				array(
-					$b::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $slug ) . '" columns="2" eyebrow="Beratungsfelder"]', 'es-bereich-detail__split-tiles' ),
+					$b::wid_heading( 'Beratungsfelder', 'p', 'es-eyebrow' ),
+					$b::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $slug ) . '" columns="2"]', 'es-bereich-detail__split-tiles' ),
 				),
 			),
 		) );
