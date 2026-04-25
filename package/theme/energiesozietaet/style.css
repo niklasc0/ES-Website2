@@ -2199,3 +2199,165 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
 .es-link, .esc-card__link, .esc-pub-row__cta, .es-news-toolbar__pill, .es-team-single__pubs a {
     font-feature-settings: "liga" off;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v18 — Mobile-Menu zurück auf Dropdown + Beratungsfeld Reset
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Mobile-Menu: Vollbild-Override aufheben, Dropdown-Stil ───── */
+@media (max-width: 1024px) {
+    /* Header bleibt position normal (nicht fixed) wenn open */
+    .es-header.is-nav-open {
+        position: relative !important;
+        top: auto; left: auto; right: auto;
+    }
+    /* Body-Lock aufheben, kein 100vh-Lock mehr */
+    body:has(.es-header.is-nav-open) { overflow: auto; }
+
+    /* Nav als Dropdown unter dem Header (absolute), nicht Vollbild */
+    .es-header.is-nav-open .es-nav {
+        position: absolute !important;
+        top: 100% !important; left: 0 !important; right: 0 !important;
+        bottom: auto !important; height: auto !important; max-height: 80vh !important;
+        width: 100% !important;
+        background: var(--es-paper);
+        z-index: 50;
+        overflow-y: auto;
+        padding: 16px 24px 24px !important;
+        display: flex !important; flex-direction: column;
+        border-top: var(--es-border);
+        box-shadow: 0 8px 24px rgba(15,23,32,0.08);
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav {
+        background: var(--es-ink); color: var(--es-paper);
+        border-top-color: var(--es-ink-line);
+    }
+    .es-header.is-nav-open .es-nav ul {
+        width: 100%; padding: 0; gap: 0;
+        flex-direction: column;
+    }
+    .es-header.is-nav-open .es-nav li { width: 100%; }
+    .es-header.is-nav-open .es-nav a {
+        display: block; padding: 14px 0;
+        font-size: 16px; font-weight: 500;
+        letter-spacing: -0.01em; border-bottom: var(--es-border);
+        color: var(--es-ink) !important;
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav a {
+        border-bottom-color: var(--es-ink-line);
+        color: var(--es-paper) !important;
+    }
+
+    /* Karriere + Kontakt Buttons im Dropdown */
+    .es-header.is-nav-open .es-header__actions {
+        display: flex !important; padding: 16px 0 0;
+        gap: 10px; flex-direction: column; width: 100%;
+    }
+    .es-header.is-nav-open .es-header__actions > a {
+        width: 100%; justify-content: center;
+        padding: 12px 16px; font-size: 14px;
+    }
+
+    /* X-Icon: Mittlerer Strich verschwindet, ::before/::after rotieren */
+    .es-nav-toggle { position: relative; z-index: 60; width: 40px; height: 40px; }
+    .es-nav-toggle .bar {
+        position: relative;
+        transition: opacity 150ms var(--es-easing);
+    }
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        position: absolute; left: 0; top: 0;
+        transform-origin: center;
+        transition: transform 200ms var(--es-easing);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar { opacity: 0; }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        opacity: 1; transform: translateY(0) rotate(45deg);
+        background: currentColor;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        opacity: 1; transform: translateY(0) rotate(-45deg);
+        background: currentColor;
+    }
+}
+
+/* ── Beratungsfeld-Detail Mobile — sauberer Reset ───────────── */
+@media (max-width: 1024px) {
+    /* 1. Spalten stapeln vertikal */
+    body .es-bereich-detail__content > .elementor-container {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        gap: 32px !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        position: static !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-element-populated {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    /* 2. Shortcode-Widget volle Breite, kein Inline-Wrap-Padding */
+    body .es-bereich-detail__content .elementor-widget-shortcode,
+    body .es-bereich-detail__content .elementor-widget-shortcode > .elementor-widget-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    /* 3. Topic-Container: 2-spaltig, zentriert, gleichgroße Karten */
+    body .es-bereich-detail__einzel,
+    body .es-bereich-detail__einzel > .es-bereich__topics,
+    body .es-bereich-detail__content .es-bereich__topics {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        justify-content: center;
+        justify-items: stretch;
+        align-items: stretch;
+    }
+    /* 4. Topic-Karten: vollständige Border, gleichmäßiges Padding */
+    body .es-bereich-detail__content .es-bereich__topic,
+    body .es-bereich-detail__einzel .es-bereich__topic {
+        border: 1px solid var(--es-rule) !important;
+        border-left: 1px solid var(--es-rule) !important;
+        background: var(--es-paper) !important;
+        padding: 20px 16px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column;
+        text-align: left;
+    }
+    body .es-bereich-detail__content .es-bereich__topic-name h3,
+    body .es-bereich-detail__einzel .es-bereich__topic-name h3 {
+        font-size: 15px !important;
+        line-height: 1.3 !important;
+    }
+    body .es-bereich-detail__content .es-bereich__topic-desc,
+    body .es-bereich-detail__einzel .es-bereich__topic-desc {
+        font-size: 12px !important;
+        padding-left: 16px !important;
+        -webkit-line-clamp: 4;
+    }
+}
+
+/* Sehr enge Screens (≤480) → 1-spaltig */
+@media (max-width: 480px) {
+    body .es-bereich-detail__einzel,
+    body .es-bereich-detail__einzel > .es-bereich__topics,
+    body .es-bereich-detail__content .es-bereich__topics {
+        grid-template-columns: 1fr !important;
+    }
+}
