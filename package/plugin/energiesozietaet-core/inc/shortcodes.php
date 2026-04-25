@@ -204,6 +204,7 @@ class ESC_Shortcodes {
 			'limit'         => -1,
 			'orderby'       => 'menu_order title',
 			'order'         => 'ASC',
+			'eyebrow'       => '',
 		), $atts, 'es_einzelleistungen' );
 
 		$args = array(
@@ -225,7 +226,11 @@ class ESC_Shortcodes {
 		}
 
 		$cols = max( 1, min( 3, (int) ( $atts['columns'] ?? 3 ) ) );
-		ob_start(); ?>
+		ob_start();
+		if ( ! empty( $atts['eyebrow'] ) ) {
+			echo '<p class="es-eyebrow">' . esc_html( $atts['eyebrow'] ) . '</p>';
+		}
+		?>
 		<div class="es-bereich__topics" style="grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);">
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$sub_raw  = trim( wp_strip_all_tags( (string) get_post_meta( get_the_ID(), 'es_subtitle', true ) ) );
