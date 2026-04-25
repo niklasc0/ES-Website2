@@ -1985,3 +1985,38 @@ a, span, p, li {
         hyphens: auto; -webkit-hyphens: auto; overflow-wrap: anywhere;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v16 — Footer dynamic columns + Mobile-Layout
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Footer-Grid generisch: Brand + N Spalten */
+.es-footer__grid {
+    display: grid; gap: var(--es-space-16);
+    grid-template-columns: 1.4fr 1fr 1fr 1fr; /* Default: Brand + 3 Spalten */
+}
+.es-footer__grid--cols-3 { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+.es-footer__grid--cols-2 { grid-template-columns: 1.6fr 1fr 1fr; }
+.es-footer__grid--cols-1 { grid-template-columns: 1.6fr 1fr; }
+.es-footer__grid--cols-0 { grid-template-columns: 1fr; }
+
+@media (max-width: 900px) {
+    /* Mobile: Brand oben über volle Breite, dann Spalte 1 + 2 nebeneinander,
+       dann Spalte 3 (falls vorhanden) als zweite Zeile linksbündig. */
+    .es-footer__grid,
+    .es-footer__grid--cols-1,
+    .es-footer__grid--cols-2,
+    .es-footer__grid--cols-3 {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 32px 24px !important;
+    }
+    .es-footer__brand { grid-column: 1 / -1; }
+    .es-footer__col--3 { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+    .es-footer__grid,
+    .es-footer__grid--cols-1,
+    .es-footer__grid--cols-2,
+    .es-footer__grid--cols-3 { grid-template-columns: 1fr !important; }
+    .es-footer__brand, .es-footer__col--3 { grid-column: auto; }
+}

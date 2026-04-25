@@ -1,15 +1,13 @@
 <?php
 /**
  * Site footer.
- * Inhalte kommen aus den Footer-Einstellungen (Einstellungen → Footer
- * (Energiesozietät)). Fallback: Klassen bleiben rein dekorativ, wenn das
- * Plugin fehlt.
+ * Inhalte kommen aus den Footer-Einstellungen (Design → Footer). Spalten
+ * mit leerer Überschrift werden ausgeblendet — die übrigen rücken zusammen.
  *
  * @package Energiesozietaet
  */
 $es_no_cta = is_page( array( 'kontakt', 'impressum', 'datenschutzerklaerung' ) ) || is_404();
 
-// Optionen vom Plugin laden (mit Defaults falls Plugin inaktiv)
 if ( class_exists( 'ESC_Footer_Settings' ) ) {
 	$opts = ESC_Footer_Settings::get();
 	$parse_lines = array( 'ESC_Footer_Settings', 'parse_lines' );
@@ -29,6 +27,18 @@ if ( class_exists( 'ESC_Footer_Settings' ) ) {
 }
 $g = function( $k, $default = '' ) use ( $opts ) { return $opts[ $k ] ?? $default; };
 $copyright = str_replace( '{year}', date_i18n( 'Y' ), (string) $g( 'copyright', '© {year} Energiesozietät GmbH' ) );
+
+// Aktive Spalten ermitteln (Heading nicht leer)
+$columns = array();
+for ( $i = 1; $i <= 3; $i++ ) {
+	$h = trim( (string) $g( "col{$i}_heading" ) );
+	if ( $h === '' ) { continue; }
+	$columns[] = array(
+		'heading' => $h,
+		'links'   => call_user_func( $parse_links, $g( "col{$i}_lines" ) ),
+	);
+}
+$col_count = count( $columns );
 ?>
 </main><!-- /#es-main -->
 
@@ -59,8 +69,8 @@ $copyright = str_replace( '{year}', date_i18n( 'Y' ), (string) $g( 'copyright', 
 
 	<div class="es-footer__main">
 		<div class="es-wrap">
-			<div class="es-footer__grid">
-				<div>
+			<div class="es-footer__grid es-footer__grid--cols-<?php echo (int) $col_count; ?>">
+				<div class="es-footer__brand">
 					<div class="es-footer__brand-name"><?php echo esc_html( $g( 'brand_name', 'Energiesozietät GmbH' ) ); ?></div>
 					<div class="es-footer__brand-sub"><?php echo esc_html( $g( 'brand_sub', 'Recht · Steuern · Beratung' ) ); ?></div>
 					<p class="es-footer__brand-claim"><?php echo wp_kses_post( $g( 'brand_claim' ) ); ?></p>
@@ -71,44 +81,38 @@ $copyright = str_replace( '{year}', date_i18n( 'Y' ), (string) $g( 'copyright', 
 					<?php endif; ?>
 				</div>
 
-				<div class="es-footer__col">
-					<h4><?php echo esc_html( $g( 'col_anschrift_heading', 'Anschrift' ) ); ?></h4>
-					<ul>
-						<?php foreach ( call_user_func( $parse_lines, $g( 'col_anschrift_lines' ) ) as $ln ) : ?>
-							<li><?php echo esc_html( $ln ); ?></li>
-						<?php endforeach; ?>
-					</ul>
-				</div>
-
-				<div class="es-footer__col">
-					<h4><?php echo esc_html( $g( 'col_kontakt_heading', 'Kontakt' ) ); ?></h4>
-					<ul>
-						<?php foreach ( call_user_func( $parse_links, $g( 'col_kontakt_lines' ) ) as $link ) : ?>
-							<li>
-								<?php if ( $link['url'] ) : ?><a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo esc_html( $link['label'] ); ?></a><?php else : ?><?php echo esc_html( $link['label'] ); ?><?php endif; ?>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				</div>
-
-				<div class="es-footer__col">
-					<h4><?php echo esc_html( $g( 'col_legal_heading', 'Rechtliches' ) ); ?></h4>
-					<ul>
-						<?php foreach ( call_user_func( $parse_links, $g( 'col_legal_lines' ) ) as $link ) : ?>
-							<li>
-								<?php if ( $link['url'] ) : ?><a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo esc_html( $link['label'] ); ?></a><?php else : ?><?php echo esc_html( $link['label'] ); ?><?php endif; ?>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				</div>
+				<?php foreach ( $columns as $idx => $c ) : ?>
+					<div class="es-footer__col es-footer__col--<?php echo (int) ( $idx + 1 ); ?>">
+						<h4><?php echo esc_html( $c['heading'] ); ?></h4>
+						<ul>
+							<?php foreach ( $c['links'] as $link ) : ?>
+								<li>
+									<?php if ( $link['url'] ) : ?>
+										<a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo esc_html( $link['label'] ); ?></a>
+									<?php else : ?>
+										<?php echo esc_html( $link['label'] ); ?>
+									<?php endif; ?>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endforeach; ?>
 			</div>
 
 			<div class="es-footer__bar">
 				<span><?php echo esc_html( $copyright ); ?></span>
 				<ul>
-					<?php foreach ( call_user_func( $parse_links, $g( 'col_legal_lines' ) ) as $link ) : ?>
-						<?php if ( $link['url'] ) : ?><li><a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo esc_html( $link['label'] ); ?></a></li><?php endif; ?>
-					<?php endforeach; ?>
+					<?php
+					// Copy: Legal-Links aus letzter Spalte für die untere Bar wiederverwenden.
+					$last_col = end( $columns );
+					if ( is_array( $last_col ) ) {
+						foreach ( $last_col['links'] as $link ) {
+							if ( $link['url'] ) {
+								echo '<li><a href="' . esc_url( $link['url'] ) . '">' . esc_html( $link['label'] ) . '</a></li>';
+							}
+						}
+					}
+					?>
 				</ul>
 			</div>
 		</div>

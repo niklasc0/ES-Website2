@@ -1,7 +1,8 @@
 <?php
 /**
- * Footer-Einstellungen — Settings-API-Page, damit der Footer im Backend
- * frei konfigurierbar ist ohne Code-Änderungen.
+ * Footer-Einstellungen — generische 3 Spalten + Brand + CTA + Copyright.
+ * Spalten werden im Frontend nur gerendert, wenn ihre Überschrift gesetzt
+ * ist — leere Spalten werden ausgeblendet und die übrigen rücken zusammen.
  *
  * @package Energiesozietaet_Core
  */
@@ -31,29 +32,35 @@ class ESC_Footer_Settings {
 			'brand_claim'   => 'Beratung mit Leidenschaft — Ergebnisse, die weitertragen.',
 			'badges'        => "BVÖD\nForum Contracting\nVKU",
 
-			'col_anschrift_heading' => 'Anschrift',
-			'col_anschrift_lines'   => "Energiesozietät GmbH\nRoßstraße 92 / Kennedyhaus\n40476 Düsseldorf",
-
-			'col_kontakt_heading' => 'Kontakt',
-			'col_kontakt_lines'   => "+49 211 159232-0 | tel:+492111592320\ninfo@energiesozietaet.de | mailto:info@energiesozietaet.de\nLinkedIn ↗ | https://www.linkedin.com/company/energiesozietaet/",
-
-			'col_legal_heading' => 'Rechtliches',
-			'col_legal_lines'   => "Impressum | /impressum/\nDatenschutz | /datenschutzerklaerung/",
+			// Drei generische Spalten — nur gerendert wenn Heading nicht leer.
+			'col1_heading' => 'Anschrift',
+			'col1_lines'   => "Energiesozietät GmbH\nRoßstraße 92 / Kennedyhaus\n40476 Düsseldorf",
+			'col2_heading' => 'Kontakt',
+			'col2_lines'   => "+49 211 159232-0 | tel:+492111592320\ninfo@energiesozietaet.de | mailto:info@energiesozietaet.de\nLinkedIn ↗ | https://www.linkedin.com/company/energiesozietaet/",
+			'col3_heading' => 'Rechtliches',
+			'col3_lines'   => "Impressum | /impressum/\nDatenschutz | /datenschutzerklaerung/",
 
 			'copyright' => '© {year} Energiesozietät GmbH · Alle Rechte vorbehalten.',
 		);
 	}
 
 	public static function get( $key = null ) {
-		$opts = get_option( self::OPT, array() );
-		$opts = array_merge( self::defaults(), (array) $opts );
+		$opts = (array) get_option( self::OPT, array() );
+		// Backward-Compat: alte Keys (col_anschrift_*, col_kontakt_*, col_legal_*) auf neue mappen
+		$legacy_map = array(
+			'col_anschrift_heading' => 'col1_heading', 'col_anschrift_lines' => 'col1_lines',
+			'col_kontakt_heading'   => 'col2_heading', 'col_kontakt_lines'   => 'col2_lines',
+			'col_legal_heading'     => 'col3_heading', 'col_legal_lines'     => 'col3_lines',
+		);
+		foreach ( $legacy_map as $old => $new ) {
+			if ( ! isset( $opts[ $new ] ) && isset( $opts[ $old ] ) ) {
+				$opts[ $new ] = $opts[ $old ];
+			}
+		}
+		$opts = array_merge( self::defaults(), $opts );
 		return $key ? ( $opts[ $key ] ?? '' ) : $opts;
 	}
 
-	/**
-	 * Parst "Label | URL"-Zeilen. URL optional.
-	 * @return array[] [ ['label' => '...', 'url' => '...'], ... ]
-	 */
 	public static function parse_links( $raw ) {
 		$out = array();
 		foreach ( preg_split( '/\r?\n/', (string) $raw ) as $ln ) {
@@ -84,9 +91,9 @@ class ESC_Footer_Settings {
 		foreach ( $defaults as $k => $v ) {
 			if ( ! isset( $input[ $k ] ) ) { $out[ $k ] = $v; continue; }
 			$val = wp_unslash( $input[ $k ] );
-			if ( 'cta_btn1_url' === $k || 'cta_btn2_url' === $k ) {
+			if ( in_array( $k, array( 'cta_btn1_url', 'cta_btn2_url' ), true ) ) {
 				$out[ $k ] = esc_url_raw( $val );
-			} elseif ( false !== strpos( $k, '_lines' ) || 'badges' === $k || false !== strpos( $k, 'cta_subtitle' ) || 'brand_claim' === $k ) {
+			} elseif ( false !== strpos( $k, '_lines' ) || 'badges' === $k || in_array( $k, array( 'cta_subtitle', 'brand_claim' ), true ) ) {
 				$out[ $k ] = wp_kses_post( $val );
 			} else {
 				$out[ $k ] = sanitize_text_field( $val );
@@ -96,22 +103,7 @@ class ESC_Footer_Settings {
 	}
 
 	public static function menu() {
-		add_submenu_page(
-			'themes.php',
-			'Footer',
-			'Footer',
-			'manage_options',
-			'esc-footer',
-			array( __CLASS__, 'render' )
-		);
-	}
-
-	protected static function textarea( $name, $label, $hint = '', $rows = 4 ) {
-		$val = self::get( $name );
-		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
-		echo '<textarea name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" rows="' . (int) $rows . '" style="width:100%;max-width:640px;">' . esc_textarea( $val ) . '</textarea>';
-		if ( $hint ) { echo '<p class="description">' . wp_kses_post( $hint ) . '</p>'; }
-		echo '</td></tr>';
+		add_submenu_page( 'themes.php', 'Footer', 'Footer', 'manage_options', 'esc-footer', array( __CLASS__, 'render' ) );
 	}
 
 	protected static function input( $name, $label, $hint = '' ) {
@@ -122,65 +114,60 @@ class ESC_Footer_Settings {
 		echo '</td></tr>';
 	}
 
+	protected static function textarea( $name, $label, $hint = '', $rows = 4 ) {
+		$val = self::get( $name );
+		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
+		echo '<textarea name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" rows="' . (int) $rows . '" style="width:100%;max-width:640px;">' . esc_textarea( $val ) . '</textarea>';
+		if ( $hint ) { echo '<p class="description">' . wp_kses_post( $hint ) . '</p>'; }
+		echo '</td></tr>';
+	}
+
 	public static function render() {
 		if ( ! current_user_can( 'manage_options' ) ) { return; }
 		?>
 		<div class="wrap">
-			<h1>Footer-Einstellungen</h1>
-			<p>Alle Inhalte des Seiten-Footers — inkl. CTA-Bar, Brand-Spalte, Standort-Info und Rechtliches — kannst Du hier zentral pflegen. Änderungen werden sofort auf jeder Seite übernommen.</p>
+			<h1>Footer</h1>
+			<p>Alle Inhalte des Seiten-Footers zentral pflegen. <strong>Spalten ohne Überschrift werden ausgeblendet</strong> — die übrigen rücken automatisch zusammen.</p>
 			<form method="post" action="options.php">
 				<?php settings_fields( 'esc_footer_group' ); ?>
 
 				<h2>CTA-Bar (oberhalb des Footers)</h2>
 				<table class="form-table"><tbody>
 					<?php
-					self::input( 'cta_eyebrow',    'Eyebrow',        'Kleine Uppercase-Label (z.B. „Kontakt")' );
-					self::input( 'cta_title',      'Überschrift',     'Hauptüberschrift' );
-					self::input( 'cta_subtitle',   'Untertitel',      'Kleiner Text unter der Überschrift (HTML erlaubt)' );
-					self::input( 'cta_btn1_label', 'Button 1 · Text', '' );
-					self::input( 'cta_btn1_url',   'Button 1 · URL',  '' );
-					self::input( 'cta_btn2_label', 'Button 2 · Text', '' );
-					self::input( 'cta_btn2_url',   'Button 2 · URL',  '' );
+					self::input( 'cta_eyebrow',    'Eyebrow' );
+					self::input( 'cta_title',      'Überschrift' );
+					self::input( 'cta_subtitle',   'Untertitel', 'HTML erlaubt' );
+					self::input( 'cta_btn1_label', 'Button 1 · Text' );
+					self::input( 'cta_btn1_url',   'Button 1 · URL' );
+					self::input( 'cta_btn2_label', 'Button 2 · Text' );
+					self::input( 'cta_btn2_url',   'Button 2 · URL' );
 					?>
 				</tbody></table>
 
 				<h2>Brand-Spalte (links)</h2>
 				<table class="form-table"><tbody>
 					<?php
-					self::input(    'brand_name',   'Name' );
-					self::input(    'brand_sub',    'Untertitel / Tagline' );
+					self::input(    'brand_name',  'Name' );
+					self::input(    'brand_sub',   'Untertitel / Tagline' );
 					self::textarea( 'brand_claim', 'Claim', '1–2 Sätze.', 2 );
-					self::textarea( 'badges',      'Badges / Mitgliedschaften', 'Eine Zeile pro Badge (reiner Text).', 4 );
+					self::textarea( 'badges',      'Badges / Mitgliedschaften', 'Eine Zeile pro Badge.', 4 );
 					?>
 				</tbody></table>
 
-				<h2>Spalte „Anschrift"</h2>
-				<table class="form-table"><tbody>
-					<?php
-					self::input(    'col_anschrift_heading', 'Überschrift' );
-					self::textarea( 'col_anschrift_lines',   'Zeilen', 'Eine Zeile pro Anschriftenteil.', 4 );
-					?>
-				</tbody></table>
-
-				<h2>Spalte „Kontakt"</h2>
-				<table class="form-table"><tbody>
-					<?php
-					self::input(    'col_kontakt_heading', 'Überschrift' );
-					self::textarea( 'col_kontakt_lines', 'Links · Format „Label | URL"', 'Eine Zeile pro Eintrag, Format <code>Text | URL</code>. Die URL ist optional — ohne URL wird nur der Text angezeigt.', 5 );
-					?>
-				</tbody></table>
-
-				<h2>Spalte „Rechtliches"</h2>
-				<table class="form-table"><tbody>
-					<?php
-					self::input(    'col_legal_heading', 'Überschrift' );
-					self::textarea( 'col_legal_lines', 'Links · Format „Label | URL"', 'Eine Zeile pro Eintrag.', 5 );
-					?>
-				</tbody></table>
+				<?php for ( $i = 1; $i <= 3; $i++ ) : ?>
+					<h2>Spalte <?php echo (int) $i; ?></h2>
+					<p style="color:#5A6577;">Lasse die Überschrift leer, um diese Spalte komplett auszublenden.</p>
+					<table class="form-table"><tbody>
+						<?php
+						self::input(    "col{$i}_heading", 'Überschrift' );
+						self::textarea( "col{$i}_lines",   'Zeilen · Format „Label | URL"', 'Eine Zeile pro Eintrag — Format <code>Text | URL</code>. URL optional.', 5 );
+						?>
+					</tbody></table>
+				<?php endfor; ?>
 
 				<h2>Copyright-Zeile</h2>
 				<table class="form-table"><tbody>
-					<?php self::input( 'copyright', 'Text', 'Platzhalter <code>{year}</code> wird automatisch durchs aktuelle Jahr ersetzt.' ); ?>
+					<?php self::input( 'copyright', 'Text', 'Platzhalter <code>{year}</code> wird automatisch ersetzt.' ); ?>
 				</tbody></table>
 
 				<?php submit_button(); ?>

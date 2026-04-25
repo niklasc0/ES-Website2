@@ -560,24 +560,8 @@ class ESC_Page_Blueprints {
 		) );
 
 		// 2 Spalten: Form links (größer), Standorte rechts (schmaler)
-		// Form-Labels als Heading-Widgets + Form selbst als html (da Formular
-		// in nativer WP-Form-Welt schwierig zu kapseln ist — in der finalen
-		// Produktivversion sollte CF7 / WPForms Shortcode hier stehen)
-		$form_html = '<form action="mailto:info@energiesozietaet.de" method="post" enctype="text/plain" class="es-kontakt-form">'
-			. '<div class="es-kontakt-form__row"><label><span>Vorname</span><input type="text" name="vorname" /></label>'
-			. '<label><span>Nachname</span><input type="text" name="nachname" /></label></div>'
-			. '<label><span>E-Mail</span><input type="email" name="email" /></label>'
-			. '<label><span>Unternehmen / Organisation</span><input type="text" name="org" /></label>'
-			. '<div class="es-kontakt-form__radio-group"><span class="es-kontakt-form__group-label">Betrifft</span>'
-			. '<div class="es-kontakt-form__pills">';
-		foreach ( array( 'Rechtsberatung','Steuerberatung','Unternehmensberatung','Karriere','Presse','Sonstiges' ) as $i => $opt ) {
-			$form_html .= '<label><input type="radio" name="thema" value="' . esc_attr( $opt ) . '"' . ( 0 === $i ? ' checked' : '' ) . '/> ' . esc_html( $opt ) . '</label>';
-		}
-		$form_html .= '</div></div>';
-		$form_html .= '<label><span>Ihre Nachricht</span><textarea name="nachricht" rows="5"></textarea></label>';
-		$form_html .= '<div class="es-kontakt-form__submit"><span>Mit dem Absenden stimmen Sie unserer <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> zu.</span>'
-			. '<button class="es-btn es-btn--primary" type="submit">Nachricht senden →</button></div>';
-		$form_html .= '</form>';
+		// Das Formular kommt aus dem [es_kontakt_form]-Shortcode; Felder, Themen
+		// und Empfänger sind unter Einstellungen → Kontaktformular pflegbar.
 
 		$loc_html = '<div class="es-kontakt-locations">';
 		$offices = array(
@@ -605,7 +589,7 @@ class ESC_Page_Blueprints {
 				array(
 					$b::wid_heading( 'Schreiben Sie uns', 'p', 'es-eyebrow' ),
 					$b::wid_heading( 'Wir antworten innerhalb eines Werktags.', 'h2', 'es-split__title' ),
-					$b::wid_html( $form_html ),
+					$b::wid_shortcode( '[es_kontakt_form]' ),
 				),
 				array(
 					$b::wid_heading( 'Unsere Standorte', 'p', 'es-eyebrow' ),
