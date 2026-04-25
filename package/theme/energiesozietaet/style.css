@@ -2936,44 +2936,42 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   FIX v25 — Beratungsfeld Split: EINE Column, Grid auf widget-wrap
+   FIX v25/v26 — Beratungsfeld Split: 2-Column Section, native Widgets
+   Mobile: Spalten auf 100% mit doppelter Klassen-Spezifitaet
    ═══════════════════════════════════════════════════════════════ */
 
-/* Desktop: 40% Text + 60% Kacheln nebeneinander */
-@media (min-width: 1025px) {
-    .es-bereich-detail__split-section > .elementor-container > .elementor-column > .elementor-widget-wrap,
-    .es-bereich-detail__split-section > .elementor-container > .elementor-column > .elementor-element-populated {
-        display: grid !important;
-        grid-template-columns: 40% 60% !important;
-        gap: 64px !important;
-        align-items: start !important;
-    }
-}
-
-/* Tablet/Mobile: untereinander, jeweils volle Breite */
+/* Tablet/Mobile: Section auf volle Breite, Spalten stacken auf 100% */
 @media (max-width: 1024px) {
-    .es-bereich-detail__split-section > .elementor-container > .elementor-column > .elementor-widget-wrap,
-    .es-bereich-detail__split-section > .elementor-container > .elementor-column > .elementor-element-populated {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 48px !important;
-        width: 100% !important;
-    }
-    .es-bereich-detail__split-section .elementor-widget,
-    .es-bereich-detail__split-section .elementor-widget-html,
-    .es-bereich-detail__split-section .elementor-widget-shortcode {
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container {
         width: 100% !important;
         max-width: 100% !important;
     }
-    /* Kacheln auf Mobile: 2 nebeneinander, voller Breite des Containers */
-    .es-bereich-detail__split-section .es-bereich__topics {
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+    }
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column.elementor-element {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section .elementor-widget,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section .elementor-widget-wrap,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section .elementor-element-populated {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    /* Kacheln auf Mobile: 2 nebeneinander, voller Container-Breite */
+    body .es-bereich-detail__split-section .es-bereich__topics {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 12px !important;
         width: 100% !important;
         border: 0 !important;
     }
-    .es-bereich-detail__split-section .es-bereich__topic {
+    body .es-bereich-detail__split-section .es-bereich__topic {
         border: 1px solid var(--es-rule) !important;
         background: var(--es-paper) !important;
         padding: 18px 14px !important;
@@ -2981,10 +2979,9 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
         width: 100% !important;
         box-sizing: border-box;
     }
-}
-
-/* Eyebrow "Beratungsfelder" oberhalb der Kacheln im Shortcode-Output */
-.es-bereich-detail__split-section .elementor-widget-shortcode .elementor-widget-container > .es-eyebrow {
-    margin-bottom: 16px;
+    /* Abstand zwischen Text-Block und Kachel-Block beim Stacking */
+    body .es-bereich-detail__split-section > .elementor-container > .elementor-column:first-child {
+        margin-bottom: 32px;
+    }
 }
 

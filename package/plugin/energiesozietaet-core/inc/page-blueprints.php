@@ -389,23 +389,25 @@ class ESC_Page_Blueprints {
 			) ),
 		) );
 
-		// Content Split — EINE Section, EINE Column (volle Breite garantiert).
-		// Zwei Widgets: HTML (Text) + Shortcode (Eyebrow + Kacheln).
-		// Grid-Layout (40/60 Desktop, 1-spaltig Mobile) liegt auf der
-		// Column selbst via display:grid. Vermeidet Elementor-Column-
-		// Spaltenbreiten-Probleme komplett.
-		$text_html  = '<div class="es-bereich-detail__split-text">';
-		$text_html .= '<p class="es-eyebrow">Was wir für Sie tun</p>';
-		$text_html .= '<h2 class="es-split__title">' . wp_kses_post( $d['long_title'] ) . '</h2>';
-		$text_html .= '<p>' . esc_html( $d['long_copy'][0] ) . '</p>';
-		$text_html .= '<p>' . esc_html( $d['long_copy'][1] ) . '</p>';
-		$text_html .= '</div>';
+		// Content Split — Section mit 2 Columns (40/60), native Widgets links
+		// damit der Text in Elementor direkt editierbar ist. Mobile-Umbruch
+		// auf 1 Column 100% per CSS-Override mit hoher Spezifitaet.
 		$s[] = $b::section_native( array(
 			'css_classes' => 'es-bereich-detail__split-section',
 			'padding' => array( '120', '0', '120', '0' ),
+			'gap' => 'wider',
+			'column_settings' => array(
+				array( '_column_size' => 40, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+				array( '_column_size' => 60, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+			),
 			'cols' => array(
 				array(
-					$b::wid_html( $text_html, 'es-bereich-detail__split-text-wid' ),
+					$b::wid_heading( 'Was wir für Sie tun', 'p', 'es-eyebrow' ),
+					$b::wid_heading( $d['long_title'], 'h2', 'es-split__title' ),
+					$b::wid_text( '<p>' . esc_html( $d['long_copy'][0] ) . '</p>' ),
+					$b::wid_text( '<p>' . esc_html( $d['long_copy'][1] ) . '</p>' ),
+				),
+				array(
 					$b::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $slug ) . '" columns="2" eyebrow="Beratungsfelder"]', 'es-bereich-detail__split-tiles' ),
 				),
 			),
