@@ -2361,3 +2361,60 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
         grid-template-columns: 1fr !important;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v19 — Mobile-Menu sticky-compat + X-Icon + Actions im Nav
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+    /* (A) Header darf sticky bleiben — nicht relative überschreiben.
+       Damit folgt das Dropdown-Menü dem sticky Header beim Scrollen. */
+    .es-header.is-nav-open {
+        position: sticky !important;
+        top: 0 !important;
+    }
+    html.es-header-sticky .es-header.is-nav-open {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 110 !important;
+    }
+    /* Body-Lock: nicht aktivieren wenn sticky, damit Page-Scroll möglich
+       bleibt — das Dropdown ist scrollbar via max-height + overflow */
+
+    /* (B) Header__actions sind im Header-Bar standardmäßig versteckt;
+       nur wenn JS sie ins Nav verschoben hat, werden sie angezeigt. */
+    .es-header__actions { display: none !important; }
+    .es-nav .es-header__actions.es-header__actions--in-nav {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 16px 0 0 !important;
+        margin-top: auto !important;
+        width: 100% !important;
+    }
+    .es-nav .es-header__actions--in-nav > a {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 12px 16px !important;
+        font-size: 14px !important;
+    }
+
+    /* (C) X-Icon Fix: NICHT opacity auf .bar (das versteckt auch ::before/::after).
+       Stattdessen background transparent — pseudo-Elemente bleiben sichtbar. */
+    .es-nav-toggle .bar {
+        opacity: 1 !important;
+        transition: background-color 150ms var(--es-easing);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar {
+        background: transparent !important;
+        opacity: 1 !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        background: currentColor !important;
+        transform: translateY(0) rotate(45deg) !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        background: currentColor !important;
+        transform: translateY(0) rotate(-45deg) !important;
+    }
+}

@@ -389,14 +389,15 @@ class ESC_Page_Blueprints {
 			) ),
 		) );
 
-		// Content Split: Text links (native Widgets), Einzelleistungen rechts (2 Spalten, mehr Padding)
+		// Content Split: Text links (native Widgets), Einzelleistungen rechts.
+		// Auf Tablet/Mobile Spalten gestapelt: _inline_size_tablet/mobile = 100.
 		$s[] = $b::section_native( array(
 			'css_classes' => 'es-bereich-detail__content',
 			'padding' => array( '120', '0', '120', '0' ),
 			'gap' => 'wider',
 			'column_settings' => array(
-				array( '_column_size' => 40 ),
-				array( '_column_size' => 60 ),
+				array( '_column_size' => 40, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+				array( '_column_size' => 60, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
 			),
 			'cols' => array(
 				array(
