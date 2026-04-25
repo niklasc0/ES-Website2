@@ -36,7 +36,7 @@ class ESC_Footer_Settings {
 			'col1_heading' => 'Anschrift',
 			'col1_lines'   => "Energiesozietät GmbH\nRoßstraße 92 / Kennedyhaus\n40476 Düsseldorf",
 			'col2_heading' => 'Kontakt',
-			'col2_lines'   => "+49 211 159232-0 | tel:+492111592320\ninfo@energiesozietaet.de | mailto:info@energiesozietaet.de\nLinkedIn ↗ | https://www.linkedin.com/company/energiesozietaet/",
+			'col2_lines'   => "+49 211 159232-0 | tel:+492111592320\ninfo@energiesozietaet.de | mailto:info@energiesozietaet.de\nLinkedIn ↗︎ | https://www.linkedin.com/company/energiesozietaet/",
 			'col3_heading' => 'Rechtliches',
 			'col3_lines'   => "Impressum | /impressum/\nDatenschutz | /datenschutzerklaerung/",
 

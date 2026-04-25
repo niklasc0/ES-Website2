@@ -2020,3 +2020,182 @@ a, span, p, li {
     .es-footer__grid--cols-3 { grid-template-columns: 1fr !important; }
     .es-footer__brand, .es-footer__col--3 { grid-column: auto; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v17 — Mobile-Menu, Footer-Cols, Beratungsfeld, Pager, Consent
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── A) Mobile-Menu Fixes ──────────────────────────────────── */
+
+/* (1) Beim Öffnen darf der Sticky-Header KEINEN backdrop-filter haben —
+   sonst wird er zum Containing-Block für das fixed-positionierte Nav,
+   was es ans Header-Top koppelt statt ans Viewport. */
+html.es-header-sticky .es-header.is-nav-open,
+html.es-header-sticky .es-header.is-nav-open.es-header--dark {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* Wenn open: Header bleibt sticky, Inner aber transparent damit
+       das Menü dahinter das X klickbar macht */
+    z-index: 110;
+}
+
+/* (2) Mobile-Nav-Overlay greift JETZT auf das Viewport zu (fixed).
+   Wir setzen es als Geschwister via display:contents-Konstrukt und
+   nutzen position:fixed mit !important. */
+@media (max-width: 1024px) {
+    .es-header.is-nav-open {
+        position: fixed !important;
+        top: 0; left: 0; right: 0; z-index: 100;
+    }
+    .es-header.is-nav-open .es-nav {
+        position: fixed !important;
+        top: var(--es-header-h, 78px); left: 0; right: 0; bottom: 0;
+        width: 100vw; height: calc(100vh - var(--es-header-h, 78px));
+        background: var(--es-paper);
+        z-index: 95;
+        overflow-y: auto;
+        padding: 32px 24px 40px;
+        display: flex !important; flex-direction: column;
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav { background: var(--es-ink); color: var(--es-paper); }
+    .es-header.is-nav-open .es-nav ul { width: 100%; padding: 0; gap: 8px; flex-direction: column; }
+    .es-header.is-nav-open .es-nav li { width: 100%; }
+    .es-header.is-nav-open .es-nav a {
+        display: block; padding: 18px 0; font-size: 22px; font-weight: 500;
+        letter-spacing: -0.015em; border-bottom: var(--es-border);
+        color: var(--es-ink) !important;
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav a { border-bottom-color: var(--es-ink-line); color: var(--es-paper) !important; }
+
+    /* Karriere + Kontakt Buttons im Mobile-Menü sichtbar */
+    .es-header.is-nav-open .es-header__actions {
+        display: flex !important; padding: 24px 0 0; gap: 12px;
+        flex-direction: column; width: 100%;
+    }
+    .es-header.is-nav-open .es-header__actions > a {
+        width: 100%; justify-content: center; padding: 14px 16px; font-size: 15px;
+    }
+    /* Body-Lock wenn open */
+    body:has(.es-header.is-nav-open) { overflow: hidden; }
+
+    /* (3) X-Icon — Bars müssen sichtbar bleiben (NICHT parent scaling auf 0).
+       Der mittlere Strich verschwindet via opacity, ::before und ::after
+       rotieren zum Kreuz. */
+    .es-nav-toggle { position: relative; z-index: 120; width: 40px; height: 40px; }
+    .es-nav-toggle .bar { position: relative; transition: opacity 150ms var(--es-easing); }
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        position: absolute; left: 0; top: 0; transform-origin: center;
+        transition: transform 200ms var(--es-easing);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar { opacity: 0; }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        opacity: 1; transform: translateY(0) rotate(45deg); background: currentColor;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        opacity: 1; transform: translateY(0) rotate(-45deg); background: currentColor;
+    }
+}
+
+/* ── B) Footer Mobile per cols-N Klasse ───────────────────── */
+
+@media (max-width: 900px) {
+    /* cols-0: nur Brand */
+    .es-footer__grid--cols-0 { grid-template-columns: 1fr !important; }
+    /* cols-1: Brand oben, Spalte 1 darunter */
+    .es-footer__grid--cols-1 { grid-template-columns: 1fr !important; }
+    .es-footer__grid--cols-1 .es-footer__brand { grid-column: 1 / -1; }
+    /* cols-2: Brand oben, Spalte 1+2 nebeneinander */
+    .es-footer__grid--cols-2 { grid-template-columns: 1fr 1fr !important; }
+    .es-footer__grid--cols-2 .es-footer__brand { grid-column: 1 / -1; }
+    /* cols-3: Brand oben, Spalte 1+2 nebeneinander, Spalte 3 darunter linksbündig */
+    .es-footer__grid--cols-3 { grid-template-columns: 1fr 1fr !important; }
+    .es-footer__grid--cols-3 .es-footer__brand { grid-column: 1 / -1; }
+    .es-footer__grid--cols-3 .es-footer__col--3 { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+    .es-footer__grid--cols-2,
+    .es-footer__grid--cols-3 { grid-template-columns: 1fr !important; }
+    .es-footer__grid > * { grid-column: auto !important; }
+}
+
+/* ── C) Beratungsgebiete Detail Mobile — sauberer Reset ───── */
+
+@media (max-width: 1024px) {
+    /* Spalten stapeln, jede 100% */
+    body .es-bereich-detail__content > .elementor-container {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        gap: 32px !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column {
+        width: 100% !important; max-width: 100% !important;
+        flex: 1 1 auto !important;
+        position: static !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-element-populated {
+        width: 100% !important; max-width: 100% !important;
+    }
+    /* Shortcode-Widget volle Breite (ohne Inline-Padding) */
+    body .es-bereich-detail__content .elementor-widget-shortcode,
+    body .es-bereich-detail__content .elementor-widget-shortcode > .elementor-widget-container {
+        width: 100% !important; max-width: 100% !important; margin: 0 !important;
+    }
+    /* Topic-Grid: 2-spaltig, alle Karten voll umrahmt, zentriert */
+    body .es-bereich-detail__einzel .es-bereich__topics,
+    body .es-bereich-detail__einzel > .es-bereich__topics {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border-top: 0 !important;
+        justify-content: center;
+    }
+    body .es-bereich-detail__einzel .es-bereich__topic {
+        border: var(--es-border) !important;
+        border-left: var(--es-border) !important;
+        padding: 20px !important;
+        background: var(--es-paper);
+        margin: 0 !important;
+    }
+}
+@media (max-width: 600px) {
+    body .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: 1fr !important; }
+}
+
+/* ── D) Beratungsfeld-Detail Label oben „Beratungsfelder" ── */
+/* (Section-Eyebrow im Blueprint wird im PHP gefixt) */
+
+/* ── E) News-Pagination unten rechtsbündig ────────────────── */
+.es-news-toolbar.es-news-toolbar--bottom { justify-content: flex-end; }
+.es-news-toolbar.es-news-toolbar--bottom .es-news-toolbar__pager { margin-left: auto; }
+
+/* ── F) Kontakt-Form Datenschutz-Checkbox links neben Text ── */
+.es-kontakt-form .es-kontakt-form__consent {
+    display: flex !important; flex-direction: row !important;
+    align-items: flex-start !important; gap: 10px !important;
+    cursor: pointer; font-size: 13px; color: var(--es-text-mute);
+}
+.es-kontakt-form .es-kontakt-form__consent input[type="checkbox"] {
+    flex-shrink: 0; margin-top: 3px; width: 16px; height: 16px; cursor: pointer;
+}
+.es-kontakt-form .es-kontakt-form__consent > span {
+    text-align: left; line-height: 1.45;
+}
+
+/* Flash-Notice-Styling */
+.es-kontakt-form__flash {
+    padding: 14px 18px; margin-bottom: 24px; border-radius: var(--es-radius-xs);
+    font-size: 14px;
+}
+.es-kontakt-form__flash--success { background: var(--es-accent-soft); color: var(--es-ink); border-left: 3px solid var(--es-accent); }
+.es-kontakt-form__flash--error   { background: #FCE7E7; color: #771111; border-left: 3px solid #C42B2B; }
+
+/* ── G) Pfeil-Variation Selector — Fallback-CSS für Browser ohne U+FE0E ── */
+/* Wenn der VS-15 nicht greift (alte iOS), zumindest font-style fix */
+.es-link, .esc-card__link, .esc-pub-row__cta, .es-news-toolbar__pill, .es-team-single__pubs a {
+    font-feature-settings: "liga" off;
+}

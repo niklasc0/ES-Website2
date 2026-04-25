@@ -67,7 +67,7 @@ while ( have_posts() ) : the_post();
 						<?php if ( $linkedin ) : ?>
 							<div class="es-team-single__contact-row">
 								<small>LinkedIn</small>
-								<a href="<?php echo esc_url( $linkedin ); ?>" target="_blank" rel="noopener" style="color:inherit;">Profil ansehen ↗</a>
+								<a href="<?php echo esc_url( $linkedin ); ?>" target="_blank" rel="noopener" style="color:inherit;">Profil ansehen ↗︎</a>
 							</div>
 						<?php endif; ?>
 						<div class="es-team-single__contact-actions">
@@ -128,7 +128,7 @@ while ( have_posts() ) : the_post();
 								<?php while ( $related_pubs->have_posts() ) : $related_pubs->the_post();
 									$link = es_meta( 'es_link' );
 									if ( $link ) : ?>
-										<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener"><?php the_title(); ?> ↗</a>
+										<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener"><?php the_title(); ?> ↗︎</a>
 									<?php else : ?>
 										<span><?php the_title(); ?></span>
 									<?php endif;

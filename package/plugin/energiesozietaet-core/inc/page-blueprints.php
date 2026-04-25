@@ -406,7 +406,7 @@ class ESC_Page_Blueprints {
 					$b::wid_text( '<p>' . esc_html( $d['long_copy'][1] ) . '</p>' ),
 				),
 				array(
-					$b::wid_heading( 'Einzelleistungen · ' . $d['title'], 'p', 'es-eyebrow' ),
+					$b::wid_heading( 'Beratungsfelder', 'p', 'es-eyebrow' ),
 					$b::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $slug ) . '" columns="2" wrapper="es-bereich-detail__einzel"]', 'es-bereich-detail__einzel' ),
 				),
 			),

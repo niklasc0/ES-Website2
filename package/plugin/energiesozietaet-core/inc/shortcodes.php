@@ -525,7 +525,7 @@ class ESC_Shortcodes {
 					<div class="esc-card__meta"><?php echo esc_html( $cat ); ?></div>
 					<h3 style="font-size:19px;font-weight:500;line-height:1.3;letter-spacing:-0.01em;margin:16px 0 20px;"><?php the_title(); ?></h3>
 					<?php if ( $src ) : ?><div style="font-size:12px;color:#8591A3;font-family:var(--es-font-mono);margin-bottom:20px;"><?php echo esc_html( $src ); ?></div><?php endif; ?>
-					<span class="esc-card__link"><?php echo $link ? 'Zur Publikation ↗' : 'Lesen'; ?></span>
+					<span class="esc-card__link"><?php echo $link ? 'Zur Publikation ↗︎' : 'Lesen'; ?></span>
 				</<?php echo $tag; ?>>
 			<?php endwhile; wp_reset_postdata(); ?>
 		</div>
