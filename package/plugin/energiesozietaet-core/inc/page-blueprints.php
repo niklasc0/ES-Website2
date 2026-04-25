@@ -389,15 +389,14 @@ class ESC_Page_Blueprints {
 			) ),
 		) );
 
-		// Content Split: Text links (native Widgets), Einzelleistungen rechts.
-		// Auf Tablet/Mobile Spalten gestapelt: _inline_size_tablet/mobile = 100.
+		// Content Split — DESKTOP-Variante (Text links, Kacheln rechts)
 		$s[] = $b::section_native( array(
-			'css_classes' => 'es-bereich-detail__content',
+			'css_classes' => 'es-bereich-detail__content es-only-desktop',
 			'padding' => array( '120', '0', '120', '0' ),
 			'gap' => 'wider',
 			'column_settings' => array(
-				array( '_column_size' => 40, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
-				array( '_column_size' => 60, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+				array( '_column_size' => 40 ),
+				array( '_column_size' => 60 ),
 			),
 			'cols' => array(
 				array(
@@ -409,6 +408,22 @@ class ESC_Page_Blueprints {
 				array(
 					$b::wid_heading( 'Beratungsfelder', 'p', 'es-eyebrow' ),
 					$b::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $slug ) . '" columns="2" wrapper="es-bereich-detail__einzel"]', 'es-bereich-detail__einzel' ),
+				),
+			),
+		) );
+
+		// Content — MOBILE/TABLET-Variante (Text oben, Kacheln darunter, beide volle Breite)
+		$s[] = $b::section_native( array(
+			'css_classes' => 'es-bereich-detail__content--stacked es-only-mobile-tablet',
+			'padding' => array( '64', '0', '64', '0' ),
+			'cols' => array(
+				array(
+					$b::wid_heading( 'Was wir für Sie tun', 'p', 'es-eyebrow' ),
+					$b::wid_heading( $d['long_title'], 'h2', 'es-split__title' ),
+					$b::wid_text( '<p>' . esc_html( $d['long_copy'][0] ) . '</p>' ),
+					$b::wid_text( '<p>' . esc_html( $d['long_copy'][1] ) . '</p>' ),
+					$b::wid_heading( 'Beratungsfelder', 'p', 'es-eyebrow' ),
+					$b::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $slug ) . '" columns="2" wrapper="es-bereich-detail__einzel-stacked"]', 'es-bereich-detail__einzel-stacked' ),
 				),
 			),
 		) );

@@ -60,15 +60,19 @@ add_action( 'after_setup_theme', 'es_theme_setup' );
  */
 function es_theme_enqueue_assets() {
 	// Inter + JetBrains Mono — sans-only system per Mockup.
-	// (Ideal wäre selbst gehostet; bis dahin Google-Fonts mit display=swap.)
 	wp_enqueue_style(
 		'es-fonts',
 		'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap',
 		array(),
 		null
 	);
-	wp_enqueue_style( 'energiesozietaet', get_stylesheet_uri(), array( 'es-fonts' ), ES_THEME_VERSION );
-	wp_enqueue_script( 'energiesozietaet-ui', ES_THEME_URI . '/assets/js/ui.js', array(), ES_THEME_VERSION, true );
+	// Cache-Busting via filemtime → Browser zieht bei jedem Deploy neue Files.
+	$css_path = ES_THEME_DIR . '/style.css';
+	$js_path  = ES_THEME_DIR . '/assets/js/ui.js';
+	$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : ES_THEME_VERSION;
+	$js_ver   = file_exists( $js_path )  ? (string) filemtime( $js_path )  : ES_THEME_VERSION;
+	wp_enqueue_style( 'energiesozietaet', get_stylesheet_uri(), array( 'es-fonts' ), $css_ver );
+	wp_enqueue_script( 'energiesozietaet-ui', ES_THEME_URI . '/assets/js/ui.js', array(), $js_ver, true );
 }
 add_action( 'wp_enqueue_scripts', 'es_theme_enqueue_assets' );
 
