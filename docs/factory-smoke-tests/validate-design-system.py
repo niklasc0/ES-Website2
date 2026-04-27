@@ -202,7 +202,7 @@ def _flatten_tokens(data):
             expected.add(f"--ds-motion-{sub}-{key}")
 
     for key in data.get("breakpoint", {}):
-        expected.add(f"--ds-bp-{key}")
+        expected.add(f"--ds-breakpoint-{key}")
 
     for key in data.get("layout", {}):
         slug = re.sub(r"([A-Z])", r"-\1", key).lower()
@@ -237,8 +237,28 @@ def validate_tokens_css(json_path, css_path):
 
 # ==== Mockup-Vollständigkeit ====
 
+# Deutsche Umlaut-/ß-Translit für Slugs (Anwendungsregel: ä→ae, ö→oe, ü→ue, ß→ss)
+UMLAUT_MAP = str.maketrans({
+    "ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss",
+})
+
+
+def _slugify(name):
+    """Wandelt einen Sitemap-Page-Namen in einen URL-tauglichen Slug um."""
+    s = name.lower().translate(UMLAUT_MAP)
+    s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+    return s
+
+
 def validate_mockups(briefing_path, mockups_dir):
-    """Aus Briefing-Sitemap die erwarteten Mockup-Files ableiten und prüfen."""
+    """Aus Briefing-Sitemap die erwarteten Mockup-Files ableiten und prüfen.
+
+    Regeln (vgl. claude-design-prompt.md):
+    - Umlaute werden transliteriert (ä→ae, ö→oe, ü→ue, ß→ss).
+    - Sub-Items in der Sitemap-Hierarchie bekommen den Parent-Slug
+      vorangestellt: "Leistungen → Unternehmensberatung" wird zu
+      "leistungen-unternehmensberatung.html".
+    """
     errors = []
     try:
         with open(briefing_path, encoding="utf-8") as f:
@@ -256,15 +276,26 @@ def validate_mockups(briefing_path, mockups_dir):
 
     sitemap_text = m.group(1)
     pages = []
-    for line in sitemap_text.splitlines():
-        line = line.strip("- ").strip()
-        if not line:
+    parent_slug = None
+    for raw in sitemap_text.splitlines():
+        if not raw.strip():
             continue
-        # Slug: lowercase, special chars → -
-        slug = line.lower().strip()
-        slug = re.sub(r"[^a-z0-9]+", "-", slug).strip("-")
-        if slug:
+        # Indent vor "- " bestimmt Hierarchie
+        stripped = raw.lstrip()
+        indent = len(raw) - len(stripped)
+        name = stripped.lstrip("-").strip()
+        if not name:
+            continue
+        slug = _slugify(name)
+        if not slug:
+            continue
+        if indent == 0:
+            parent_slug = slug
             pages.append(slug)
+        else:
+            # Sub-Item: Parent-Prefix
+            full_slug = f"{parent_slug}-{slug}" if parent_slug else slug
+            pages.append(full_slug)
 
     mockups_path = Path(mockups_dir)
     if not mockups_path.is_dir():

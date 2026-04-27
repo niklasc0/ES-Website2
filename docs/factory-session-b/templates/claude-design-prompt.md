@@ -84,6 +84,21 @@ Produziere in einem Schritt:
 
 (B) `mockups/<page-slug>.html` — eine Datei pro Seite aus der Briefing-
     Sitemap. Konventionen:
+
+    Slug-Generierung (Pflicht, keine Abweichungen):
+    - Umlaute werden transliteriert: ä→ae, ö→oe, ü→ue, ß→ss.
+      Beispiel: "Über uns" → ueber-uns.html (NICHT ueberuns oder
+      ueber_uns oder ber-uns).
+    - Eingerueckte Sub-Items in der Sitemap-Hierarchie bekommen den
+      Parent-Slug als Prefix. Beispiel:
+        - Leistungen
+          - Unternehmensberatung
+          - Steuerberatung
+      → leistungen.html, leistungen-unternehmensberatung.html,
+        leistungen-steuerberatung.html.
+    - Sonderzeichen werden zu Bindestrichen, alles lowercase.
+
+    Mockup-Inhalt:
     - Single-File HTML mit eingebettetem CSS.
     - Vanilla CSS (kein Tailwind), CSS-Custom-Properties aus
       design-system.json als :root-Vars eingebunden — entweder inline
@@ -91,10 +106,20 @@ Produziere in einem Schritt:
     - Mobile-first responsive (Breakpoints aus design-system.json).
     - WCAG AA: Kontraste ≥ 4.5:1 für Body-Text, ≥ 3:1 für UI-Elemente.
       Touch-Targets ≥ 44×44px.
-    - Echte Inhalte aus dem Briefing wo angegeben. Wo der Kunde Copy
-      offenlässt: realistische Platzhalter (kein "Lorem ipsum" —
-      stattdessen domänenrelevante deutsche Beispieltexte), klar als
-      Platzhalter erkennbar (z. B. <!-- PLACEHOLDER --> Kommentar).
+
+    Copy-Markierung (zwingend bei selbst-formuliertem Text):
+    - Echte Inhalte aus dem Briefing wo angegeben — uebernimm sie 1:1.
+    - Wo der Kunde Copy offenlaesst und du selbst formulierst (Headlines,
+      Lede-Saetze, CTAs etc.): markiere die Stelle mit HTML-Kommentar
+      <!-- author: claude-design --> direkt vor dem Text. Niklas und
+      der Kunde erkennen so beim Review, was vom Kunden bestaetigt
+      werden muss.
+    - Keine Marketing-Floskeln ("Lorem ipsum" verboten, ebenso "innovative
+      Lösungen", "individuelle Beratung", "Synergie", "ganzheitlich").
+      Stattdessen domaenenrelevante deutsche Saetze, die echte
+      Aussagen machen.
+
+    Bilder & Medien:
     - Bilder als <img>-Tags mit Platzhalter-URL
       (https://placehold.co/1200x800?text=Hero) — keine Pfade in /uploads/.
     - KEIN JS außer es ist für die Interaktion zwingend (z. B.
@@ -132,15 +157,32 @@ Bestätige in einer ersten Antwort:
 ERST nach Rückbestätigung von Niklas (oder klarem Auftrag, ohne
 Rückfragen weiterzumachen) erzeugst du die Artefakte aus (A)-(D).
 
+Q-Antworten respektieren (wichtig):
+Wenn Niklas eine konkrete Rückfrage beantwortet (z. B. "Q1: b —
+Architekturbild im Hero"), setzt du die Antwort 1:1 in den Mockup um.
+Du triffst keine eigenstaendige Design-Entscheidung gegen die Antwort,
+auch wenn dir eine andere Variante visuell besser scheint. Falls du
+eine Alternative fuer ueberlegen haeltst: nenne sie in design-notes.md
+als Beobachtung — aber implementiere die Antwort, die Niklas gegeben
+hat. Der Kunde oder Niklas treffen die Design-Entscheidung, nicht du.
+
 ==== HÄRTEKRITERIEN ====
 
 Vor Auslieferung selbst prüfen:
 
 - [ ] design-system.json validiert gegen das Schema (alle Pflichtfelder).
 - [ ] Jede Seite aus der Briefing-Sitemap hat exakt eine HTML-Mockup-
-      Datei.
+      Datei mit korrektem Slug (Umlaute transliteriert, Sub-Items mit
+      Parent-Prefix — siehe AUFTRAG (B)).
 - [ ] tokens.css ist mit design-system.json synchron — wenn ein Token
-      im JSON, ist es auch im CSS, und umgekehrt.
+      im JSON, ist es auch im CSS, und umgekehrt. Naming exakt nach
+      Schema-Konvention `--ds-<group>-<sub>-<key>` ohne Abkürzungen
+      (also `--ds-breakpoint-tablet`, NICHT `--ds-bp-tablet`).
+- [ ] Alle selbst-formulierten Headlines/Copy mit
+      <!-- author: claude-design --> markiert.
+- [ ] Q-Antworten von Niklas wurden 1:1 umgesetzt (keine eigenstaendige
+      Abweichung; falls Bedenken: in design-notes.md notiert, aber
+      umgesetzt).
 - [ ] Alle Mockups öffnen sich ohne Console-Errors im Browser.
 - [ ] Alle Mockups sind mobile (375px) und desktop (1280px) responsive.
 - [ ] Alle Mockups erreichen WCAG-AA-Kontrast.

@@ -24,6 +24,17 @@ WordPress-/Elementor-Site bauen kann.
 - **Keine Komponenten-Specs in v1**: Komponenten beschreibt der
   HTML-Mockup. Tokens sind die strikte Quelle, Komponenten die lockere.
 
+### Erweiterungs-Regel
+
+- **Innerhalb existierender Gruppen** dürfen zusätzliche Tokens ergänzt
+  werden, wenn sie konsistent zur Gruppen-Konvention sind und mit
+  `$description` begründet sind. Beispiel: `color.inkSoft`,
+  `color.accentInk`, `motion.easing.out`, `spacing.5/10/40`.
+- **Neue Top-Level-Gruppen** (z. B. `gradient`, `colorDark`, `components`)
+  brauchen einen Schema-Bump (`design-system-v2`) — nicht ad-hoc anlegen.
+- **Pflichtfelder** dürfen nicht weggelassen werden, auch wenn sie
+  visuell nicht eingesetzt werden — Defaults sind besser als „fehlt".
+
 ---
 
 ## Top-Level-Struktur
@@ -416,6 +427,45 @@ Niklas-Celecki-Mandanten.
   ]
 }
 ```
+
+---
+
+## CSS-Variable Naming-Konvention (für `tokens.css`)
+
+Wenn Claude Design parallel zur `design-system.json` eine `tokens.css`
+mitliefert (empfohlen), gilt für die `:root`-Custom-Properties dort
+**strikt** dieses Schema:
+
+```
+--ds-<group>-<sub>-<key>
+```
+
+mit `<group>` und `<sub>` jeweils **vollständig** ausgeschrieben in
+**kebab-case, lowercase**. Niemals abkürzen.
+
+| Token im JSON | CSS-Variable in tokens.css |
+|---|---|
+| `color.ink` | `--ds-color-ink` |
+| `color.paperWarm` | `--ds-color-paper-warm` |
+| `spacing.4` | `--ds-spacing-4` |
+| `typography.fontFamily.display` | `--ds-typography-font-family-display` |
+| `typography.fontSize.h1` | `--ds-typography-font-size-h1` |
+| `typography.lineHeight.base` | `--ds-typography-line-height-base` |
+| `radius.pill` | `--ds-radius-pill` |
+| `shadow.sm` | `--ds-shadow-sm` |
+| `motion.easing.default` | `--ds-motion-easing-default` |
+| `motion.duration.base` | `--ds-motion-duration-base` |
+| `breakpoint.tablet` | `--ds-breakpoint-tablet` (NICHT `--ds-bp-tablet`) |
+| `layout.containerMax` | `--ds-layout-container-max` |
+| `layout.headerHeightDesktop` | `--ds-layout-header-height-desktop` |
+
+**Camel-Case in JSON-Keys** wird vor dem Mapping in kebab-case zerlegt:
+`paperWarm` → `paper-warm`, `containerMax` → `container-max`,
+`headerHeightDesktop` → `header-height-desktop`.
+
+Im Theme-Code wird dann ein Alias-Layer auf projektspezifische Namen
+gemappt, siehe Playbook
+[`design-tokens-to-project.md`](../playbooks/design-tokens-to-project.md).
 
 ---
 
