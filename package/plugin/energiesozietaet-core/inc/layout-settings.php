@@ -66,7 +66,12 @@ class ESC_Layout_Settings {
 		if ( $o['header_sticky'] ) { $flags[] = 'es-header-sticky'; }
 		if ( $o['back_to_top']   ) { $flags[] = 'es-btt-on'; }
 		if ( $o['hero_scroll']   ) { $flags[] = 'es-hero-scroll-on'; }
-		echo '<script>document.documentElement.classList.add(' . implode( ',', array_map( function ( $c ) { return '"' . esc_js( $c ) . '"'; }, $flags ) ) . ');document.documentElement.dataset.escBtt=' . (int) $o['btt_threshold'] . ';</script>';
+		// classList.add() ohne Argumente wirft TypeError → leere Argumentliste
+		// vermeiden, indem wir gar nichts adden, wenn $flags leer ist.
+		$add = $flags
+			? 'document.documentElement.classList.add(' . implode( ',', array_map( function ( $c ) { return '"' . esc_js( $c ) . '"'; }, $flags ) ) . ');'
+			: '';
+		echo '<script>' . $add . 'document.documentElement.dataset.escBtt=' . (int) $o['btt_threshold'] . ';</script>';
 	}
 
 	/** Back-To-Top-Button ins Footer-Markup hängen, wenn aktiviert. */

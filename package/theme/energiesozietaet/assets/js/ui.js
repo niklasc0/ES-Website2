@@ -122,8 +122,10 @@
 		});
 	}
 
-	// 3c. Back-to-top button
-	var btt = document.querySelector('.es-btt');
+	// 3c. Back-to-top button (nur initialisieren, wenn Toggle im Backend an ist)
+	var btt = document.documentElement.classList.contains('es-btt-on')
+		? document.querySelector('.es-btt')
+		: null;
 	if (btt) {
 		var threshold = parseInt(document.documentElement.dataset.escBtt || '400', 10);
 		var bttToggle = function () {

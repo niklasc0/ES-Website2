@@ -1895,7 +1895,12 @@ a, span, p, li {
     .es-news-archive__featured > div:first-child { aspect-ratio: 16/9 !important; }
 }
 
-/* G) Universal: Title-Hyphenation auf langen Wörtern (mobile) */
+/* G) Universal: Title-Wrap auf langen Woertern (mobile)
+   Nur lange Woerter umbrechen, die SELBST nicht in eine Zeile passen.
+   `overflow-wrap: break-word` greift erst, wenn ein Wort alleine zu
+   breit ist. `hyphens: auto` und `overflow-wrap: anywhere` wuerden
+   bereits passende Woerter mid-word trennen, wenn vorhergehende Woerter
+   in der Zeile stehen — das wollen wir nicht. */
 @media (max-width: 768px) {
     .es-article__title,
     .es-team-single__name,
@@ -1903,10 +1908,10 @@ a, span, p, li {
     .es-stage h1,
     .es-stage h2,
     .es-stage h3 {
-        hyphens: auto;
-        -webkit-hyphens: auto;
-        overflow-wrap: anywhere;
+        overflow-wrap: break-word;
         word-break: normal;
+        hyphens: manual;
+        -webkit-hyphens: manual;
     }
 }
 
@@ -1979,10 +1984,12 @@ a, span, p, li {
 /* E) Header: Skip-Link aus Vollbild-Mobile-Menu sicher ausblenden */
 .es-header.is-nav-open .screen-reader-text { display: none; }
 
-/* F) Hyphens auf .esc-card Title für lange News-Titel mobile */
+/* F) Title-Wrap auf .esc-card und News-Listings (mobile) — Wort wird nur
+   umgebrochen, wenn es alleine zu lang ist. Siehe v14/G fuer die Logik. */
 @media (max-width: 600px) {
     .esc-card__title, .es-news-archive__featured h2, .es-news-archive__grid h3 {
-        hyphens: auto; -webkit-hyphens: auto; overflow-wrap: anywhere;
+        overflow-wrap: break-word; word-break: normal;
+        hyphens: manual; -webkit-hyphens: manual;
     }
 }
 
@@ -3029,3 +3036,40 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
     }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   FIX v28 — Back-To-Top-Toggle & Leistungen-Uebersicht Orphan-Fix
+   ═══════════════════════════════════════════════════════════════ */
+
+/* (1) Back-To-Top: Wenn Toggle im Backend (Design > Layout) aus ist, fehlt
+   die `es-btt-on`-Klasse am <html>-Element. Belt-and-Suspenders: auch wenn
+   das Button-Markup aus irgendeinem Grund (Cache, Plugin) im DOM landet,
+   wird es per CSS verlaesslich versteckt. Die JS-Init ist zusaetzlich auf
+   die Klasse gegated. */
+html:not(.es-btt-on) .es-btt { display: none !important; }
+
+/* (2) Leistungen-Uebersicht: Bei nicht-vollstaendiger letzter Zeile (z. B.
+   7 Beratungsfelder in 3-Spalten-Grid) darf die rechte Aussenrahmenlinie
+   in der letzten Zeile nicht bis zum rechten Section-Rand laufen, sondern
+   muss an der rechten Kante der letzten Kachel enden.
+   Loesung: Container traegt nur noch border-left, die rechte Aussenlinie
+   wird per `border-right` an jeder "letzten Kachel der Zeile" gezogen
+   (3n) sowie an der letzten Kachel ueberhaupt (`:last-child`) — bei
+   Orphans liegt die Linie damit automatisch an der Zellengrenze. */
+.es-bereich__inner > .es-bereich__topics {
+    border-right: 0;
+}
+.es-bereich__inner > .es-bereich__topics > .es-bereich__topic:nth-child(3n),
+.es-bereich__inner > .es-bereich__topics > .es-bereich__topic:last-child {
+    border-right: var(--es-border);
+}
+/* Mobile: Grid wechselt auf 2-Spalten (vgl. Z. 1628) — Selektoren
+   anpassen: 3n entfaellt, stattdessen 2n + last-child. */
+@media (max-width: 768px) {
+    .es-bereich__inner > .es-bereich__topics > .es-bereich__topic:nth-child(3n) {
+        border-right: 0;
+    }
+    .es-bereich__inner > .es-bereich__topics > .es-bereich__topic:nth-child(2n),
+    .es-bereich__inner > .es-bereich__topics > .es-bereich__topic:last-child {
+        border-right: var(--es-border);
+    }
+}
