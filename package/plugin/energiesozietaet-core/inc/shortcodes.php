@@ -425,8 +425,9 @@ class ESC_Shortcodes {
 		<div class="esc-grid esc-grid--cols-<?php echo (int) $atts['columns']; ?>">
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$thumb_id = get_post_thumbnail_id();
+				$felder   = get_the_terms( get_the_ID(), 'es_beratungsfeld' );
 				$cats     = get_the_terms( get_the_ID(), 'es_news_kategorie' );
-				$cat_name = ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : 'Aktuelles'; ?>
+				$cat_name = ( $felder && ! is_wp_error( $felder ) ) ? $felder[0]->name : ( ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : 'Aktuelles' ); ?>
 				<a class="esc-card es-reveal" href="<?php the_permalink(); ?>">
 					<div class="esc-card__media">
 						<?php if ( $thumb_id ) {

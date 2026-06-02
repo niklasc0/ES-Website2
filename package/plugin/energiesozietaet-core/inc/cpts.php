@@ -82,7 +82,7 @@ class ESC_CPTs {
 	}
 
 	public static function register_taxonomies() {
-		register_taxonomy( 'es_beratungsfeld', array( 'es_einzelleistung' ), array(
+		register_taxonomy( 'es_beratungsfeld', array( 'es_einzelleistung', 'es_news' ), array(
 			'label'             => __( 'Beratungsfelder', 'energiesozietaet-core' ),
 			'labels'            => array(
 				'name'          => 'Beratungsfelder',

@@ -8,8 +8,9 @@
 get_header();
 while ( have_posts() ) : the_post();
 	$thumb_id = get_post_thumbnail_id();
+	$felder   = get_the_terms( get_the_ID(), 'es_beratungsfeld' );
 	$cats     = get_the_terms( get_the_ID(), 'es_news_kategorie' );
-	$cat_name = ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : 'Aktuelles';
+	$cat_name = ( $felder && ! is_wp_error( $felder ) ) ? $felder[0]->name : ( ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : 'Aktuelles' );
 	$content  = trim( get_the_content() );
 	$words    = str_word_count( wp_strip_all_tags( $content ) );
 	$reading  = max( 1, (int) round( $words / 220 ) ); ?>
