@@ -183,6 +183,13 @@ em { font-style: normal; color: var(--es-accent); }
 html.js .es-reveal { opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--es-easing), transform 600ms var(--es-easing); }
 html.js .es-reveal.is-in,
 html.js .es-reveal.is-visible { opacity: 1; transform: none; }
+/* Fix v33b: .es-reveal-Transition (oben) listet kein background -> bei
+   esc-Karten mit .es-reveal (z.B. Fachbeitraege) springt der Hover-Hintergrund.
+   Hier background ergaenzen; Reveal (opacity/transform 600ms) bleibt. */
+html.js .esc-card.es-reveal {
+    transition: opacity 600ms var(--es-easing), transform 600ms var(--es-easing),
+                background 700ms ease-in-out, border-color 260ms var(--es-easing);
+}
 
 /* ─────────────────────────────────────────────────────────────
    Header (G1)
