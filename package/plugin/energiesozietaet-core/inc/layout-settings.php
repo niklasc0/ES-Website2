@@ -50,12 +50,13 @@ class ESC_Layout_Settings {
 
 	public static function menu() {
 		add_submenu_page(
-			'themes.php',
+			'es-theme-options',
 			'Layout',
 			'Layout',
 			'manage_options',
 			'esc-layout',
-			array( __CLASS__, 'render' )
+			array( __CLASS__, 'render' ),
+			30
 		);
 	}
 

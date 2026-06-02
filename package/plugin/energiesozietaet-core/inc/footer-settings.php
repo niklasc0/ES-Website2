@@ -103,7 +103,7 @@ class ESC_Footer_Settings {
 	}
 
 	public static function menu() {
-		add_submenu_page( 'themes.php', 'Footer', 'Footer', 'manage_options', 'esc-footer', array( __CLASS__, 'render' ) );
+		add_submenu_page( 'es-theme-options', 'Footer', 'Footer', 'manage_options', 'esc-footer', array( __CLASS__, 'render' ), 40 );
 	}
 
 	protected static function input( $name, $label, $hint = '' ) {

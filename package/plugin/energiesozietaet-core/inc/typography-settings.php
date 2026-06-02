@@ -72,12 +72,13 @@ class ESC_Typography_Settings {
 
 	public static function menu() {
 		add_submenu_page(
-			'themes.php',
+			'es-theme-options',
 			'Typografie',
 			'Typografie',
 			'manage_options',
 			'esc-typography',
-			array( __CLASS__, 'render' )
+			array( __CLASS__, 'render' ),
+			10
 		);
 	}
 

@@ -59,12 +59,14 @@ class ESC_Contact_Form {
 	}
 
 	public static function menu() {
-		add_options_page(
+		add_submenu_page(
+			'es-theme-options',
 			'Kontaktformular',
 			'Kontaktformular',
 			'manage_options',
 			'esc-contact',
-			array( __CLASS__, 'render_settings' )
+			array( __CLASS__, 'render_settings' ),
+			50
 		);
 	}
 

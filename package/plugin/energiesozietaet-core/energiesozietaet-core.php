@@ -28,6 +28,8 @@ require_once ESC_DIR . 'inc/elementor-builder.php';
 require_once ESC_DIR . 'inc/page-blueprints.php';
 require_once ESC_DIR . 'inc/importer.php';
 require_once ESC_DIR . 'inc/admin.php';
+require_once ESC_DIR . 'inc/theme-options.php';
+require_once ESC_DIR . 'inc/colors-settings.php';
 require_once ESC_DIR . 'inc/footer-settings.php';
 require_once ESC_DIR . 'inc/karriere-settings.php';
 require_once ESC_DIR . 'inc/typography-settings.php';
