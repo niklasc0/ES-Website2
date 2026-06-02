@@ -44,3 +44,18 @@ kann es also gezielt überschreiben.
 Nur nötig, wenn eine Änderung das Plugin betrifft (CPTs, Shortcodes,
 Importer, Builder). Claude weist explizit darauf hin. Auch ein
 Plugin-Upload überschreibt keine Inhalte — nur ein „erzwingen"-Import tut das.
+
+## Konvention: native Elemente statt Shortcodes
+
+So **wenig wie möglich als Shortcode**, so **viel wie möglich als native
+WordPress-/Elementor-Elemente** — damit Inhalte/Layout in Elementor
+anpassbar bleiben.
+
+- **Layout & Inhalt** (Bilder, Überschriften, Texte, Spalten, Zitate):
+  native Elementor-Widgets. Claude liefert dazu Ziel-Render + ggf.
+  On-Brand-CSS-Klassen (die man am Widget setzt) + Schritt-für-Schritt.
+- **Shortcodes nur für echte Dynamik**, die nativ nicht geht (z. B. Listen,
+  die sich automatisch aus CPTs/Meta füllen: `[es_team]`, `[es_news]`,
+  `[es_karriere]` …). Solche dynamischen Inhalte bleiben Shortcodes.
+- **Statische, einmalige Inhalte → nie in einen Shortcode** gießen.
+
