@@ -20,6 +20,40 @@ class ESC_Shortcodes {
 		add_shortcode( 'es_pub_teaser',      array( __CLASS__, 'pub_teaser' ) );
 		add_shortcode( 'es_ansprechpartner', array( __CLASS__, 'ansprechpartner' ) );
 		add_shortcode( 'es_mandanten',       array( __CLASS__, 'mandanten' ) );
+		add_shortcode( 'es_field_image',     array( __CLASS__, 'field_image' ) );
+
+		// Nur [es_field_image] in Elementor-HTML-Widgets ausfuehren
+		// (HTML-Widgets verarbeiten Shortcodes sonst nicht).
+		add_filter( 'elementor/widget/render_content', array( __CLASS__, 'run_field_image_in_html' ), 10, 2 );
+	}
+
+	public static function run_field_image_in_html( $content, $widget ) {
+		if ( is_object( $widget ) && method_exists( $widget, 'get_name' )
+			&& 'html' === $widget->get_name() && false !== strpos( $content, '[es_field_image' ) ) {
+			return do_shortcode( $content );
+		}
+		return $content;
+	}
+
+	/**
+	 * [es_field_image field="steuerberatung"]
+	 * Beitragsbild der Beratungsfeld-Seite (sonst Platzhalter mit grünem Schimmer).
+	 */
+	public static function field_image( $atts ) {
+		$atts  = shortcode_atts( array( 'field' => '' ), $atts, 'es_field_image' );
+		$slug  = sanitize_title( $atts['field'] );
+		$page  = $slug ? get_page_by_path( $slug ) : null;
+		$thumb = $page ? get_post_thumbnail_id( $page->ID ) : 0;
+		$title = $page ? $page->post_title : ucwords( str_replace( '-', ' ', $slug ) );
+		if ( $thumb ) {
+			return '<div class="es-bereich__img">'
+				. wp_get_attachment_image( $thumb, 'es-wide', false, array(
+					'style' => 'width:100%;height:100%;object-fit:cover;display:block;',
+					'alt'   => esc_attr( $title ),
+				) )
+				. '</div>';
+		}
+		return '<div class="es-bereich__img"><div class="es-ph-cat"><span>' . esc_html( $title ) . '</span></div></div>';
 	}
 
 	/**
