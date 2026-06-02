@@ -223,7 +223,7 @@ class ESC_Contact_Form {
 			<?php endif; ?>
 			<?php if ( $opts['show_topic'] && $topics ) : ?>
 				<div class="es-kontakt-form__radio-group">
-					<span class="es-kontakt-form__group-label">Betrifft</span>
+					<span class="es-kontakt-form__group-label">Betreff</span>
 					<div class="es-kontakt-form__pills">
 						<?php foreach ( $topics as $i => $t ) : ?>
 							<label><input type="radio" name="thema" value="<?php echo esc_attr( $t ); ?>"<?php checked( 0, $i ); ?>> <?php echo esc_html( $t ); ?></label>
