@@ -121,8 +121,7 @@ class ESC_MetaBoxes {
 		echo '<p><label><strong>Kernpunkte (eine Zeile = ein Bullet)</strong></label>';
 		echo '<textarea name="es_bullets_raw" rows="6" style="width:100%;">' . esc_textarea( $txt ) . '</textarea></p>';
 
-		$ap_opts = array( '' => '— keiner —' ) + self::team_options();
-		self::field( 'Ansprechpartner (Kontaktkarte)', 'es_ansprechpartner', get_post_meta( $post->ID, 'es_ansprechpartner', true ), 'select', $ap_opts );
+		self::field( 'Ansprechpartner (Kontaktkarte)', 'es_ansprechpartner', get_post_meta( $post->ID, 'es_ansprechpartner', true ), 'select', array( 'options' => self::team_options() ) );
 	}
 
 	public static function box_karriere( $post ) {
