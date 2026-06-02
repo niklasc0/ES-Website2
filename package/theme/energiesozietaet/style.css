@@ -729,7 +729,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 /* ─────────────────────────────────────────────────────────────
    Service-Card Hover (Home + Leistungen)
    ───────────────────────────────────────────────────────────── */
-.esc-card { transition: transform 260ms var(--es-easing), border-color 260ms var(--es-easing), background 450ms var(--es-easing); }
+.esc-card { transition: transform 260ms var(--es-easing), border-color 260ms var(--es-easing), background 700ms ease-in-out; }
 .esc-card:hover { background: var(--es-paper-warm); border-color: var(--es-ink); }
 
 /* ─────────────────────────────────────────────────────────────
@@ -985,7 +985,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     border: var(--es-border);
     background: var(--es-paper);
     min-height: 380px;
-    transition: background 450ms var(--es-easing), border-color 200ms var(--es-easing), transform 200ms var(--es-easing);
+    transition: background 700ms ease-in-out, border-color 200ms var(--es-easing), transform 200ms var(--es-easing);
 }
 .elementor-column.es-service-card:hover .elementor-element-populated {
     background: var(--es-paper-warm); border-color: var(--es-ink); transform: translateY(-2px);
@@ -1163,7 +1163,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     background: var(--es-paper);
     border: var(--es-border);
     min-height: 380px;
-    transition: background 450ms var(--es-easing), border-color 240ms var(--es-easing), transform 240ms var(--es-easing);
+    transition: background 700ms ease-in-out, border-color 240ms var(--es-easing), transform 240ms var(--es-easing);
 }
 .es-home-services > .elementor-container > .elementor-column:hover > .elementor-widget-wrap,
 .es-home-services > .elementor-container > .elementor-column:hover > .elementor-element-populated {
@@ -1442,7 +1442,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 /* Background transition nur auf Inhalt, nicht auf ::before */
 .es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
 .es-home-services > .elementor-container > .elementor-column > .elementor-element-populated {
-    transition: border-color 240ms var(--es-easing), transform 240ms var(--es-easing), background-color 240ms var(--es-easing);
+    transition: border-color 240ms var(--es-easing), transform 240ms var(--es-easing), background-color 700ms ease-in-out;
 }
 
 /* D) Native Elementor Button-Widget — sieht 1:1 aus wie unsere .es-btn.
@@ -3169,11 +3169,16 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-stage--warm .es-gf-quote__name { color: var(--es-paper); }
 .es-stage--warm .es-gf-quote__role { color: rgba(255,255,255,0.7); }
 
-/* v32-3) Weisse esc-/LinkedIn-Karten in warm: Default-Text dunkel halten
-   (Hover -> dunkler Hintergrund + heller Text bleibt via Fix v31). */
-.es-stage--warm .esc-card__title { color: var(--es-ink); }
-.es-stage--warm .esc-card__text  { color: var(--es-text-mute); }
-.es-stage--warm .esc-card__link  { color: var(--es-ink); }
+/* v32-3) Weisse esc-Karten in warm: ALLE Text-Elemente dunkel halten — auch
+   Karten mit plain <h3>/<p> (Publikations-/Fachbeitrags-Teaser, .esc-card h3
+   ohne __title-Klasse). Hover -> dunkler Hintergrund + heller Text. */
+.es-stage--warm .esc-card h2, .es-stage--warm .esc-card h3, .es-stage--warm .esc-card h4,
+.es-stage--warm .esc-card .esc-card__title { color: var(--es-ink); }
+.es-stage--warm .esc-card p, .es-stage--warm .esc-card .esc-card__text { color: var(--es-text-mute); }
+.es-stage--warm .esc-card .esc-card__link { color: var(--es-ink); }
+.esc-card:hover h2, .esc-card:hover h3, .esc-card:hover h4,
+.esc-card:hover .esc-card__title, .esc-card:hover p,
+.esc-card:hover .esc-card__text, .esc-card:hover .esc-card__link { color: var(--es-paper); }
 
 /* v32-4) Service-Card-CTA "Mehr erfahren" beim Hover hell (Home/Leistungen) */
 .es-home-services > .elementor-container > .elementor-column:hover .es-link {
@@ -3196,12 +3201,14 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-kontakt-general a { color: var(--es-paper) !important; }
 .es-kontakt-general > div:last-child { color: rgba(255,255,255,0.7); }
 
-/* v32-9) Beratungsfeld-Kacheln klar klickbar: Lift + Akzent-Titel + Dot
-   (kein bg-Fill -> funktioniert auf hellem UND dunklem Grund). */
-.es-bereich__topic { transition: transform 240ms var(--es-easing), border-color 240ms var(--es-easing); }
-.es-bereich__topic:hover { transform: translateY(-3px); }
+/* v32-9) Beratungsfeld-Kacheln klar klickbar: der INHALT liftet (nicht die
+   Kachel mit den Trennlinien), Akzent-Titel + groesserer Punkt. Hell + dunkel. */
+.es-bereich__topic { transition: border-color 240ms var(--es-easing); }
+.es-bereich__topic-name, .es-bereich__topic-desc { transition: transform 280ms var(--es-easing); }
+.es-bereich__topic:hover .es-bereich__topic-name,
+.es-bereich__topic:hover .es-bereich__topic-desc { transform: translateY(-3px); }
 .es-bereich__topic:hover .es-bereich__topic-name h3 { color: var(--es-accent); }
-.es-bereich__topic-name > span:first-child { transition: transform 240ms var(--es-easing); }
+.es-bereich__topic-name > span:first-child { transition: transform 280ms var(--es-easing); }
 .es-bereich__topic:hover .es-bereich__topic-name > span:first-child { transform: scale(1.6); }
 
 /* Menü: aktives Beratungsfeld ohne Farb-Hintergrund (gruene Linie reicht) */
