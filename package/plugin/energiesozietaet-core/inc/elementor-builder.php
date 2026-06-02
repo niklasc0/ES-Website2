@@ -66,7 +66,7 @@ class ESC_Elementor_Builder {
 			$settings['background_color']      = '#0E1A2B';
 		} elseif ( 'warm' === $variant ) {
 			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#F6F4EF';
+			$settings['background_color']      = '#303030';
 		} elseif ( 'cool' === $variant ) {
 			$settings['background_background'] = 'classic';
 			$settings['background_color']      = '#F3F5F8';
@@ -561,7 +561,7 @@ class ESC_Elementor_Builder {
 			$settings['background_color']      = '#0E1A2B';
 		} elseif ( 'warm' === $args['variant'] ) {
 			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#F6F4EF';
+			$settings['background_color']      = '#303030';
 		} elseif ( 'cool' === $args['variant'] ) {
 			$settings['background_background'] = 'classic';
 			$settings['background_color']      = '#F3F5F8';

@@ -127,7 +127,7 @@ class ESC_Shortcodes {
 		ob_start(); ?>
 		<div class="es-news-archive">
 			<a class="es-news-archive__featured" href="<?php echo esc_url( $f_link ); ?>" style="display:grid;grid-template-columns:1.3fr 1fr;gap:56px;margin-bottom:56px;color:#0E1A2B;">
-				<div style="aspect-ratio:16/10;overflow:hidden;background:#F6F4EF;"><?php echo $f_img; ?></div>
+				<div style="aspect-ratio:16/10;overflow:hidden;background:#303030;"><?php echo $f_img; ?></div>
 				<div style="align-self:center;">
 					<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;font-family:var(--es-font-mono);">Featured &middot; <?php echo esc_html( $f_date ); ?></div>
 					<h2 style="font-size:clamp(28px,3.4vw,48px);line-height:1.1;font-weight:400;letter-spacing:-0.03em;margin:0 0 24px;"><?php echo esc_html( $f_title ); ?></h2>
@@ -161,7 +161,7 @@ class ESC_Shortcodes {
 					$thumb_id = get_post_thumbnail_id();
 					$img = $thumb_id ? wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>'; ?>
 					<a href="<?php the_permalink(); ?>" style="display:grid;grid-template-columns:200px 1fr;gap:28px;color:#0E1A2B;">
-						<div style="width:200px;height:160px;overflow:hidden;background:#F6F4EF;"><?php echo $img; ?></div>
+						<div style="width:200px;height:160px;overflow:hidden;background:#303030;"><?php echo $img; ?></div>
 						<div>
 							<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;font-family:var(--es-font-mono);"><?php echo esc_html( get_the_date() ); ?></div>
 							<h3 style="font-size:20px;font-weight:500;line-height:1.25;letter-spacing:-0.015em;margin:0 0 10px;"><?php the_title(); ?></h3>

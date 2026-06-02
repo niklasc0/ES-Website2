@@ -42,7 +42,7 @@ function es_theme_setup() {
 		array( 'name' => __( 'Tinte', 'energiesozietaet' ),        'slug' => 'ink',        'color' => '#0E1A2B' ),
 		array( 'name' => __( 'Tinte weich', 'energiesozietaet' ),  'slug' => 'ink-soft',   'color' => '#1A2740' ),
 		array( 'name' => __( 'Papier', 'energiesozietaet' ),       'slug' => 'paper',      'color' => '#FFFFFF' ),
-		array( 'name' => __( 'Papier warm', 'energiesozietaet' ),  'slug' => 'paper-warm', 'color' => '#F6F4EF' ),
+		array( 'name' => __( 'Papier warm', 'energiesozietaet' ),  'slug' => 'paper-warm', 'color' => '#303030' ),
 		array( 'name' => __( 'Papier kühl', 'energiesozietaet' ),  'slug' => 'paper-cool', 'color' => '#F3F5F8' ),
 		array( 'name' => __( 'Akzent', 'energiesozietaet' ),       'slug' => 'accent',     'color' => '#95D708' ),
 		array( 'name' => __( 'Text', 'energiesozietaet' ),         'slug' => 'text',       'color' => '#0E1A2B' ),
