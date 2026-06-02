@@ -57,7 +57,7 @@ while ( have_posts() ) : the_post();
 					<div class="es-leistung__card">
 						<div class="es-eyebrow">Kontakt</div>
 						<p class="es-leistung__card-title">Persönliche Beratung.</p>
-						<p class="es-leistung__card-text">Sie haben ein konkretes Vorhaben zum Thema <?php echo esc_html( get_the_title() ); ?>? Wir ordnen es fachübergreifend ein — auf den Punkt.</p>
+						<p class="es-leistung__card-text">Sie haben ein konkretes Vorhaben zum Thema <?php echo esc_html( get_the_title() ); ?>? Wir beraten Sie gern!</p>
 						<a class="es-btn es-btn--paper" href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">Termin anfragen →</a>
 					</div>
 					<a class="es-leistung__back" href="<?php echo esc_url( $bf_url ); ?>">← Alle Leistungen: <?php echo esc_html( $bf_name ); ?></a>
