@@ -426,7 +426,7 @@ class ESC_Shortcodes {
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$thumb_id = get_post_thumbnail_id();
 				$cats     = get_the_terms( get_the_ID(), 'es_news_kategorie' );
-				$cat_name = ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : 'Kanzlei'; ?>
+				$cat_name = ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : 'Aktuelles'; ?>
 				<a class="esc-card es-reveal" href="<?php the_permalink(); ?>">
 					<div class="esc-card__media">
 						<?php if ( $thumb_id ) {
