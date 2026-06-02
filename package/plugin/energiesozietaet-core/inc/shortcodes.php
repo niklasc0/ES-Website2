@@ -337,15 +337,49 @@ class ESC_Shortcodes {
 		$atts = shortcode_atts( array( 'columns' => 3, 'limit' => -1 ), $atts, 'es_karriere' );
 		$q = new WP_Query( array( 'post_type' => 'es_karriere', 'posts_per_page' => (int) $atts['limit'] ) );
 		if ( ! $q->have_posts() ) { return ''; }
+		$field_map = array(
+			'rechtsberatung'       => 'Rechtsberatung',
+			'steuerberatung'       => 'Steuerberatung',
+			'unternehmensberatung' => 'Unternehmensberatung',
+			'management'           => 'Büroleitung',
+		);
 		ob_start(); ?>
 		<div class="esc-grid esc-grid--cols-<?php echo (int) $atts['columns']; ?>">
 			<?php while ( $q->have_posts() ) : $q->the_post();
-				$dept = get_post_meta( get_the_ID(), 'es_department', true ); ?>
+				$thumb_id   = get_post_thumbnail_id();
+				$department = (string) get_post_meta( get_the_ID(), 'es_department', true );
+				$field_slug = (string) get_post_meta( get_the_ID(), 'es_field', true );
+				$field_label = ( $field_slug && isset( $field_map[ $field_slug ] ) ) ? $field_map[ $field_slug ] : '';
+				if ( ! $field_label ) {
+					$lower = strtolower( $department );
+					if ( strpos( $lower, 'recht' ) !== false )      { $field_label = 'Rechtsberatung'; }
+					elseif ( strpos( $lower, 'steuer' ) !== false ) { $field_label = 'Steuerberatung'; }
+					elseif ( strpos( $lower, 'consulting' ) !== false || strpos( $lower, 'unternehmen' ) !== false ) { $field_label = 'Unternehmensberatung'; }
+					else { $field_label = 'Consulting'; }
+				}
+				$location = (string) get_post_meta( get_the_ID(), 'es_location', true );
+				if ( ! $location ) { $location = 'Düsseldorf'; }
+				$emp_type = (string) get_post_meta( get_the_ID(), 'es_employment_type', true );
+				if ( ! $emp_type ) { $emp_type = 'Vollzeit'; }
+				$start_date = (string) get_post_meta( get_the_ID(), 'es_start_date', true );
+				$entry_str  = $start_date ? date_i18n( 'j. F Y', strtotime( $start_date ) ) : 'ab sofort';
+				?>
 				<a class="esc-card es-reveal" href="<?php the_permalink(); ?>">
+					<div class="esc-card__media">
+						<?php if ( $thumb_id ) {
+							echo wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy' ) );
+						} else { ?>
+							<div class="es-ph-cat"><span><?php echo esc_html( $field_label ); ?></span></div>
+						<?php } ?>
+					</div>
 					<div class="esc-card__body">
-						<div class="esc-card__meta"><?php echo esc_html( $dept ); ?></div>
 						<h3 class="esc-card__title"><?php the_title(); ?></h3>
-						<p class="esc-card__text"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
+						<dl class="esc-card__facts">
+							<div><dt>Bereich</dt><dd><?php echo esc_html( $field_label ); ?></dd></div>
+							<div><dt>Standort</dt><dd><?php echo esc_html( $location ); ?></dd></div>
+							<div><dt>Anstellung</dt><dd><?php echo esc_html( $emp_type ); ?></dd></div>
+							<div><dt>Eintritt</dt><dd><?php echo esc_html( $entry_str ); ?></dd></div>
+						</dl>
 						<span class="esc-card__link">Zur Stellenbeschreibung →</span>
 					</div>
 				</a>

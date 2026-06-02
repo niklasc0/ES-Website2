@@ -3265,3 +3265,9 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
     .es-leistung__aside { position: static; max-width: 440px; }
     .es-leistung__main .es-article__body { max-width: none; }
 }
+
+/* Karriere-Karten: Eckdaten-Liste statt Excerpt (Bereich/Standort/...) */
+.esc-card__facts { margin: 0; display: grid; gap: 8px; }
+.esc-card__facts > div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; align-items: baseline; }
+.esc-card__facts dt { font-family: var(--es-font-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--es-text-soft); }
+.esc-card__facts dd { margin: 0; font-size: 15px; line-height: 1.35; color: var(--es-text); }
