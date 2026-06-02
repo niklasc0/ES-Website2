@@ -15,6 +15,9 @@ while ( have_posts() ) : the_post();
 	$closing = es_meta( 'es_closing' );
 	$bf_url  = $bf ? home_url( '/' . $bf->slug . '/' ) : home_url( '/leistungen/' );
 	$bf_name = $bf ? $bf->name : 'Leistungen';
+	$ap_id   = (int) es_meta( 'es_ansprechpartner' );
+	$ap      = $ap_id ? get_post( $ap_id ) : null;
+	$ap_ok   = ( $ap && 'es_team' === $ap->post_type && 'publish' === $ap->post_status );
 	?>
 
 	<section class="es-leistung">
@@ -55,8 +58,22 @@ while ( have_posts() ) : the_post();
 
 				<aside class="es-leistung__aside">
 					<div class="es-leistung__card">
-						<div class="es-eyebrow">Kontakt</div>
-						<p class="es-leistung__card-title">Persönliche Beratung.</p>
+						<?php if ( $ap_ok ) :
+							$ap_role  = get_post_meta( $ap->ID, 'es_role', true );
+							$ap_photo = get_the_post_thumbnail( $ap->ID, 'es-team', array( 'style' => 'width:100%;height:100%;object-fit:cover;', 'alt' => esc_attr( $ap->post_title ) ) );
+							?>
+							<div class="es-eyebrow">Ihr Ansprechpartner</div>
+							<div class="es-leistung__card-person">
+								<div class="es-leistung__card-photo"><?php echo $ap_photo; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+								<div>
+									<div class="es-leistung__card-name"><?php echo esc_html( $ap->post_title ); ?></div>
+									<?php if ( $ap_role ) : ?><div class="es-leistung__card-role"><?php echo esc_html( $ap_role ); ?></div><?php endif; ?>
+								</div>
+							</div>
+						<?php else : ?>
+							<div class="es-eyebrow">Kontakt</div>
+							<p class="es-leistung__card-title">Persönliche Beratung.</p>
+						<?php endif; ?>
 						<p class="es-leistung__card-text">Sie haben ein konkretes Vorhaben zum Thema <?php echo esc_html( get_the_title() ); ?>? Wir beraten Sie gern!</p>
 						<a class="es-btn es-btn--paper" href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">Termin anfragen →</a>
 					</div>

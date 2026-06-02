@@ -120,6 +120,9 @@ class ESC_MetaBoxes {
 		$txt = is_array( $bullets ) ? implode( "\n", $bullets ) : '';
 		echo '<p><label><strong>Kernpunkte (eine Zeile = ein Bullet)</strong></label>';
 		echo '<textarea name="es_bullets_raw" rows="6" style="width:100%;">' . esc_textarea( $txt ) . '</textarea></p>';
+
+		$ap_opts = array( '' => '— keiner —' ) + self::team_options();
+		self::field( 'Ansprechpartner (Kontaktkarte)', 'es_ansprechpartner', get_post_meta( $post->ID, 'es_ansprechpartner', true ), 'select', $ap_opts );
 	}
 
 	public static function box_karriere( $post ) {
@@ -198,7 +201,7 @@ class ESC_MetaBoxes {
 
 		$scalars = array(
 			'es_role','es_email','es_phone','es_linkedin','es_location','es_field','es_more_bio',
-			'es_subtitle','es_closing',
+			'es_subtitle','es_closing','es_ansprechpartner',
 			'es_department','es_employment_type','es_start_date',
 			'es_end_date','es_kind','es_registration_url',
 			'es_cat','es_source','es_publication_date','es_link','es_author',
