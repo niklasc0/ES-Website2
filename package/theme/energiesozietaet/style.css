@@ -561,7 +561,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 
 /* News / Article (S1) */
 .es-article { padding: var(--es-space-12) 0 var(--es-space-30); }
-.es-article__header { max-width: var(--es-container-narrow); margin: 0 auto; padding: 0 var(--es-space-12) 0; }
+.es-article__header { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
 .es-article__crumb { font-size: 12px; color: var(--es-text-soft); margin-bottom: var(--es-space-10); font-family: var(--es-font-mono); letter-spacing: 0.06em; }
 .es-article__eyebrow { color: var(--es-accent); margin-bottom: 20px; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: var(--es-fw-medium); display: inline-block; }
 .es-article__title { font-size: clamp(36px, 4.5vw, 56px); line-height: 1.08; font-weight: var(--es-fw-regular); letter-spacing: -0.035em; margin: 0 0 28px; }
