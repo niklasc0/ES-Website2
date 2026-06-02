@@ -3128,6 +3128,7 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 
 /* (4) Interaktive Flaechen, die jetzt dunkel werden -> heller Text */
 .esc-card:hover { color: var(--es-paper); }
+.esc-card:hover .esc-card__title,
 .esc-card:hover .esc-card__text,
 .esc-card:hover .esc-card__link { color: var(--es-paper); }
 .es-team-filter__pill:hover,
@@ -3140,6 +3141,13 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-home-services > .elementor-container > .elementor-column:hover p { color: rgba(255,255,255,0.8); }
 .es-bereich-detail__einzel .es-bereich__topic:hover { color: var(--es-paper); }
 .es-bereich-detail__einzel .es-bereich__topic:hover .es-bereich__topic-desc { color: rgba(255,255,255,0.7); }
+
+/* (4b) In warm-Abschnitten haelt Zeile 1041 die Service-Card beim Hover
+        WEISS -> Text dort dunkel lassen (sonst weiss-auf-weiss). */
+.es-stage--warm .elementor-column.es-service-card:hover .elementor-element-populated { color: var(--es-ink); }
+.es-stage--warm .elementor-column.es-service-card:hover .es-service-card__title .elementor-heading-title { color: var(--es-ink); }
+.es-stage--warm .elementor-column.es-service-card:hover .es-service-card__num { color: var(--es-text-soft); }
+.es-stage--warm .elementor-column.es-service-card:hover .es-service-card__body p { color: var(--es-text-mute); }
 
 /* (5) Statische Kontakt-Box (war beige) -> heller Text */
 .es-kontakt-general { color: rgba(255,255,255,0.82); }
