@@ -1667,7 +1667,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 
     /* ─── HERO MOBILE ─── */
     /* Claims: kleineren Text + tighter */
-    .es-hero-claims-inner > .elementor-container { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+    .es-hero-claims-inner > .elementor-container { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; }
     .es-hero-claims-inner .es-hero-claims__wert .elementor-heading-title { font-size: 26px !important; }
 
     /* Gap innerhalb von .es-stage (Margin zwischen inneren widgets) reduzieren */
@@ -3275,6 +3275,26 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 
 /* Karriere-Karten: Eckdaten-Liste statt Excerpt (Bereich/Standort/...) */
 .esc-card__facts { margin: 0; display: grid; gap: 8px; }
-.esc-card__facts > div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; align-items: baseline; }
+.esc-card__facts > div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; align-items: baseline; }
 .esc-card__facts dt { font-family: var(--es-font-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--es-text-soft); }
-.esc-card__facts dd { margin: 0; font-size: 15px; line-height: 1.35; color: var(--es-text); }
+.esc-card__facts dd { margin: 0; font-size: 15px; line-height: 1.35; color: var(--es-text); overflow-wrap: break-word; }
+
+/* ════════════════════════════════════════════════════════════
+   Responsive-Fixes: Karriere-Eckdaten, News-Featured, Hero (Tablet)
+   ════════════════════════════════════════════════════════════ */
+/* Karriere-Eckdaten: auf schmalen Karten Label ueber Wert stapeln */
+@media (max-width: 600px) {
+    .esc-card__facts > div { grid-template-columns: 1fr; gap: 2px; }
+    .esc-card__facts dd { font-size: 14px; }
+}
+/* News-Featured: Bild ueber Text schon ab Tablet (vorher erst < 600px) */
+@media (max-width: 900px) {
+    .es-news-archive__featured { grid-template-columns: 1fr !important; gap: 28px !important; }
+    .es-news-archive__featured > div:first-child { aspect-ratio: 16/9 !important; }
+}
+/* Hero (Tablet): Seitenrand wie die anderen Sektionen (.es-hero fehlte in
+   der Padding-Liste) + Claims linksbuendig mit dem uebrigen Hero-Text */
+@media (max-width: 768px) {
+    body .es-hero > .elementor-container { padding-left: 24px !important; padding-right: 24px !important; }
+    .es-hero-claims-inner > .elementor-container { padding-left: 0 !important; padding-right: 0 !important; }
+}
