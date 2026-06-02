@@ -359,8 +359,13 @@ html.js .esc-card.es-reveal {
 .esc-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
 .esc-grid--cols-3 { grid-template-columns: repeat(3, 1fr); }
 .esc-grid--cols-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1024px) {
+    /* CPT-Karten (u.a. Karriere): frueher auf 2 Spalten, damit lange Werte
+       wie "Unternehmensberatung" nicht mitten im Wort umbrechen. */
+    .esc-grid--cols-3 { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 900px) {
-    .esc-grid--cols-3, .esc-grid--cols-4 { grid-template-columns: repeat(2, 1fr); }
+    .esc-grid--cols-4 { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
     .esc-grid--cols-2, .esc-grid--cols-3, .esc-grid--cols-4 { grid-template-columns: 1fr; }
@@ -3282,8 +3287,10 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 /* ════════════════════════════════════════════════════════════
    Responsive-Fixes: Karriere-Eckdaten, News-Featured, Hero (Tablet)
    ════════════════════════════════════════════════════════════ */
-/* Karriere-Eckdaten: auf schmalen Karten Label ueber Wert stapeln */
-@media (max-width: 600px) {
+/* Karriere-Eckdaten: Label ueber Wert stapeln — jetzt bis 768px, damit der
+   Wert in den (ab hier 2-spaltigen) Karten nicht mitten im Wort bricht
+   ("Unternehmensber atung"). */
+@media (max-width: 768px) {
     .esc-card__facts > div { grid-template-columns: 1fr; gap: 2px; }
     .esc-card__facts dd { font-size: 14px; }
 }
@@ -3292,9 +3299,25 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
     .es-news-archive__featured { grid-template-columns: 1fr !important; gap: 28px !important; }
     .es-news-archive__featured > div:first-child { aspect-ratio: 16/9 !important; }
 }
-/* Hero (Tablet): Seitenrand wie die anderen Sektionen (.es-hero fehlte in
-   der Padding-Liste) + Claims linksbuendig mit dem uebrigen Hero-Text */
-@media (max-width: 768px) {
-    body .es-hero > .elementor-container { padding-left: 24px !important; padding-right: 24px !important; }
+/* Tablet-Korrekturen bis 1024px: echte Tablets sind im Hochformat 810–834px
+   breit; ein 768px-Breakpoint verfehlt sie komplett — deshalb wirkte der Hero
+   "unveraendert". Untergrenze 601px, damit Phones ihre eigenen Regeln behalten. */
+@media (min-width: 601px) and (max-width: 1024px) {
+    /* Seitenrand fuer boxed-Sektionen: Hero & News-Uebersicht haben links/rechts
+       0 Padding und liegen unter der 1280px-Box -> Inhalt klebt sonst am Rand. */
+    body .elementor-section.elementor-section-boxed > .elementor-container { padding-left: 32px !important; padding-right: 32px !important; }
+    body .es-hero > .elementor-container { padding-left: 32px !important; padding-right: 32px !important; }
+    /* Claims linksbuendig mit dem uebrigen Hero-Text. */
     .es-hero-claims-inner > .elementor-container { padding-left: 0 !important; padding-right: 0 !important; }
+    /* Claims zuverlaessig 3 nebeneinander: Elementor nutzt Flex (nicht Grid) und
+       setzt auf Tablet 50%-Spalten -> "3 Standorte" rutscht in eine 2. Reihe.
+       Daher Flex-Spalten gleichmaessig auf Drittel zwingen (flex-basis schlaegt
+       Elementors Spaltenbreite). */
+    body .es-hero-claims-inner > .elementor-container { display: flex !important; flex-wrap: nowrap !important; gap: 20px !important; }
+    body .es-hero-claims-inner > .elementor-container > .elementor-column { flex: 1 1 0% !important; }
+}
+/* Phone (<=600px): Claims gestapelt — 3 schmale Spalten waeren zu eng. */
+@media (max-width: 600px) {
+    body .es-hero-claims-inner > .elementor-container { display: flex !important; flex-wrap: wrap !important; }
+    body .es-hero-claims-inner > .elementor-container > .elementor-column { flex: 1 1 100% !important; }
 }
