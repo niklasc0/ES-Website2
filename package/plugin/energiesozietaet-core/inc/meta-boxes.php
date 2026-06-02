@@ -69,6 +69,17 @@ class ESC_MetaBoxes {
 	public static function box_team( $post ) {
 		self::nonce();
 		self::field( 'Rolle / Position', 'es_role',     get_post_meta( $post->ID, 'es_role', true ) );
+		self::field(
+			'Geschlecht (Anrede „Ihr/e Ansprechpartner/in")',
+			'es_gender',
+			get_post_meta( $post->ID, 'es_gender', true ),
+			'select',
+			array( 'options' => array(
+				'm' => 'männlich — „Ihr Ansprechpartner"',
+				'w' => 'weiblich — „Ihre Ansprechpartnerin"',
+				'd' => 'divers — „Ihr:e Ansprechpartner:in"',
+			) )
+		);
 		self::field( 'E-Mail',           'es_email',    get_post_meta( $post->ID, 'es_email', true ) );
 		self::field( 'Telefon',          'es_phone',    get_post_meta( $post->ID, 'es_phone', true ) );
 		self::field( 'LinkedIn-URL',     'es_linkedin', get_post_meta( $post->ID, 'es_linkedin', true ), 'url' );
@@ -199,7 +210,7 @@ class ESC_MetaBoxes {
 		if ( ! current_user_can( 'edit_post', $post_id ) ) { return; }
 
 		$scalars = array(
-			'es_role','es_email','es_phone','es_linkedin','es_location','es_field','es_more_bio',
+			'es_role','es_gender','es_email','es_phone','es_linkedin','es_location','es_field','es_more_bio',
 			'es_subtitle','es_closing','es_ansprechpartner',
 			'es_department','es_employment_type','es_start_date',
 			'es_end_date','es_kind','es_registration_url',
