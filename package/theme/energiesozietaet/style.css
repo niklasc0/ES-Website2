@@ -3185,7 +3185,9 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-stage--warm .esc-card .esc-card__link { color: var(--es-ink); }
 .esc-card:hover h2, .esc-card:hover h3, .esc-card:hover h4,
 .esc-card:hover .esc-card__title, .esc-card:hover p,
-.esc-card:hover .esc-card__text, .esc-card:hover .esc-card__link { color: var(--es-paper); }
+.esc-card:hover .esc-card__text, .esc-card:hover .esc-card__link,
+.esc-card:hover .esc-card__facts dd { color: var(--es-paper); }
+.esc-card:hover .esc-card__facts dt { color: rgba(255,255,255,0.6); }
 
 /* v32-4) Service-Card-CTA "Mehr erfahren" beim Hover hell (Home/Leistungen) */
 .es-home-services > .elementor-container > .elementor-column:hover .es-link {
