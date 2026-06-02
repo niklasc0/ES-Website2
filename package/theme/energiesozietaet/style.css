@@ -729,7 +729,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 /* ─────────────────────────────────────────────────────────────
    Service-Card Hover (Home + Leistungen)
    ───────────────────────────────────────────────────────────── */
-.esc-card { transition: transform 260ms var(--es-easing), border-color 260ms var(--es-easing), background 260ms var(--es-easing); }
+.esc-card { transition: transform 260ms var(--es-easing), border-color 260ms var(--es-easing), background 450ms var(--es-easing); }
 .esc-card:hover { background: var(--es-paper-warm); border-color: var(--es-ink); }
 
 /* ─────────────────────────────────────────────────────────────
@@ -985,7 +985,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     border: var(--es-border);
     background: var(--es-paper);
     min-height: 380px;
-    transition: background 200ms var(--es-easing), border-color 200ms var(--es-easing), transform 200ms var(--es-easing);
+    transition: background 450ms var(--es-easing), border-color 200ms var(--es-easing), transform 200ms var(--es-easing);
 }
 .elementor-column.es-service-card:hover .elementor-element-populated {
     background: var(--es-paper-warm); border-color: var(--es-ink); transform: translateY(-2px);
@@ -1163,7 +1163,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     background: var(--es-paper);
     border: var(--es-border);
     min-height: 380px;
-    transition: background 240ms var(--es-easing), border-color 240ms var(--es-easing), transform 240ms var(--es-easing);
+    transition: background 450ms var(--es-easing), border-color 240ms var(--es-easing), transform 240ms var(--es-easing);
 }
 .es-home-services > .elementor-container > .elementor-column:hover > .elementor-widget-wrap,
 .es-home-services > .elementor-container > .elementor-column:hover > .elementor-element-populated {
@@ -1242,7 +1242,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) {
     padding-left: 28px; border-left: var(--es-border);
 }
-.es-bereich-detail__einzel .es-bereich__topic:hover { border-color: var(--es-ink); background: var(--es-paper-warm); }
+.es-bereich-detail__einzel .es-bereich__topic:hover { border-color: var(--es-accent); }
 @media (max-width: 768px) {
     .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: 1fr; }
     .es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 28px; border-left: var(--es-border); }
@@ -1360,10 +1360,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     padding: 48px 36px !important;
     transition: border-color 240ms var(--es-easing), transform 240ms var(--es-easing);
 }
-.es-cards-grid:not(.es-cards-grid--quads) > .elementor-container > .elementor-column:hover > .elementor-widget-wrap,
-.es-cards-grid:not(.es-cards-grid--quads) > .elementor-container > .elementor-column:hover > .elementor-element-populated {
-    border-color: var(--es-ink) !important; transform: translateY(-2px);
-}
+/* Fix v32: Pillar-Karten (cards_native) sind nie klickbar -> kein Hover-Lift/Border */
 
 /* 5) Philosophie 4-Perspektiven nach Mockup:
    weiß auf warm, 4×28px Akzentbar oben-links, Titel+Desc darunter */
@@ -1566,7 +1563,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-nav .sub-menu .current-menu-item > a,
 .es-nav .sub-menu .current_page_item > a {
     color: var(--es-ink) !important;
-    background: var(--es-paper-warm) !important;
+    background: transparent !important;
     font-weight: var(--es-fw-medium);
 }
 .es-nav .sub-menu a::after { background: var(--es-accent); bottom: 6px; width: calc(100% - 40px); left: 20px; }
@@ -3154,6 +3151,57 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-kontakt-general .elementor-heading-title,
 .es-kontakt-general h2, .es-kontakt-general h3 { color: var(--es-paper); }
 
-/* (6) Aktives Submenu-Item (Hintergrund jetzt dunkel) -> heller Text */
-.es-nav .sub-menu .current-menu-item > a,
-.es-nav .sub-menu .current_page_item > a { color: var(--es-paper) !important; }
+/* ════════════════════════════════════════════════════════════
+   Fix v32 — Bug-Reports Runde 2 (Politur der Dark-Sektionen)
+   ════════════════════════════════════════════════════════════ */
+
+/* v32-1) Eyebrow ("Hairline") in dunklen Abschnitten lesbar. Der innere
+   .elementor-heading-title hat color:mute!important -> hier ueberschreiben.
+   Accent-Eyebrows (gruen) ausgenommen. */
+.es-stage--warm .es-eyebrow:not(.es-eyebrow--accent),
+.es-bereich--warm .es-eyebrow:not(.es-eyebrow--accent),
+.es-kontakt-general .es-eyebrow:not(.es-eyebrow--accent) { color: rgba(255,255,255,0.65); }
+.es-stage--warm .es-eyebrow:not(.es-eyebrow--accent) .elementor-heading-title,
+.es-stage--warm .es-eyebrow:not(.es-eyebrow--accent) > .elementor-heading-title { color: rgba(255,255,255,0.65) !important; }
+
+/* v32-2) GF-Zitat (voll auf dunkel): Zitat/Name/Rolle hell */
+.es-stage--warm .es-gf-quote__text .elementor-heading-title { color: var(--es-paper) !important; }
+.es-stage--warm .es-gf-quote__name { color: var(--es-paper); }
+.es-stage--warm .es-gf-quote__role { color: rgba(255,255,255,0.7); }
+
+/* v32-3) Weisse esc-/LinkedIn-Karten in warm: Default-Text dunkel halten
+   (Hover -> dunkler Hintergrund + heller Text bleibt via Fix v31). */
+.es-stage--warm .esc-card__title { color: var(--es-ink); }
+.es-stage--warm .esc-card__text  { color: var(--es-text-mute); }
+.es-stage--warm .esc-card__link  { color: var(--es-ink); }
+
+/* v32-4) Service-Card-CTA "Mehr erfahren" beim Hover hell (Home/Leistungen) */
+.es-home-services > .elementor-container > .elementor-column:hover .es-link {
+    color: var(--es-paper); border-bottom-color: rgba(255,255,255,0.5);
+}
+
+/* v32-5) Bereich-(--warm): Lede + Nummer + Label lesbar (Ergaenzung zu v30) */
+.es-bereich--warm .es-bereich__lede { color: rgba(255,255,255,0.8); }
+.es-bereich--warm .es-bereich__num  { color: rgba(255,255,255,0.55); }
+.es-bereich--warm .es-bereich__topics-label { color: rgba(255,255,255,0.6); }
+
+/* v32-6) Primary-Button-Hover in dunklen Abschnitten lesbar (war transparent+ink) */
+.es-stage--warm .es-btn--primary:hover,
+.es-bereich--warm .es-btn--primary:hover { background: transparent; color: var(--es-paper); border-color: var(--es-paper); }
+
+/* v32-7) Ansprechpartner-Rolle in warm lesbar */
+.es-stage--warm .es-ansprech__role { color: rgba(255,255,255,0.7); }
+
+/* v32-8) Kontakt-Box: Mail-Link + Beschreibung hell */
+.es-kontakt-general a { color: var(--es-paper) !important; }
+.es-kontakt-general > div:last-child { color: rgba(255,255,255,0.7); }
+
+/* v32-9) Beratungsfeld-Kacheln klar klickbar: Lift + Akzent-Titel + Dot
+   (kein bg-Fill -> funktioniert auf hellem UND dunklem Grund). */
+.es-bereich__topic { transition: transform 240ms var(--es-easing), border-color 240ms var(--es-easing); }
+.es-bereich__topic:hover { transform: translateY(-3px); }
+.es-bereich__topic:hover .es-bereich__topic-name h3 { color: var(--es-accent); }
+.es-bereich__topic-name > span:first-child { transition: transform 240ms var(--es-easing); }
+.es-bereich__topic:hover .es-bereich__topic-name > span:first-child { transform: scale(1.6); }
+
+/* Menü: aktives Beratungsfeld ohne Farb-Hintergrund (gruene Linie reicht) */

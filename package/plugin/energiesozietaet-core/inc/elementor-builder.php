@@ -295,7 +295,7 @@ class ESC_Elementor_Builder {
 			// Primary-Button. (Native Button-Widgets passen hier schlecht, da
 			// die ganze Section HTML-basiert ist — Umbau auf section_native
 			// wäre ein grösserer Umbau, den der User explizit bewahren will.)
-			$html .= '<a class="es-btn es-btn--primary" href="' . esc_url( $args['link'] ) . '">Zu ' . esc_html( $args['title'] ) . ' →</a>';
+			$html .= '<a class="es-btn es-btn--primary" href="' . esc_url( $args['link'] ) . '">Zur ' . esc_html( $args['title'] ) . ' →</a>';
 		}
 		$html .= '</div>';
 		$html .= '<div>' . $img_html . '</div>';
