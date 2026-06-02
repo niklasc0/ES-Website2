@@ -43,6 +43,11 @@ class ESC_Shortcodes {
 		$atts  = shortcode_atts( array( 'field' => '' ), $atts, 'es_field_image' );
 		$slug  = sanitize_title( $atts['field'] );
 		$page  = $slug ? get_page_by_path( $slug ) : null;
+		if ( ! $page && $slug ) {
+			// Seite per Slug finden, auch wenn verschachtelt (z. B. /leistungen/rechtsberatung/)
+			$found = get_posts( array( 'name' => $slug, 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 1 ) );
+			if ( $found ) { $page = $found[0]; }
+		}
 		$thumb = $page ? get_post_thumbnail_id( $page->ID ) : 0;
 		$title = $page ? $page->post_title : ucwords( str_replace( '-', ' ', $slug ) );
 		if ( $thumb ) {
