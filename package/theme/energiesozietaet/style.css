@@ -3219,3 +3219,49 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-bereich__topic:hover .es-bereich__topic-name > span:first-child { transform: scale(1.6); }
 
 /* Menü: aktives Beratungsfeld ohne Farb-Hintergrund (gruene Linie reicht) */
+
+/* ════════════════════════════════════════════════════════════
+   Einzelleistung — redaktionelles Leistungs-Layout (Fix v34)
+   Header + zweispaltig (Artikeltext + Sticky-Kontakt-Aside),
+   klare Typo-Hierarchie. Optik wie Team-Single / Bereich.
+   ════════════════════════════════════════════════════════════ */
+.es-leistung { padding: var(--es-space-12) 0 var(--es-space-30); }
+
+.es-leistung__crumb { font-size: 12px; color: var(--es-text-soft); font-family: var(--es-font-mono); letter-spacing: 0.06em; margin-bottom: var(--es-space-10); display: flex; gap: 8px; flex-wrap: wrap; }
+.es-leistung__crumb a:hover { color: var(--es-accent); }
+.es-leistung__crumb-current { color: var(--es-text-mute); }
+
+.es-leistung__header { padding-bottom: var(--es-space-10); border-bottom: var(--es-border); margin-bottom: var(--es-space-14); }
+.es-leistung__header .es-eyebrow { margin-bottom: 0; }
+.es-leistung__title { font-size: clamp(40px, 5vw, 64px); line-height: 1.04; font-weight: var(--es-fw-regular); letter-spacing: -0.035em; margin: 14px 0 0; }
+.es-leistung__lede { font-size: 20px; line-height: 1.55; color: var(--es-text-mute); margin: 24px 0 0; max-width: 60ch; }
+
+.es-leistung__grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--es-space-20); align-items: start; }
+.es-leistung__main { min-width: 0; }
+.es-leistung__main .es-article__body { max-width: 680px; margin: 0; padding: 0; }
+
+/* Typo-Hierarchie im Body: 1. Absatz = Lede, h4/h5/h6 (Intro-Statement)
+   gross & leicht statt winzig-fett (Content nutzt h5 als Intro-Absatz). */
+.es-leistung__body > p:first-child { font-size: clamp(21px, 2.3vw, 26px); line-height: 1.35; color: var(--es-ink); font-weight: var(--es-fw-regular); letter-spacing: -0.015em; margin: 0 0 32px; }
+.es-leistung__body h4, .es-leistung__body h5, .es-leistung__body h6 { font-size: 20px; line-height: 1.6; font-weight: var(--es-fw-regular); color: var(--es-ink); letter-spacing: -0.01em; margin: 0 0 28px; }
+
+/* Listen mit Akzent-Punkten (statt Standard-Bullets) */
+.es-leistung__body ul { list-style: none; padding-left: 0; margin: 0 0 28px; }
+.es-leistung__body ul li { position: relative; padding-left: 24px; margin-bottom: 12px; }
+.es-leistung__body ul li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 999px; background: var(--es-accent); }
+
+/* Sticky Kontakt-Aside (Optik wie Team-Single-Kontaktkarte) */
+.es-leistung__aside { position: sticky; top: calc(var(--es-header-h, 78px) + 24px); display: flex; flex-direction: column; gap: 20px; }
+.es-leistung__card { background: var(--es-ink); color: var(--es-paper); padding: 32px 28px; border-radius: var(--es-radius-xs); }
+.es-leistung__card .es-eyebrow { color: var(--es-accent); margin-bottom: 16px; }
+.es-leistung__card-title { font-size: 22px; line-height: 1.2; font-weight: var(--es-fw-regular); letter-spacing: -0.02em; margin: 0 0 12px; color: var(--es-paper); }
+.es-leistung__card-text { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.7); margin: 0 0 24px; }
+.es-leistung__card .es-btn { width: 100%; justify-content: center; }
+.es-leistung__back { font-size: 14px; color: var(--es-text-mute); display: inline-block; }
+.es-leistung__back:hover { color: var(--es-accent); }
+
+@media (max-width: 980px) {
+    .es-leistung__grid { grid-template-columns: 1fr; gap: var(--es-space-12); }
+    .es-leistung__aside { position: static; max-width: 440px; }
+    .es-leistung__main .es-article__body { max-width: none; }
+}
