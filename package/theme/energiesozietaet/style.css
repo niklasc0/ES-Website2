@@ -3285,6 +3285,33 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
     }
 }
 
+/* ═══ Einheitliches Box-Modell: ALLE Bereich-Kacheln als Boxen mit Abstand ═══
+   Auf Wunsch ueberall gleich (statt zusammenhaengendem Linien-Raster auf der
+   Uebersicht) — auf allen Bildschirmgroessen. Die Mehrfach-Klassen heben die
+   Spezifitaet ueber die Alt-Regeln (Linien-Raster, Varianten, :nth-child). */
+.es-bereich__topics.es-bereich__topics.es-bereich__topics {
+    border: 0 !important;
+    gap: 16px !important;
+    grid-auto-rows: 1fr;
+}
+.es-bereich__topic.es-bereich__topic.es-bereich__topic {
+    border: 1px solid var(--es-rule) !important;
+    background: var(--es-paper) !important;
+    padding: 28px !important;
+}
+.es-bereich__topic.es-bereich__topic.es-bereich__topic:hover { border-color: var(--es-accent) !important; }
+/* Dunkle ("warm") Sektionen (z.B. Steuerberatung auf der Uebersicht): Boxen
+   dunkel mit hellem Rahmen statt weiss. */
+.es-bereich--warm .es-bereich__topic.es-bereich__topic.es-bereich__topic {
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.18) !important;
+}
+.es-bereich--warm .es-bereich__topic.es-bereich__topic.es-bereich__topic:hover { border-color: var(--es-accent) !important; }
+@media (max-width: 768px) {
+    .es-bereich__topics.es-bereich__topics.es-bereich__topics { gap: 12px !important; }
+    .es-bereich__topic.es-bereich__topic.es-bereich__topic { padding: 18px !important; }
+}
+
 /* Menü: aktives Beratungsfeld ohne Farb-Hintergrund (gruene Linie reicht) */
 
 /* ════════════════════════════════════════════════════════════
