@@ -3264,25 +3264,25 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-bereich__topic-name h3 { min-width: 0; overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
 .es-bereich__topic-desc { overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
 
-/* ── Beratungsfeld-DETAILSEITEN: Kacheln als saubere Boxen (Mobile/Tablet) ──
-   NUR die schmalen Detailseiten-Kacheln (split-tiles, sitzen in der 60%-Spalte
-   neben Text). Die Leistungsuebersicht (.es-bereich__inner, volle Breite)
-   bleibt unangetastet: Linien-Raster + gruener Punkt wie gehabt.
-   split-tiles nutzt ein Container-Rahmen-Modell (Aussenrahmen am Container,
-   Kacheln nur Innentrenner, letzte Reihe border-bottom:0) — das verliert mit
-   Kachel-Abstand die untere Linie. Hier: Container ohne Rahmen, jede Kachel
-   voller Rahmen + Abstand. Auf der schmalen Spalte zusaetzlich Punkt aus. Die
-   :nth-...-Selektoren ueberschreiben die gleich spezifischen Original-Regeln
-   (gleiche Spezifitaet, spaeter im Quelltext -> gewinnen). */
+/* ── Beratungsfeld-DETAILSEITEN Mobile/Tablet: Kacheln so breit wie die Uebersicht ──
+   Erkenntnis: auf Mobile sind BEIDE 2-spaltig und die Detail-Kacheln stehen
+   (responsive) UNTER dem Text. Sie wirken nur schmaler, weil der "wider"-
+   Spaltenabstand der Split-Sektion sie im Mobile-Stack zusaetzlich einrueckt.
+   Fix: diesen Spalten-Innenabstand auf Mobile entfernen -> der Kachelblock nutzt
+   die volle Sektionsbreite wie die Uebersicht (Titel passen, kaum noch Silben-
+   trennung). Gruener Punkt bleibt (kein display:none mehr). Die boxed-Kacheln
+   kommen bereits aus der Split-Sektion (Z. 2985 ff.); nur die UNTERE Rahmenlinie
+   der letzten Reihe muss zurueck (split-tiles :nth-last-child entfernt sie). */
 @media (max-width: 1024px) {
-    .es-bereich-detail__split-tiles .es-bereich__topics { border: 0 !important; gap: 12px !important; }
-    .es-bereich-detail__split-tiles .es-bereich__topic,
-    .es-bereich-detail__split-tiles .es-bereich__topic:nth-child(2n+1),
-    .es-bereich-detail__split-tiles .es-bereich__topic:nth-last-child(-n+2) {
-        border: 1px solid var(--es-rule) !important;
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column > .elementor-element-populated,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column > .elementor-widget-wrap {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
-    .es-bereich-detail__split-tiles .es-bereich__topic-name > span:first-child { display: none !important; }
-    .es-bereich-detail__split-tiles .es-bereich__topic-desc { padding-left: 0 !important; }
+    .es-bereich-detail__split-tiles .es-bereich__topic:nth-last-child(-n+2) {
+        border-bottom: 1px solid var(--es-rule) !important;
+    }
 }
 
 /* Menü: aktives Beratungsfeld ohne Farb-Hintergrund (gruene Linie reicht) */
