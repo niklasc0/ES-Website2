@@ -3264,26 +3264,25 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-bereich__topic-name h3 { min-width: 0; overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
 .es-bereich__topic-desc { overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
 
-/* ── Bereich-Kacheln auf Mobile/Tablet (<=1024px): einheitliches Box-Modell ──
-   Die vielen Kachel-Varianten (split-tiles als Linien-Grid mit Container-Rahmen
-   + ":nth-last-child border-bottom:0", stacked, einzel ...) lassen je nach
-   Variante die UNTERE Rahmenlinie weg. Hier vereinheitlicht: kein Container-
-   Rahmen, jede Kachel traegt ihren eigenen vollen Rahmen (alle 4 Seiten) mit
-   Abstand. Die mehrfach wiederholten Klassen heben gezielt die Spezifitaet
-   ueber die Varianten-Regeln (sonst gewinnt z.B. ".es-bereich-detail__split-
-   tiles ...:nth-last-child"). */
+/* ── Beratungsfeld-DETAILSEITEN: Kacheln als saubere Boxen (Mobile/Tablet) ──
+   NUR die schmalen Detailseiten-Kacheln (split-tiles, sitzen in der 60%-Spalte
+   neben Text). Die Leistungsuebersicht (.es-bereich__inner, volle Breite)
+   bleibt unangetastet: Linien-Raster + gruener Punkt wie gehabt.
+   split-tiles nutzt ein Container-Rahmen-Modell (Aussenrahmen am Container,
+   Kacheln nur Innentrenner, letzte Reihe border-bottom:0) — das verliert mit
+   Kachel-Abstand die untere Linie. Hier: Container ohne Rahmen, jede Kachel
+   voller Rahmen + Abstand. Auf der schmalen Spalte zusaetzlich Punkt aus. Die
+   :nth-...-Selektoren ueberschreiben die gleich spezifischen Original-Regeln
+   (gleiche Spezifitaet, spaeter im Quelltext -> gewinnen). */
 @media (max-width: 1024px) {
-    body .es-bereich__topics.es-bereich__topics.es-bereich__topics {
-        border: 0 !important;
-        gap: 12px !important;
-    }
-    body .es-bereich__topic.es-bereich__topic.es-bereich__topic {
+    .es-bereich-detail__split-tiles .es-bereich__topics { border: 0 !important; gap: 12px !important; }
+    .es-bereich-detail__split-tiles .es-bereich__topic,
+    .es-bereich-detail__split-tiles .es-bereich__topic:nth-child(2n+1),
+    .es-bereich-detail__split-tiles .es-bereich__topic:nth-last-child(-n+2) {
         border: 1px solid var(--es-rule) !important;
     }
-    /* Gruener Punkt aus -> Text nutzt die Breite; das Kachel-Padding haelt
-       weiter Abstand zur Rahmenlinie. Beschreibung buendig zum Titel. */
-    body .es-bereich__topic-name > span:first-child { display: none !important; }
-    body .es-bereich__topic-desc.es-bereich__topic-desc.es-bereich__topic-desc { padding-left: 0 !important; }
+    .es-bereich-detail__split-tiles .es-bereich__topic-name > span:first-child { display: none !important; }
+    .es-bereich-detail__split-tiles .es-bereich__topic-desc { padding-left: 0 !important; }
 }
 
 /* Menü: aktives Beratungsfeld ohne Farb-Hintergrund (gruene Linie reicht) */
