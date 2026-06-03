@@ -3251,6 +3251,19 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-bereich__topic-name > span:first-child { transition: transform 280ms var(--es-easing); }
 .es-bereich__topic:hover .es-bereich__topic-name > span:first-child { transform: scale(1.6); }
 
+/* ── Bereich-/Einzelleistungs-Kacheln: Ueberlauf + ungleiche Hoehen fixen ──
+   Grid-Items haben per Default min-width:auto -> lange Woerter wie
+   "Gesellschaftsrecht" sprengen die Spalte, laufen ueber die Rahmenlinie und
+   machen die Kacheln ungleich hoch. min-width:0 laesst Spalte/Items schrumpfen,
+   hyphens:auto (Seite ist lang="de-DE") bricht sauber ("Gesellschafts-recht"),
+   grid-auto-rows:1fr macht alle Kacheln gleich hoch. Gilt fuer alle Varianten
+   ueber die Basisklassen. */
+.es-bereich__topics { grid-auto-rows: 1fr; }
+.es-bereich__topic { min-width: 0; }
+.es-bereich__topic-name { min-width: 0; }
+.es-bereich__topic-name h3 { min-width: 0; overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
+.es-bereich__topic-desc { overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
+
 /* Menü: aktives Beratungsfeld ohne Farb-Hintergrund (gruene Linie reicht) */
 
 /* ════════════════════════════════════════════════════════════
