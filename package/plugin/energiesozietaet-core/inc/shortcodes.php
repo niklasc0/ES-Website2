@@ -394,7 +394,7 @@ class ESC_Shortcodes {
 					if ( strpos( $lower, 'recht' ) !== false )      { $field_label = 'Rechtsberatung'; }
 					elseif ( strpos( $lower, 'steuer' ) !== false ) { $field_label = 'Steuerberatung'; }
 					elseif ( strpos( $lower, 'consulting' ) !== false || strpos( $lower, 'unternehmen' ) !== false ) { $field_label = 'Unternehmensberatung'; }
-					else { $field_label = 'Consulting'; }
+					else { $field_label = 'Kanzlei'; }
 				}
 				$location = (string) get_post_meta( get_the_ID(), 'es_location', true );
 				if ( ! $location ) { $location = 'Düsseldorf'; }
