@@ -374,7 +374,14 @@ class ESC_Shortcodes {
 
 	public static function karriere( $atts ) {
 		$atts = shortcode_atts( array( 'columns' => 3, 'limit' => -1 ), $atts, 'es_karriere' );
-		$q = new WP_Query( array( 'post_type' => 'es_karriere', 'posts_per_page' => (int) $atts['limit'] ) );
+		$q = new WP_Query( array(
+			'post_type'      => 'es_karriere',
+			'posts_per_page' => (int) $atts['limit'],
+			// Eindeutige, steuerbare Reihenfolge: zuerst das "Reihenfolge"-Feld
+			// (Seiteneigenschaften), dann neueste zuerst, ID als eindeutiger
+			// Tiebreaker -> in jedem Browser/Cache identisch.
+			'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'DESC', 'ID' => 'DESC' ),
+		) );
 		if ( ! $q->have_posts() ) { return ''; }
 		$field_map = array(
 			'rechtsberatung'       => 'Rechtsberatung',
