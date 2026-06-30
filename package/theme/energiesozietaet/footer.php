@@ -6,7 +6,9 @@
  *
  * @package Energiesozietaet
  */
-$es_no_cta = is_page( array( 'kontakt', 'impressum', 'datenschutzerklaerung' ) ) || is_404();
+// ah5: keine globale Footer-CTA — die Startseite bringt ihre eigene CTA-Sektion
+// aus der Blueprint mit; Unterseiten haben keine. Vermeidet Doppelung.
+$es_no_cta = true;
 
 if ( class_exists( 'ESC_Footer_Settings' ) ) {
 	$opts = ESC_Footer_Settings::get();
@@ -30,7 +32,7 @@ $copyright = str_replace( '{year}', date_i18n( 'Y' ), (string) $g( 'copyright', 
 
 // Aktive Spalten ermitteln (Heading nicht leer)
 $columns = array();
-for ( $i = 1; $i <= 3; $i++ ) {
+for ( $i = 1; $i <= 2; $i++ ) {
 	$h = trim( (string) $g( "col{$i}_heading" ) );
 	if ( $h === '' ) { continue; }
 	$columns[] = array(
@@ -39,6 +41,8 @@ for ( $i = 1; $i <= 3; $i++ ) {
 	);
 }
 $col_count = count( $columns );
+// Rechtliches (Spalte 3) speist ausschließlich die zentrierte Copyright-Leiste.
+$legal_links = call_user_func( $parse_links, $g( 'col3_lines' ) );
 ?>
 </main><!-- /#es-main -->
 
@@ -103,17 +107,16 @@ $col_count = count( $columns );
 				<span><?php echo esc_html( $copyright ); ?></span>
 				<ul>
 					<?php
-					// Copy: Legal-Links aus letzter Spalte für die untere Bar wiederverwenden.
-					$last_col = end( $columns );
-					if ( is_array( $last_col ) ) {
-						foreach ( $last_col['links'] as $link ) {
-							if ( $link['url'] ) {
-								echo '<li><a href="' . esc_url( $link['url'] ) . '">' . esc_html( $link['label'] ) . '</a></li>';
-							}
+					foreach ( $legal_links as $link ) {
+						if ( $link['url'] ) {
+							echo '<li><a href="' . esc_url( $link['url'] ) . '">' . esc_html( $link['label'] ) . '</a></li>';
+						} else {
+							echo '<li>' . esc_html( $link['label'] ) . '</li>';
 						}
 					}
 					?>
 				</ul>
+				<span aria-hidden="true"></span>
 			</div>
 		</div>
 	</div>

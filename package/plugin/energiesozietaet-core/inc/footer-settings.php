@@ -32,11 +32,12 @@ class ESC_Footer_Settings {
 			'brand_claim'   => 'Beratung mit Leidenschaft — Ergebnisse, die weitertragen.',
 			'badges'        => "BVÖD\nForum Contracting\nVKU",
 
-			// Drei generische Spalten — nur gerendert wenn Heading nicht leer.
-			'col1_heading' => 'Anschrift',
-			'col1_lines'   => "Energiesozietät GmbH\nRoßstraße 92 / Kennedyhaus\n40476 Düsseldorf",
-			'col2_heading' => 'Kontakt',
-			'col2_lines'   => "+49 211 159232-0 | tel:+492111592320\ninfo@energiesozietaet.de | mailto:info@energiesozietaet.de\nLinkedIn ↗︎ | https://www.linkedin.com/company/energiesozietaet/",
+			// Spalte 1 (Adresse) + Spalte 2 (Navigation) erscheinen im Grid;
+			// Spalte 3 (Rechtliches) speist nur die zentrierte Copyright-Leiste.
+			'col1_heading' => 'Energiesozietät GmbH',
+			'col1_lines'   => "Recht Steuern Beratung\nRoßstraße 92 | Kennedyhaus\n40476 Düsseldorf\ninfo@energiesozietaet.de\nCaffamacherreihe 8 | 20355 Hamburg\nJungbuschstraße 6 | 68159 Mannheim",
+			'col2_heading' => 'Navigation',
+			'col2_lines'   => "Home | /\nPhilosophie | /philosophie/\nLeistungen | /leistungen/\nTeam | /team/\nPublikationen | /publikationen/\nKarriere | /karriere/\nNews | /news/\nVeranstaltungen | /veranstaltungen/\nKontakt | /kontakt/",
 			'col3_heading' => 'Rechtliches',
 			'col3_lines'   => "Impressum | /impressum/\nDatenschutz | /datenschutzerklaerung/",
 
