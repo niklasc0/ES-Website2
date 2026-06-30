@@ -61,18 +61,20 @@ class ESC_Elementor_Builder {
 			'padding'       => array( 'unit' => 'px', 'top' => '0', 'right' => '0', 'bottom' => '0', 'left' => '0', 'isLinked' => false ),
 			'gap'           => 'no',
 		);
-		if ( 'ink' === $variant ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#122023';
-		} elseif ( 'warm' === $variant ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#1D2D2D';
+		// ah5: dunkle Bänder (ink/warm) schweben als eingerückte, gerundete Blöcke.
+		// Hintergrund + Rundung liegen auf dem .es-stage-Wrapper (CSS), die Section
+		// bleibt transparent und bekommt nur einen seitlichen Gutter. Helle Bänder
+		// (cool) bleiben vollflächige Sektionen.
+		$float = ( 'ink' === $variant || 'warm' === $variant );
+		if ( $float ) {
+			$settings['padding'] = array( 'unit' => 'px', 'top' => '0', 'right' => '24', 'bottom' => '0', 'left' => '24', 'isLinked' => false );
 		} elseif ( 'cool' === $variant ) {
 			$settings['background_background'] = 'classic';
 			$settings['background_color']      = '#F5F5F5';
 		}
 		// Stage-Wrapper damit CSS-Selektoren wie .es-stage--ink h1 greifen
 		$stage_class = $variant ? 'es-stage es-stage--' . $variant : 'es-stage';
+		if ( $float ) { $stage_class .= ' es-stage--float'; }
 		$wrapped = '<div class="' . esc_attr( $stage_class ) . '">' . $html . '</div>';
 		return self::section( array( array( 'widgets' => array( self::html( $wrapped ) ) ) ), $settings );
 	}

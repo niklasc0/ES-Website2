@@ -387,6 +387,12 @@ html.js .esc-card.es-reveal {
 .es-hero > .elementor-container,
 .es-hero > .es-wrap { position: relative; z-index: 1; }
 
+/* ah5: dunkle Floating-Bänder — eingerückt (Gutter via Section-Padding),
+   stark gerundet, schweben auf weißem Grund. */
+.es-stage--float { border-radius: var(--es-radius-section); overflow: hidden; }
+.es-stage--ink.es-stage--float  { background: var(--es-ink); }
+.es-stage--warm.es-stage--float { background: var(--es-paper-warm); }
+
 /* Claim grid under hero (H1) */
 .es-hero-claims {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--es-space-8);
@@ -905,12 +911,22 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .esc-pub-row__author { font-size: 13px; color: var(--es-text-mute); margin: 0; }
 .esc-pub-row__cta {
     justify-self: end; display: inline-flex; align-items: center; gap: 8px;
-    font-size: 13px; font-weight: var(--es-fw-medium); color: var(--es-ink);
-    padding-bottom: 2px; border-bottom: 1px solid currentColor;
-    white-space: nowrap;
+    font-size: 14px; font-weight: var(--es-fw-medium); color: var(--es-on-dark-text);
+    padding: 11px 24px; border-radius: var(--es-radius-pill);
+    background: var(--es-ink); border: 1px solid var(--es-ink);
+    white-space: nowrap; transition: all var(--es-duration-fast) var(--es-easing);
 }
-.esc-pub-row:hover .esc-pub-row__cta { color: var(--es-accent); border-bottom-color: var(--es-accent); }
+.esc-pub-row:hover .esc-pub-row__cta { color: var(--es-ink); background: var(--es-accent); border-color: var(--es-accent); }
 .esc-pub-row__arrow { font-size: 16px; }
+/* Veranstaltungen: „Details"-Pill (dunkel-teal) am Zeilenende */
+.esc-event-row__pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 11px 26px; border-radius: var(--es-radius-pill);
+    background: var(--es-ink); color: var(--es-on-dark-text);
+    font-size: 14px; font-weight: var(--es-fw-medium);
+    transition: all var(--es-duration-fast) var(--es-easing);
+}
+.esc-event-row:hover .esc-event-row__pill { background: var(--es-accent); color: var(--es-ink); }
 
 @media (max-width: 900px) {
     .esc-pub-year { grid-template-columns: 1fr; gap: 20px; }
@@ -1026,9 +1042,9 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     .es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 28px; border-left: 0; }
 }
 
-/* Publikationen-Row: Hover-Tint entfernen, nur CTA-Farbe */
+/* Publikationen-Row: Hover-Tint entfernen; CTA-Pill färbt sich grün */
 .esc-pub-row:hover { background: transparent; }
-.esc-pub-row:hover .esc-pub-row__cta { color: var(--es-accent); border-bottom-color: var(--es-accent); }
+.esc-pub-row:hover .esc-pub-row__cta { color: var(--es-ink); background: var(--es-accent); border-color: var(--es-accent); }
 
 /* Event-Row: kein Icon mehr vor Location */
 .esc-event-row__loc::before { content: none; }
@@ -3184,6 +3200,10 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-section--warm h1, .es-section--warm h2, .es-section--warm h3, .es-section--warm h4,
 .es-bereich--warm h1, .es-bereich--warm h2, .es-bereich--warm h3, .es-bereich--warm h4 { color: var(--es-on-dark-title); }
 .es-stage--warm .elementor-heading-title { color: var(--es-on-dark-title); }
+/* Floating-Bänder (ink/warm): pale-lime Headlines wie ah5 — Heroes bleiben weiß. */
+.es-stage--float h1, .es-stage--float h2, .es-stage--float h3, .es-stage--float h4, .es-stage--float h5, .es-stage--float h6,
+.es-stage--float .elementor-heading-title { color: var(--es-on-dark-title); }
+.es-stage--float p { color: var(--es-on-dark-text); }
 .es-stage--warm p,
 .es-stage--warm .elementor-widget-text-editor p { color: rgba(255,255,255,0.78); }
 .es-stage--warm .es-split__lead p { color: rgba(255,255,255,0.82); }

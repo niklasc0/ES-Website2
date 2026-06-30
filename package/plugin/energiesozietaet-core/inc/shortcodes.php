@@ -465,7 +465,7 @@ class ESC_Shortcodes {
 						<h3 class="esc-event-row__title"><?php the_title(); ?></h3>
 						<div class="esc-event-row__kind"><?php echo esc_html( $kind ? $kind : 'Veranstaltung' ); ?></div>
 						<div class="esc-event-row__loc"><?php echo esc_html( $loc ? $loc : 'Düsseldorf' ); ?></div>
-						<div class="esc-event-row__arrow">→</div>
+						<div class="esc-event-row__arrow"><span class="esc-event-row__pill">Details</span></div>
 					</a>
 				<?php endwhile; wp_reset_postdata(); ?>
 			</div>
