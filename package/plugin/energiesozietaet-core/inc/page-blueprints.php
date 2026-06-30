@@ -441,7 +441,7 @@ class ESC_Page_Blueprints {
 		$s[] = $b::section_native( array(
 			'padding' => array( '40', '0', '80', '0' ),
 			'cols' => array( array(
-				$b::wid_shortcode( '[es_team columns="4" filter="1"]' ),
+				$b::wid_shortcode( '[es_team columns="2" filter="1"]' ),
 			) ),
 		) );
 		$s[] = $b::split_native( array(

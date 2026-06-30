@@ -350,23 +350,28 @@ class ESC_Shortcodes {
 		ob_start();
 		echo $filter_html;
 		?>
-		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?>">
+		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid">
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$role     = get_post_meta( get_the_ID(), 'es_role', true );
 				$thumb_id = get_post_thumbnail_id();
-				$field    = (string) get_post_meta( get_the_ID(), 'es_field', true );
-				$feld_lbl = $labels[ $field ] ?? ( $field ? ucfirst( $field ) : '' ); ?>
-				<a class="esc-team-card es-reveal" href="<?php the_permalink(); ?>">
-					<div class="esc-team-card__photo">
+				$linkedin = (string) get_post_meta( get_the_ID(), 'es_linkedin', true );
+				$bio      = get_the_excerpt(); ?>
+				<div class="esc-team-card es-reveal">
+					<a class="esc-team-card__photo" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
 						<?php if ( $thumb_id ) { echo wp_get_attachment_image( $thumb_id, 'es-team', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); }
 						else { echo '<span class="esc-team-card__initial">' . esc_html( mb_substr( get_the_title(), 0, 1 ) ) . '</span>'; } ?>
-					</div>
+					</a>
 					<div class="esc-team-card__body">
-						<?php if ( $feld_lbl ) : ?><div class="esc-team-card__feld"><?php echo esc_html( $feld_lbl ); ?></div><?php endif; ?>
-						<h3 class="esc-team-card__name"><?php the_title(); ?></h3>
-						<p class="esc-team-card__role"><?php echo esc_html( $role ); ?></p>
+						<h3 class="esc-team-card__name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+						<?php if ( $role ) : ?><p class="esc-team-card__role"><?php echo esc_html( $role ); ?></p><?php endif; ?>
+						<?php if ( $bio ) : ?><p class="esc-team-card__bio"><?php echo esc_html( wp_trim_words( $bio, 26 ) ); ?></p><?php endif; ?>
+						<?php if ( $linkedin ) : ?>
+							<a class="esc-team-card__li" href="<?php echo esc_url( $linkedin ); ?>" target="_blank" rel="noopener" aria-label="LinkedIn-Profil">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5 2.5 2.5 0 0 0 4.98 3.5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21H20.6v-5.6c0-1.34-.02-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21H12.7z"/></svg>
+							</a>
+						<?php endif; ?>
 					</div>
-				</a>
+				</div>
 			<?php endwhile; wp_reset_postdata(); ?>
 		</div>
 		<?php return ob_get_clean();
