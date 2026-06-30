@@ -395,7 +395,7 @@ class ESC_Shortcodes {
 			'management'           => 'Büroleitung',
 		);
 		ob_start(); ?>
-		<div class="esc-grid esc-grid--cols-<?php echo (int) $atts['columns']; ?>">
+		<div class="esc-grid esc-grid--cols-<?php echo (int) $atts['columns']; ?> esc-job-list">
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$thumb_id   = get_post_thumbnail_id();
 				$department = (string) get_post_meta( get_the_ID(), 'es_department', true );
@@ -415,18 +415,18 @@ class ESC_Shortcodes {
 				$start_date = (string) get_post_meta( get_the_ID(), 'es_start_date', true );
 				$entry_str  = $start_date ? date_i18n( 'j. F Y', strtotime( $start_date ) ) : 'ab sofort';
 				?>
-				<a class="esc-card es-reveal" href="<?php the_permalink(); ?>">
-					<div class="esc-card__media">
+				<a class="esc-job es-reveal" href="<?php the_permalink(); ?>">
+					<div class="esc-job__media">
 						<?php if ( $thumb_id ) {
 							echo wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy' ) );
 						} else { ?>
 							<div class="es-ph-cat"><span><?php echo esc_html( $field_label ); ?></span></div>
 						<?php } ?>
 					</div>
-					<div class="esc-card__body">
-						<h3 class="esc-card__title"><?php the_title(); ?></h3>
+					<div class="esc-job__body">
+						<div class="es-eyebrow es-eyebrow--accent"><?php echo esc_html( $field_label ); ?></div>
+						<h3 class="esc-job__title"><?php the_title(); ?></h3>
 						<dl class="esc-card__facts">
-							<div><dt>Bereich</dt><dd><?php echo esc_html( $field_label ); ?></dd></div>
 							<div><dt>Standort</dt><dd><?php echo esc_html( $location ); ?></dd></div>
 							<div><dt>Anstellung</dt><dd><?php echo esc_html( $emp_type ); ?></dd></div>
 							<div><dt>Eintritt</dt><dd><?php echo esc_html( $entry_str ); ?></dd></div>

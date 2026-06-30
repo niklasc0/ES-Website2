@@ -498,7 +498,7 @@ class ESC_Page_Blueprints {
 			'padding' => array( '80', '0', '100', '0' ),
 			'cols' => array( array(
 				$b::wid_heading( 'Offene Positionen', 'h2', 'es-section__title' ),
-				$b::wid_shortcode( '[es_karriere columns="3"]' ),
+				$b::wid_shortcode( '[es_karriere columns="1"]' ),
 				$b::wid_html( '<p style="margin-top:32px;"><a class="es-link" href="mailto:info@energiesozietaet.de?subject=Initiativbewerbung">Initiativbewerbung →</a></p>' ),
 			) ),
 		) );

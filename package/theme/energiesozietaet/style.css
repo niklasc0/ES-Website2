@@ -522,6 +522,31 @@ html.js .esc-card.es-reveal {
 .esc-team-card__li:hover { color: var(--es-accent); }
 @media (max-width: 600px) { .esc-team-grid.esc-grid { grid-template-columns: 1fr; } }
 
+/* Karriere — ah5 Job-Reihen: Bild links + helle Card rechts, gestapelt */
+.esc-job-list.esc-grid { grid-template-columns: 1fr; gap: var(--es-space-8); }
+.esc-job {
+    position: relative; display: grid; grid-template-columns: 1.15fr 1fr;
+    color: var(--es-ink); background: var(--es-paper-cool);
+    border-radius: var(--es-radius-card); overflow: hidden;
+    transition: transform var(--es-duration-fast) var(--es-easing);
+}
+.esc-job::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
+    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--es-duration-normal) var(--es-easing);
+}
+.esc-job:hover::before { transform: scaleX(1); }
+.esc-job:hover { transform: translateY(-2px); }
+.esc-job__media { overflow: hidden; background: var(--es-paper-warm); min-height: 240px; }
+.esc-job__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--es-easing); }
+.esc-job:hover .esc-job__media img { transform: scale(1.04); }
+.esc-job__media .es-ph-cat { width: 100%; height: 100%; border-radius: 0; aspect-ratio: auto; }
+.esc-job__body { padding: var(--es-space-10) var(--es-space-10); display: flex; flex-direction: column; }
+.esc-job__title { font-size: 24px; font-weight: var(--es-fw-medium); letter-spacing: -0.02em; line-height: 1.2; margin: 6px 0 18px; }
+.esc-job .esc-card__facts { margin: 0 0 22px; }
+.esc-job .esc-card__link { margin-top: auto; }
+@media (max-width: 760px) { .esc-job { grid-template-columns: 1fr; } .esc-job__media { min-height: 200px; } }
+
 /* Event row cards (2-col wide, breiter als hoch) */
 .esc-event-row {
     display: grid; grid-template-columns: 120px 1fr 200px 180px 60px;
