@@ -1,0 +1,45 @@
+/*
+ * Elementor-specific overrides so ES design tokens propagate into Elementor widgets.
+ */
+.elementor-section.elementor-section-stretched { position: relative; }
+
+/* Use our accent for Elementor buttons */
+.elementor-button.elementor-button-link,
+.elementor-widget-button .elementor-button {
+	transition: transform var(--es-dur, 320ms) cubic-bezier(0.22, 0.61, 0.36, 1),
+	            box-shadow var(--es-dur, 320ms) cubic-bezier(0.22, 0.61, 0.36, 1),
+	            background var(--es-dur, 320ms) cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.elementor-widget-button .elementor-button:hover { transform: translateY(-2px); }
+
+/* Accent spans */
+.elementor .text-bg-green { color: var(--es-accent-deep, #7bbc02); font-weight: 600; }
+
+/* Cards built with Elementor — give them our shadow + lift if they have the "es-card" class */
+.elementor .es-card-like {
+	border: 1px solid var(--es-line, rgba(15,23,32,.08));
+	border-radius: var(--es-radius, 10px);
+	transition: transform var(--es-dur) var(--es-ease), box-shadow var(--es-dur) var(--es-ease);
+}
+.elementor .es-card-like:hover { transform: translateY(-4px); box-shadow: var(--es-shadow-lifted); }
+
+/* Elementor Heading uses our fonts */
+.elementor-heading-title { font-family: var(--es-font-display, serif); letter-spacing: -0.015em; }
+
+/* Accordion subtle styling */
+.elementor-accordion .elementor-accordion-item {
+	border: 1px solid var(--es-line, rgba(15,23,32,.08)) !important;
+	border-radius: 10px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	background: #fff;
+}
+.elementor-accordion .elementor-accordion-item + .elementor-accordion-item { border-top: 1px solid var(--es-line) !important; }
+.elementor-accordion .elementor-tab-title {
+	padding: 18px 20px !important;
+	font-family: var(--es-font-display, serif);
+	color: var(--es-ink, #0f1720);
+	font-weight: 500 !important;
+}
+.elementor-accordion .elementor-tab-title.elementor-active { background: var(--es-soft, #f6f7f5); color: var(--es-ink); }
+.elementor-accordion .elementor-tab-content { padding: 4px 20px 24px !important; color: var(--es-muted, #5a6270); }

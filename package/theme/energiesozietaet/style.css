@@ -1,0 +1,3411 @@
+/*
+Theme Name: Energiesozietät
+Theme URI: https://energiesozietaet.de/
+Author: Energiesozietät
+Author URI: https://energiesozietaet.de/
+Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
+Version: 2.0.0
+Requires at least: 6.0
+Tested up to: 6.9
+Requires PHP: 7.4
+License: GPL v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: energiesozietaet
+Tags: elementor, business, one-column, custom-colors, custom-menu, featured-images
+*/
+
+:root {
+    --es-ink:          #0E1A2B;
+    --es-ink-soft:     #1A2740;
+    --es-ink-line:     #23304A;
+    --es-paper:        #FFFFFF;
+    --es-paper-warm:   #303030;
+    --es-paper-cool:   #F3F5F8;
+    --es-text:         #0E1A2B;
+    --es-text-mute:    #5A6577;
+    --es-text-soft:    #8591A3;
+    --es-rule:         #E4E7EC;
+    --es-accent:       #95D708;
+    --es-accent-soft:  #D7EDA0;
+
+    --es-font-sans:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --es-font-display: var(--es-font-sans);
+    --es-font-mono:    "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+    --es-fs-display-xl: 80px;
+    --es-fs-display-l:  72px;
+    --es-fs-display-m:  56px;
+    --es-fs-h2:         48px;
+    --es-fs-h3:         32px;
+    --es-fs-h4:         24px;
+    --es-fs-body-l:     20px;
+    --es-fs-body:       17px;
+    --es-fs-body-s:     15px;
+    --es-fs-meta:       13px;
+    --es-fs-eyebrow:    11px;
+
+    --es-fw-light:   300;
+    --es-fw-regular: 400;
+    --es-fw-medium:  500;
+
+    --es-lh-tight:  1.02;
+    --es-lh-snug:   1.15;
+    --es-lh-normal: 1.55;
+    --es-lh-loose:  1.7;
+
+    --es-ls-display:  -0.04em;
+    --es-ls-headline: -0.03em;
+    --es-ls-tight:    -0.02em;
+    --es-ls-eyebrow:  0.22em;
+
+    --es-space-3:  12px;  --es-space-4:  16px;  --es-space-6:  24px;
+    --es-space-8:  32px;  --es-space-10: 40px;  --es-space-12: 48px;
+    --es-space-16: 64px;  --es-space-20: 80px;  --es-space-24: 96px;
+    --es-space-30: 120px; --es-space-35: 140px;
+
+    --es-radius-xs: 2px; --es-radius-sm: 4px; --es-radius-pill: 999px;
+
+    --es-container:        1280px;
+    --es-container-narrow: 780px;
+
+    --es-border:      1px solid var(--es-rule);
+    --es-border-dark: 1px solid var(--es-ink-line);
+
+    --es-duration-fast:   0.2s;
+    --es-duration-normal: 0.3s;
+    --es-easing:          cubic-bezier(0.2, 0, 0, 1);
+
+    --es-header-h: 78px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root { --es-duration-fast: 0ms; --es-duration-normal: 0ms; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: var(--es-font-sans);
+    font-size: var(--es-fs-body);
+    line-height: var(--es-lh-normal);
+    color: var(--es-text);
+    background: var(--es-paper);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+img, picture, svg { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; transition: color var(--es-duration-fast) var(--es-easing); }
+a:hover { color: var(--es-accent); }
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 0.5em;
+    font-family: var(--es-font-display);
+    font-weight: var(--es-fw-regular);
+    color: var(--es-ink);
+    letter-spacing: var(--es-ls-headline);
+    line-height: var(--es-lh-snug);
+}
+h1 { font-size: clamp(44px, 6vw, var(--es-fs-display-xl)); font-weight: var(--es-fw-light); letter-spacing: var(--es-ls-display); line-height: var(--es-lh-tight); }
+h2 { font-size: clamp(32px, 4vw, var(--es-fs-h2)); font-weight: var(--es-fw-regular); }
+h3 { font-size: clamp(22px, 2.2vw, var(--es-fs-h3)); font-weight: var(--es-fw-medium); letter-spacing: var(--es-ls-tight); }
+h4 { font-size: clamp(18px, 1.4vw, var(--es-fs-h4)); font-weight: var(--es-fw-medium); letter-spacing: var(--es-ls-tight); }
+
+p { margin: 0 0 1em; }
+strong, b { font-weight: var(--es-fw-medium); color: var(--es-ink); }
+em { font-style: normal; color: var(--es-accent); }
+
+.text-bg-green, span.text-bg-green { color: var(--es-accent); font-style: normal; }
+.es-ink-text { color: var(--es-ink); }
+.es-muted-text { color: var(--es-text-mute); }
+.es-highlight { background: var(--es-accent-soft); padding: 0 4px; }
+.es-underline-accent { text-decoration: underline; text-decoration-color: var(--es-accent); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+.es-wrap { max-width: var(--es-container); margin: 0 auto; padding: 0 var(--es-space-12); }
+.es-wrap--narrow { max-width: var(--es-container-narrow); margin: 0 auto; padding: 0 var(--es-space-12); }
+.es-main { min-height: 60vh; }
+
+.es-eyebrow {
+    display: inline-block;
+    font-size: var(--es-fs-eyebrow);
+    letter-spacing: var(--es-ls-eyebrow);
+    text-transform: uppercase;
+    font-weight: var(--es-fw-medium);
+    color: var(--es-text-mute);
+    margin-bottom: 20px;
+}
+.es-eyebrow--accent { color: var(--es-accent); }
+.es-eyebrow--paper  { color: rgba(255, 255, 255, 0.6); }
+
+.es-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px;
+    font-size: 14px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em;
+    font-family: var(--es-font-sans);
+    border-radius: var(--es-radius-xs);
+    border: 1px solid currentColor;
+    background: transparent; color: var(--es-ink);
+    cursor: pointer;
+    transition: all var(--es-duration-fast) var(--es-easing);
+    text-decoration: none;
+}
+.es-btn:hover { background: var(--es-ink); color: var(--es-paper); }
+.es-btn--primary { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
+.es-btn--primary:hover { background: transparent; color: var(--es-ink); }
+.es-btn--paper { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }
+.es-btn--paper:hover { background: transparent; color: var(--es-paper); border-color: var(--es-paper); }
+.es-btn--ghost-paper { background: transparent; color: var(--es-paper); border-color: rgba(255,255,255,0.4); }
+.es-btn--ghost-paper:hover { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }
+.es-btn--accent { background: var(--es-accent); color: var(--es-ink); border-color: var(--es-accent); }
+.es-btn--accent:hover { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
+
+.es-link {
+    display: inline-block;
+    font-size: 14px; font-weight: var(--es-fw-medium);
+    color: var(--es-ink);
+    padding-bottom: 2px;
+    border-bottom: 1px solid currentColor;
+}
+.es-link:hover { color: var(--es-accent); border-bottom-color: var(--es-accent); }
+.es-link--paper { color: var(--es-paper); }
+
+.es-section { padding: var(--es-space-30) 0; }
+.es-section--sm { padding: var(--es-space-20) 0; }
+.es-section--xl { padding: var(--es-space-35) 0; }
+.es-section--warm { background: var(--es-paper-warm); }
+.es-section--cool { background: var(--es-paper-cool); }
+.es-section--ink  { background: var(--es-ink); color: var(--es-paper); }
+.es-section--ink h1, .es-section--ink h2, .es-section--ink h3, .es-section--ink h4 { color: var(--es-paper); }
+
+/* Subtle reveal-on-scroll (keeps elements grounded until visible).
+   Requires JS to add .js to <html> before the reveal rule applies — that way
+   no-JS / failed-JS clients see content immediately. */
+html.js .es-reveal { opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--es-easing), transform 600ms var(--es-easing); }
+html.js .es-reveal.is-in,
+html.js .es-reveal.is-visible { opacity: 1; transform: none; }
+/* Fix v33b: .es-reveal-Transition (oben) listet kein background -> bei
+   esc-Karten mit .es-reveal (z.B. Fachbeitraege) springt der Hover-Hintergrund.
+   Hier background ergaenzen; Reveal (opacity/transform 600ms) bleibt. */
+html.js .esc-card.es-reveal {
+    transition: opacity 600ms var(--es-easing), transform 600ms var(--es-easing),
+                background 500ms ease-in-out, border-color 260ms var(--es-easing);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Header (G1)
+   ───────────────────────────────────────────────────────────── */
+.es-header {
+    position: relative; z-index: 20;
+    padding: 20px 0;
+    border-bottom: var(--es-border);
+    color: var(--es-ink);
+    background: var(--es-paper);
+}
+.es-header--dark { background: var(--es-ink); color: var(--es-paper); border-bottom: var(--es-border-dark); }
+.es-header__inner {
+    display: flex; align-items: center; gap: var(--es-space-6);
+    justify-content: space-between;
+}
+
+.es-brand { display: inline-flex; align-items: center; gap: 10px; color: inherit; }
+.es-brand__mark {
+    width: 28px; height: 28px; border-radius: var(--es-radius-xs);
+    background: currentColor; color: var(--es-paper);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; letter-spacing: -0.02em;
+}
+.es-header--dark .es-brand__mark { color: var(--es-ink); background: var(--es-paper); }
+.es-brand__wordmark { display: inline-flex; flex-direction: column; line-height: 1.1; }
+.es-brand__name { font-size: 15px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em; }
+.es-brand__sub { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--es-text-mute); margin-top: 2px; }
+.es-header--dark .es-brand__sub { color: rgba(255,255,255,0.65); }
+
+.es-nav { display: flex; align-items: center; gap: 28px; }
+.es-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 28px; align-items: center; }
+.es-nav li { position: relative; }
+.es-nav a {
+    font-size: 13px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em;
+    color: var(--es-text-mute);
+    padding-bottom: 4px; border-bottom: 1px solid transparent;
+}
+.es-header--dark .es-nav a { color: rgba(255,255,255,0.72); }
+.es-nav a:hover { color: var(--es-ink); border-bottom-color: var(--es-ink); }
+.es-header--dark .es-nav a:hover { color: var(--es-paper); border-bottom-color: var(--es-paper); }
+.es-nav .current-menu-item > a, .es-nav .current_page_item > a, .es-nav .current-menu-ancestor > a {
+    color: var(--es-ink); border-bottom-color: var(--es-ink);
+}
+.es-header--dark .es-nav .current-menu-item > a,
+.es-header--dark .es-nav .current_page_item > a,
+.es-header--dark .es-nav .current-menu-ancestor > a {
+    color: var(--es-paper); border-bottom-color: var(--es-paper);
+}
+.es-nav .sub-menu {
+    position: absolute; top: 100%; left: -16px;
+    min-width: 220px;
+    display: none; flex-direction: column; gap: 0;
+    padding: 12px 0; background: var(--es-paper);
+    border: var(--es-border); border-radius: var(--es-radius-xs); z-index: 10;
+}
+.es-nav li:hover > .sub-menu, .es-nav li:focus-within > .sub-menu { display: flex; }
+.es-nav .sub-menu a { display: block; padding: 10px 20px; border-bottom: 0; color: var(--es-ink); }
+.es-nav .sub-menu a:hover { background: var(--es-paper-warm); color: var(--es-accent); }
+
+.es-header__actions { display: inline-flex; align-items: center; gap: 10px; }
+.es-btn-jobs {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; font-size: 12px; font-weight: var(--es-fw-medium);
+    border: var(--es-border); border-radius: var(--es-radius-xs);
+    color: inherit;
+}
+.es-header--dark .es-btn-jobs { border-color: rgba(255,255,255,0.3); }
+.es-btn-jobs__dot { width: 6px; height: 6px; border-radius: 999px; background: var(--es-accent); display: inline-block; }
+.es-btn-jobs:hover { color: var(--es-accent); }
+
+.es-btn-kontakt {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px; font-size: 13px; font-weight: var(--es-fw-medium);
+    border-radius: var(--es-radius-xs);
+    background: var(--es-ink); color: var(--es-paper);
+    border: 1px solid var(--es-ink);
+}
+.es-header--dark .es-btn-kontakt { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }
+.es-btn-kontakt:hover { background: var(--es-accent); color: var(--es-ink); border-color: var(--es-accent); }
+
+.es-nav-toggle { display: none; background: transparent; border: 0; cursor: pointer; padding: 10px; color: inherit; }
+.es-nav-toggle .bar, .es-nav-toggle .bar::before, .es-nav-toggle .bar::after {
+    display: block; content: ""; width: 22px; height: 1.5px; background: currentColor;
+    transition: transform var(--es-duration-fast) var(--es-easing);
+}
+.es-nav-toggle .bar::before { transform: translateY(-6px); }
+.es-nav-toggle .bar::after  { transform: translateY(4.5px); }
+
+@media (max-width: 1024px) {
+    .es-nav, .es-header__actions { display: none; }
+    .es-nav-toggle { display: inline-flex; }
+    .es-header.is-nav-open .es-nav {
+        display: flex; position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; gap: 0;
+        background: var(--es-paper); border-top: var(--es-border);
+        padding: var(--es-space-4) 0;
+    }
+    .es-header--dark.is-nav-open .es-nav { background: var(--es-ink); border-top-color: var(--es-ink-line); }
+    .es-header.is-nav-open .es-nav ul { flex-direction: column; gap: 0; width: 100%; padding: 0 var(--es-space-6); }
+    .es-header.is-nav-open .es-nav a { display: block; padding: 14px 0; border-bottom: var(--es-border); }
+    .es-header.is-nav-open .es-header__actions { display: flex; padding: var(--es-space-4) var(--es-space-6); justify-content: flex-start; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Footer (G2)
+   ───────────────────────────────────────────────────────────── */
+.es-footer { background: var(--es-ink); color: var(--es-paper); }
+.es-footer a { color: inherit; }
+.es-footer__cta { padding: var(--es-space-30) 0 var(--es-space-24); border-bottom: var(--es-border-dark); }
+.es-footer__cta-grid { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: var(--es-space-12); }
+.es-footer__cta h2 { font-size: clamp(36px, 4.6vw, 64px); line-height: 1.02; font-weight: var(--es-fw-regular); letter-spacing: -0.035em; margin: 0; max-width: 820px; }
+.es-footer__cta-sub { color: rgba(255,255,255,0.55); }
+.es-footer__cta-actions { display: flex; gap: 12px; }
+@media (max-width: 900px) {
+    .es-footer__cta-grid { grid-template-columns: 1fr; }
+}
+
+.es-footer__main { padding: var(--es-space-16) 0 var(--es-space-8); }
+.es-footer__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: var(--es-space-16); }
+.es-footer__brand-name { font-size: 18px; font-weight: var(--es-fw-medium); letter-spacing: -0.02em; }
+.es-footer__brand-sub { font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 0.18em; text-transform: uppercase; margin-top: 6px; }
+.es-footer__brand-claim { margin-top: 28px; font-size: 14px; color: rgba(255,255,255,0.7); max-width: 360px; }
+.es-footer__badges { display: flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; }
+.es-footer__badge {
+    padding: 8px 10px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.7);
+    border-radius: var(--es-radius-xs);
+}
+.es-footer__col h4 { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--es-accent); margin: 0 0 14px; font-weight: var(--es-fw-medium); }
+.es-footer__col ul { list-style: none; margin: 0; padding: 0; }
+.es-footer__col li { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 6px; }
+
+.es-footer__bar {
+    margin-top: var(--es-space-16); padding-top: var(--es-space-8);
+    border-top: var(--es-border-dark);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    padding-bottom: var(--es-space-8);
+}
+.es-footer__bar ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 24px; }
+@media (max-width: 900px) {
+    .es-footer__grid { grid-template-columns: 1fr 1fr; }
+    .es-footer__bar { flex-direction: column; gap: 12px; align-items: flex-start; }
+}
+@media (max-width: 600px) {
+    .es-footer__grid { grid-template-columns: 1fr; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Hero, Claim-Grid, Split, Bereichs-Block, Cards, Grids
+   ───────────────────────────────────────────────────────────── */
+
+/* Claim grid under hero (H1) */
+.es-hero-claims {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--es-space-8);
+    padding-top: var(--es-space-8);
+    border-top: 1px solid rgba(255,255,255,0.14);
+}
+.es-hero-claims__wert { font-size: 32px; font-weight: var(--es-fw-regular); letter-spacing: -0.03em; }
+.es-hero-claims__label { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 6px; letter-spacing: 0.12em; text-transform: uppercase; }
+@media (max-width: 900px) { .es-hero-claims { grid-template-columns: repeat(2, 1fr); } }
+
+/* Grid wrappers for shortcodes (legacy) + new card styles */
+.esc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--es-space-8); }
+.esc-grid--cols-1 { grid-template-columns: 1fr; }
+.esc-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
+.esc-grid--cols-3 { grid-template-columns: repeat(3, 1fr); }
+.esc-grid--cols-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1100px) {
+    /* CPT-Karten (u.a. Karriere): frueher auf 2 Spalten, damit lange Werte
+       wie "Unternehmensberatung" nicht mitten im Wort umbrechen (in 3 Spalten
+       wird die Wert-Spalte schon ab ~1067px zu schmal). */
+    .esc-grid--cols-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+    .esc-grid--cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+    .esc-grid--cols-2, .esc-grid--cols-3, .esc-grid--cols-4 { grid-template-columns: 1fr; }
+}
+
+/* Generic card (news, einzelleistung, karriere, veranstaltung) */
+.esc-card {
+    display: flex; flex-direction: column;
+    padding: 0;
+    color: var(--es-ink);
+    background: var(--es-paper);
+    border: var(--es-border);
+    border-radius: var(--es-radius-xs);
+    transition: transform var(--es-duration-fast) var(--es-easing), border-color var(--es-duration-fast) var(--es-easing);
+    overflow: hidden;
+    position: relative;
+}
+.esc-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--es-duration-normal) var(--es-easing);
+}
+.esc-card:hover { color: var(--es-ink); transform: translateY(-2px); border-color: var(--es-ink); }
+.esc-card:hover::before { transform: scaleX(1); }
+
+.esc-card__media { aspect-ratio: 16/10; overflow: hidden; background: var(--es-paper-warm); }
+.esc-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--es-easing); }
+.esc-card:hover .esc-card__media img { transform: scale(1.04); }
+
+.esc-card__body { padding: var(--es-space-6) var(--es-space-6) var(--es-space-8); display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.esc-card__meta {
+    font-size: 11px; color: var(--es-accent);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    font-family: var(--es-font-mono);
+}
+.esc-card__title { font-size: 20px; font-weight: var(--es-fw-medium); line-height: 1.28; letter-spacing: -0.015em; margin: 0; }
+.esc-card__text { font-size: 14px; color: var(--es-text-mute); line-height: 1.6; margin: 0; }
+.esc-card__link { margin-top: auto; font-size: 13px; color: var(--es-ink); font-weight: var(--es-fw-medium); display: inline-flex; align-items: center; gap: 6px; padding-top: 10px; }
+
+/* Team card (larger photos, minimal chrome) */
+.esc-team-card {
+    display: block; color: var(--es-ink); background: transparent;
+    transition: transform var(--es-duration-fast) var(--es-easing);
+}
+.esc-team-card:hover { color: var(--es-ink); transform: translateY(-2px); }
+.esc-team-card__photo {
+    width: 100%; aspect-ratio: 4/5;
+    background: var(--es-paper-warm);
+    overflow: hidden;
+    position: relative;
+}
+.esc-team-card__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.esc-team-card__initial {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 56px; font-weight: var(--es-fw-light); color: var(--es-text-soft);
+}
+.esc-team-card__body { margin-top: 20px; }
+.esc-team-card__feld {
+    font-size: 11px; color: var(--es-accent);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 8px;
+    font-family: var(--es-font-mono);
+}
+.esc-team-card__name { font-size: 18px; font-weight: var(--es-fw-medium); letter-spacing: -0.015em; margin: 0; }
+.esc-team-card__role { font-size: 13px; color: var(--es-text-mute); margin: 4px 0 0; }
+
+/* Event row cards (2-col wide, breiter als hoch) */
+.esc-event-row {
+    display: grid; grid-template-columns: 120px 1fr 200px 180px 60px;
+    gap: 40px; align-items: center;
+    padding: var(--es-space-8) 0;
+    border-bottom: var(--es-border);
+    color: var(--es-ink);
+}
+.esc-event-row__day { font-size: 56px; font-weight: var(--es-fw-light); letter-spacing: -0.04em; line-height: 0.95; }
+.esc-event-row__month { font-size: 12px; color: var(--es-text-mute); font-family: var(--es-font-mono); margin-top: 4px; }
+.esc-event-row__title { font-size: 24px; font-weight: var(--es-fw-medium); letter-spacing: -0.02em; line-height: 1.25; margin: 0; }
+.esc-event-row__kind { font-size: 11px; color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase; }
+.esc-event-row__loc { font-size: 14px; color: var(--es-text-mute); }
+.esc-event-row__arrow { font-size: 18px; text-align: right; }
+@media (max-width: 900px) {
+    .esc-event-row { grid-template-columns: 80px 1fr; gap: 20px; }
+    .esc-event-row__kind, .esc-event-row__loc, .esc-event-row__arrow { display: none; }
+    .esc-event-row__day { font-size: 40px; }
+}
+
+/* Publikation row (no detail page) */
+.esc-pub-row {
+    display: grid; grid-template-columns: 120px 1fr 220px 40px;
+    gap: var(--es-space-8); align-items: baseline;
+    padding: var(--es-space-6) 0;
+    border-bottom: var(--es-border);
+    color: var(--es-ink);
+}
+.esc-pub-row__cat { font-size: 11px; color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase; }
+.esc-pub-row__title { font-size: 19px; font-weight: var(--es-fw-medium); letter-spacing: -0.015em; line-height: 1.3; margin: 0 0 6px; }
+.esc-pub-row__author { font-size: 13px; color: var(--es-text-mute); margin: 0; }
+.esc-pub-row__src { font-size: 13px; color: var(--es-text-soft); font-family: var(--es-font-mono); line-height: 1.4; }
+.esc-pub-row__arrow { font-size: 18px; text-align: right; }
+@media (max-width: 900px) {
+    .esc-pub-row { grid-template-columns: 1fr; gap: 8px; }
+    .esc-pub-row__src, .esc-pub-row__arrow { display: none; }
+}
+
+/* Bereichs-Block (C3) — stripes: paper + paper-warm */
+.es-bereich { border-bottom: var(--es-border); }
+.es-bereich--warm { background: var(--es-paper-warm); }
+.es-bereich__inner { padding: var(--es-space-30) 0; }
+.es-bereich__top { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--es-space-16); align-items: start; margin-bottom: var(--es-space-16); }
+.es-bereich__meta { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+.es-bereich__num { font-family: var(--es-font-mono); font-size: 12px; color: var(--es-text-soft); letter-spacing: 0.12em; }
+.es-bereich__sep { width: 40px; height: 1px; background: var(--es-rule); }
+.es-bereich__sub { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--es-accent); }
+.es-bereich__title { font-size: clamp(40px, 5.4vw, 72px); font-weight: var(--es-fw-regular); letter-spacing: -0.035em; line-height: 1.02; margin: 0 0 36px; }
+.es-bereich__lede { font-size: 20px; line-height: 1.6; color: var(--es-text-mute); max-width: 580px; font-weight: var(--es-fw-light); margin-bottom: 40px; }
+.es-bereich__img { aspect-ratio: 4/3; background: var(--es-paper-cool); overflow: hidden; }
+.es-bereich__img img { width: 100%; height: 100%; object-fit: cover; }
+.es-bereich__topics-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--es-text-soft); margin-bottom: 24px; }
+.es-bereich__topics { display: grid; grid-template-columns: repeat(3, 1fr); border-top: var(--es-border); }
+.es-bereich__topic { padding: 28px 0; border-bottom: var(--es-border); color: var(--es-ink); display: block; }
+.es-bereich__topic + .es-bereich__topic:not(:nth-child(3n+1)) { padding-left: var(--es-space-8); border-left: var(--es-border); }
+.es-bereich__topic-name { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.es-bereich__topic-name > span:first-child { width: 6px; height: 6px; border-radius: 999px; background: var(--es-accent); display: inline-block; }
+.es-bereich__topic-name h3 { font-size: 18px; font-weight: var(--es-fw-medium); letter-spacing: -0.015em; margin: 0; }
+.es-bereich__topic-desc { font-size: 14px; color: var(--es-text-mute); line-height: 1.55; padding-left: 16px; margin: 0; }
+@media (max-width: 1024px) {
+    .es-bereich__top { grid-template-columns: 1fr; }
+    .es-bereich__topics { grid-template-columns: repeat(2, 1fr); }
+    .es-bereich__topic:nth-child(2n+1) { padding-left: 0; border-left: 0; }
+}
+@media (max-width: 600px) {
+    .es-bereich__topics { grid-template-columns: 1fr; }
+    .es-bereich__topic { padding-left: 0 !important; border-left: 0 !important; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Team-Single (S3), News-Single (S1), Karriere-Single (S4)
+   ───────────────────────────────────────────────────────────── */
+
+/* Team single */
+.es-team-single { padding: var(--es-space-12) 0 var(--es-space-30); }
+.es-team-single__crumb { font-size: 12px; color: var(--es-text-soft); margin-bottom: var(--es-space-10); font-family: var(--es-font-mono); letter-spacing: 0.06em; }
+.es-team-single__grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: var(--es-space-24); align-items: start; }
+.es-team-single__col-left { position: sticky; top: 40px; }
+/* Fix v29: Sticky-Header verdeckte sonst das Foto oben. Bei aktivem
+   html.es-header-sticky die Spalte um Header-Hoehe + Abstand versetzen. */
+html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 78px) + 24px); }
+.es-team-single__photo { width: 100%; aspect-ratio: 4/5; background: var(--es-paper-warm); overflow: hidden; }
+.es-team-single__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.es-team-single__contact-card {
+    margin-top: var(--es-space-8); padding: var(--es-space-8);
+    background: var(--es-ink); color: var(--es-paper);
+    border-radius: var(--es-radius-xs);
+}
+.es-team-single__contact-card .es-eyebrow { color: var(--es-accent); }
+.es-team-single__contact-row { margin-bottom: 10px; font-size: 14px; line-height: 1.6; }
+.es-team-single__contact-row small { display: block; color: rgba(255,255,255,0.5); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 2px; }
+.es-team-single__contact-actions { margin-top: var(--es-space-6); display: flex; flex-direction: column; gap: 8px; }
+.es-team-single__contact-actions .es-btn { width: 100%; justify-content: center; }
+
+.es-team-single__role-eyebrow { color: var(--es-accent); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: var(--es-fw-medium); margin-bottom: 20px; display: inline-block; }
+.es-team-single__name { font-size: clamp(40px, 5vw, 64px); line-height: 1.02; font-weight: var(--es-fw-regular); letter-spacing: -0.035em; margin: 0 0 12px; }
+.es-team-single__role { font-size: 17px; color: var(--es-text-mute); margin: 0 0 var(--es-space-10); }
+.es-team-single__bio { font-size: 19px; line-height: 1.6; color: var(--es-text-mute); margin-bottom: var(--es-space-12); }
+
+.es-team-single__section { border-top: var(--es-border); padding-top: var(--es-space-12); margin-top: var(--es-space-12); }
+.es-team-single__section h3 { font-size: 22px; font-weight: var(--es-fw-medium); letter-spacing: -0.015em; margin: 0 0 20px; }
+
+.es-team-single__focus { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.es-team-single__focus-item { font-size: 14px; padding: 10px 0; color: var(--es-text); display: flex; align-items: center; gap: 10px; }
+.es-team-single__focus-item::before { content: ""; width: 4px; height: 4px; background: var(--es-accent); border-radius: 999px; }
+
+.es-team-single__career { display: grid; gap: 16px; }
+.es-team-single__career-row {
+    display: grid; grid-template-columns: 140px 1fr; gap: 24px;
+    padding-bottom: 16px; border-bottom: var(--es-border);
+}
+.es-team-single__career-row:last-child { border-bottom: 0; }
+.es-team-single__career-when { font-size: 13px; color: var(--es-text-soft); font-family: var(--es-font-mono); }
+.es-team-single__career-what { font-size: 15px; }
+
+.es-team-single__pubs a { display: block; padding: 16px 0; border-bottom: var(--es-border); font-size: 15px; }
+.es-team-single__pubs a:last-child { border-bottom: 0; }
+
+.es-team-single__back {
+    display: inline-block; margin-top: var(--es-space-12);
+    font-size: 13px; font-weight: var(--es-fw-medium);
+    color: var(--es-ink); padding-bottom: 2px;
+    border-bottom: 1px solid currentColor;
+}
+.es-team-single__back:hover { color: var(--es-accent); }
+
+@media (max-width: 1024px) {
+    .es-team-single__grid { grid-template-columns: 1fr; }
+    .es-team-single__col-left { position: static; max-width: 460px; }
+}
+
+/* News / Article (S1) */
+.es-article { padding: var(--es-space-12) 0 var(--es-space-30); }
+.es-article__header { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+.es-article__crumb { font-size: 12px; color: var(--es-text-soft); margin-bottom: var(--es-space-10); font-family: var(--es-font-mono); letter-spacing: 0.06em; }
+.es-article__eyebrow { color: var(--es-accent); margin-bottom: 20px; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: var(--es-fw-medium); display: inline-block; }
+.es-article__title { font-size: clamp(36px, 4.5vw, 56px); line-height: 1.08; font-weight: var(--es-fw-regular); letter-spacing: -0.035em; margin: 0 0 28px; }
+.es-article__lede { font-size: 20px; line-height: 1.55; color: var(--es-text-mute); margin: 0 0 var(--es-space-10); }
+.es-article__byline {
+    display: flex; align-items: center; gap: 14px;
+    padding-bottom: var(--es-space-10); border-bottom: var(--es-border);
+    margin-bottom: var(--es-space-14);
+}
+.es-article__byline-avatar { width: 44px; height: 44px; border-radius: 999px; overflow: hidden; background: var(--es-paper-warm); flex-shrink: 0; }
+.es-article__byline-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.es-article__byline-name { font-size: 14px; font-weight: var(--es-fw-medium); }
+.es-article__byline-meta { font-size: 12px; color: var(--es-text-mute); }
+
+.es-article__hero { max-width: 1040px; margin: 0 auto var(--es-space-14); padding: 0 var(--es-space-12); }
+.es-article__hero img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; display: block; }
+.es-article__body { max-width: 720px; margin: 0 auto; padding: 0 var(--es-space-12); font-size: 18px; line-height: 1.7; color: var(--es-text); }
+.es-article__body h2 { font-size: 28px; font-weight: var(--es-fw-medium); letter-spacing: -0.02em; margin: 56px 0 20px; }
+.es-article__body h3 { font-size: 22px; font-weight: var(--es-fw-medium); margin: 40px 0 16px; }
+.es-article__body blockquote {
+    margin: 48px 0; padding: 24px 32px;
+    border-left: 3px solid var(--es-accent);
+    font-size: 24px; line-height: 1.35; letter-spacing: -0.01em;
+    color: var(--es-ink); font-style: normal;
+}
+.es-article__body p { margin-bottom: 28px; }
+.es-article__body ul, .es-article__body ol { margin-bottom: 28px; padding-left: 24px; }
+.es-article__body li { margin-bottom: 8px; }
+.es-article__body a { color: var(--es-ink); border-bottom: 1px solid var(--es-accent); }
+
+/* Karriere single (S4) — sectioned */
+.es-stelle-single { padding: var(--es-space-12) 0 var(--es-space-30); }
+.es-stelle-single__meta-row { display: flex; gap: 32px; flex-wrap: wrap; padding: var(--es-space-8) 0; border-top: var(--es-border); border-bottom: var(--es-border); margin-bottom: var(--es-space-14); font-size: 13px; color: var(--es-text-mute); }
+.es-stelle-single__meta-row strong { color: var(--es-ink); font-weight: var(--es-fw-medium); }
+.es-stelle-single__section-title { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--es-accent); font-weight: var(--es-fw-medium); margin: var(--es-space-12) 0 20px; }
+.es-stelle-single__heading { font-size: 28px; font-weight: var(--es-fw-medium); letter-spacing: -0.02em; margin: 0 0 16px; }
+
+/* Veranstaltung single */
+.es-event-single { padding: var(--es-space-12) 0 var(--es-space-30); }
+.es-event-single__datecard {
+    display: inline-flex; align-items: baseline; gap: 14px;
+    padding: 16px 20px; border: var(--es-border);
+    margin-bottom: var(--es-space-10);
+}
+.es-event-single__datecard strong { font-size: 40px; font-weight: var(--es-fw-light); letter-spacing: -0.04em; line-height: 1; }
+.es-event-single__datecard span { font-size: 12px; color: var(--es-text-mute); font-family: var(--es-font-mono); text-transform: uppercase; letter-spacing: 0.12em; }
+
+/* Smooth accordion (used by Elementor) */
+.elementor-accordion .elementor-accordion-item {
+    border-bottom: var(--es-border) !important;
+    margin-bottom: 0 !important;
+    border-top: 0; border-left: 0; border-right: 0;
+    background: transparent !important;
+}
+.elementor-accordion .elementor-tab-title {
+    padding: 24px 0 !important;
+    border: 0 !important;
+    transition: color var(--es-duration-fast) var(--es-easing);
+}
+.elementor-accordion .elementor-tab-content {
+    padding: 0 0 28px !important;
+    border: 0 !important;
+    overflow: hidden;
+    transition: max-height var(--es-duration-normal) var(--es-easing), opacity var(--es-duration-normal) var(--es-easing);
+}
+
+/* Category placeholder (colored gradient tile) — used when a post has no real featured image */
+.es-ph-cat {
+    display: flex; align-items: flex-end; justify-content: flex-start;
+    aspect-ratio: 16/10; color: var(--es-paper);
+    padding: 24px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    background: linear-gradient(135deg, var(--es-ink) 0%, var(--es-ink-soft) 100%);
+    position: relative; overflow: hidden;
+}
+.es-ph-cat::before {
+    content: ""; position: absolute; right: -60px; bottom: -60px; width: 240px; height: 240px; border-radius: 999px;
+    background: radial-gradient(circle, var(--es-accent) 0%, transparent 70%); opacity: 0.35;
+}
+.es-ph-cat span { position: relative; z-index: 1; font-weight: var(--es-fw-medium); }
+
+/* Anchor rails — guides the eye, never a wall of floating content */
+.es-rail { border-top: var(--es-border); padding-top: var(--es-space-8); }
+.es-rail--end { border-bottom: var(--es-border); padding-bottom: var(--es-space-8); }
+
+/* ─────────────────────────────────────────────────────────────
+   Stage wrappers (Dark/Warm/Cool) — darunter alle Headings/Text
+   bekommen die richtige Farbe unabhängig von Inline-Styles.
+   ───────────────────────────────────────────────────────────── */
+.es-stage--ink { color: var(--es-paper); }
+.es-stage--ink h1, .es-stage--ink h2, .es-stage--ink h3, .es-stage--ink h4, .es-stage--ink h5, .es-stage--ink h6 { color: var(--es-paper); }
+.es-stage--ink p { color: rgba(255,255,255,0.78); }
+.es-stage--ink a:not(.es-btn):not(.es-btn-jobs):not(.es-btn-kontakt) { color: inherit; }
+.es-stage--ink strong, .es-stage--ink b { color: var(--es-paper); }
+.es-stage--ink .es-eyebrow { color: rgba(255,255,255,0.6); }
+.es-stage--ink .es-eyebrow--accent { color: var(--es-accent); }
+.es-stage--ink .es-link { color: var(--es-paper); border-bottom-color: var(--es-paper); }
+.es-stage--ink .es-link:hover { color: var(--es-accent); border-bottom-color: var(--es-accent); }
+
+/* ─────────────────────────────────────────────────────────────
+   Button-Varianten auf hellem Grund absichern (kein White-on-White)
+   ───────────────────────────────────────────────────────────── */
+/* --paper Button gehört nur in dunkle Sections. Auf hellem Grund
+   fallen wir auf --primary (ink) zurück. */
+.es-stage--warm .es-btn--paper, .es-stage--cool .es-btn--paper, .es-stage:not(.es-stage--ink) .es-btn--paper {
+    background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink);
+}
+.es-stage--warm .es-btn--paper:hover, .es-stage--cool .es-btn--paper:hover {
+    background: transparent; color: var(--es-ink);
+}
+/* --ghost-paper nur auf dunkel */
+.es-stage:not(.es-stage--ink) .es-btn--ghost-paper {
+    color: var(--es-ink); border-color: var(--es-ink);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Mobile-Padding Fixes (Hauptcontainer + Hero-Inhalte)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .es-wrap, .es-wrap--narrow { padding-left: var(--es-space-6); padding-right: var(--es-space-6); }
+    :root { --es-space-30: 72px; --es-space-35: 84px; --es-space-20: 56px; }
+}
+@media (max-width: 600px) {
+    .es-wrap, .es-wrap--narrow { padding-left: 18px; padding-right: 18px; }
+    /* Grid-Layouts in den Blueprints stapeln */
+    .es-stage [style*="grid-template-columns:1.3fr 1fr"],
+    .es-stage [style*="grid-template-columns:1fr 1.3fr"],
+    .es-stage [style*="grid-template-columns:1fr 1.6fr"],
+    .es-stage [style*="grid-template-columns:1fr 1.4fr"],
+    .es-stage [style*="grid-template-columns:1fr 1.2fr"],
+    .es-stage [style*="grid-template-columns:1fr 2fr"],
+    .es-stage [style*="grid-template-columns:1.2fr 1fr"],
+    .es-stage [style*="grid-template-columns:auto 1fr auto"],
+    .es-stage [style*="grid-template-columns:auto 1fr"] { grid-template-columns: 1fr !important; gap: 32px !important; }
+    .es-stage [style*="grid-template-columns:repeat(2"],
+    .es-stage [style*="grid-template-columns: repeat(2"] { grid-template-columns: 1fr !important; }
+    .es-stage h1 { font-size: 40px !important; }
+    .es-stage h2 { font-size: 30px !important; }
+    .es-footer__cta-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Menu hover underline slide-in
+   ───────────────────────────────────────────────────────────── */
+.es-nav a { position: relative; border-bottom: 0 !important; padding-bottom: 4px; }
+.es-nav a::after {
+    content: ""; position: absolute; left: 0; bottom: 0;
+    width: 100%; height: 1px; background: currentColor;
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 260ms var(--es-easing);
+}
+.es-nav a:hover::after, .es-nav .current-menu-item > a::after, .es-nav .current_page_item > a::after, .es-nav .current-menu-ancestor > a::after { transform: scaleX(1); }
+.es-header--dark .es-nav a::after { background: var(--es-accent); }
+.es-nav a:hover { color: var(--es-ink); }
+.es-header--dark .es-nav a:hover { color: var(--es-paper); }
+
+/* ─────────────────────────────────────────────────────────────
+   Header Actions — gleiche Höhe und Größe
+   ───────────────────────────────────────────────────────────── */
+.es-btn-jobs, .es-btn-kontakt {
+    height: 36px; padding: 0 16px; font-size: 13px;
+    display: inline-flex; align-items: center; gap: 8px;
+    line-height: 1; white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Footer-CTA text readability (white text on ink)
+   ───────────────────────────────────────────────────────────── */
+.es-footer__cta { color: var(--es-paper); }
+.es-footer__cta h2 { color: var(--es-paper) !important; }
+.es-footer__cta-sub { color: rgba(255,255,255,0.55) !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   Service-Card Hover (Home + Leistungen)
+   ───────────────────────────────────────────────────────────── */
+.esc-card { transition: transform 260ms var(--es-easing), border-color 260ms var(--es-easing), background 500ms ease-in-out; }
+.esc-card:hover { background: var(--es-paper-warm); border-color: var(--es-ink); }
+
+/* ─────────────────────────────────────────────────────────────
+   Bereichs-Block: Bild ohne graue Kante
+   ───────────────────────────────────────────────────────────── */
+.es-bereich__img { background: transparent; border: 0; aspect-ratio: 4/3; overflow: hidden; }
+.es-bereich__img img, .es-bereich__img .es-ph-cat { width: 100%; height: 100%; display: block; }
+.es-bereich__img .es-ph-cat { aspect-ratio: auto; }
+
+/* Topic-Cards etwas Atem: max-height-fallback durch line-clamp 4 */
+.es-bereich__topic-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Pullquote panel (Philosophie)
+   ───────────────────────────────────────────────────────────── */
+.es-pullquote-panel {
+    background: var(--es-paper);
+    border: var(--es-border);
+    padding: var(--es-space-16) var(--es-space-12);
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   News card fallback — Textüberlauf truncaten
+   ───────────────────────────────────────────────────────────── */
+.es-ph-cat span {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    word-break: break-word;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   News single — breiteres Article-Body (zentriert, max 860)
+   ───────────────────────────────────────────────────────────── */
+.es-article__body { max-width: 860px; }
+.es-article__hero { max-width: 1240px; }
+
+/* Veranstaltung-Row Pin-Icon → Kompass-SVG */
+.esc-event-row__loc::before {
+    content: "";
+    display: inline-block; width: 14px; height: 14px; margin-right: 8px;
+    background: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><polygon points='16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76'/></svg>");
+            mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><polygon points='16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76'/></svg>");
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+    vertical-align: -2px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Team-Filter (on /team/)
+   ───────────────────────────────────────────────────────────── */
+.es-team-filter {
+    display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+    padding: 20px 0; border-bottom: var(--es-border);
+}
+.es-team-filter__pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.es-team-filter__pill {
+    padding: 8px 14px; font-size: 13px; border-radius: var(--es-radius-xs);
+    border: var(--es-border); color: var(--es-ink); background: transparent;
+    transition: background 200ms var(--es-easing), color 200ms var(--es-easing);
+}
+.es-team-filter__pill:hover { background: var(--es-paper-warm); color: var(--es-ink); }
+.es-team-filter__pill.is-active { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
+.es-team-filter__count { margin-left: auto; font-size: 13px; color: var(--es-text-mute); }
+
+/* ─────────────────────────────────────────────────────────────
+   Publikationen — Jahres-Gruppen (L2 nach Mockup)
+   ───────────────────────────────────────────────────────────── */
+.esc-pub-years { display: block; }
+.esc-pub-year {
+    display: grid; grid-template-columns: 120px 1fr; gap: var(--es-space-12);
+    padding-top: var(--es-space-14); padding-bottom: var(--es-space-4);
+    border-top: var(--es-border);
+}
+.esc-pub-year__label { position: sticky; top: 100px; align-self: start; }
+.esc-pub-year__num { font-size: 48px; font-weight: var(--es-fw-light); letter-spacing: -0.03em; line-height: 1; }
+.esc-pub-year__count { font-size: 12px; color: var(--es-text-mute); margin-top: 8px; font-family: var(--es-font-mono); }
+
+.esc-pub-row {
+    display: grid; grid-template-columns: 140px 1fr 220px;
+    gap: var(--es-space-8); align-items: baseline;
+    padding: var(--es-space-6) 0;
+    border-bottom: var(--es-border);
+    color: var(--es-ink);
+}
+.esc-pub-row:hover { background: var(--es-paper-warm); }
+.esc-pub-row--nolink { color: var(--es-text-mute); }
+.esc-pub-row__cat {
+    font-size: 11px; color: var(--es-accent);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    font-family: var(--es-font-mono);
+}
+.esc-pub-row__title { font-size: 19px; font-weight: var(--es-fw-medium); letter-spacing: -0.015em; line-height: 1.3; margin: 0 0 6px; }
+.esc-pub-row__author { font-size: 13px; color: var(--es-text-mute); margin: 0; }
+.esc-pub-row__cta {
+    justify-self: end; display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: var(--es-fw-medium); color: var(--es-ink);
+    padding-bottom: 2px; border-bottom: 1px solid currentColor;
+    white-space: nowrap;
+}
+.esc-pub-row:hover .esc-pub-row__cta { color: var(--es-accent); border-bottom-color: var(--es-accent); }
+.esc-pub-row__arrow { font-size: 16px; }
+
+@media (max-width: 900px) {
+    .esc-pub-year { grid-template-columns: 1fr; gap: 20px; }
+    .esc-pub-year__label { position: static; }
+    .esc-pub-year__num { font-size: 32px; }
+    .esc-pub-row { grid-template-columns: 1fr; gap: 8px; }
+    .esc-pub-row__cta { justify-self: start; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Button inside .es-stage--ink nochmal hart absichern
+   ───────────────────────────────────────────────────────────── */
+.es-stage--ink .es-btn--paper { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }
+.es-stage--ink .es-btn--paper:hover { background: transparent; color: var(--es-paper); border-color: var(--es-paper); }
+.es-stage--ink .es-btn--ghost-paper { color: var(--es-paper); border-color: rgba(255,255,255,0.4); }
+.es-stage--ink .es-btn--ghost-paper:hover { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }
+
+/* ─────────────────────────────────────────────────────────────
+   Native Elementor widgets — Hero/Split/CTA/Cards stylen via CSS,
+   damit Inhalte im Editor nativ editierbar bleiben.
+   ───────────────────────────────────────────────────────────── */
+
+/* Elementor resets so dass unsere Varianten greifen */
+.es-stage .elementor-heading-title { margin: 0; font-family: var(--es-font-sans); font-weight: var(--es-fw-regular); color: var(--es-ink); letter-spacing: var(--es-ls-headline); line-height: var(--es-lh-snug); }
+.es-stage--ink .elementor-heading-title { color: var(--es-paper); }
+.es-stage .elementor-widget-text-editor { color: inherit; }
+.es-stage--ink .elementor-widget-text-editor p { color: rgba(255,255,255,0.78); }
+
+/* Eyebrow als Heading-Widget p + Klasse */
+.elementor-widget-heading.es-eyebrow .elementor-heading-title,
+.elementor-widget-heading .elementor-heading-title.es-eyebrow {
+    font-size: var(--es-fs-eyebrow); letter-spacing: var(--es-ls-eyebrow);
+    text-transform: uppercase; font-weight: var(--es-fw-medium);
+    color: var(--es-text-mute); display: inline-block; margin-bottom: 20px;
+}
+/* Wenn die Klasse am Widget-Container hängt (Standardfall) */
+.elementor-widget.es-eyebrow .elementor-heading-title,
+.es-eyebrow > .elementor-heading-title {
+    font-size: var(--es-fs-eyebrow); letter-spacing: var(--es-ls-eyebrow);
+    text-transform: uppercase; font-weight: var(--es-fw-medium);
+    color: var(--es-text-mute) !important; margin-bottom: 0;
+}
+.es-eyebrow.es-eyebrow--paper .elementor-heading-title,
+.es-eyebrow--paper > .elementor-heading-title { color: rgba(255,255,255,0.6) !important; }
+.es-eyebrow.es-eyebrow--accent .elementor-heading-title,
+.es-eyebrow--accent > .elementor-heading-title { color: var(--es-accent) !important; }
+
+.elementor-widget.es-eyebrow { margin-bottom: 20px !important; }
+
+/* Hero-Title (H1) */
+.elementor-widget.es-hero__title .elementor-heading-title,
+.es-hero__title > .elementor-heading-title {
+    font-size: clamp(44px, 6vw, 80px); font-weight: var(--es-fw-light);
+    letter-spacing: -0.04em; line-height: 1.02; color: var(--es-paper) !important;
+    max-width: 1100px;
+}
+.elementor-widget.es-hero__title { margin-bottom: 36px !important; }
+.elementor-widget.es-hero__lead .elementor-widget-container p,
+.es-hero__lead p {
+    font-size: 20px; line-height: 1.55; font-weight: 300;
+    color: rgba(255,255,255,0.78); max-width: 780px;
+}
+.elementor-widget.es-hero__lead { margin-bottom: 40px !important; }
+
+/* Split-Section Title (H2) */
+.elementor-widget.es-split__title .elementor-heading-title,
+.es-split__title > .elementor-heading-title {
+    font-size: clamp(32px, 4vw, 52px); line-height: 1.05; font-weight: var(--es-fw-light);
+    letter-spacing: -0.035em; margin-top: 24px !important;
+}
+.elementor-widget.es-split__lead .elementor-widget-container p,
+.es-split__lead p { font-size: 20px; line-height: 1.65; font-weight: 400; color: var(--es-ink); margin-bottom: 24px; }
+.es-stage--ink .es-split__lead p { color: rgba(255,255,255,0.82); }
+.elementor-widget.es-split__body .elementor-widget-container p,
+.es-split__body p { font-size: 17px; line-height: 1.7; color: var(--es-text-mute); }
+.es-stage--ink .es-split__body p { color: rgba(255,255,255,0.6); }
+
+/* CTA-Title */
+.elementor-widget.es-cta__title .elementor-heading-title,
+.es-cta__title > .elementor-heading-title {
+    font-size: clamp(36px, 4.6vw, 64px); line-height: 1.02; font-weight: var(--es-fw-regular);
+    letter-spacing: -0.035em; color: var(--es-paper) !important; max-width: 820px; margin: 0;
+}
+.es-cta__title .es-cta__sub { color: rgba(255,255,255,0.55); }
+.es-cta__buttons { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+
+/* Hero-Button-Row Container */
+.es-hero__buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+
+/* Pillar-Cards (Philosophie, Benefits) */
+.elementor-column.es-card-pillar { padding: 48px 36px !important; background: var(--es-paper); border: var(--es-border); }
+.es-stage--warm .elementor-column.es-card-pillar { background: var(--es-paper); }
+.es-card-pillar__num { font-family: var(--es-font-mono); font-size: 11px; color: var(--es-accent); letter-spacing: 0.16em; margin-bottom: 32px; }
+.elementor-widget.es-card-pillar__title .elementor-heading-title,
+.es-card-pillar__title > .elementor-heading-title { font-size: 30px; line-height: 1.15; font-weight: 400; letter-spacing: -0.025em; margin: 0 0 20px; }
+.elementor-widget.es-card-pillar__desc p,
+.es-card-pillar__desc p { font-size: 15px; color: var(--es-text-mute); line-height: 1.65; margin: 0; }
+
+/* Default Elementor Section-Gap */
+.es-stage .elementor-section.elementor-section-gap-default > .elementor-container { gap: var(--es-space-16); }
+
+/* Beratungsfeld-Detail: 2-Spalten-Einzelleistungen mit mehr Padding */
+.es-bereich-detail__einzel .es-bereich__topics {
+    grid-template-columns: repeat(2, 1fr);
+    border-top: var(--es-border);
+}
+.es-bereich-detail__einzel .es-bereich__topic { padding: 36px 28px; }
+.es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) {
+    padding-left: 36px; border-left: var(--es-border);
+}
+@media (max-width: 768px) {
+    .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: 1fr; }
+    .es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 28px; border-left: 0; }
+}
+
+/* Publikationen-Row: Hover-Tint entfernen, nur CTA-Farbe */
+.esc-pub-row:hover { background: transparent; }
+.esc-pub-row:hover .esc-pub-row__cta { color: var(--es-accent); border-bottom-color: var(--es-accent); }
+
+/* Event-Row: kein Icon mehr vor Location */
+.esc-event-row__loc::before { content: none; }
+
+/* News/Event-Article Body: Blocksatz-Option */
+.es-article__body { text-align: left; }
+.es-article__body--justify { text-align: justify; hyphens: auto; }
+
+/* Kontakt: Form (breiter) + Standorte (schmaler) als echtes Grid direkt auf dem
+   Section-Container. Die alte Regel zielte auf .es-kontakt-grid, die Sektion
+   heisst aber .es-kontakt-grid-wrap (+ es fehlte display:grid) -> sie griff nie,
+   und Elementors Flex-Spalten (58/42 + 96px-Gap) klappten auf mittleren Breiten
+   um und liessen die rechte Haelfte leer. */
+.es-kontakt-grid-wrap > .elementor-container {
+    display: grid !important;
+    grid-template-columns: 1.4fr 1fr !important;
+    gap: clamp(48px, 6vw, 96px) !important;
+    align-items: start;
+}
+.es-kontakt-grid-wrap > .elementor-container > .elementor-column {
+    width: auto !important; max-width: none !important;
+}
+@media (max-width: 1024px) {
+    .es-kontakt-grid-wrap > .elementor-container { grid-template-columns: 1fr !important; gap: 48px !important; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Native-Home: Service-Cards (3-col native widgets)
+   ───────────────────────────────────────────────────────────── */
+.elementor-column.es-service-card > .elementor-widget-wrap,
+.elementor-column.es-service-card .elementor-element-populated {
+    padding: 36px !important;
+    border: var(--es-border);
+    background: var(--es-paper);
+    min-height: 380px;
+    transition: background 500ms ease-in-out, border-color 200ms var(--es-easing), transform 200ms var(--es-easing);
+}
+.elementor-column.es-service-card:hover .elementor-element-populated {
+    background: var(--es-paper-warm); border-color: var(--es-ink); transform: translateY(-2px);
+}
+.es-service-card__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; }
+.es-service-card__num  { font-family: var(--es-font-mono); font-size: 12px; color: var(--es-text-soft); letter-spacing: 0.1em; }
+.es-service-card__dot  { width: 6px; height: 6px; border-radius: 999px; background: var(--es-accent); display: inline-block; }
+.elementor-widget.es-service-card__title .elementor-heading-title,
+.es-service-card__title > .elementor-heading-title {
+    font-size: 28px; line-height: 1.1; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.elementor-widget.es-service-card__body .elementor-widget-container p,
+.es-service-card__body p { font-size: 15px; color: var(--es-text-mute); line-height: 1.55; }
+
+/* News-Title auf Home */
+.elementor-widget.es-home-news__title .elementor-heading-title,
+.es-home-news__title > .elementor-heading-title {
+    font-size: clamp(32px, 4.2vw, 52px); line-height: 1.05; font-weight: var(--es-fw-regular); letter-spacing: -0.03em; margin-bottom: 48px;
+}
+
+.elementor-widget.es-home-services-head__title .elementor-heading-title,
+.es-home-services-head__title > .elementor-heading-title {
+    font-size: clamp(36px, 4.4vw, 52px); line-height: 1.05; font-weight: var(--es-fw-regular); letter-spacing: -0.03em; margin-bottom: 20px;
+}
+
+/* Mandantschaft-Liste */
+.es-mandanten { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; border-top: var(--es-border); }
+.es-mandanten li {
+    padding: 22px 32px 22px 0; border-bottom: var(--es-border);
+    display: flex; align-items: center; gap: 16px;
+    font-size: 17px; font-weight: 400; letter-spacing: -0.01em;
+}
+.es-mandanten li:nth-child(2n) { padding-right: 0; padding-left: 32px; border-left: var(--es-border); }
+.es-mandanten__num { font-family: var(--es-font-mono); font-size: 11px; color: var(--es-text-soft); letter-spacing: 0.08em; }
+@media (max-width: 700px) {
+    .es-mandanten { grid-template-columns: 1fr; }
+    .es-mandanten li, .es-mandanten li:nth-child(2n) { padding-left: 0; padding-right: 0; border-left: 0; }
+}
+
+/* Ansprechpartner-Balken */
+.es-ansprech { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+.es-ansprech__people { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; flex: 1; }
+.es-ansprech__people > a { display: flex; align-items: center; gap: 14px; color: var(--es-ink); }
+.es-ansprech__photo { width: 52px; height: 52px; border-radius: 999px; overflow: hidden; background: var(--es-paper-warm); flex-shrink: 0; }
+.es-ansprech__photo img { width: 100%; height: 100%; object-fit: cover; }
+.es-ansprech__name { font-size: 15px; font-weight: 500; }
+.es-ansprech__role { font-size: 12px; color: var(--es-text-mute); margin-top: 2px; }
+.es-ansprech .es-btn { margin-left: auto; }
+
+/* Kontakt: right column narrower already defined above */
+
+/* Service-Cards + Mandanten auch für es-stage--warm Hintergrund */
+.es-stage--warm .elementor-column.es-service-card .elementor-element-populated { background: var(--es-paper); }
+
+/* Sicherstellen, dass Elementor-Button-Widget unsere Custom-Klassen greift */
+.elementor-widget-button .elementor-button {
+    border-radius: var(--es-radius-xs); font-family: var(--es-font-sans);
+    font-weight: var(--es-fw-medium); letter-spacing: -0.01em; padding: 14px 22px;
+}
+
+/* Eyebrow als p-Tag mit Klasse auf WIDGET — Elementor hängt Klasse an <p> */
+.es-eyebrow > .elementor-heading-title { margin: 0 !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   Kontakt-Form (native HTML-Block in Elementor-html-Widget)
+   ───────────────────────────────────────────────────────────── */
+.es-kontakt-form {
+    display: grid; gap: 24px; max-width: none;
+    background: #F4F6F8; border: var(--es-border); border-radius: var(--es-radius-xs);
+    padding: 40px;
+}
+@media (max-width: 1024px) { .es-kontakt-form { max-width: 600px; } }
+@media (max-width: 600px)  { .es-kontakt-form { padding: 28px; } }
+.es-kontakt-form label { display: flex; flex-direction: column; gap: 8px; }
+.es-kontakt-form label > span { font-size: 12px; color: var(--es-text-mute); letter-spacing: 0.1em; text-transform: uppercase; }
+.es-kontakt-form input[type="text"], .es-kontakt-form input[type="email"], .es-kontakt-form textarea {
+    width: 100%; border: 0; border-bottom: 1px solid var(--es-ink);
+    background: transparent; padding: 10px 0; font: inherit; font-size: 16px; outline: none;
+}
+.es-kontakt-form textarea { resize: vertical; }
+.es-kontakt-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 600px) { .es-kontakt-form__row { grid-template-columns: 1fr; } }
+.es-kontakt-form__radio-group { display: flex; flex-direction: column; gap: 12px; }
+.es-kontakt-form__group-label { font-size: 12px; color: var(--es-text-mute); letter-spacing: 0.1em; text-transform: uppercase; }
+.es-kontakt-form__pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.es-kontakt-form__pills label {
+    padding: 10px 16px; font-size: 13px; border: var(--es-border); border-radius: var(--es-radius-xs);
+    cursor: pointer; flex-direction: row; align-items: center; gap: 6px;
+}
+.es-kontakt-form__pills input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+.es-kontakt-form__pills label:has(input:checked) { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
+.es-kontakt-form__submit { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; gap: 16px; flex-wrap: wrap; }
+.es-kontakt-form__submit > span { font-size: 12px; color: var(--es-text-mute); max-width: 400px; }
+
+/* Kontakt-Standorte */
+.es-kontakt-locations { display: grid; gap: 0; }
+.es-kontakt-location { padding: 28px 0; border-bottom: var(--es-border); }
+.es-kontakt-location.is-last { border-bottom: 0; }
+.es-kontakt-location__head {
+    font-size: 24px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+}
+.es-kontakt-location__badge {
+    font-size: 10px; color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 3px 8px; border: 1px solid var(--es-accent); border-radius: var(--es-radius-pill);
+}
+.es-kontakt-location__line { font-size: 15px; color: var(--es-text-mute); line-height: 1.5; }
+.es-kontakt-location__tel { font-size: 15px; color: var(--es-ink); font-family: var(--es-font-mono); display: block; margin-top: 10px; }
+.es-kontakt-general {
+    margin-top: 40px; padding: 28px; background: var(--es-paper-warm); border: var(--es-border);
+    border-radius: var(--es-radius-xs);
+}
+.es-kontakt-general .es-eyebrow { margin-bottom: 12px; }
+.es-kontakt-general a { font-size: 17px; font-weight: 500; color: var(--es-ink); display: inline-block; margin-bottom: 4px; }
+.es-kontakt-general > div:last-child { font-size: 14px; color: var(--es-text-mute); }
+
+/* Section-Title generisch */
+.elementor-widget.es-section__title .elementor-heading-title,
+.es-section__title > .elementor-heading-title {
+    font-size: clamp(28px, 3vw, 36px); font-weight: 400; letter-spacing: -0.025em; margin-bottom: 40px;
+}
+
+/* News-Fallback .es-ph-cat — striktere Begrenzung */
+.es-ph-cat {
+    padding: 24px 32px 24px 24px; overflow: hidden;
+    display: flex; align-items: flex-end; justify-content: flex-start;
+}
+.es-ph-cat span {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; text-overflow: ellipsis;
+    max-width: calc(100% - 16px); word-break: break-word;
+    padding-right: 16px;
+}
+
+/* Event-Row: wieder Pin/Kompass entfernen */
+.esc-event-row__loc::before { content: none !important; }
+
+/* Pub-Row: kein Hover-Hintergrund */
+.esc-pub-row:hover { background: transparent !important; }
+
+/* ═════════════════════════════════════════════════════════════
+   FIX v5 — Element-Tag-basierte Styles + Column-Styling via
+   Section-Selektor (stabiler als Column-Classes in Elementor)
+   ═════════════════════════════════════════════════════════════ */
+
+/* 1) Elementor's eigene Heading-Title-Regeln entschärfen, damit
+   unsere Tag-basierten h1/h2/h3/h4 Stil-Regeln greifen und
+   Tag-Änderungen (h1↔h2) im Editor tatsächlich die Größe ändern. */
+:where(.elementor-heading-title) { font-weight: inherit; font-size: inherit; line-height: inherit; letter-spacing: inherit; font-family: inherit; color: inherit; margin: 0; }
+
+/* Tag-basierte Größen innerhalb von Stages */
+.es-stage h1, .es-stage .elementor-heading-title.elementor-size-xxl { font-size: clamp(44px, 6vw, 80px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.02; }
+.es-stage h2, .es-stage .elementor-heading-title.elementor-size-xl  { font-size: clamp(32px, 4vw, 52px); font-weight: 400; letter-spacing: -0.03em; line-height: 1.05; }
+.es-stage h3, .es-stage .elementor-heading-title.elementor-size-large { font-size: clamp(22px, 2.4vw, 32px); font-weight: 500; letter-spacing: -0.015em; line-height: 1.15; }
+.es-stage h4, .es-stage .elementor-heading-title.elementor-size-medium { font-size: clamp(18px, 1.6vw, 24px); font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
+
+/* Dark-Stage Farben */
+.es-stage--ink h1, .es-stage--ink h2, .es-stage--ink h3, .es-stage--ink h4 { color: var(--es-paper) !important; }
+
+/* Akzent-Span in H1/H2 — gleiche Stärke wie der Rest */
+.es-stage .elementor-heading-title .text-bg-green,
+.es-stage .text-bg-green { color: var(--es-accent); font-weight: inherit; font-style: normal; }
+
+/* 2) Hero-spezifische Größen per h1 innerhalb .es-hero */
+.es-hero .es-hero__title h1.elementor-heading-title,
+.es-hero .es-hero__title h2.elementor-heading-title,
+.es-hero .es-hero__title .elementor-heading-title {
+    font-size: clamp(44px, 6vw, 80px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.02;
+    color: var(--es-paper); max-width: 1100px;
+}
+.es-hero .es-hero__title h2.elementor-heading-title { font-size: clamp(32px, 4vw, 56px); }
+
+/* 3) Hero-Claims Farben explizit auf hell (für dunkle Section) */
+.es-stage--ink .es-hero-claims__wert { color: var(--es-paper); }
+.es-stage--ink .es-hero-claims__label { color: rgba(255,255,255,0.55); }
+
+/* 4) Service-Cards (Home) — stylen via Section-Parent */
+.es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-home-services > .elementor-container > .elementor-column > .elementor-element-populated {
+    padding: 36px !important;
+    background: var(--es-paper);
+    border: var(--es-border);
+    min-height: 380px;
+    transition: background 500ms ease-in-out, border-color 240ms var(--es-easing), transform 240ms var(--es-easing);
+}
+.es-home-services > .elementor-container > .elementor-column:hover > .elementor-widget-wrap,
+.es-home-services > .elementor-container > .elementor-column:hover > .elementor-element-populated {
+    background: var(--es-paper-warm); border-color: var(--es-ink); transform: translateY(-2px);
+}
+
+/* 5) Pillar-Cards (Philosophie 3 Säulen) */
+.es-cards-grid > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-cards-grid > .elementor-container > .elementor-column > .elementor-element-populated {
+    padding: 48px 36px !important;
+    background: var(--es-paper);
+    border: var(--es-border);
+}
+/* 4-Perspektiven-Grid hat gleichen Section-Class, braucht schmaleres Padding */
+.es-cards-grid.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-cards-grid.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated {
+    padding: 36px 28px !important; position: relative;
+}
+.es-cards-grid.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+.es-cards-grid.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated::before {
+    content: ""; position: absolute; top: 36px; left: 28px; width: 4px; height: 28px; background: var(--es-accent);
+}
+.es-cards-grid.es-cards-grid--quads .es-card-pillar__title { margin-top: 24px; }
+
+/* 6) Pullquote — Panel wenn Wrapper es-pullquote hat */
+.es-pullquote-panel {
+    background: var(--es-paper); border: var(--es-border);
+    padding: var(--es-space-16) var(--es-space-12);
+    max-width: 1080px; margin: 0 auto; text-align: center;
+}
+.es-stage--warm .es-pullquote-panel { background: var(--es-paper); }
+.es-pullquote-panel .elementor-heading-title { font-size: clamp(26px, 3.2vw, 48px); font-weight: 300; letter-spacing: -0.025em; line-height: 1.25; color: var(--es-ink); margin: 0; }
+.es-pullquote-panel p { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--es-accent); font-weight: 500; margin-top: 40px; }
+
+/* 7) Submenu — kein BG-Wechsel auf Hover, nur grüner Unterstrich */
+.es-nav .sub-menu a { background: transparent !important; }
+.es-nav .sub-menu a:hover { color: var(--es-ink) !important; background: transparent !important; }
+.es-nav .sub-menu a::after { background: var(--es-accent); }
+
+/* 8) Footer — Button "Termin vereinbaren" absichern */
+.es-footer .es-btn--paper {
+    background: var(--es-paper); color: var(--es-ink) !important;
+    border-color: var(--es-paper);
+}
+.es-footer .es-btn--paper:hover {
+    background: transparent; color: var(--es-paper) !important; border-color: var(--es-paper);
+}
+.es-footer .es-btn--ghost-paper { color: var(--es-paper) !important; border-color: rgba(255,255,255,0.4); }
+.es-footer .es-btn--ghost-paper:hover { background: var(--es-paper); color: var(--es-ink) !important; border-color: var(--es-paper); }
+
+/* 9) Footer Link-Hover-Animation */
+.es-footer__col li a, .es-footer__bar li a, .es-footer__brand-name-link {
+    position: relative; display: inline-block;
+    color: rgba(255,255,255,0.8); transition: color 200ms var(--es-easing);
+}
+.es-footer__col li a::after, .es-footer__bar li a::after {
+    content: ""; position: absolute; left: 0; bottom: -2px; width: 100%; height: 1px;
+    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform 240ms var(--es-easing);
+}
+.es-footer__col li a:hover, .es-footer__bar li a:hover { color: var(--es-accent); }
+.es-footer__col li a:hover::after, .es-footer__bar li a:hover::after { transform: scaleX(1); }
+
+/* 10) Leistungen (Bereichs-Block) — einzelleistungen-Card Borders komplett */
+.es-bereich-detail__einzel .es-bereich__topic {
+    border: var(--es-border);
+    padding: 28px;
+    background: var(--es-paper);
+    transition: border-color 200ms var(--es-easing), background 200ms var(--es-easing);
+}
+.es-bereich-detail__einzel .es-bereich__topics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    border-top: 0;
+}
+.es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) {
+    padding-left: 28px; border-left: var(--es-border);
+}
+.es-bereich-detail__einzel .es-bereich__topic:hover { border-color: var(--es-accent); }
+@media (max-width: 768px) {
+    .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: 1fr; }
+    .es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 28px; border-left: var(--es-border); }
+}
+
+/* 11) Events: ALLE Icons weg vor Ort */
+.esc-event-row__loc::before { content: none !important; }
+.esc-event-row__loc { padding-left: 0; }
+
+/* 12) Karriere Body: kein zusätzliches Padding-Left */
+.es-stelle-single .es-article__body { padding: 0; max-width: none; margin: 0 0 24px; }
+.es-stelle-single .es-article__body p { margin: 0 0 20px; }
+.es-stelle-single ul { padding-left: 20px !important; }
+
+/* 13) Beratungsfeld-Detail: Text-Spalte etwas breiter */
+.es-bereich-detail__content > .elementor-container > .elementor-column:nth-child(1) { width: 42% !important; }
+.es-bereich-detail__content > .elementor-container > .elementor-column:nth-child(2) { width: 58% !important; }
+@media (max-width: 900px) {
+    .es-bereich-detail__content > .elementor-container > .elementor-column { width: 100% !important; }
+}
+
+/* 14) Einzelleistungen-Kurztext: max. 3 Zeilen + ellipsis (Topic-Grid) */
+.es-bereich__topic-desc {
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Pullquote native — Wrapper Section */
+.es-pullquote-panel-wrap > .elementor-container {
+    max-width: 1080px; margin: 0 auto;
+}
+.es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-element-populated {
+    background: var(--es-paper); border: var(--es-border);
+    padding: 64px 48px !important; text-align: center;
+}
+.es-pullquote__quote .elementor-heading-title { font-size: clamp(26px, 3.2vw, 48px) !important; font-weight: 300 !important; letter-spacing: -0.025em !important; line-height: 1.25 !important; color: var(--es-ink); margin: 0; }
+.es-pullquote__attr p { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--es-accent); font-weight: 500; margin-top: 40px !important; }
+
+/* Home Intro-Strip — größere H2 "Wir arbeiten hoch spezialisiert ..." */
+.es-home-intro__headline .elementor-heading-title { font-size: clamp(28px, 3.2vw, 44px) !important; font-weight: 400 !important; letter-spacing: -0.025em !important; line-height: 1.2 !important; color: var(--es-ink); margin: 0 !important; }
+.es-home-intro__headline .text-bg-green { color: var(--es-accent); font-weight: inherit; }
+
+/* Home news section title mit weniger bottom-margin */
+.es-home-news .elementor-widget-shortcode { margin-top: 48px; }
+
+/* Karriere-Single: Body ohne Einrückung, normale List-Styles */
+.es-stelle-single__body { font-size: 17px; line-height: 1.7; color: var(--es-ink); text-align: justify; hyphens: auto; margin-bottom: 16px; }
+.es-stelle-single__body p { margin: 0 0 20px; padding: 0; text-indent: 0; }
+.es-stelle-single__body p:last-child { margin-bottom: 0; }
+.es-stelle-single__list { font-size: 16px; line-height: 1.7; color: var(--es-ink); padding-left: 20px; margin: 0 0 40px; list-style: disc; }
+.es-stelle-single__list li { margin-bottom: 8px; padding-left: 4px; }
+.es-stelle-single__list li::marker { color: var(--es-accent); }
+
+/* ═════════════════════════════════════════════════════════════
+   FIX v6 — PUNKTGENAU, keine globalen Umbauten
+   ═════════════════════════════════════════════════════════════ */
+
+/* 1) HEADING-TAG wirkt auf Größe. Elementor's .elementor-size-*
+   haben (0,2,0) Specificity — unsere Tag-Regeln würden verlieren.
+   Deshalb !important auf die Tag-Basiswerte. So ändert sich Text
+   wirklich, wenn im Editor H2↔H1 gewechselt wird. */
+.es-stage h1, .es-stage .elementor-heading-title[class*=elementor-size] ~ .nope {}
+.es-stage h1.elementor-heading-title,
+.es-stage h1 { font-size: clamp(44px, 6vw, 80px) !important; font-weight: 300 !important; letter-spacing: -0.04em !important; line-height: 1.02 !important; }
+.es-stage h2.elementor-heading-title,
+.es-stage h2 { font-size: clamp(32px, 4vw, 52px) !important; font-weight: 400 !important; letter-spacing: -0.03em !important; line-height: 1.1 !important; }
+.es-stage h3.elementor-heading-title,
+.es-stage h3 { font-size: clamp(22px, 2.4vw, 32px) !important; font-weight: 500 !important; letter-spacing: -0.015em !important; line-height: 1.18 !important; }
+.es-stage h4.elementor-heading-title,
+.es-stage h4 { font-size: clamp(18px, 1.6vw, 24px) !important; font-weight: 500 !important; letter-spacing: -0.01em !important; line-height: 1.25 !important; }
+.es-stage h5.elementor-heading-title,
+.es-stage h5 { font-size: 16px !important; font-weight: 500 !important; line-height: 1.3 !important; }
+.es-stage h6.elementor-heading-title,
+.es-stage h6 { font-size: 14px !important; font-weight: 500 !important; line-height: 1.3 !important; }
+.es-stage p.elementor-heading-title,
+.es-stage p { font-size: inherit; line-height: inherit; }
+/* Akzent-Span immer gleiche Stärke wie Parent-Heading */
+.es-stage .elementor-heading-title .text-bg-green,
+.es-stage .text-bg-green { font-weight: inherit !important; font-style: normal; color: var(--es-accent); }
+
+/* Aber: wenn in der .es-hero__title Widget-Klasse nochmal etwas
+   Spezifisches gesetzt wird — greift unsere !important-Tag-Regel
+   trotzdem. Das ist gewollt. */
+
+/* 2) Split-Column: Eyebrow + H2 direkt zusammen, nicht unten
+   auseinandergestretcht. Column-Vertikal-Align top. */
+.es-split > .elementor-container > .elementor-column { align-self: flex-start; }
+.es-stage .es-split__title { margin-top: 8px !important; }
+.es-stage .es-split__title .elementor-heading-title { margin-top: 0 !important; }
+
+/* 3) Home Beratungsfeld-Kacheln: genau wie News-Kacheln animiert
+   (Top-Balken grün slide-in beim Hover + subtile Hebung). */
+.es-home-services > .elementor-container > .elementor-column { position: relative; overflow: hidden; }
+.es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-home-services > .elementor-container > .elementor-column > .elementor-element-populated { position: relative; }
+.es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+.es-home-services > .elementor-container > .elementor-column > .elementor-element-populated::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform 300ms var(--es-easing);
+    z-index: 2;
+}
+.es-home-services > .elementor-container > .elementor-column:hover > .elementor-widget-wrap::before,
+.es-home-services > .elementor-container > .elementor-column:hover > .elementor-element-populated::before {
+    transform: scaleX(1);
+}
+
+/* 4) Philosophie 3-Pillar Kacheln — weiß, Border dunkler, Schatten
+   durch stärkere Border statt nur Hairline */
+.es-cards-grid:not(.es-cards-grid--quads) > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-cards-grid:not(.es-cards-grid--quads) > .elementor-container > .elementor-column > .elementor-element-populated {
+    background: var(--es-paper) !important;
+    border: 1px solid var(--es-rule) !important;
+    padding: 48px 36px !important;
+    transition: border-color 240ms var(--es-easing), transform 240ms var(--es-easing);
+}
+/* Fix v32: Pillar-Karten (cards_native) sind nie klickbar -> kein Hover-Lift/Border */
+
+/* 5) Philosophie 4-Perspektiven nach Mockup:
+   weiß auf warm, 4×28px Akzentbar oben-links, Titel+Desc darunter */
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated {
+    background: var(--es-paper) !important;
+    border: 1px solid var(--es-rule) !important;
+    padding: 36px 28px !important;
+    position: relative;
+}
+/* Bar via ::before (neu vor allem, da ich alten Selektor umbenenne) */
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated::before {
+    content: ""; display: block; width: 4px; height: 28px;
+    background: var(--es-accent); margin-bottom: 24px;
+}
+.es-cards-grid--quads .es-card-pillar__title .elementor-heading-title { font-size: 20px !important; font-weight: 500 !important; letter-spacing: -0.015em !important; line-height: 1.25 !important; margin: 0 0 10px !important; }
+.es-cards-grid--quads .es-card-pillar__desc p { font-size: 13px; color: var(--es-text-mute); line-height: 1.6; margin: 0; }
+
+/* 6) Einzelleistungen in Bereichs-Block: Heading auf vorige Größe (20px) */
+.es-bereich__topic-name h3 { font-size: 20px !important; font-weight: 500 !important; letter-spacing: -0.015em !important; line-height: 1.25 !important; margin: 0 !important; }
+
+/* 7) Veranstaltungen — PIN komplett entfernen (unicode + icon) */
+.esc-event-row__loc { padding-left: 0 !important; }
+.esc-event-row__loc::before { content: none !important; display: none !important; }
+.esc-event-row__loc::after { content: none !important; }
+
+/* 8) Karriere-Breadcrumb: "Karriere" only (CSS blendet den Rest aus
+   falls Template-Update nicht greift — aber wir machen den wirklichen
+   Fix im Template) */
+
+/* News-Toolbar */
+.es-news-toolbar {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: 16px; border-top: var(--es-border); padding: 20px 0; margin-bottom: 40px;
+}
+.es-news-toolbar__pp, .es-news-toolbar__pager { display: flex; gap: 8px; align-items: center; }
+.es-news-toolbar__label { font-size: 12px; color: var(--es-text-mute); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 8px; }
+.es-news-toolbar__status { font-size: 13px; color: var(--es-text-mute); padding: 0 8px; }
+.es-news-toolbar__pill {
+    padding: 8px 14px; font-size: 13px; border: var(--es-border); border-radius: var(--es-radius-xs);
+    color: var(--es-ink); background: transparent; transition: all 200ms var(--es-easing);
+}
+.es-news-toolbar__pill:hover { background: var(--es-paper-warm); color: var(--es-ink); }
+.es-news-toolbar__pill.is-active { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
+.es-news-toolbar__pill.is-disabled { opacity: 0.4; pointer-events: none; cursor: default; }
+.es-news-archive__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
+/* News-Karten erst ab >1024px zweispaltig: das fixe 200px-Bild plus lange
+   Titelwoerter ("Energienetzentgeltregulierung:") wuerden zweispaltig sonst
+   rechts ueber den Rand hinauslaufen (Horizontal-Scroll). */
+@media (max-width: 1024px) { .es-news-archive__grid { grid-template-columns: 1fr; } }
+/* Innenraster + Titel bruchsicher gegen Horizontal-Ueberlauf. */
+.es-news-archive__grid > a { grid-template-columns: 200px minmax(0, 1fr) !important; }
+.es-news-archive__grid h3, .es-news-archive__featured h2 { overflow-wrap: break-word; word-break: break-word; }
+.es-news-archive__featured { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v7 — punktgenau
+   ═══════════════════════════════════════════════════════════════ */
+
+/* A) Custom Logo in Header */
+.es-brand__logo { max-height: 44px; width: auto; display: block; }
+
+/* B) Eyebrow→H2 Gap deutlich reduzieren */
+.es-stage .es-split__title { margin-top: 0 !important; padding-top: 0 !important; }
+.es-stage .es-split__title .elementor-heading-title { margin-top: 0 !important; }
+.es-stage .es-eyebrow { margin-bottom: 8px !important; }
+.es-stage .es-eyebrow + .es-split__title,
+.es-stage .elementor-widget.es-eyebrow + .elementor-widget.es-split__title { margin-top: 0 !important; }
+/* Die generische .elementor-widget-heading _widget-Container-Margin_ so klein
+   wie möglich halten — damit der Abstand Eyebrow→H2 ≤ 12px bleibt */
+.es-split .elementor-widget.es-split__title { margin-top: 4px !important; }
+
+/* C) Service-Card Top-Bar: sicher stabil 2px, Inhalt rückt nach unten
+   damit der Balken nicht vom BG überdeckt wird */
+.es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-home-services > .elementor-container > .elementor-column > .elementor-element-populated {
+    padding-top: 40px !important; /* +4px Platz für den Balken */
+}
+.es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+.es-home-services > .elementor-container > .elementor-column > .elementor-element-populated::before {
+    height: 3px !important; /* minimal dicker damit er gegen Anti-Aliasing hält */
+    z-index: 10 !important;
+    pointer-events: none;
+}
+/* Background transition nur auf Inhalt, nicht auf ::before */
+.es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-home-services > .elementor-container > .elementor-column > .elementor-element-populated {
+    transition: border-color 240ms var(--es-easing), transform 240ms var(--es-easing), background-color 500ms ease-in-out;
+}
+
+/* D) Native Elementor Button-Widget — sieht 1:1 aus wie unsere .es-btn.
+   Elementor-Buttons landen als .elementor-widget-button .elementor-button */
+.elementor-widget-button .elementor-button {
+    background: transparent; color: var(--es-ink); border: 1px solid var(--es-ink) !important;
+    border-radius: var(--es-radius-xs) !important;
+    font-family: var(--es-font-sans) !important;
+    font-size: 14px !important; font-weight: var(--es-fw-medium) !important; letter-spacing: -0.01em !important;
+    padding: 14px 22px !important;
+    transition: all var(--es-duration-fast) var(--es-easing);
+    line-height: 1 !important;
+}
+.elementor-widget-button .elementor-button:hover { background: var(--es-ink) !important; color: var(--es-paper) !important; }
+
+/* --paper (auf dunklem Grund) */
+.elementor-widget-button.es-btn--paper .elementor-button,
+.elementor-widget-button .elementor-button.es-btn--paper {
+    background: var(--es-paper) !important; color: var(--es-ink) !important; border-color: var(--es-paper) !important;
+}
+.elementor-widget-button.es-btn--paper .elementor-button:hover,
+.elementor-widget-button .elementor-button.es-btn--paper:hover {
+    background: transparent !important; color: var(--es-paper) !important; border-color: var(--es-paper) !important;
+}
+/* --ghost-paper (auf dunklem Grund, transparenter Button) */
+.elementor-widget-button.es-btn--ghost-paper .elementor-button,
+.elementor-widget-button .elementor-button.es-btn--ghost-paper {
+    background: transparent !important; color: var(--es-paper) !important; border-color: rgba(255,255,255,0.4) !important;
+}
+.elementor-widget-button.es-btn--ghost-paper .elementor-button:hover,
+.elementor-widget-button .elementor-button.es-btn--ghost-paper:hover {
+    background: var(--es-paper) !important; color: var(--es-ink) !important; border-color: var(--es-paper) !important;
+}
+/* --primary */
+.elementor-widget-button.es-btn--primary .elementor-button,
+.elementor-widget-button .elementor-button.es-btn--primary {
+    background: var(--es-ink) !important; color: var(--es-paper) !important; border-color: var(--es-ink) !important;
+}
+.elementor-widget-button.es-btn--primary .elementor-button:hover,
+.elementor-widget-button .elementor-button.es-btn--primary:hover {
+    background: transparent !important; color: var(--es-ink) !important;
+}
+
+/* Hero-Buttons nebeneinander (statt stacked) */
+.es-hero > .elementor-container > .elementor-column > .elementor-widget-wrap > .elementor-widget.es-hero__button,
+.es-hero > .elementor-container > .elementor-column > .elementor-element-populated > .elementor-widget.es-hero__button {
+    display: inline-block; width: auto; margin-right: 12px;
+}
+
+/* CTA-Buttons nebeneinander in col2 */
+.es-cta > .elementor-container > .elementor-column:last-child > .elementor-widget-wrap,
+.es-cta > .elementor-container > .elementor-column:last-child > .elementor-element-populated {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; justify-content: flex-end;
+}
+.es-cta__button { width: auto !important; }
+
+/* E) Hero-Claims inner section: 4 Spalten, gleiches Styling */
+.es-hero-claims-inner.elementor-inner-section { margin-top: 40px !important; padding-top: 32px !important; border-top: 1px solid rgba(255,255,255,0.14); }
+.es-hero-claims-inner > .elementor-container { gap: 32px; }
+.es-hero-claims-inner > .elementor-container > .elementor-column .es-hero-claims__wert .elementor-heading-title {
+    font-size: 32px !important; font-weight: 400 !important; letter-spacing: -0.03em !important; line-height: 1 !important; color: var(--es-paper) !important;
+}
+.es-hero-claims-inner > .elementor-container > .elementor-column .es-hero-claims__label .elementor-heading-title {
+    font-size: 12px !important; color: rgba(255,255,255,0.55) !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; margin-top: 6px !important; font-weight: 500 !important;
+}
+
+/* F) GF-Zitat nativ */
+.es-gf-quote__photo { width: 180px; height: 180px; border-radius: 999px; overflow: hidden; background: var(--es-paper-warm); }
+.es-gf-quote__photo img { width: 100%; height: 100%; object-fit: cover; }
+.es-gf-quote__text .elementor-heading-title {
+    font-size: clamp(26px, 2.8vw, 40px) !important;
+    font-weight: 300 !important; letter-spacing: -0.02em !important; line-height: 1.25 !important;
+    color: var(--es-ink) !important; margin: 24px 0 32px !important;
+}
+.es-gf-quote__name { font-size: 16px; font-weight: 500; margin: 0; }
+.es-gf-quote__role { font-size: 13px; color: var(--es-text-mute); margin: 2px 0 0; }
+
+/* G) Beratungsfeld Pub-Teaser Titel kleiner (19px wie vorher) */
+.es-bereich-pub-teaser h3,
+.esc-pub-teaser-card h3 { font-size: 19px !important; }
+/* Der pub_teaser Shortcode setzt .esc-card mit h3 inline 19px — falls CSS
+   sie überschreibt, das hier auf den h3-Tag in der Card zurücksetzen */
+.esc-grid .esc-card h3 { font-size: 19px !important; font-weight: 500 !important; line-height: 1.3 !important; letter-spacing: -0.01em !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v8 — Punktgenau
+   ═══════════════════════════════════════════════════════════════ */
+
+/* A) Perspektiven-Kacheln: Abstand zwischen Akzentstrich und Titel */
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+.es-cards-grid--quads > .elementor-container > .elementor-column > .elementor-element-populated::before {
+    width: 4px; height: 28px;
+    background: var(--es-accent);
+    margin-bottom: 40px !important; /* deutlich mehr Abstand */
+    display: block; content: "";
+    position: static !important;
+}
+.es-cards-grid--quads .es-card-pillar__title,
+.es-cards-grid--quads .elementor-widget.es-card-pillar__title { margin-top: 0 !important; }
+.es-cards-grid--quads .es-card-pillar__title .elementor-heading-title { margin: 0 0 10px !important; }
+
+/* B) LinkedIn-Feed auf der Startseite */
+.es-linkedin-feed { }
+.es-linkedin-feed__head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 48px; flex-wrap: wrap; gap: 16px; }
+.es-linkedin-feed__title { font-size: clamp(32px, 4.2vw, 52px); line-height: 1.05; font-weight: 400; letter-spacing: -0.03em; margin: 0; }
+.es-linkedin-card .esc-card__media.es-linkedin-card__icon {
+    display: flex; align-items: center; justify-content: center;
+    background: var(--es-ink); color: var(--es-accent); aspect-ratio: 16/10;
+}
+.es-linkedin-card .esc-card__meta { color: #0077B5; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v11 — Menü-Dropdown-Kontrast, Mobile, Publikationen, Kontakt
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Submenü (Leistungen-Dropdown) current-item lesbar machen ─── */
+.es-nav .sub-menu a { color: var(--es-ink) !important; background: transparent !important; }
+.es-nav .sub-menu .current-menu-item > a,
+.es-nav .sub-menu .current_page_item > a {
+    color: var(--es-ink) !important;
+    background: transparent !important;
+    font-weight: var(--es-fw-medium);
+}
+.es-nav .sub-menu a::after { background: var(--es-accent); bottom: 6px; width: calc(100% - 40px); left: 20px; }
+
+/* ─── Publikationen: doppelte Linie am Jahresende beseitigen ─── */
+.esc-pub-year__items .esc-pub-row:last-child { border-bottom: 0; }
+/* Der Separator zwischen Jahren bleibt via .esc-pub-year border-top. */
+
+/* ─── Kontakt: Allgemeine-Anfragen-Kasten — E-Mail auf eigener Zeile ─── */
+.es-kontakt-general a {
+    display: block; word-break: break-word; font-size: 17px; font-weight: 500;
+    color: var(--es-ink); margin: 6px 0 4px;
+}
+.es-kontakt-general > div:last-child { font-size: 14px; color: var(--es-text-mute); }
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE — ≤ 768px. Gezielt nur mobile Anpassungen; Desktop bleibt.
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+    /* Globale Seitenabstände vereinheitlichen — überall gleich wie bei
+       'Unser Anspruch' (24px). */
+    .es-wrap,
+    .es-wrap--narrow,
+    .es-stage .es-wrap,
+    .es-footer .es-wrap,
+    .elementor-section-boxed > .elementor-container { padding-left: 24px !important; padding-right: 24px !important; }
+    body .es-home-services .elementor-container,
+    body .es-home-news .elementor-container,
+    body .es-cta .elementor-container,
+    body .es-gf-quote .elementor-container { padding-left: 24px !important; padding-right: 24px !important; }
+
+    /* Vertikale Abstände reduzieren — weniger Leerraum zwischen Abschnitten. */
+    .es-stage > .elementor-container,
+    body .es-stage .elementor-section,
+    body .elementor-section.es-stage,
+    body .es-stage { padding-top: 56px !important; padding-bottom: 56px !important; }
+    body .es-stage--ink.es-hero { padding-top: 72px !important; padding-bottom: 64px !important; }
+
+    /* Home News-Teaser: Titel enger an die Karten */
+    .es-home-news .elementor-widget-shortcode { margin-top: 20px !important; }
+    .es-home-news .es-home-news__title .elementor-heading-title,
+    .es-home-news__title > .elementor-heading-title { margin-bottom: 16px !important; }
+
+    /* ─── HOME ─── */
+    /* Intro-Strip: Eyebrow+H2 oben, Paragraph darunter (wird schon
+       durch allgemeines grid-template-columns: 1fr-Stacking gemacht). */
+
+    /* Leistungen Service-Cards: min-height reduzieren */
+    .es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    .es-home-services > .elementor-container > .elementor-column > .elementor-element-populated { min-height: 0 !important; padding: 24px !important; }
+    .es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
+    .es-home-services > .elementor-container > .elementor-column > .elementor-element-populated::before { display: none; }
+
+    /* ─── LEISTUNGEN (Übersicht) ─── */
+    /* Bilder der Beratungsgebiete ausblenden auf Mobile */
+    .es-bereich__img { display: none !important; }
+    .es-bereich__top { grid-template-columns: 1fr !important; gap: 24px !important; }
+    .es-bereich__inner { padding: 48px 0 !important; }
+    .es-bereich__title { font-size: 40px !important; line-height: 1.05 !important; }
+    /* Einzelleistungs-Kacheln 2-Spaltig, keine Overflow */
+    .es-bereich__topics { grid-template-columns: repeat(2, 1fr) !important; gap: 0 !important; }
+    .es-bereich__topic { padding: 20px 16px !important; }
+    .es-bereich__topic-name h3 { font-size: 16px !important; }
+    .es-bereich__topic-desc { font-size: 12px !important; padding-left: 12px !important; -webkit-line-clamp: 3; }
+    .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 16px !important; border-left: var(--es-border) !important; }
+
+    /* ─── BERATUNGSFELD-DETAIL ─── */
+    /* Ansprechpartner-Balken: Überschrift oben, Personen gestapelt, Button zentriert */
+    .es-ansprech { flex-direction: column; align-items: stretch; gap: 20px; }
+    .es-ansprech__people { flex-direction: column; align-items: stretch; gap: 16px; }
+    .es-ansprech__people > a { justify-content: flex-start; }
+    .es-ansprech .es-btn,
+    .es-ansprech .es-btn--primary { align-self: center; margin-left: 0 !important; }
+
+    /* "Was wir für Sie tun": Text oben, Einzelleistungs-Kacheln darunter 2-Spaltig */
+    .es-bereich-detail__content > .elementor-container { grid-template-columns: 1fr !important; }
+    .es-bereich-detail__content > .elementor-container > .elementor-column { width: 100% !important; }
+    .es-bereich-detail__content .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: repeat(2, 1fr) !important; gap: 0 !important; }
+    .es-bereich-detail__einzel .es-bereich__topic { padding: 20px 16px !important; }
+    .es-bereich-detail__einzel .es-bereich__topic:not(:nth-child(2n+1)) { padding-left: 16px !important; border-left: var(--es-border) !important; }
+
+    /* ─── TEAM ─── */
+    /* Übersicht: 2-Spalten Team-Grid (statt 4) */
+    .esc-grid.esc-grid--cols-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+
+    /* Team-Detail: Bild kleiner + zentriert, Contact-Box zentriert */
+    .es-team-single__grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .es-team-single__col-left { max-width: 320px; margin: 0 auto; position: static !important; }
+    .es-team-single__photo { aspect-ratio: 4/5; }
+    .es-team-single__contact-card { text-align: center; margin-left: auto; margin-right: auto; }
+    .es-team-single__contact-row { text-align: left; }
+    .es-team-single__contact-actions .es-btn { justify-content: center; }
+
+    /* ─── HERO MOBILE ─── */
+    /* Claims: kleineren Text + tighter */
+    .es-hero-claims-inner > .elementor-container { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; }
+    .es-hero-claims-inner .es-hero-claims__wert .elementor-heading-title { font-size: 26px !important; }
+
+    /* Gap innerhalb von .es-stage (Margin zwischen inneren widgets) reduzieren */
+    .es-stage .elementor-widget { margin-bottom: 18px !important; }
+    .es-stage .es-split__title { margin-top: 0 !important; }
+    .es-stage .es-hero__title { margin-bottom: 16px !important; }
+    .es-stage .es-hero__lead { margin-bottom: 24px !important; }
+
+    /* Kontakt: right-column form stays usable */
+    .es-kontakt-general a { font-size: 16px !important; }
+}
+
+/* Extra-enge Screens (≤ 480px): zurück auf 1 Spalte wo noch 2 sinnvoll sind */
+@media (max-width: 480px) {
+    .esc-grid.esc-grid--cols-4 { grid-template-columns: repeat(2, 1fr) !important; }
+    .es-hero-claims-inner > .elementor-container { grid-template-columns: 1fr !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v12 — präzise Mobile-Korrekturen (≤ 768px)
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+    /* A) Beratungsfeld-Detail: Spalten wirklich stapeln (Elementor nutzt
+       flex, nicht grid — daher hier explizit flex-direction:column und
+       Spaltenweite auf 100%). */
+    body .es-bereich-detail__content > .elementor-container {
+        flex-direction: column !important;
+        flex-wrap: wrap !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    /* B) Section-Padding auf Mobile noch dezenter (war 56px, jetzt 40 / 32
+       je nach Section-Typ). Wir greifen nicht über .es-stage pauschal,
+       sondern über Elementor's eigene Section-Klasse damit die Inline-
+       Padding-Regeln aus post-CSS gewinnen. */
+    body .elementor-section.es-stage > .elementor-container { padding-top: 40px !important; padding-bottom: 40px !important; }
+    body .elementor-section.es-stage.es-hero > .elementor-container { padding-top: 64px !important; padding-bottom: 56px !important; }
+    body .elementor-section.es-stage > .elementor-container { padding-left: 24px !important; padding-right: 24px !important; }
+    /* Der Padding-Wert wandert über Elementor in $section-padding (oben);
+       die Section selbst hat zusätzlich data-style oder via post.css
+       padding gesetzt — wir überschreiben die wichtigsten Custom-Sections: */
+    body .elementor-section.es-stage { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+    /* C) Vertikale Abstände innerhalb von .es-stage-Sections — Widget-
+       Margins reduzieren */
+    body .es-stage .elementor-widget { margin-bottom: 16px !important; }
+    body .es-stage .elementor-widget:last-child { margin-bottom: 0 !important; }
+
+    /* D) Home: Leistungen-Headline → enger an die Cards */
+    body .es-home-services-head > .elementor-container { padding-top: 40px !important; padding-bottom: 8px !important; }
+    body .es-home-services > .elementor-container { padding-top: 0 !important; padding-bottom: 40px !important; }
+    body .es-home-services > .elementor-container > .elementor-column { width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important; margin-bottom: 12px; }
+    body .es-home-services > .elementor-container { flex-direction: column !important; }
+
+    /* E) Home GF-Quote + News: Spacing tighter */
+    body .es-gf-quote > .elementor-container { padding-top: 40px !important; padding-bottom: 40px !important; }
+    body .es-home-news > .elementor-container { padding-top: 40px !important; padding-bottom: 40px !important; }
+    body .es-home-news .es-home-news__title .elementor-heading-title { margin-bottom: 16px !important; }
+
+    /* F) Home Intro-Strip ('Unser Anspruch') schon kompakt — angleichen */
+    body .es-split > .elementor-container { padding-top: 40px !important; padding-bottom: 40px !important; }
+    body .es-split > .elementor-container > .elementor-column { width: 100% !important; flex: 1 1 100% !important; max-width: 100% !important; margin-bottom: 8px; }
+    body .es-split > .elementor-container { flex-direction: column !important; }
+
+    /* G) Beratungsfeld-Detail Ansprechpartner-Bar: Padding oben/unten nicht
+       riesig + mehr Luft zwischen Personen und Button */
+    body .es-stage--warm .es-ansprech { gap: 24px; }
+    body .es-stage--warm .es-ansprech .es-btn { margin-top: 8px !important; }
+    /* Section-Padding der Ansprechpartner-Section enger */
+    body .es-bereich-detail__content + .es-stage--warm > .elementor-container,
+    body .es-stage--warm .es-ansprech ~ * { /* no-op selector for safety */ }
+    /* Direkt auf die Ansprechpartner-Section: sie hat keine eigene Klasse,
+       daher per generischer Regel: alle warm-Sections mit Ansprechpartner
+       enger machen */
+
+    /* H) Philosophie: Section mit "Wie wir arbeiten" und "Interdisziplinär"
+       — engere Abstände */
+    body .es-cards-grid > .elementor-container { padding-top: 24px !important; padding-bottom: 40px !important; }
+    body .es-cards-grid > .elementor-container > .elementor-column { width: 100% !important; flex: 1 1 100% !important; max-width: 100% !important; margin-bottom: 12px; }
+    body .es-cards-grid > .elementor-container { flex-direction: column !important; }
+
+    /* I) Section, die NUR Eyebrow + H2 + Text enthält, ohne unten Abstand */
+    body .es-stage > .elementor-container > .elementor-column > .elementor-widget-wrap > .elementor-widget:last-child,
+    body .es-stage > .elementor-container > .elementor-column > .elementor-element-populated > .elementor-widget:last-child { margin-bottom: 0 !important; }
+}
+
+/* ─── Fallback: auch bei Tablet (769–1024) sollen Beratungsfeld-Spalten
+   eine spaltige Ansicht zeigen, weil 60/40-Layout unter ~900px kippt ─── */
+@media (min-width: 769px) and (max-width: 1024px) {
+    body .es-bereich-detail__content > .elementor-container { flex-direction: column !important; }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column { width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v13 — Beratungsfeld Text-Spalte volle Breite ≤ 1024
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    /* Volle Breite + Reset auf Standard-Block, damit nichts ausgegrenzt
+       bleibt durch flex-basis */
+    body .es-bereich-detail__content > .elementor-container {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        gap: 32px !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column {
+        width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important;
+    }
+    /* Direkt-Kinder der Spalten dürfen ebenfalls volle Breite nehmen */
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-element-populated {
+        width: 100% !important;
+    }
+    /* Sticky position (von Desktop) auf mobile auflösen */
+    body .es-bereich-detail__content > .elementor-container > .elementor-column[style*="position: sticky"],
+    body .es-bereich-detail__content > .elementor-container > .elementor-column { position: static !important; top: auto !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v14 — Sticky-Header, BTT-Button, Scroll-Down, Mobile-Menu,
+   Mobile-Arrows, Hyphenation
+   ═══════════════════════════════════════════════════════════════ */
+
+/* A) Sticky Header (wenn html.es-header-sticky) */
+html.es-header-sticky .es-header {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: saturate(120%) blur(8px);
+    -webkit-backdrop-filter: saturate(120%) blur(8px);
+}
+html.es-header-sticky .es-header.is-condensed { box-shadow: 0 1px 0 rgba(15,23,32,0.06); }
+html.es-header-sticky .es-header--dark { background: rgba(14,26,43,0.92); }
+html.es-header-sticky .es-header:not(.es-header--dark) { background: rgba(255,255,255,0.92); }
+
+/* B) Back-To-Top */
+.es-btt {
+    position: fixed; right: 24px; bottom: 24px; z-index: 999;
+    width: 48px; height: 48px; border-radius: 999px;
+    background: var(--es-accent); color: var(--es-ink);
+    border: 0; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    opacity: 0; transform: translateY(8px) scale(0.96); pointer-events: none;
+    transition: opacity 240ms var(--es-easing), transform 240ms var(--es-easing), background 200ms var(--es-easing);
+    box-shadow: 0 6px 20px rgba(15,23,32,0.18);
+}
+.es-btt[hidden] { display: inline-flex !important; }
+.es-btt.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+.es-btt:hover { background: var(--es-ink); color: var(--es-accent); }
+.es-btt:focus-visible { outline: 2px solid var(--es-ink); outline-offset: 2px; }
+
+/* C) Hero Scroll-Down (Home) */
+.es-hero-scroll {
+    position: absolute; right: 32px; bottom: 24px; z-index: 3;
+    display: inline-flex; flex-direction: column; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.78);
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;
+    text-decoration: none;
+}
+.es-hero-scroll svg { animation: esBob 1.6s ease-in-out infinite; }
+.es-hero-scroll:hover { color: var(--es-accent); }
+@keyframes esBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+@media (prefers-reduced-motion: reduce) { .es-hero-scroll svg { animation: none; } }
+@media (max-width: 600px) { .es-hero-scroll { right: 18px; bottom: 16px; font-size: 10px; } }
+
+/* D) Mobile-Pfeile: kein Emoji-Style erzwingen.
+   Variation-Selector unterdrücken, statt-Pfeil als Inline-SVG nicht
+   möglich für bestehende Texte → text-rendering und font-variant-Tweak. */
+.es-link, .esc-card__link, .esc-pub-row__cta, .es-news-toolbar__pill,
+a, span, p, li {
+    text-rendering: optimizeLegibility;
+    font-variant-emoji: text;     /* Chromium 124+ */
+}
+/* Strikt: 'text-style' Variation auf jegliche ↗ / ↑ / → / ← */
+.es-link::after, .esc-card__link::after { font-variant-emoji: text; }
+
+/* E) Mobile-Menu: Vollbild-Overlay + größere Schrift + Hamburger ↔ X */
+@media (max-width: 1024px) {
+    .es-header.is-nav-open .es-nav {
+        position: fixed !important; top: 0; left: 0; right: 0; bottom: 0;
+        width: 100vw; height: 100vh; max-height: none;
+        background: var(--es-paper);
+        z-index: 90;
+        overflow-y: auto;
+        padding: 96px 24px 32px;
+        display: flex !important; flex-direction: column;
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav { background: var(--es-ink); color: var(--es-paper); }
+    .es-header.is-nav-open .es-nav ul { width: 100%; padding: 0; gap: 8px; }
+    .es-header.is-nav-open .es-nav li { width: 100%; }
+    .es-header.is-nav-open .es-nav a {
+        display: block; padding: 18px 0; font-size: 22px; font-weight: 500;
+        letter-spacing: -0.015em; border-bottom: var(--es-border);
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav a { border-bottom-color: var(--es-ink-line); color: var(--es-paper); }
+    .es-header.is-nav-open .es-header__actions {
+        display: flex !important; padding: 24px 0 0; gap: 12px;
+        flex-direction: column; width: 100%;
+    }
+    .es-header.is-nav-open .es-header__actions > a {
+        width: 100%; justify-content: center; padding: 14px 16px; font-size: 14px;
+    }
+
+    /* Hamburger ↔ X */
+    .es-nav-toggle { position: relative; z-index: 100; width: 40px; height: 40px; }
+    .es-nav-toggle .bar,
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        transition: transform 200ms var(--es-easing), opacity 150ms var(--es-easing);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar {
+        background: transparent; transform: scaleX(0);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        transform: translateY(0) rotate(45deg);
+        background: currentColor;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        transform: translateY(0) rotate(-45deg);
+        background: currentColor;
+    }
+}
+
+/* F) News (mobile): Beitragsbild ausblenden in Liste, Title-Hyphenation */
+@media (max-width: 600px) {
+    .es-news-archive__grid > a { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .es-news-archive__grid > a > div:first-child { display: none !important; }
+    .es-news-archive__featured { grid-template-columns: 1fr !important; gap: 24px !important; }
+    .es-news-archive__featured > div:first-child { aspect-ratio: 16/9 !important; }
+}
+
+/* G) Universal: Title-Wrap auf langen Woertern (mobile)
+   Nur lange Woerter umbrechen, die SELBST nicht in eine Zeile passen.
+   `overflow-wrap: break-word` greift erst, wenn ein Wort alleine zu
+   breit ist. `hyphens: auto` und `overflow-wrap: anywhere` wuerden
+   bereits passende Woerter mid-word trennen, wenn vorhergehende Woerter
+   in der Zeile stehen — das wollen wir nicht. */
+@media (max-width: 768px) {
+    .es-article__title,
+    .es-team-single__name,
+    .es-bereich__title,
+    .es-stage h1,
+    .es-stage h2,
+    .es-stage h3 {
+        overflow-wrap: break-word;
+        word-break: normal;
+        hyphens: manual;
+        -webkit-hyphens: manual;
+    }
+}
+
+/* H) Karriere Bewerbungsbox (mobile) — Single Column */
+@media (max-width: 768px) {
+    .es-stelle-single > div > div[style*="grid-template-columns:1fr auto"] {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        text-align: center;
+    }
+    .es-stelle-single > div > div[style*="grid-template-columns:1fr auto"] > a {
+        justify-self: center;
+    }
+}
+
+/* I) News-Pagination soll auch oberhalb der Liste erscheinen — wird unten
+   im Shortcode gerendert; CSS muss nur sicherstellen, dass beide gleich
+   aussehen (kein zusätzliches Styling nötig). */
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v15 — Split-Right-Col Top-Align, GF-Photo-Layout, Topic-Cards
+   ═══════════════════════════════════════════════════════════════ */
+
+/* A) Split-Section: Right-Col (Inhalt) bündig mit Title (nicht Eyebrow).
+   Eyebrow nimmt ~32–40px (font-size 11px + margin-bottom 8px + display
+   inline-block). Wir versetzen den ersten Widget der rechten Spalte
+   um diese Höhe nach unten — nur Desktop. */
+@media (min-width: 1025px) {
+    .es-split > .elementor-container > .elementor-column:nth-child(2) > .elementor-widget-wrap > .elementor-widget:first-child,
+    .es-split > .elementor-container > .elementor-column:nth-child(2) > .elementor-element-populated > .elementor-widget:first-child {
+        margin-top: 32px !important;
+    }
+}
+
+/* B) GF-Quote: Photo unter Zitat, links neben Name+Rolle */
+.es-gf-quote .es-gf-quote__author {
+    display: flex; align-items: center; gap: 16px; margin-top: 24px;
+}
+.es-gf-quote .es-gf-quote__photo {
+    width: 88px; height: 88px; border-radius: 999px; overflow: hidden;
+    background: var(--es-paper-warm); flex-shrink: 0;
+}
+.es-gf-quote .es-gf-quote__photo img { width: 100%; height: 100%; object-fit: cover; }
+.es-gf-quote .es-gf-quote__author-text { display: flex; flex-direction: column; }
+.es-gf-quote .es-gf-quote__name { margin: 0; font-size: 16px; font-weight: 500; color: var(--es-ink); }
+.es-gf-quote .es-gf-quote__role { margin: 2px 0 0; font-size: 13px; color: var(--es-text-mute); }
+
+/* C) Beratungsgebiete: Topic-Cards zentriert + Text-Spalten volle Breite
+   im Mobile/Tablet-Stack */
+@media (max-width: 1024px) {
+    body .es-bereich-detail__content > .elementor-container > .elementor-column .elementor-widget-shortcode { width: 100% !important; }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column .elementor-widget-shortcode .elementor-widget-container { width: 100% !important; }
+    body .es-bereich-detail__einzel .es-bereich__topics {
+        grid-template-columns: repeat(2, 1fr) !important;
+        max-width: 100% !important;
+        margin-left: 0 !important; margin-right: 0 !important;
+    }
+    body .es-bereich-detail__einzel .es-bereich__topic { padding: 24px 18px !important; }
+}
+@media (max-width: 600px) {
+    body .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: 1fr !important; }
+}
+
+/* D) Topic-Cards generell auf Mobile zentriert (Inhalt mittig im Card) */
+@media (max-width: 768px) {
+    .es-bereich__topic { text-align: left; }
+    .es-bereich__topic-name { justify-content: flex-start; }
+}
+
+/* E) Header: Skip-Link aus Vollbild-Mobile-Menu sicher ausblenden */
+.es-header.is-nav-open .screen-reader-text { display: none; }
+
+/* F) Title-Wrap auf .esc-card und News-Listings (mobile) — Wort wird nur
+   umgebrochen, wenn es alleine zu lang ist. Siehe v14/G fuer die Logik. */
+@media (max-width: 600px) {
+    .esc-card__title, .es-news-archive__featured h2, .es-news-archive__grid h3 {
+        overflow-wrap: break-word; word-break: normal;
+        hyphens: manual; -webkit-hyphens: manual;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v16 — Footer dynamic columns + Mobile-Layout
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Footer-Grid generisch: Brand + N Spalten */
+.es-footer__grid {
+    display: grid; gap: var(--es-space-16);
+    grid-template-columns: 1.4fr 1fr 1fr 1fr; /* Default: Brand + 3 Spalten */
+}
+.es-footer__grid--cols-3 { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+.es-footer__grid--cols-2 { grid-template-columns: 1.6fr 1fr 1fr; }
+.es-footer__grid--cols-1 { grid-template-columns: 1.6fr 1fr; }
+.es-footer__grid--cols-0 { grid-template-columns: 1fr; }
+
+@media (max-width: 900px) {
+    /* Mobile: Brand oben über volle Breite, dann Spalte 1 + 2 nebeneinander,
+       dann Spalte 3 (falls vorhanden) als zweite Zeile linksbündig. */
+    .es-footer__grid,
+    .es-footer__grid--cols-1,
+    .es-footer__grid--cols-2,
+    .es-footer__grid--cols-3 {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 32px 24px !important;
+    }
+    .es-footer__brand { grid-column: 1 / -1; }
+    .es-footer__col--3 { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+    .es-footer__grid,
+    .es-footer__grid--cols-1,
+    .es-footer__grid--cols-2,
+    .es-footer__grid--cols-3 { grid-template-columns: 1fr !important; }
+    .es-footer__brand, .es-footer__col--3 { grid-column: auto; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v17 — Mobile-Menu, Footer-Cols, Beratungsfeld, Pager, Consent
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── A) Mobile-Menu Fixes ──────────────────────────────────── */
+
+/* (1) Beim Öffnen darf der Sticky-Header KEINEN backdrop-filter haben —
+   sonst wird er zum Containing-Block für das fixed-positionierte Nav,
+   was es ans Header-Top koppelt statt ans Viewport. */
+html.es-header-sticky .es-header.is-nav-open,
+html.es-header-sticky .es-header.is-nav-open.es-header--dark {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* Wenn open: Header bleibt sticky, Inner aber transparent damit
+       das Menü dahinter das X klickbar macht */
+    z-index: 110;
+}
+
+/* (2) Mobile-Nav-Overlay greift JETZT auf das Viewport zu (fixed).
+   Wir setzen es als Geschwister via display:contents-Konstrukt und
+   nutzen position:fixed mit !important. */
+@media (max-width: 1024px) {
+    .es-header.is-nav-open {
+        position: fixed !important;
+        top: 0; left: 0; right: 0; z-index: 100;
+    }
+    .es-header.is-nav-open .es-nav {
+        position: fixed !important;
+        top: var(--es-header-h, 78px); left: 0; right: 0; bottom: 0;
+        width: 100vw; height: calc(100vh - var(--es-header-h, 78px));
+        background: var(--es-paper);
+        z-index: 95;
+        overflow-y: auto;
+        padding: 32px 24px 40px;
+        display: flex !important; flex-direction: column;
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav { background: var(--es-ink); color: var(--es-paper); }
+    .es-header.is-nav-open .es-nav ul { width: 100%; padding: 0; gap: 8px; flex-direction: column; }
+    .es-header.is-nav-open .es-nav li { width: 100%; }
+    .es-header.is-nav-open .es-nav a {
+        display: block; padding: 18px 0; font-size: 22px; font-weight: 500;
+        letter-spacing: -0.015em; border-bottom: var(--es-border);
+        color: var(--es-ink) !important;
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav a { border-bottom-color: var(--es-ink-line); color: var(--es-paper) !important; }
+
+    /* Karriere + Kontakt Buttons im Mobile-Menü sichtbar */
+    .es-header.is-nav-open .es-header__actions {
+        display: flex !important; padding: 24px 0 0; gap: 12px;
+        flex-direction: column; width: 100%;
+    }
+    .es-header.is-nav-open .es-header__actions > a {
+        width: 100%; justify-content: center; padding: 14px 16px; font-size: 15px;
+    }
+    /* Body-Lock wenn open */
+    body:has(.es-header.is-nav-open) { overflow: hidden; }
+
+    /* (3) X-Icon — Bars müssen sichtbar bleiben (NICHT parent scaling auf 0).
+       Der mittlere Strich verschwindet via opacity, ::before und ::after
+       rotieren zum Kreuz. */
+    .es-nav-toggle { position: relative; z-index: 120; width: 40px; height: 40px; }
+    .es-nav-toggle .bar { position: relative; transition: opacity 150ms var(--es-easing); }
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        position: absolute; left: 0; top: 0; transform-origin: center;
+        transition: transform 200ms var(--es-easing);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar { opacity: 0; }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        opacity: 1; transform: translateY(0) rotate(45deg); background: currentColor;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        opacity: 1; transform: translateY(0) rotate(-45deg); background: currentColor;
+    }
+}
+
+/* ── B) Footer Mobile per cols-N Klasse ───────────────────── */
+
+@media (max-width: 900px) {
+    /* cols-0: nur Brand */
+    .es-footer__grid--cols-0 { grid-template-columns: 1fr !important; }
+    /* cols-1: Brand oben, Spalte 1 darunter */
+    .es-footer__grid--cols-1 { grid-template-columns: 1fr !important; }
+    .es-footer__grid--cols-1 .es-footer__brand { grid-column: 1 / -1; }
+    /* cols-2: Brand oben, Spalte 1+2 nebeneinander */
+    .es-footer__grid--cols-2 { grid-template-columns: 1fr 1fr !important; }
+    .es-footer__grid--cols-2 .es-footer__brand { grid-column: 1 / -1; }
+    /* cols-3: Brand oben, Spalte 1+2 nebeneinander, Spalte 3 darunter linksbündig */
+    .es-footer__grid--cols-3 { grid-template-columns: 1fr 1fr !important; }
+    .es-footer__grid--cols-3 .es-footer__brand { grid-column: 1 / -1; }
+    .es-footer__grid--cols-3 .es-footer__col--3 { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+    .es-footer__grid--cols-2,
+    .es-footer__grid--cols-3 { grid-template-columns: 1fr !important; }
+    .es-footer__grid > * { grid-column: auto !important; }
+}
+
+/* ── C) Beratungsgebiete Detail Mobile — sauberer Reset ───── */
+
+@media (max-width: 1024px) {
+    /* Spalten stapeln, jede 100% */
+    body .es-bereich-detail__content > .elementor-container {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        gap: 32px !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column {
+        width: 100% !important; max-width: 100% !important;
+        flex: 1 1 auto !important;
+        position: static !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-element-populated {
+        width: 100% !important; max-width: 100% !important;
+    }
+    /* Shortcode-Widget volle Breite (ohne Inline-Padding) */
+    body .es-bereich-detail__content .elementor-widget-shortcode,
+    body .es-bereich-detail__content .elementor-widget-shortcode > .elementor-widget-container {
+        width: 100% !important; max-width: 100% !important; margin: 0 !important;
+    }
+    /* Topic-Grid: 2-spaltig, alle Karten voll umrahmt, zentriert */
+    body .es-bereich-detail__einzel .es-bereich__topics,
+    body .es-bereich-detail__einzel > .es-bereich__topics {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border-top: 0 !important;
+        justify-content: center;
+    }
+    body .es-bereich-detail__einzel .es-bereich__topic {
+        border: var(--es-border) !important;
+        border-left: var(--es-border) !important;
+        padding: 20px !important;
+        background: var(--es-paper);
+        margin: 0 !important;
+    }
+}
+@media (max-width: 600px) {
+    body .es-bereich-detail__einzel .es-bereich__topics { grid-template-columns: 1fr !important; }
+}
+
+/* ── D) Beratungsfeld-Detail Label oben „Beratungsfelder" ── */
+/* (Section-Eyebrow im Blueprint wird im PHP gefixt) */
+
+/* ── E) News-Pagination unten rechtsbündig ────────────────── */
+.es-news-toolbar.es-news-toolbar--bottom { justify-content: flex-end; }
+.es-news-toolbar.es-news-toolbar--bottom .es-news-toolbar__pager { margin-left: auto; }
+
+/* ── F) Kontakt-Form Datenschutz-Checkbox links neben Text ── */
+.es-kontakt-form .es-kontakt-form__consent {
+    display: flex !important; flex-direction: row !important;
+    align-items: flex-start !important; gap: 10px !important;
+    cursor: pointer; font-size: 13px; color: var(--es-text-mute);
+}
+.es-kontakt-form .es-kontakt-form__consent input[type="checkbox"] {
+    flex-shrink: 0; margin-top: 3px; width: 16px; height: 16px; cursor: pointer;
+}
+.es-kontakt-form .es-kontakt-form__consent > span {
+    text-align: left; line-height: 1.45;
+}
+
+/* Flash-Notice-Styling */
+.es-kontakt-form__flash {
+    padding: 14px 18px; margin-bottom: 24px; border-radius: var(--es-radius-xs);
+    font-size: 14px;
+}
+.es-kontakt-form__flash--success { background: var(--es-accent-soft); color: var(--es-ink); border-left: 3px solid var(--es-accent); }
+.es-kontakt-form__flash--error   { background: #FCE7E7; color: #771111; border-left: 3px solid #C42B2B; }
+
+/* ── G) Pfeil-Variation Selector — Fallback-CSS für Browser ohne U+FE0E ── */
+/* Wenn der VS-15 nicht greift (alte iOS), zumindest font-style fix */
+.es-link, .esc-card__link, .esc-pub-row__cta, .es-news-toolbar__pill, .es-team-single__pubs a {
+    font-feature-settings: "liga" off;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v18 — Mobile-Menu zurück auf Dropdown + Beratungsfeld Reset
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Mobile-Menu: Vollbild-Override aufheben, Dropdown-Stil ───── */
+@media (max-width: 1024px) {
+    /* Header bleibt position normal (nicht fixed) wenn open */
+    .es-header.is-nav-open {
+        position: relative !important;
+        top: auto; left: auto; right: auto;
+    }
+    /* Body-Lock aufheben, kein 100vh-Lock mehr */
+    body:has(.es-header.is-nav-open) { overflow: auto; }
+
+    /* Nav als Dropdown unter dem Header (absolute), nicht Vollbild */
+    .es-header.is-nav-open .es-nav {
+        position: absolute !important;
+        top: 100% !important; left: 0 !important; right: 0 !important;
+        bottom: auto !important; height: auto !important; max-height: 80vh !important;
+        width: 100% !important;
+        background: var(--es-paper);
+        z-index: 50;
+        overflow-y: auto;
+        padding: 16px 24px 24px !important;
+        display: flex !important; flex-direction: column;
+        border-top: var(--es-border);
+        box-shadow: 0 8px 24px rgba(15,23,32,0.08);
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav {
+        background: var(--es-ink); color: var(--es-paper);
+        border-top-color: var(--es-ink-line);
+    }
+    .es-header.is-nav-open .es-nav ul {
+        width: 100%; padding: 0; gap: 0;
+        flex-direction: column;
+    }
+    .es-header.is-nav-open .es-nav li { width: 100%; }
+    .es-header.is-nav-open .es-nav a {
+        display: block; padding: 14px 0;
+        font-size: 16px; font-weight: 500;
+        letter-spacing: -0.01em; border-bottom: var(--es-border);
+        color: var(--es-ink) !important;
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav a {
+        border-bottom-color: var(--es-ink-line);
+        color: var(--es-paper) !important;
+    }
+
+    /* Karriere + Kontakt Buttons im Dropdown */
+    .es-header.is-nav-open .es-header__actions {
+        display: flex !important; padding: 16px 0 0;
+        gap: 10px; flex-direction: column; width: 100%;
+    }
+    .es-header.is-nav-open .es-header__actions > a {
+        width: 100%; justify-content: center;
+        padding: 12px 16px; font-size: 14px;
+    }
+
+    /* X-Icon: Mittlerer Strich verschwindet, ::before/::after rotieren */
+    .es-nav-toggle { position: relative; z-index: 60; width: 40px; height: 40px; }
+    .es-nav-toggle .bar {
+        position: relative;
+        transition: opacity 150ms var(--es-easing);
+    }
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        position: absolute; left: 0; top: 0;
+        transform-origin: center;
+        transition: transform 200ms var(--es-easing);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar { opacity: 0; }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        opacity: 1; transform: translateY(0) rotate(45deg);
+        background: currentColor;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        opacity: 1; transform: translateY(0) rotate(-45deg);
+        background: currentColor;
+    }
+}
+
+/* ── Beratungsfeld-Detail Mobile — sauberer Reset ───────────── */
+@media (max-width: 1024px) {
+    /* 1. Spalten stapeln vertikal */
+    body .es-bereich-detail__content > .elementor-container {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        gap: 32px !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        position: static !important;
+    }
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    body .es-bereich-detail__content > .elementor-container > .elementor-column > .elementor-element-populated {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    /* 2. Shortcode-Widget volle Breite, kein Inline-Wrap-Padding */
+    body .es-bereich-detail__content .elementor-widget-shortcode,
+    body .es-bereich-detail__content .elementor-widget-shortcode > .elementor-widget-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    /* 3. Topic-Container: 2-spaltig, zentriert, gleichgroße Karten */
+    body .es-bereich-detail__einzel,
+    body .es-bereich-detail__einzel > .es-bereich__topics,
+    body .es-bereich-detail__content .es-bereich__topics {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        justify-content: center;
+        justify-items: stretch;
+        align-items: stretch;
+    }
+    /* 4. Topic-Karten: vollständige Border, gleichmäßiges Padding */
+    body .es-bereich-detail__content .es-bereich__topic,
+    body .es-bereich-detail__einzel .es-bereich__topic {
+        border: 1px solid var(--es-rule) !important;
+        border-left: 1px solid var(--es-rule) !important;
+        background: var(--es-paper) !important;
+        padding: 20px 16px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column;
+        text-align: left;
+    }
+    body .es-bereich-detail__content .es-bereich__topic-name h3,
+    body .es-bereich-detail__einzel .es-bereich__topic-name h3 {
+        font-size: 15px !important;
+        line-height: 1.3 !important;
+    }
+    body .es-bereich-detail__content .es-bereich__topic-desc,
+    body .es-bereich-detail__einzel .es-bereich__topic-desc {
+        font-size: 12px !important;
+        padding-left: 16px !important;
+        -webkit-line-clamp: 4;
+    }
+}
+
+/* Sehr enge Screens (≤480) → 1-spaltig */
+@media (max-width: 480px) {
+    body .es-bereich-detail__einzel,
+    body .es-bereich-detail__einzel > .es-bereich__topics,
+    body .es-bereich-detail__content .es-bereich__topics {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v19 — Mobile-Menu sticky-compat + X-Icon + Actions im Nav
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+    /* (A) Header darf sticky bleiben — nicht relative überschreiben.
+       Damit folgt das Dropdown-Menü dem sticky Header beim Scrollen. */
+    .es-header.is-nav-open {
+        position: sticky !important;
+        top: 0 !important;
+    }
+    html.es-header-sticky .es-header.is-nav-open {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 110 !important;
+    }
+    /* Body-Lock: nicht aktivieren wenn sticky, damit Page-Scroll möglich
+       bleibt — das Dropdown ist scrollbar via max-height + overflow */
+
+    /* (B) Header__actions sind im Header-Bar standardmäßig versteckt;
+       nur wenn JS sie ins Nav verschoben hat, werden sie angezeigt. */
+    .es-header__actions { display: none !important; }
+    .es-nav .es-header__actions.es-header__actions--in-nav {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 16px 0 0 !important;
+        margin-top: auto !important;
+        width: 100% !important;
+    }
+    .es-nav .es-header__actions--in-nav > a {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 12px 16px !important;
+        font-size: 14px !important;
+    }
+
+    /* (C) X-Icon Fix: NICHT opacity auf .bar (das versteckt auch ::before/::after).
+       Stattdessen background transparent — pseudo-Elemente bleiben sichtbar. */
+    .es-nav-toggle .bar {
+        opacity: 1 !important;
+        transition: background-color 150ms var(--es-easing);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar {
+        background: transparent !important;
+        opacity: 1 !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        background: currentColor !important;
+        transform: translateY(0) rotate(45deg) !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        background: currentColor !important;
+        transform: translateY(0) rotate(-45deg) !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v20 — Beratungsfeld 2-Section Approach + Mobile-Menu Final
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Sichtbarkeits-Klassen für Section-Tausch ──────────────── */
+@media (max-width: 1024px) {
+    .es-only-desktop { display: none !important; }
+}
+@media (min-width: 1025px) {
+    .es-only-mobile-tablet { display: none !important; }
+}
+
+/* ── Beratungsfeld Mobile-Stacked-Variante ─────────────────── */
+.es-bereich-detail__content--stacked .es-eyebrow { margin-bottom: 12px; }
+.es-bereich-detail__content--stacked > .elementor-container > .elementor-column > .elementor-widget-wrap,
+.es-bereich-detail__content--stacked > .elementor-container > .elementor-column > .elementor-element-populated {
+    width: 100% !important; max-width: 100% !important;
+}
+.es-bereich-detail__content--stacked .elementor-widget-shortcode,
+.es-bereich-detail__content--stacked .elementor-widget-shortcode > .elementor-widget-container {
+    width: 100% !important; max-width: 100% !important; margin: 0 !important;
+}
+.es-bereich-detail__einzel-stacked,
+.es-bereich-detail__einzel-stacked > .es-bereich__topics,
+.es-bereich-detail__content--stacked .es-bereich__topics {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 24px 0 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+.es-bereich-detail__content--stacked .es-bereich__topic {
+    border: 1px solid var(--es-rule) !important;
+    background: var(--es-paper) !important;
+    padding: 18px 14px !important;
+    margin: 0 !important;
+}
+.es-bereich-detail__content--stacked .es-bereich__topic-name h3 { font-size: 15px !important; line-height: 1.3 !important; }
+.es-bereich-detail__content--stacked .es-bereich__topic-desc { font-size: 12px !important; padding-left: 16px !important; -webkit-line-clamp: 4; }
+
+@media (max-width: 480px) {
+    .es-bereich-detail__einzel-stacked,
+    .es-bereich-detail__einzel-stacked > .es-bereich__topics,
+    .es-bereich-detail__content--stacked .es-bereich__topics {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Mobile-Menu — final mit position:fixed
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    /* Header bleibt sticky (oder normal). Nav als FIXED-Overlay direkt
+       unter dem Header — folgt damit immer dem Viewport, egal ob der
+       Header sticky ist oder nicht. */
+    .es-header.is-nav-open .es-nav {
+        position: fixed !important;
+        top: var(--es-header-h, 78px) !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: auto !important;
+        width: 100% !important;
+        max-height: calc(100vh - var(--es-header-h, 78px)) !important;
+        background: var(--es-paper);
+        z-index: 99 !important;
+        overflow-y: auto;
+        padding: 16px 24px 24px !important;
+        display: flex !important;
+        flex-direction: column;
+        border-top: var(--es-border);
+        box-shadow: 0 8px 24px rgba(15,23,32,0.08);
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav {
+        background: var(--es-ink);
+        color: var(--es-paper);
+        border-top-color: var(--es-ink-line);
+    }
+
+    /* Header__actions side-by-side (Row), normal Width ── */
+    .es-nav .es-header__actions.es-header__actions--in-nav {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 12px !important;
+        padding: 16px 0 0 !important;
+        margin-top: auto !important;
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+    .es-nav .es-header__actions--in-nav > a {
+        width: auto !important;
+        flex: 0 1 auto !important;
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+    }
+
+    /* Kontakt-Button: stets sichtbar (kein white-on-white) */
+    .es-nav .es-header__actions--in-nav .es-btn-kontakt {
+        background: var(--es-ink) !important;
+        color: var(--es-paper) !important;
+        border-color: var(--es-ink) !important;
+    }
+    .es-header--dark .es-nav .es-header__actions--in-nav .es-btn-kontakt {
+        background: var(--es-paper) !important;
+        color: var(--es-ink) !important;
+        border-color: var(--es-paper) !important;
+    }
+    .es-nav .es-header__actions--in-nav .es-btn-jobs {
+        color: inherit !important;
+    }
+
+    /* Allgemeine Link-Farb-Override im Nav darf den Button NICHT erfassen */
+    .es-header.is-nav-open .es-nav a.es-btn-kontakt,
+    .es-header.es-header--dark.is-nav-open .es-nav a.es-btn-kontakt {
+        color: inherit !important;
+    }
+
+    /* X-Icon — finale Variante: Bar wirklich invisible, Pseudos sichtbar */
+    .es-nav-toggle { position: relative; z-index: 120; }
+    .es-nav-toggle .bar { background: currentColor; transition: background-color 150ms var(--es-easing); }
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        background: currentColor;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        transition: transform 200ms var(--es-easing);
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar { background: transparent !important; }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        transform: translateY(0) rotate(45deg) !important;
+        background: currentColor !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        transform: translateY(0) rotate(-45deg) !important;
+        background: currentColor !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v21 — letzte Korrekturen Mobile-Menu + Beratungsfeld
+   ═══════════════════════════════════════════════════════════════ */
+
+/* (A) Beratungsfeld-Kacheln auf Mobile: 1 Spalte, volle Breite ─ */
+@media (max-width: 1024px) {
+    .es-bereich-detail__einzel-stacked,
+    .es-bereich-detail__einzel-stacked > .es-bereich__topics,
+    .es-bereich-detail__content--stacked .es-bereich__topics {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    /* (B) Body-Overflow-Lock entfernen — bricht sticky positioning */
+    body:has(.es-header.is-nav-open) { overflow: visible !important; }
+
+    /* (C) Header bleibt SICHTBAR und sticky beim Öffnen.
+       Höchster z-index: 200 → über dem Nav. */
+    .es-header { z-index: 200 !important; }
+    .es-header.is-nav-open { z-index: 200 !important; }
+    html.es-header-sticky .es-header,
+    html.es-header-sticky .es-header.is-nav-open {
+        position: sticky !important; top: 0 !important;
+        z-index: 200 !important;
+    }
+    /* Header darf KEINEN backdrop-filter haben → bricht containing-block */
+    .es-header, .es-header.is-nav-open {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    /* Header braucht solide Hintergrundfarbe damit Nav nicht durchscheint */
+    .es-header:not(.es-header--dark) { background: var(--es-paper) !important; }
+    .es-header--dark { background: var(--es-ink) !important; }
+
+    /* Nav: position fixed, UNTER dem Header (z-index 100 < 200) */
+    .es-header.is-nav-open .es-nav {
+        position: fixed !important;
+        top: var(--es-header-h, 78px) !important;
+        left: 0 !important; right: 0 !important;
+        bottom: auto !important;
+        width: 100vw !important;
+        max-height: calc(100vh - var(--es-header-h, 78px)) !important;
+        z-index: 100 !important;
+        overflow-y: auto;
+        padding: 16px 24px 24px !important;
+        display: flex !important;
+        flex-direction: column;
+        background: var(--es-paper);
+        border-top: var(--es-border);
+        box-shadow: 0 8px 24px rgba(15,23,32,0.08);
+    }
+    .es-header.es-header--dark.is-nav-open .es-nav {
+        background: var(--es-ink);
+        color: var(--es-paper);
+        border-top-color: var(--es-ink-line);
+    }
+
+    /* (D) Buttons 50/50 mit Gap */
+    .es-nav .es-header__actions.es-header__actions--in-nav {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 12px !important;
+        padding: 16px 0 0 !important;
+        margin-top: auto !important;
+        width: 100% !important;
+    }
+    .es-nav .es-header__actions--in-nav > a {
+        flex: 1 1 50% !important;
+        min-width: 0 !important;
+        width: 50% !important;
+        max-width: 50% !important;
+        padding: 12px 12px !important;
+        font-size: 13px !important;
+        text-align: center !important;
+        justify-content: center !important;
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+
+    /* (E) Kontakt-Button: zuverlässiger Kontrast (super-spezifischer Selektor) */
+    body .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-btn-kontakt,
+    body .es-header.is-nav-open.es-header--dark .es-nav .es-header__actions--in-nav .es-btn-kontakt {
+        background-color: var(--es-accent) !important;
+        color: var(--es-ink) !important;
+        border: 1px solid var(--es-accent) !important;
+    }
+    body .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-btn-jobs {
+        background-color: transparent !important;
+        color: var(--es-ink) !important;
+        border: 1px solid var(--es-ink) !important;
+    }
+    body .es-header.es-header--dark.is-nav-open .es-nav .es-header__actions--in-nav .es-btn-jobs {
+        color: var(--es-paper) !important;
+        border-color: var(--es-paper) !important;
+    }
+
+    /* (F) X-Icon definitiv: position-Reset auf Pseudos + opacity:1 */
+    .es-nav-toggle { position: relative; z-index: 250 !important; }
+    .es-nav-toggle .bar { background: currentColor; opacity: 1 !important; }
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        position: absolute !important; left: 0 !important;
+        background: currentColor !important; opacity: 1 !important;
+        width: 22px !important; height: 1.5px !important;
+        content: "" !important;
+        transition: transform 200ms var(--es-easing);
+    }
+    .es-nav-toggle .bar::before { top: -6px; }
+    .es-nav-toggle .bar::after  { top: 6px; }
+    .es-header.is-nav-open .es-nav-toggle .bar { background: transparent !important; }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        top: 0 !important;
+        transform: rotate(45deg) !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        top: 0 !important;
+        transform: rotate(-45deg) !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v22 — Header-Visibility, Hamburger/X klar sichtbar, Kacheln 2-col
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+
+    /* (1) HAMBURGER — 3 gleich breite Linien, gleicher Abstand.
+       Container hat feste Höhe, Pseudos absolut positioniert. */
+    .es-nav-toggle {
+        position: relative !important;
+        z-index: 9999 !important;
+        width: 28px !important; height: 22px !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: 0 !important;
+        cursor: pointer;
+        display: inline-flex !important;
+        align-items: center !important; justify-content: center !important;
+    }
+    .es-nav-toggle .bar {
+        position: relative !important;
+        display: block !important;
+        width: 22px !important; height: 2px !important;
+        background-color: currentColor !important;
+        transform: none !important;
+        transition: background-color 150ms var(--es-easing) !important;
+    }
+    .es-nav-toggle .bar::before,
+    .es-nav-toggle .bar::after {
+        content: "" !important;
+        position: absolute !important;
+        left: 0 !important;
+        width: 22px !important; height: 2px !important;
+        background-color: currentColor !important;
+        opacity: 1 !important;
+        transition: top 200ms var(--es-easing), transform 200ms var(--es-easing) !important;
+    }
+    .es-nav-toggle .bar::before { top: -7px !important; transform: none !important; }
+    .es-nav-toggle .bar::after  { top:  7px !important; transform: none !important; }
+
+    /* X-State — beide Pseudos rotieren auf top:0 zum Kreuz, mid weg */
+    .es-header.is-nav-open .es-nav-toggle .bar {
+        background-color: transparent !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::before {
+        top: 0 !important;
+        transform: rotate(45deg) !important;
+        background-color: currentColor !important;
+    }
+    .es-header.is-nav-open .es-nav-toggle .bar::after {
+        top: 0 !important;
+        transform: rotate(-45deg) !important;
+        background-color: currentColor !important;
+    }
+
+    /* X/Hamburger Farbe per Header-Variante explizit erzwingen */
+    .es-header:not(.es-header--dark) .es-nav-toggle { color: var(--es-ink) !important; }
+    .es-header.es-header--dark         .es-nav-toggle { color: var(--es-paper) !important; }
+
+
+    /* (2) HEADER bleibt SICHTBAR beim Öffnen — komplett opak, fixed
+       am Top, höchster z-index. Wir setzen ihn beim Open auf
+       position:fixed (statt sticky) damit kein Containing-Block-Bug. */
+    body .es-header.is-nav-open {
+        position: fixed !important;
+        top: 0 !important; left: 0 !important; right: 0 !important;
+        z-index: 9990 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    body .es-header.is-nav-open:not(.es-header--dark) {
+        background-color: var(--es-paper) !important;
+    }
+    body .es-header.es-header--dark.is-nav-open {
+        background-color: var(--es-ink) !important;
+    }
+
+    /* Body bekommt Padding-Top wenn Menu offen, damit kein Layout-Sprung */
+    body:has(.es-header.is-nav-open) { padding-top: var(--es-header-h, 78px); }
+
+    /* Nav: fixed direkt unter dem Header */
+    body .es-header.is-nav-open .es-nav {
+        position: fixed !important;
+        top: var(--es-header-h, 78px) !important;
+        left: 0 !important; right: 0 !important; bottom: auto !important;
+        width: 100vw !important;
+        max-height: calc(100vh - var(--es-header-h, 78px)) !important;
+        z-index: 9980 !important;
+        overflow-y: auto;
+        padding: 16px 24px 24px !important;
+        display: flex !important;
+        flex-direction: column;
+        background-color: var(--es-paper) !important;
+        border-top: var(--es-border);
+    }
+    body .es-header.es-header--dark.is-nav-open .es-nav {
+        background-color: var(--es-ink) !important;
+        color: var(--es-paper) !important;
+        border-top-color: var(--es-ink-line);
+    }
+}
+
+/* (3) BERATUNGSFELD-Kacheln Mobile → 2 nebeneinander, immer */
+@media (max-width: 1024px) {
+    .es-bereich-detail__einzel-stacked,
+    .es-bereich-detail__einzel-stacked > .es-bereich__topics,
+    .es-bereich-detail__content--stacked .es-bereich__topics,
+    .es-bereich-detail__content--stacked .es-bereich-detail__einzel-stacked .es-bereich__topics {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        margin: 0 !important;
+        border-top: 0 !important;
+    }
+    .es-bereich-detail__content--stacked .es-bereich__topic,
+    .es-bereich-detail__einzel-stacked .es-bereich__topic {
+        border: 1px solid var(--es-rule) !important;
+        background: var(--es-paper) !important;
+        padding: 18px 14px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v23 — Header bleibt am Top sichtbar, Stacked-Section volle Breite
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+
+    /* (1) HEADER: per ID-Selector → Spezifitaet (1,1,0) schlaegt
+       die alte v21-Regel mit (0,3,1). Damit greift position:fixed
+       auch wenn html.es-header-sticky aktiv ist. */
+    #es-header.is-nav-open {
+        position: fixed !important;
+        top: 0 !important; left: 0 !important; right: 0 !important;
+        z-index: 9990 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    #es-header.is-nav-open:not(.es-header--dark) {
+        background-color: var(--es-paper) !important;
+    }
+    #es-header.es-header--dark.is-nav-open {
+        background-color: var(--es-ink) !important;
+    }
+
+    /* Body: KEIN padding-top mehr — das hat den sticky-Header bei
+       scrollY=0 nach unten geschoben. Stattdessen Scroll-Lock per
+       overflow:hidden, damit Body-Content nicht durchblitzt. */
+    body:has(.es-header.is-nav-open) {
+        padding-top: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* Nav: weiterhin fixed unter dem Header — ID-Selector damit
+       v21/v22-Regeln zuverlaessig ueberschrieben werden. */
+    #es-header.is-nav-open #es-nav,
+    #es-header.is-nav-open .es-nav {
+        position: fixed !important;
+        top: var(--es-header-h, 78px) !important;
+        left: 0 !important; right: 0 !important; bottom: auto !important;
+        width: 100vw !important;
+        max-height: calc(100vh - var(--es-header-h, 78px)) !important;
+        z-index: 9980 !important;
+        overflow-y: auto;
+    }
+}
+
+/* (2) BERATUNGSFELD-Stacked-Section: Section + Column auf 100% Breite
+   forcen. Vorher griffen nur Regeln fuer .es-bereich-detail__content
+   (ohne --stacked) → die Mobile-Section war effektiv default Elementor-
+   Spalte mit 50% Breite. */
+@media (max-width: 1024px) {
+    body .es-bereich-detail__content--stacked,
+    body .es-bereich-detail__content--stacked > .elementor-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column !important;
+    }
+    body .es-bereich-detail__content--stacked > .elementor-container > .elementor-column,
+    body .es-bereich-detail__content--stacked > .elementor-container > .elementor-column.elementor-element {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+    body .es-bereich-detail__content--stacked > .elementor-container > .elementor-column > .elementor-widget-wrap,
+    body .es-bereich-detail__content--stacked > .elementor-container > .elementor-column > .elementor-element-populated {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v24 — Sub-Menus auf Mobile aus, Stacked-Section voll, Übersicht-Kacheln Außenrahmen
+   ═══════════════════════════════════════════════════════════════ */
+
+/* (1) Sub-Items im Mobile-Menue komplett ausblenden */
+@media (max-width: 1024px) {
+    #es-nav .sub-menu,
+    .es-nav .sub-menu {
+        display: none !important;
+    }
+}
+
+/* (2) Stacked-Section: maximal-aggressive Selektoren mit doppelter Klasse
+   damit Spezifitaet alle frueheren Regeln und Elementor-Inline-CSS schlaegt. */
+@media (max-width: 1024px) {
+    body section.elementor-section.es-bereich-detail__content--stacked.es-bereich-detail__content--stacked,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    body section.elementor-section.es-bereich-detail__content--stacked.es-bereich-detail__content--stacked > .elementor-container,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked > .elementor-container.elementor-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        padding: 0 24px !important;
+    }
+    body section.elementor-section.es-bereich-detail__content--stacked.es-bereich-detail__content--stacked > .elementor-container > .elementor-column,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked > .elementor-container > .elementor-column.elementor-element {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked .elementor-widget-wrap,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked .elementor-element-populated,
+    body .es-bereich-detail__content--stacked.es-bereich-detail__content--stacked .elementor-widget {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* (3) Leistungsuebersicht-Kacheln: Aussenrahmen links/rechts hinzufuegen.
+   Selektor zielt nur auf die Uebersichts-Variante (im .es-bereich__inner). */
+.es-bereich__inner > .es-bereich__topics {
+    border-left: var(--es-border);
+    border-right: var(--es-border);
+}
+.es-bereich__inner > .es-bereich__topics > .es-bereich__topic {
+    padding-left: var(--es-space-8);
+    padding-right: var(--es-space-8);
+}
+@media (max-width: 1024px) {
+    .es-bereich__inner > .es-bereich__topics > .es-bereich__topic {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v25/v26 — Beratungsfeld Split: 2-Column Section, native Widgets
+   Mobile: Spalten auf 100% mit doppelter Klassen-Spezifitaet
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tablet/Mobile: Section auf volle Breite, Spalten stacken auf 100% */
+@media (max-width: 1024px) {
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+    }
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column.elementor-element {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section .elementor-widget,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section .elementor-widget-wrap,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section .elementor-element-populated {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    /* Kacheln auf Mobile: 2 nebeneinander, voller Container-Breite */
+    body .es-bereich-detail__split-section .es-bereich__topics {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        border: 0 !important;
+    }
+    body .es-bereich-detail__split-section .es-bereich__topic {
+        border: 1px solid var(--es-rule) !important;
+        background: var(--es-paper) !important;
+        padding: 18px 14px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+    /* Abstand zwischen Text-Block und Kachel-Block beim Stacking */
+    body .es-bereich-detail__split-section > .elementor-container > .elementor-column:first-child {
+        margin-bottom: 32px;
+    }
+}
+
+/* Beratungsfeld-Detail Kacheln (2-Spalten) — saubere Aussen- und
+   Innenrahmen. Container traegt top + left, jede Kachel right + bottom →
+   durchgehende Linien an allen Innen- und Aussenkanten. Ueberschreibt
+   die default 3-Spalten-Regeln auf Z. 476-490. */
+.es-bereich-detail__split-tiles .es-bereich__topics {
+    border-top: var(--es-border) !important;
+    border-left: var(--es-border) !important;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
+}
+.es-bereich-detail__split-tiles .es-bereich__topic {
+    padding: 32px 28px !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: var(--es-border) !important;
+    border-bottom: var(--es-border) !important;
+}
+@media (max-width: 1024px) {
+    /* Mobile: Container traegt alle 4 Aussenraender, Kacheln nur Innen-
+       trenner. Bei 2 Kacheln in einer Zeile: rechte Kachel hat keinen
+       right-Border (Container hat right), linke Kachel border-right
+       als Trenner. Letzte Reihe: bottom kommt vom Container. */
+    .es-bereich-detail__split-tiles .es-bereich__topics {
+        border: var(--es-border) !important;
+        border-top: var(--es-border) !important;
+    }
+    .es-bereich-detail__split-tiles .es-bereich__topic {
+        padding: 18px 14px !important;
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-bottom: var(--es-border) !important;
+        border-right: 0 !important;
+    }
+    /* In 2-Spalten Mobile Layout: erste Kachel jeder Reihe (ungerade nth)
+       bekommt right-Border als Trenner zur naechsten */
+    .es-bereich-detail__split-tiles .es-bereich__topic:nth-child(2n+1) {
+        border-right: var(--es-border) !important;
+    }
+    /* Letzte Reihe: kein bottom-Border (sonst doppelt mit Container) */
+    .es-bereich-detail__split-tiles .es-bereich__topic:nth-last-child(-n+2) {
+        border-bottom: 0 !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FIX v28 — Back-To-Top-Toggle & Leistungen-Uebersicht Orphan-Fix
+   ═══════════════════════════════════════════════════════════════ */
+
+/* (1) Back-To-Top: Wenn Toggle im Backend (Design > Layout) aus ist, fehlt
+   die `es-btt-on`-Klasse am <html>-Element. Belt-and-Suspenders: auch wenn
+   das Button-Markup aus irgendeinem Grund (Cache, Plugin) im DOM landet,
+   wird es per CSS verlaesslich versteckt. Die JS-Init ist zusaetzlich auf
+   die Klasse gegated. */
+html:not(.es-btt-on) .es-btt { display: none !important; }
+
+/* (2) Leistungen-Uebersicht: Bei nicht-vollstaendiger letzter Zeile (z. B.
+   7 Beratungsfelder in 3-Spalten-Grid) darf die rechte Aussenrahmenlinie
+   in der letzten Zeile nicht bis zum rechten Section-Rand laufen, sondern
+   muss an der rechten Kante der letzten Kachel enden.
+   Loesung: Container traegt nur noch border-left, die rechte Aussenlinie
+   wird per `border-right` an jeder "letzten Kachel der Zeile" gezogen
+   (3n) sowie an der letzten Kachel ueberhaupt (`:last-child`) — bei
+   Orphans liegt die Linie damit automatisch an der Zellengrenze. */
+.es-bereich__inner > .es-bereich__topics {
+    border-right: 0;
+}
+.es-bereich__inner > .es-bereich__topics > .es-bereich__topic:nth-child(3n),
+.es-bereich__inner > .es-bereich__topics > .es-bereich__topic:last-child {
+    border-right: var(--es-border);
+}
+/* Mobile: Grid wechselt auf 2-Spalten (vgl. Z. 1628) — Selektoren
+   anpassen: 3n entfaellt, stattdessen 2n + last-child. */
+@media (max-width: 768px) {
+    .es-bereich__inner > .es-bereich__topics > .es-bereich__topic:nth-child(3n) {
+        border-right: 0;
+    }
+    .es-bereich__inner > .es-bereich__topics > .es-bereich__topic:nth-child(2n),
+    .es-bereich__inner > .es-bereich__topics > .es-bereich__topic:last-child {
+        border-right: var(--es-border);
+    }
+}
+
+/* ════════════════════════════════════════════════════════════
+   Dark-Sektionen: das fruehere Sand-Beige (--es-paper-warm) ist
+   jetzt #303030. Warm-Abschnitte = dunkle Abschnitte -> heller
+   Text (analog --ink). Weisse Karten darin behalten dunklen Text.
+   Interaktive/statische Flaechen, die jetzt dunkel werden, bekommen
+   ebenfalls hellen Text. Bereits tote Hover (sub-menu, pub-row) sind
+   anderswo auf transparent ueberschrieben und bleiben unangetastet.
+   ════════════════════════════════════════════════════════════ */
+
+/* (1) Direkter Text auf warm-(=dunklen)-Abschnitten hell */
+.es-stage--warm,
+.es-section--warm,
+.es-bereich--warm { color: var(--es-paper); }
+.es-stage--warm h1, .es-stage--warm h2, .es-stage--warm h3, .es-stage--warm h4, .es-stage--warm h5, .es-stage--warm h6,
+.es-section--warm h1, .es-section--warm h2, .es-section--warm h3, .es-section--warm h4,
+.es-bereich--warm h1, .es-bereich--warm h2, .es-bereich--warm h3, .es-bereich--warm h4 { color: var(--es-paper); }
+.es-stage--warm .elementor-heading-title { color: var(--es-paper); }
+.es-stage--warm p,
+.es-stage--warm .elementor-widget-text-editor p { color: rgba(255,255,255,0.78); }
+.es-stage--warm .es-split__lead p { color: rgba(255,255,255,0.82); }
+.es-stage--warm .es-split__body p { color: rgba(255,255,255,0.6); }
+.es-stage--warm strong, .es-stage--warm b { color: var(--es-paper); }
+.es-stage--warm .es-eyebrow { color: rgba(255,255,255,0.6); }
+.es-stage--warm .es-eyebrow--accent { color: var(--es-accent); }
+.es-stage--warm a:not(.es-btn):not(.es-btn-jobs):not(.es-btn-kontakt):not(.es-link) { color: inherit; }
+.es-stage--warm .es-link { color: var(--es-paper); border-bottom-color: var(--es-paper); }
+.es-stage--warm .es-link:hover { color: var(--es-accent); border-bottom-color: var(--es-accent); }
+.es-bereich--warm .es-bereich__topic { color: var(--es-paper); }
+.es-bereich--warm .es-bereich__topic-desc { color: rgba(255,255,255,0.7); }
+.es-bereich--warm .es-bereich__topics-label { color: rgba(255,255,255,0.55); }
+
+/* (2) --paper / --ghost-paper Buttons in warm-Abschnitten = Dunkel-
+       Behandlung (wie --ink), sonst dunkler Text auf dunklem Grund */
+.es-stage--warm.es-stage .es-btn--paper { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }
+.es-stage--warm.es-stage .es-btn--paper:hover { background: transparent; color: var(--es-paper); border-color: var(--es-paper); }
+.es-stage--warm.es-stage .es-btn--ghost-paper { color: var(--es-paper); border-color: rgba(255,255,255,0.4); }
+.es-stage--warm.es-stage .es-btn--ghost-paper:hover { background: var(--es-paper); color: var(--es-ink); border-color: var(--es-paper); }
+
+/* (3) Weisse Karten in warm-Abschnitten behalten dunklen Text */
+.es-stage--warm .es-card-pillar,
+.es-stage--warm .es-service-card .elementor-element-populated,
+.es-stage--warm .es-pullquote-panel { color: var(--es-ink); }
+.es-stage--warm .es-card-pillar__title .elementor-heading-title,
+.es-stage--warm .es-service-card__title .elementor-heading-title,
+.es-stage--warm .es-pullquote-panel .elementor-heading-title { color: var(--es-ink); }
+.es-stage--warm .es-card-pillar__desc p,
+.es-stage--warm .es-service-card__body p { color: var(--es-text-mute); }
+.es-stage--warm .es-pullquote-panel p { color: var(--es-accent); }
+
+/* (4) Interaktive Flaechen, die jetzt dunkel werden -> heller Text */
+.esc-card:hover { color: var(--es-paper); }
+.esc-card:hover .esc-card__title,
+.esc-card:hover .esc-card__text,
+.esc-card:hover .esc-card__link { color: var(--es-paper); }
+.es-team-filter__pill:hover,
+.es-news-toolbar__pill:hover { color: var(--es-paper); }
+.elementor-column.es-service-card:hover .elementor-element-populated { color: var(--es-paper); }
+.elementor-column.es-service-card:hover .es-service-card__title .elementor-heading-title { color: var(--es-paper); }
+.elementor-column.es-service-card:hover .es-service-card__num,
+.elementor-column.es-service-card:hover .es-service-card__body p { color: rgba(255,255,255,0.8); }
+.es-home-services > .elementor-container > .elementor-column:hover .elementor-heading-title { color: var(--es-paper); }
+.es-home-services > .elementor-container > .elementor-column:hover p { color: rgba(255,255,255,0.8); }
+.es-bereich-detail__einzel .es-bereich__topic:hover { color: var(--es-paper); }
+.es-bereich-detail__einzel .es-bereich__topic:hover .es-bereich__topic-desc { color: rgba(255,255,255,0.7); }
+
+/* (4b) In warm-Abschnitten haelt Zeile 1041 die Service-Card beim Hover
+        WEISS -> Text dort dunkel lassen (sonst weiss-auf-weiss). */
+.es-stage--warm .elementor-column.es-service-card:hover .elementor-element-populated { color: var(--es-ink); }
+.es-stage--warm .elementor-column.es-service-card:hover .es-service-card__title .elementor-heading-title { color: var(--es-ink); }
+.es-stage--warm .elementor-column.es-service-card:hover .es-service-card__num { color: var(--es-text-soft); }
+.es-stage--warm .elementor-column.es-service-card:hover .es-service-card__body p { color: var(--es-text-mute); }
+
+/* (5) Statische Kontakt-Box (war beige) -> heller Text */
+.es-kontakt-general { color: rgba(255,255,255,0.82); }
+.es-kontakt-general .elementor-heading-title,
+.es-kontakt-general h2, .es-kontakt-general h3 { color: var(--es-paper); }
+
+/* ════════════════════════════════════════════════════════════
+   Fix v32 — Bug-Reports Runde 2 (Politur der Dark-Sektionen)
+   ════════════════════════════════════════════════════════════ */
+
+/* v32-1) Eyebrow ("Hairline") in dunklen Abschnitten lesbar. Der innere
+   .elementor-heading-title hat color:mute!important -> hier ueberschreiben.
+   Accent-Eyebrows (gruen) ausgenommen. */
+.es-stage--warm .es-eyebrow:not(.es-eyebrow--accent),
+.es-bereich--warm .es-eyebrow:not(.es-eyebrow--accent),
+.es-kontakt-general .es-eyebrow:not(.es-eyebrow--accent) { color: rgba(255,255,255,0.65); }
+.es-stage--warm .es-eyebrow:not(.es-eyebrow--accent) .elementor-heading-title,
+.es-stage--warm .es-eyebrow:not(.es-eyebrow--accent) > .elementor-heading-title { color: rgba(255,255,255,0.65) !important; }
+
+/* v32-2) GF-Zitat (voll auf dunkel): Zitat/Name/Rolle hell */
+.es-stage--warm .es-gf-quote__text .elementor-heading-title { color: var(--es-paper) !important; }
+.es-stage--warm .es-gf-quote__name { color: var(--es-paper); }
+.es-stage--warm .es-gf-quote__role { color: rgba(255,255,255,0.7); }
+
+/* v32-3) Weisse esc-Karten in warm: ALLE Text-Elemente dunkel halten — auch
+   Karten mit plain <h3>/<p> (Publikations-/Fachbeitrags-Teaser, .esc-card h3
+   ohne __title-Klasse). Hover -> dunkler Hintergrund + heller Text. */
+.es-stage--warm .esc-card h2, .es-stage--warm .esc-card h3, .es-stage--warm .esc-card h4,
+.es-stage--warm .esc-card .esc-card__title { color: var(--es-ink); }
+.es-stage--warm .esc-card p, .es-stage--warm .esc-card .esc-card__text { color: var(--es-text-mute); }
+.es-stage--warm .esc-card .esc-card__link { color: var(--es-ink); }
+.esc-card:hover h2, .esc-card:hover h3, .esc-card:hover h4,
+.esc-card:hover .esc-card__title, .esc-card:hover p,
+.esc-card:hover .esc-card__text, .esc-card:hover .esc-card__link,
+.esc-card:hover .esc-card__facts dd { color: var(--es-paper); }
+.esc-card:hover .esc-card__facts dt { color: rgba(255,255,255,0.6); }
+
+/* v32-4) Service-Card-CTA "Mehr erfahren" beim Hover hell (Home/Leistungen) */
+.es-home-services > .elementor-container > .elementor-column:hover .es-link {
+    color: var(--es-paper); border-bottom-color: rgba(255,255,255,0.5);
+}
+
+/* v32-5) Bereich-(--warm): Lede + Nummer + Label lesbar (Ergaenzung zu v30) */
+.es-bereich--warm .es-bereich__lede { color: rgba(255,255,255,0.8); }
+.es-bereich--warm .es-bereich__num  { color: rgba(255,255,255,0.55); }
+.es-bereich--warm .es-bereich__topics-label { color: rgba(255,255,255,0.6); }
+
+/* v32-6) Primary-Button-Hover in dunklen Abschnitten lesbar (war transparent+ink) */
+.es-stage--warm .es-btn--primary:hover,
+.es-bereich--warm .es-btn--primary:hover { background: transparent; color: var(--es-paper); border-color: var(--es-paper); }
+
+/* v32-7) Ansprechpartner-Rolle in warm lesbar */
+.es-stage--warm .es-ansprech__role { color: rgba(255,255,255,0.7); }
+
+/* v32-8) Kontakt-Box: Mail-Link + Beschreibung hell */
+.es-kontakt-general a { color: var(--es-paper) !important; }
+.es-kontakt-general > div:last-child { color: rgba(255,255,255,0.7); }
+
+/* v32-9) Beratungsfeld-Kacheln klar klickbar: der INHALT liftet (nicht die
+   Kachel mit den Trennlinien), Akzent-Titel + groesserer Punkt. Hell + dunkel. */
+.es-bereich__topic { transition: border-color 240ms var(--es-easing); }
+.es-bereich__topic-name, .es-bereich__topic-desc { transition: transform 280ms var(--es-easing); }
+.es-bereich__topic:hover .es-bereich__topic-name,
+.es-bereich__topic:hover .es-bereich__topic-desc { transform: translateY(-3px); }
+.es-bereich__topic:hover .es-bereich__topic-name h3 { color: var(--es-accent); }
+.es-bereich__topic-name > span:first-child { transition: transform 280ms var(--es-easing); }
+.es-bereich__topic:hover .es-bereich__topic-name > span:first-child { transform: scale(1.6); }
+
+/* ── Bereich-/Einzelleistungs-Kacheln: Ueberlauf + ungleiche Hoehen fixen ──
+   Grid-Items haben per Default min-width:auto -> lange Woerter wie
+   "Gesellschaftsrecht" sprengen die Spalte, laufen ueber die Rahmenlinie und
+   machen die Kacheln ungleich hoch. min-width:0 laesst Spalte/Items schrumpfen,
+   hyphens:auto (Seite ist lang="de-DE") bricht sauber ("Gesellschafts-recht"),
+   grid-auto-rows:1fr macht alle Kacheln gleich hoch. Gilt fuer alle Varianten
+   ueber die Basisklassen. */
+.es-bereich__topics { grid-auto-rows: 1fr; }
+.es-bereich__topic { min-width: 0; }
+.es-bereich__topic-name { min-width: 0; }
+.es-bereich__topic-name h3 { min-width: 0; overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
+.es-bereich__topic-desc { overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
+
+/* ── Beratungsfeld-DETAILSEITEN Mobile/Tablet: Kacheln so breit wie die Uebersicht ──
+   Erkenntnis: auf Mobile sind BEIDE 2-spaltig und die Detail-Kacheln stehen
+   (responsive) UNTER dem Text. Sie wirken nur schmaler, weil der "wider"-
+   Spaltenabstand der Split-Sektion sie im Mobile-Stack zusaetzlich einrueckt.
+   Fix: diesen Spalten-Innenabstand auf Mobile entfernen -> der Kachelblock nutzt
+   die volle Sektionsbreite wie die Uebersicht (Titel passen, kaum noch Silben-
+   trennung). Gruener Punkt bleibt (kein display:none mehr). Die boxed-Kacheln
+   kommen bereits aus der Split-Sektion (Z. 2985 ff.); nur die UNTERE Rahmenlinie
+   der letzten Reihe muss zurueck (split-tiles :nth-last-child entfernt sie). */
+@media (max-width: 1024px) {
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column > .elementor-element-populated,
+    body .es-bereich-detail__split-section.es-bereich-detail__split-section > .elementor-container > .elementor-column > .elementor-widget-wrap {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .es-bereich-detail__split-tiles .es-bereich__topic:nth-last-child(-n+2) {
+        border-bottom: 1px solid var(--es-rule) !important;
+    }
+}
+
+/* ═══ Einheitliches Box-Modell: ALLE Bereich-Kacheln als Boxen mit Abstand ═══
+   Auf Wunsch ueberall gleich (statt zusammenhaengendem Linien-Raster auf der
+   Uebersicht) — auf allen Bildschirmgroessen. Die Mehrfach-Klassen heben die
+   Spezifitaet ueber die Alt-Regeln (Linien-Raster, Varianten, :nth-child). */
+.es-bereich__topics.es-bereich__topics.es-bereich__topics {
+    border: 0 !important;
+    gap: 16px !important;
+    grid-auto-rows: 1fr;
+}
+.es-bereich__topic.es-bereich__topic.es-bereich__topic {
+    border: 1px solid var(--es-rule) !important;
+    background: var(--es-paper) !important;
+    padding: 28px !important;
+}
+.es-bereich__topic.es-bereich__topic.es-bereich__topic:hover { border-color: var(--es-accent) !important; }
+/* Dunkle ("warm") Sektionen (z.B. Steuerberatung auf der Uebersicht): Boxen
+   dunkel mit hellem Rahmen statt weiss. */
+.es-bereich--warm .es-bereich__topic.es-bereich__topic.es-bereich__topic {
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.18) !important;
+}
+.es-bereich--warm .es-bereich__topic.es-bereich__topic.es-bereich__topic:hover { border-color: var(--es-accent) !important; }
+@media (max-width: 768px) {
+    .es-bereich__topics.es-bereich__topics.es-bereich__topics { gap: 12px !important; }
+    .es-bereich__topic.es-bereich__topic.es-bereich__topic { padding: 18px !important; }
+}
+
+/* Menü: aktives Beratungsfeld ohne Farb-Hintergrund (gruene Linie reicht) */
+
+/* ════════════════════════════════════════════════════════════
+   Einzelleistung — redaktionelles Leistungs-Layout (Fix v34)
+   Header + zweispaltig (Artikeltext + Sticky-Kontakt-Aside),
+   klare Typo-Hierarchie. Optik wie Team-Single / Bereich.
+   ════════════════════════════════════════════════════════════ */
+.es-leistung { padding: var(--es-space-12) 0 var(--es-space-30); }
+
+.es-leistung__crumb { font-size: 12px; color: var(--es-text-soft); font-family: var(--es-font-mono); letter-spacing: 0.06em; margin-bottom: var(--es-space-10); display: flex; gap: 8px; flex-wrap: wrap; }
+.es-leistung__crumb a:hover { color: var(--es-accent); }
+.es-leistung__crumb-current { color: var(--es-text-mute); }
+
+.es-leistung__header { padding-bottom: var(--es-space-10); border-bottom: var(--es-border); margin-bottom: var(--es-space-14); }
+.es-leistung__header .es-eyebrow { margin-bottom: 0; }
+.es-leistung__title { font-size: clamp(40px, 5vw, 64px); line-height: 1.04; font-weight: var(--es-fw-regular); letter-spacing: -0.035em; margin: 14px 0 0; }
+.es-leistung__lede { font-size: 20px; line-height: 1.55; color: var(--es-text-mute); margin: 24px 0 0; max-width: 60ch; }
+
+.es-leistung__grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--es-space-20); align-items: start; }
+.es-leistung__main { min-width: 0; }
+.es-leistung__main .es-article__body { max-width: 680px; margin: 0; padding: 0; }
+
+/* Typo-Hierarchie im Body: 1. Absatz = Lede, h4/h5/h6 (Intro-Statement)
+   gross & leicht statt winzig-fett (Content nutzt h5 als Intro-Absatz). */
+.es-leistung__body > p:first-child { font-size: clamp(21px, 2.3vw, 26px); line-height: 1.35; color: var(--es-ink); font-weight: var(--es-fw-regular); letter-spacing: -0.015em; margin: 0 0 32px; }
+.es-leistung__body h4, .es-leistung__body h5, .es-leistung__body h6 { font-size: 20px; line-height: 1.6; font-weight: var(--es-fw-regular); color: var(--es-ink); letter-spacing: -0.01em; margin: 0 0 28px; }
+
+/* Listen mit Akzent-Punkten (statt Standard-Bullets) */
+.es-leistung__body ul { list-style: none; padding-left: 0; margin: 0 0 28px; }
+.es-leistung__body ul li { position: relative; padding-left: 24px; margin-bottom: 12px; }
+.es-leistung__body ul li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 999px; background: var(--es-accent); }
+
+/* Sticky Kontakt-Aside (Optik wie Team-Single-Kontaktkarte) */
+.es-leistung__aside { position: sticky; top: calc(var(--es-header-h, 78px) + 24px); display: flex; flex-direction: column; gap: 20px; }
+.es-leistung__card { background: var(--es-ink); color: var(--es-paper); padding: 32px 28px; border-radius: var(--es-radius-xs); }
+.es-leistung__card .es-eyebrow { color: var(--es-accent); margin-bottom: 16px; }
+.es-leistung__card-title { font-size: 22px; line-height: 1.2; font-weight: var(--es-fw-regular); letter-spacing: -0.02em; margin: 0 0 12px; color: var(--es-paper); }
+.es-leistung__card-text { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.7); margin: 0 0 24px; }
+.es-leistung__card-person { display: flex; align-items: center; gap: 14px; margin: 4px 0 20px; }
+.es-leistung__card-photo { width: 56px; height: 56px; border-radius: 999px; overflow: hidden; flex-shrink: 0; background: rgba(255,255,255,0.08); }
+.es-leistung__card-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.es-leistung__card-name { font-size: 15px; font-weight: var(--es-fw-medium); color: var(--es-paper); line-height: 1.25; }
+.es-leistung__card-role { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 3px; }
+.es-leistung__card .es-btn { width: 100%; justify-content: center; }
+.es-leistung__back { font-size: 14px; color: var(--es-text-mute); display: inline-block; }
+.es-leistung__back:hover { color: var(--es-accent); }
+
+@media (max-width: 980px) {
+    .es-leistung__grid { grid-template-columns: 1fr; gap: var(--es-space-12); }
+    .es-leistung__aside { position: static; max-width: 440px; }
+    .es-leistung__main .es-article__body { max-width: none; }
+}
+
+/* Karriere-Karten: Eckdaten-Liste statt Excerpt (Bereich/Standort/...) */
+.esc-card__facts { margin: 0; display: grid; gap: 8px; }
+.esc-card__facts > div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; align-items: baseline; }
+.esc-card__facts dt { font-family: var(--es-font-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--es-text-soft); }
+.esc-card__facts dd { margin: 0; font-size: 15px; line-height: 1.35; color: var(--es-text); overflow-wrap: break-word; }
+
+/* ════════════════════════════════════════════════════════════
+   Responsive-Fixes: Karriere-Eckdaten, News-Featured, Hero (Tablet)
+   ════════════════════════════════════════════════════════════ */
+/* Karriere-Eckdaten: Label ueber Wert stapeln — jetzt bis 768px, damit der
+   Wert in den (ab hier 2-spaltigen) Karten nicht mitten im Wort bricht
+   ("Unternehmensber atung"). */
+@media (max-width: 768px) {
+    .esc-card__facts > div { grid-template-columns: 1fr; gap: 2px; }
+    .esc-card__facts dd { font-size: 14px; }
+}
+/* News-Featured: Bild ueber Text schon ab Tablet (vorher erst < 600px) */
+@media (max-width: 900px) {
+    .es-news-archive__featured { grid-template-columns: 1fr !important; gap: 28px !important; }
+    .es-news-archive__featured > div:first-child { aspect-ratio: 16/9 !important; }
+}
+/* Zwischen-Zone Desktop->Tablet bis 1280px: die boxed-Sektionen sind 1280px
+   breit; darunter liegt der Inhalt sonst ohne Seitenrand an der Kante, und
+   Elementor stapelt die Hero-Claims erst spaet (echte Tablets sind 810–834px).
+   Untergrenze 601px, damit Phones ihre eigenen Regeln behalten. */
+@media (min-width: 601px) and (max-width: 1280px) {
+    /* Seitenrand fuer boxed-Sektionen: Hero & News-Uebersicht haben links/rechts
+       0 Padding und liegen unter der 1280px-Box -> Inhalt klebt sonst am Rand. */
+    body .elementor-section.elementor-section-boxed > .elementor-container { padding-left: 32px !important; padding-right: 32px !important; }
+    body .es-hero > .elementor-container { padding-left: 32px !important; padding-right: 32px !important; }
+    /* Claims linksbuendig mit dem uebrigen Hero-Text. */
+    .es-hero-claims-inner > .elementor-container { padding-left: 0 !important; padding-right: 0 !important; }
+    /* Claims zuverlaessig 3 nebeneinander: Elementor nutzt Flex (nicht Grid) und
+       setzt auf Tablet 50%-Spalten -> "3 Standorte" rutscht in eine 2. Reihe.
+       Daher Flex-Spalten gleichmaessig auf Drittel zwingen (flex-basis schlaegt
+       Elementors Spaltenbreite). */
+    body .es-hero-claims-inner > .elementor-container { display: flex !important; flex-wrap: nowrap !important; gap: 20px !important; }
+    body .es-hero-claims-inner > .elementor-container > .elementor-column { flex: 1 1 0% !important; }
+}
+/* Phone (<=600px): Claims gestapelt — 3 schmale Spalten waeren zu eng. */
+@media (max-width: 600px) {
+    body .es-hero-claims-inner > .elementor-container { display: flex !important; flex-wrap: wrap !important; }
+    body .es-hero-claims-inner > .elementor-container > .elementor-column { flex: 1 1 100% !important; }
+}
