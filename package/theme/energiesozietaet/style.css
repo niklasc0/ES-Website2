@@ -480,19 +480,12 @@ html.js .esc-card.es-reveal {
 /* Team card — ah5: Foto links + Text rechts in heller, gerundeter Card */
 .esc-team-grid.esc-grid { grid-template-columns: repeat(2, 1fr); gap: var(--es-space-8); }
 .esc-team-card {
-    position: relative;
     display: grid; grid-template-columns: 38% 1fr;
     color: var(--es-ink); background: var(--es-paper-cool);
     border-radius: var(--es-radius-card); overflow: hidden;
     transition: transform var(--es-duration-fast) var(--es-easing), box-shadow var(--es-duration-fast) var(--es-easing);
 }
-/* gleiche „von links aufbauende" Band-Geste wie .esc-card */
-.esc-team-card::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
-    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
-    transition: transform var(--es-duration-normal) var(--es-easing);
-}
-.esc-team-card:hover::before { transform: scaleX(1); }
+/* Original-Verhalten: nur Lift beim Hover, kein aufbauendes Band. */
 .esc-team-card:hover { color: var(--es-ink); transform: translateY(-2px); }
 .esc-team-card__photo {
     aspect-ratio: 4/5; min-height: 100%;
