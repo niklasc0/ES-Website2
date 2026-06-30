@@ -63,13 +63,13 @@ class ESC_Elementor_Builder {
 		);
 		if ( 'ink' === $variant ) {
 			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#0E1A2B';
+			$settings['background_color']      = '#122023';
 		} elseif ( 'warm' === $variant ) {
 			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#303030';
+			$settings['background_color']      = '#1D2D2D';
 		} elseif ( 'cool' === $variant ) {
 			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#F3F5F8';
+			$settings['background_color']      = '#F5F5F5';
 		}
 		// Stage-Wrapper damit CSS-Selektoren wie .es-stage--ink h1 greifen
 		$stage_class = $variant ? 'es-stage es-stage--' . $variant : 'es-stage';
@@ -149,8 +149,8 @@ class ESC_Elementor_Builder {
 				'tabs'                          => $tabs,
 				'title_html_tag'                => 'h4',
 				'border_width'                  => array( 'unit' => 'px', 'size' => 0 ),
-				'title_color'                   => '#0E1A2B',
-				'tab_content_color'             => '#5A6577',
+				'title_color'                   => '#122023',
+				'tab_content_color'             => '#899092',
 			),
 		);
 	}
@@ -231,7 +231,7 @@ class ESC_Elementor_Builder {
 		$right_html = '';
 		foreach ( (array) $args['paragraphs'] as $i => $p ) {
 			$size  = 0 === $i ? '20px' : '17px';
-			$color = 'ink' === $args['variant'] ? ( 0 === $i ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.6)' ) : ( 0 === $i ? '#0E1A2B' : '#5A6577' );
+			$color = 'ink' === $args['variant'] ? ( 0 === $i ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.6)' ) : ( 0 === $i ? '#122023' : '#899092' );
 			$right_html .= '<p style="font-size:' . $size . ';line-height:1.65;color:' . $color . ';margin:0 0 24px;">' . $p . '</p>';
 		}
 
@@ -406,8 +406,8 @@ class ESC_Elementor_Builder {
 	public static function section_head( $eyebrow, $title_html, $lede = '', $align = 'left', $variant = '' ) {
 		$text_align = 'center' === $align ? 'text-align:center;' : '';
 		$eyebrow_class = 'ink' === $variant ? 'es-eyebrow es-eyebrow--paper' : 'es-eyebrow';
-		$title_color = 'ink' === $variant ? '#FFFFFF' : '#0E1A2B';
-		$lede_color  = 'ink' === $variant ? 'rgba(255,255,255,0.7)' : '#5A6577';
+		$title_color = 'ink' === $variant ? '#E1FCAD' : '#122023';
+		$lede_color  = 'ink' === $variant ? '#CAD0BE' : '#899092';
 		$max = 'center' === $align ? 'margin-inline:auto;' : '';
 
 		$html  = '<div class="es-wrap" style="padding-top:120px;padding-bottom:48px;' . $text_align . '">';
@@ -558,13 +558,13 @@ class ESC_Elementor_Builder {
 		);
 		if ( 'ink' === $args['variant'] ) {
 			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#0E1A2B';
+			$settings['background_color']      = '#122023';
 		} elseif ( 'warm' === $args['variant'] ) {
 			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#303030';
+			$settings['background_color']      = '#1D2D2D';
 		} elseif ( 'cool' === $args['variant'] ) {
 			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#F3F5F8';
+			$settings['background_color']      = '#F5F5F5';
 		}
 
 		$col_cfgs = array();

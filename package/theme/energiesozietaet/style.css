@@ -15,22 +15,28 @@ Tags: elementor, business, one-column, custom-colors, custom-menu, featured-imag
 */
 
 :root {
-    --es-ink:          #0E1A2B;
-    --es-ink-soft:     #1A2740;
-    --es-ink-line:     #23304A;
+    /* Palette — ah5/Elementra-Designsprache (ThemeREX-Color-Scheme). */
+    --es-ink:          #122023;  /* dunkelstes Brand: dunkle Sektionen, Primary-Buttons, Headings */
+    --es-ink-soft:     #1D2D2D;  /* dunkle Alt-Fläche */
+    --es-ink-line:     #283538;  /* Hairline auf Dunkel */
     --es-paper:        #FFFFFF;
-    --es-paper-warm:   #303030;
-    --es-paper-cool:   #F3F5F8;
-    --es-text:         #0E1A2B;
-    --es-text-mute:    #5A6577;
-    --es-text-soft:    #8591A3;
-    --es-rule:         #E4E7EC;
-    --es-accent:       #95D708;
-    --es-accent-soft:  #D7EDA0;
+    --es-paper-warm:   #1D2D2D;  /* dunkle Stripe-Fläche (ah5 alt-bg-2) — trägt die On-Dark-Logik */
+    --es-paper-cool:   #F5F5F5;  /* helle Alt-Fläche (helle Stripe) */
+    --es-text:         #151E20;  /* Fließtext auf Hell */
+    --es-text-mute:    #899092;  /* Sekundärtext */
+    --es-text-soft:    #B6BAAF;  /* Meta / tertiär */
+    --es-rule:         #DADEC5;  /* Hairline auf Hell (grünstichig) */
+    --es-accent:       #95D708;  /* Limetten-Akzent (Link/Hover) */
+    --es-accent-soft:  #E1FCAD;  /* blasses Limette (Titel auf Dunkel, Highlights) */
 
-    --es-font-sans:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    --es-font-display: var(--es-font-sans);
-    --es-font-mono:    "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    /* Text-Rollen auf dunklen Flächen (dunkle Sektionen / Footer / CTA). */
+    --es-on-dark-title: #E1FCAD;
+    --es-on-dark-text:  #CAD0BE;
+    --es-on-dark-meta:  #A6AC9B;
+
+    --es-font-sans:    "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --es-font-display: "Sora", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --es-font-mono:    "Manrope", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
 
     --es-fs-display-xl: 80px;
     --es-fs-display-l:  72px;
@@ -3113,9 +3119,9 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 }
 
 /* ════════════════════════════════════════════════════════════
-   Dark-Sektionen: das fruehere Sand-Beige (--es-paper-warm) ist
-   jetzt #303030. Warm-Abschnitte = dunkle Abschnitte -> heller
-   Text (analog --ink). Weisse Karten darin behalten dunklen Text.
+   Dark-Sektionen: --es-paper-warm ist das dunkle Teal (#1D2D2D,
+   ah5). Warm-Abschnitte = dunkle Abschnitte -> blass-limette Titel
+   (--es-on-dark-title) + heller Text. Weisse Karten darin behalten dunklen Text.
    Interaktive/statische Flaechen, die jetzt dunkel werden, bekommen
    ebenfalls hellen Text. Bereits tote Hover (sub-menu, pub-row) sind
    anderswo auf transparent ueberschrieben und bleiben unangetastet.
@@ -3124,11 +3130,11 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 /* (1) Direkter Text auf warm-(=dunklen)-Abschnitten hell */
 .es-stage--warm,
 .es-section--warm,
-.es-bereich--warm { color: var(--es-paper); }
+.es-bereich--warm { color: var(--es-on-dark-text); }
 .es-stage--warm h1, .es-stage--warm h2, .es-stage--warm h3, .es-stage--warm h4, .es-stage--warm h5, .es-stage--warm h6,
 .es-section--warm h1, .es-section--warm h2, .es-section--warm h3, .es-section--warm h4,
-.es-bereich--warm h1, .es-bereich--warm h2, .es-bereich--warm h3, .es-bereich--warm h4 { color: var(--es-paper); }
-.es-stage--warm .elementor-heading-title { color: var(--es-paper); }
+.es-bereich--warm h1, .es-bereich--warm h2, .es-bereich--warm h3, .es-bereich--warm h4 { color: var(--es-on-dark-title); }
+.es-stage--warm .elementor-heading-title { color: var(--es-on-dark-title); }
 .es-stage--warm p,
 .es-stage--warm .elementor-widget-text-editor p { color: rgba(255,255,255,0.78); }
 .es-stage--warm .es-split__lead p { color: rgba(255,255,255,0.82); }

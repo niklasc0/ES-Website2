@@ -18,8 +18,8 @@ class ESC_Colors_Settings {
 	protected static function fields() {
 		return array(
 			'accent'     => array( 'Akzentfarbe',                       array( '--es-accent' ),               '#95D708' ),
-			'ink'        => array( 'Primaerfarbe (Text & Ueberschriften)', array( '--es-ink', '--es-text' ),  '#0E1A2B' ),
-			'paper_warm' => array( 'Dunkle Sektionen',                  array( '--es-paper-warm' ),           '#303030' ),
+			'ink'        => array( 'Primaerfarbe (Text & Ueberschriften)', array( '--es-ink', '--es-text' ),  '#122023' ),
+			'paper_warm' => array( 'Dunkle Sektionen',                  array( '--es-paper-warm' ),           '#1D2D2D' ),
 			'paper'      => array( 'Seiten-Hintergrund',                array( '--es-paper' ),                '#FFFFFF' ),
 		);
 	}

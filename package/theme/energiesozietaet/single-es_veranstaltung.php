@@ -30,8 +30,8 @@ while ( have_posts() ) : the_post();
 						<strong><?php echo esc_html( date_i18n( 'd', $ts ) ); ?></strong>
 						<span><?php echo esc_html( date_i18n( 'M Y', $ts ) ); ?></span>
 						<?php if ( $ts2 && $ts2 !== $ts ) : ?>
-							<span style="color:#8591A3;margin:0 8px;">—</span>
-							<strong style="color:#0E1A2B;"><?php echo esc_html( date_i18n( 'd', $ts2 ) ); ?></strong>
+							<span style="color:#B6BAAF;margin:0 8px;">—</span>
+							<strong style="color:#122023;"><?php echo esc_html( date_i18n( 'd', $ts2 ) ); ?></strong>
 							<span><?php echo esc_html( date_i18n( 'M Y', $ts2 ) ); ?></span>
 						<?php endif; ?>
 					</div>
@@ -61,7 +61,7 @@ while ( have_posts() ) : the_post();
 
 		<div style="max-width:860px;margin:56px auto 0;padding:0 24px;">
 			<?php if ( $reg_url && $upcoming ) : ?>
-				<div style="padding:32px;background:#0E1A2B;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;">
+				<div style="padding:32px;background:#122023;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;">
 					<div>
 						<div style="color:#95D708;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;">Anmeldung</div>
 						<div style="font-size:20px;font-weight:500;letter-spacing:-0.015em;">Sichern Sie sich Ihren Platz.</div>

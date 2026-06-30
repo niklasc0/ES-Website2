@@ -93,15 +93,15 @@ while ( have_posts() ) : the_post();
 			<div class="esc-grid esc-grid--cols-2" style="gap:16px;margin-bottom:56px;">
 				<?php foreach ( $benefits_list as $bn ) :
 					if ( empty( $bn[0] ) ) continue; ?>
-					<div style="padding:24px;border:1px solid #E4E7EC;">
+					<div style="padding:24px;border:1px solid #DADEC5;">
 						<div style="width:4px;height:20px;background:#95D708;margin-bottom:14px;"></div>
 						<div style="font-size:17px;font-weight:500;letter-spacing:-0.015em;margin-bottom:6px;"><?php echo esc_html( $bn[0] ); ?></div>
-						<?php if ( ! empty( $bn[1] ) ) : ?><div style="font-size:14px;color:#5A6577;"><?php echo esc_html( $bn[1] ); ?></div><?php endif; ?>
+						<?php if ( ! empty( $bn[1] ) ) : ?><div style="font-size:14px;color:#899092;"><?php echo esc_html( $bn[1] ); ?></div><?php endif; ?>
 					</div>
 				<?php endforeach; ?>
 			</div>
 
-			<div style="padding:32px;background:#0E1A2B;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;">
+			<div style="padding:32px;background:#122023;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;">
 				<div>
 					<div style="color:#95D708;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;"><?php echo esc_html( $kget( 'cta_eyebrow', 'Deine Bewerbung' ) ); ?></div>
 					<div style="font-size:22px;font-weight:500;letter-spacing:-0.015em;"><?php echo esc_html( $kget( 'cta_title', 'Bereit, gemeinsam durchzustarten?' ) ); ?></div>

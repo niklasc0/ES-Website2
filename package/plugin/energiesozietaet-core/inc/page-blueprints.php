@@ -155,7 +155,7 @@ class ESC_Page_Blueprints {
 			'cols' => array(
 				array(
 					$b::wid_heading( 'Leistungen', 'p', 'es-eyebrow' ),
-					$b::wid_heading( 'Interdisziplinäre Beratung.<br><span style="color:#5A6577;">Drei Felder, ein Gedanke.</span>', 'h2', 'es-home-services-head__title' ),
+					$b::wid_heading( 'Interdisziplinäre Beratung.<br><span style="color:#899092;">Drei Felder, ein Gedanke.</span>', 'h2', 'es-home-services-head__title' ),
 					$b::wid_text( '<p>Wir denken Lösungen vom Ende her: strategische, betriebswirtschaftliche, juristische und steuerliche Themen stellen wir in den Gesamtkontext.</p>' ),
 				),
 			),
@@ -604,11 +604,11 @@ class ESC_Page_Blueprints {
 
 	protected static function field( $label, $name, $type = 'text' ) {
 		$out  = '<div>';
-		$out .= '<div style="font-size:12px;color:#5A6577;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">' . esc_html( $label ) . '</div>';
+		$out .= '<div style="font-size:12px;color:#899092;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">' . esc_html( $label ) . '</div>';
 		if ( 'textarea' === $type ) {
-			$out .= '<textarea name="' . esc_attr( $name ) . '" rows="5" style="width:100%;border:0;border-bottom:1px solid #0E1A2B;background:transparent;padding:10px 0;font:inherit;font-size:16px;resize:vertical;outline:none;"></textarea>';
+			$out .= '<textarea name="' . esc_attr( $name ) . '" rows="5" style="width:100%;border:0;border-bottom:1px solid #122023;background:transparent;padding:10px 0;font:inherit;font-size:16px;resize:vertical;outline:none;"></textarea>';
 		} else {
-			$out .= '<input type="' . esc_attr( $type ) . '" name="' . esc_attr( $name ) . '" style="width:100%;border:0;border-bottom:1px solid #0E1A2B;background:transparent;padding:10px 0;font:inherit;font-size:16px;outline:none;" />';
+			$out .= '<input type="' . esc_attr( $type ) . '" name="' . esc_attr( $name ) . '" style="width:100%;border:0;border-bottom:1px solid #122023;background:transparent;padding:10px 0;font:inherit;font-size:16px;outline:none;" />';
 		}
 		$out .= '</div>';
 		return $out;

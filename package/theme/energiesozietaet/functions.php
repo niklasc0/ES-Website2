@@ -39,14 +39,14 @@ function es_theme_setup() {
 	) );
 
 	add_theme_support( 'editor-color-palette', array(
-		array( 'name' => __( 'Tinte', 'energiesozietaet' ),        'slug' => 'ink',        'color' => '#0E1A2B' ),
-		array( 'name' => __( 'Tinte weich', 'energiesozietaet' ),  'slug' => 'ink-soft',   'color' => '#1A2740' ),
+		array( 'name' => __( 'Tinte', 'energiesozietaet' ),        'slug' => 'ink',        'color' => '#122023' ),
+		array( 'name' => __( 'Tinte weich', 'energiesozietaet' ),  'slug' => 'ink-soft',   'color' => '#1D2D2D' ),
 		array( 'name' => __( 'Papier', 'energiesozietaet' ),       'slug' => 'paper',      'color' => '#FFFFFF' ),
-		array( 'name' => __( 'Papier warm', 'energiesozietaet' ),  'slug' => 'paper-warm', 'color' => '#303030' ),
-		array( 'name' => __( 'Papier kühl', 'energiesozietaet' ),  'slug' => 'paper-cool', 'color' => '#F3F5F8' ),
+		array( 'name' => __( 'Papier warm (dunkel)', 'energiesozietaet' ), 'slug' => 'paper-warm', 'color' => '#1D2D2D' ),
+		array( 'name' => __( 'Papier kühl', 'energiesozietaet' ),  'slug' => 'paper-cool', 'color' => '#F5F5F5' ),
 		array( 'name' => __( 'Akzent', 'energiesozietaet' ),       'slug' => 'accent',     'color' => '#95D708' ),
-		array( 'name' => __( 'Text', 'energiesozietaet' ),         'slug' => 'text',       'color' => '#0E1A2B' ),
-		array( 'name' => __( 'Muted', 'energiesozietaet' ),        'slug' => 'muted',      'color' => '#5A6577' ),
+		array( 'name' => __( 'Text', 'energiesozietaet' ),         'slug' => 'text',       'color' => '#151E20' ),
+		array( 'name' => __( 'Muted', 'energiesozietaet' ),        'slug' => 'muted',      'color' => '#899092' ),
 	) );
 
 	add_image_size( 'es-team', 900, 900, true );
@@ -59,10 +59,10 @@ add_action( 'after_setup_theme', 'es_theme_setup' );
  * Enqueue styles & scripts.
  */
 function es_theme_enqueue_assets() {
-	// Inter + JetBrains Mono — sans-only system per Mockup.
+	// Manrope (Text/UI) + Sora (Display/Headlines) — Design-Sprache des ah5/Elementra-Templates.
 	wp_enqueue_style(
 		'es-fonts',
-		'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap',
+		'https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap',
 		array(),
 		null
 	);
