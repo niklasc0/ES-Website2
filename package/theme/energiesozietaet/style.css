@@ -87,6 +87,26 @@ Tags: elementor, business, one-column, custom-colors, custom-menu, featured-imag
     --es-header-h: 78px;
 }
 
+/* ════════════════════════════════════════════════════════════
+   Elementor-Global-Farben auf unsere Palette zwingen.
+   Elementors Default-Kit (Primary #6EC1E4 Blau, Accent #61CE70) färbt
+   sonst alle Heading-/Link-Widgets — das war der „Mischmasch". Wir
+   überschreiben die CSS-Variablen, die Elementors Widget-CSS referenziert,
+   kontextabhängig: hell = Ink-Heading, dunkle Flächen = pale-lime.
+   ════════════════════════════════════════════════════════════ */
+body {
+    --e-global-color-primary:   var(--es-ink)       !important;  /* Headings */
+    --e-global-color-secondary: var(--es-text-mute) !important;
+    --e-global-color-text:      var(--es-text)      !important;  /* Body */
+    --e-global-color-accent:    var(--es-accent)    !important;  /* Akzent-Grün */
+}
+/* Auf dunklen Flächen: Heading = pale-lime, Text = soft-greenish */
+.es-stage--ink, .es-stage--warm, .es-stage--float,
+.es-section--ink, .es-footer, .es-hero {
+    --e-global-color-primary: var(--es-on-dark-title) !important;
+    --e-global-color-text:    var(--es-on-dark-text)  !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
     :root { --es-duration-fast: 0ms; --es-duration-normal: 0ms; }
 }
@@ -480,18 +500,21 @@ html.js .esc-card.es-reveal {
 /* Team card — ah5: Foto links + Text rechts in heller, gerundeter Card */
 .esc-team-grid.esc-grid { grid-template-columns: repeat(2, 1fr); gap: var(--es-space-8); }
 .esc-team-card {
-    display: grid; grid-template-columns: 38% 1fr;
+    display: grid; grid-template-columns: 38% 1fr; align-items: stretch;
+    min-height: 260px;
     color: var(--es-ink); background: var(--es-paper-cool);
     border-radius: var(--es-radius-card); overflow: hidden;
     transition: transform var(--es-duration-fast) var(--es-easing), box-shadow var(--es-duration-fast) var(--es-easing);
 }
 /* Original-Verhalten: nur Lift beim Hover, kein aufbauendes Band. */
 .esc-team-card:hover { color: var(--es-ink); transform: translateY(-2px); }
+/* Foto füllt die linke Grid-Zelle (Breite = Spalte, Höhe = Card). KEIN
+   aspect-ratio — das würde mit stretch die Breite aus der Höhe ableiten
+   und den Text überlappen. */
 .esc-team-card__photo {
-    aspect-ratio: 4/5; min-height: 100%;
     background: var(--es-paper-warm);
     overflow: hidden;
-    position: relative; display: block;
+    position: relative; display: block; height: 100%;
 }
 .esc-team-card__photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--es-easing); }
 .esc-team-card:hover .esc-team-card__photo img { transform: scale(1.04); }
