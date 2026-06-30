@@ -241,12 +241,22 @@ html.js .esc-card.es-reveal {
 .es-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 28px; align-items: center; }
 .es-nav li { position: relative; }
 .es-nav a {
+    position: relative;
     font-size: 15px; font-weight: var(--es-fw-medium); letter-spacing: -0.005em;
     color: var(--es-text);
-    padding-bottom: 4px; border-bottom: 1px solid transparent;
+    padding-bottom: 4px;
+}
+/* Menü-Hover: gleiche „von links aufbauende" Band-Animation wie die Kacheln. */
+.es-nav a::after {
+    content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%;
+    background: var(--es-accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform var(--es-duration-normal) var(--es-easing);
 }
 .es-header--dark .es-nav a { color: rgba(255,255,255,0.72); }
-.es-nav a:hover { color: var(--es-accent); border-bottom-color: transparent; }
+.es-nav a:hover { color: var(--es-accent); }
+.es-nav a:hover::after { transform: scaleX(1); }
+.es-nav .current-menu-item > a::after, .es-nav .current_page_item > a::after, .es-nav .current-menu-ancestor > a::after { transform: scaleX(1); }
 .es-header--dark .es-nav a:hover { color: var(--es-paper); border-bottom-color: var(--es-paper); }
 .es-nav .current-menu-item > a, .es-nav .current_page_item > a, .es-nav .current-menu-ancestor > a {
     color: var(--es-accent); border-bottom-color: transparent;
@@ -265,6 +275,7 @@ html.js .esc-card.es-reveal {
 }
 .es-nav li:hover > .sub-menu, .es-nav li:focus-within > .sub-menu { display: flex; }
 .es-nav .sub-menu a { display: block; padding: 10px 20px; border-bottom: 0; color: var(--es-ink); }
+.es-nav .sub-menu a::after { display: none; }
 .es-nav .sub-menu a:hover { background: var(--es-paper-warm); color: var(--es-accent); }
 
 .es-header__actions { display: inline-flex; align-items: center; gap: 10px; justify-self: end; }
@@ -456,14 +467,32 @@ html.js .esc-card.es-reveal {
 .esc-card__text { font-size: 14px; color: var(--es-text-mute); line-height: 1.6; margin: 0; }
 .esc-card__link { margin-top: auto; font-size: 13px; color: var(--es-ink); font-weight: var(--es-fw-medium); display: inline-flex; align-items: center; gap: 6px; padding-top: 10px; }
 
+/* ah5 News-Karte: borderless, Bild-first (gerundetes Bild + Titel + Datum).
+   Die „von links aufbauende" Band-Geste (.esc-card::before) bleibt über dem Bild. */
+.esc-card--news { background: transparent; border: 0; border-radius: 0; overflow: visible; }
+.esc-card--news .esc-card__media { border-radius: var(--es-radius-card); aspect-ratio: 16/11; }
+.esc-card--news .esc-card__body { padding: 18px 2px 0; gap: 10px; }
+.esc-card--news .esc-card__title { font-size: 19px; line-height: 1.3; }
+.esc-card--news .esc-card__date { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--es-text-soft); }
+.esc-card--news .esc-card__date svg { flex: none; }
+.esc-card--news:hover { transform: translateY(-2px); }
+
 /* Team card — ah5: Foto links + Text rechts in heller, gerundeter Card */
 .esc-team-grid.esc-grid { grid-template-columns: repeat(2, 1fr); gap: var(--es-space-8); }
 .esc-team-card {
+    position: relative;
     display: grid; grid-template-columns: 38% 1fr;
     color: var(--es-ink); background: var(--es-paper-cool);
     border-radius: var(--es-radius-card); overflow: hidden;
     transition: transform var(--es-duration-fast) var(--es-easing), box-shadow var(--es-duration-fast) var(--es-easing);
 }
+/* gleiche „von links aufbauende" Band-Geste wie .esc-card */
+.esc-team-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
+    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--es-duration-normal) var(--es-easing);
+}
+.esc-team-card:hover::before { transform: scaleX(1); }
 .esc-team-card:hover { color: var(--es-ink); transform: translateY(-2px); }
 .esc-team-card__photo {
     aspect-ratio: 4/5; min-height: 100%;

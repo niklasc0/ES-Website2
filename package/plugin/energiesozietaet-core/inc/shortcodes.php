@@ -513,7 +513,7 @@ class ESC_Shortcodes {
 				$felder   = get_the_terms( get_the_ID(), 'es_beratungsfeld' );
 				$cats     = get_the_terms( get_the_ID(), 'es_news_kategorie' );
 				$cat_name = ( $felder && ! is_wp_error( $felder ) ) ? $felder[0]->name : ( ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : 'Aktuelles' ); ?>
-				<a class="esc-card es-reveal" href="<?php the_permalink(); ?>">
+				<a class="esc-card esc-card--news es-reveal" href="<?php the_permalink(); ?>">
 					<div class="esc-card__media">
 						<?php if ( $thumb_id ) {
 							echo wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy' ) );
@@ -522,10 +522,11 @@ class ESC_Shortcodes {
 						<?php } ?>
 					</div>
 					<div class="esc-card__body">
-						<div class="esc-card__meta"><?php echo esc_html( $cat_name ); ?> · <?php echo esc_html( get_the_date() ); ?></div>
 						<h3 class="esc-card__title"><?php the_title(); ?></h3>
-						<p class="esc-card__text"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
-						<span class="esc-card__link">Weiterlesen →</span>
+						<div class="esc-card__date">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
+							<?php echo esc_html( get_the_date() ); ?>
+						</div>
 					</div>
 				</a>
 			<?php endwhile; wp_reset_postdata(); ?>
