@@ -310,7 +310,13 @@ class ESC_Shortcodes {
 			'order'          => $atts['order'],
 		);
 		if ( $active_field ) {
-			$q_args['meta_query'] = array( array( 'key' => 'es_field', 'value' => $active_field ) );
+			// Robust: Feld kann als Einzelwert (es_field) ODER als Array
+			// (es_fields, serialisiert) gespeichert sein — beide matchen.
+			$q_args['meta_query'] = array(
+				'relation' => 'OR',
+				array( 'key' => 'es_field', 'value' => $active_field ),
+				array( 'key' => 'es_fields', 'value' => '"' . $active_field . '"', 'compare' => 'LIKE' ),
+			);
 		}
 		$q = new WP_Query( $q_args );
 		$cols = max( 2, min( 4, (int) $atts['columns'] ) );

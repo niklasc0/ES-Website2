@@ -729,8 +729,28 @@ html.js .esc-card.es-reveal {
 }
 
 /* Bereichs-Block (C3) — stripes: paper + paper-warm */
-.es-bereich { border-bottom: var(--es-border); }
+/* es-bereich: Überlappungs-Mechanik wie .es-stage-sec — eigene Farbe füllt
+   über ein unten gerundetes ::after, der Sektions-Hintergrund = Farbe der
+   NÄCHSTEN Sektion (Ecken zeigen die nächste Fläche). Ersetzt die alte
+   eckige border-bottom-Trennlinie. */
+.es-bereich { position: relative; background: var(--es-paper); }
 .es-bereich--warm { background: var(--es-paper-warm); }
+.es-bereich::after {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: var(--es-paper);
+    border-bottom-left-radius: var(--es-radius-section);
+    border-bottom-right-radius: var(--es-radius-section);
+}
+.es-bereich--warm::after { background: var(--es-paper-warm); }
+.es-bereich > .es-wrap { position: relative; z-index: 1; }
+/* Untergrund = Farbe der nächsten Sektion */
+.es-bereich:has(+ .es-bereich--warm) { background: var(--es-paper-warm); }
+.es-bereich--warm:has(+ .es-bereich:not(.es-bereich--warm)) { background: var(--es-paper); }
+/* letzte bereich überlappt in den (dunklen) Footer */
+.es-bereich:not(:has(+ .es-bereich)) { background: var(--es-ink); }
+/* vorherige es-stage-sec (Hero/Split) rundet passend in die erste bereich */
+.es-stage-sec:has(+ .es-bereich--warm) { background: var(--es-paper-warm); }
+.es-stage-sec:has(+ .es-bereich:not(.es-bereich--warm)) { background: var(--es-paper); }
 .es-bereich__inner { padding: var(--es-space-30) 0; }
 .es-bereich__top { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--es-space-16); align-items: start; margin-bottom: var(--es-space-16); }
 .es-bereich__meta { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }

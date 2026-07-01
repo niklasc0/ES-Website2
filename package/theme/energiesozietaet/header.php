@@ -69,8 +69,11 @@ $es_is_dark = false;
 		</nav>
 
 		<div class="es-header__actions">
-			<a class="es-btn es-btn--accent es-header__cta" href="<?php echo esc_url( home_url( '/karriere/' ) ); ?>">
+			<a class="es-btn es-btn--ghost es-header__cta es-header__cta--jobs" href="<?php echo esc_url( home_url( '/karriere/' ) ); ?>">
 				<?php esc_html_e( 'Stellenangebote', 'energiesozietaet' ); ?>
+			</a>
+			<a class="es-btn es-btn--accent es-header__cta" href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">
+				<?php esc_html_e( 'Kontakt', 'energiesozietaet' ); ?>
 			</a>
 		</div>
 
