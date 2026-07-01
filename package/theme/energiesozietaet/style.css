@@ -3758,3 +3758,18 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .esc-card--news:hover .esc-card__title { color: var(--es-ink); }
 .esc-card--news .esc-card__date,
 .esc-card--news:hover .esc-card__date { color: var(--es-text-soft); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Karten-Abstände: Service-Karten (Home) und Pillar-/Quad-Karten liegen als
+   Elementor-Spalten Kante an Kante (Container-gap = normal, Karten-BG füllt
+   die ganze Spalte). Echten Abstand erzwingen + Spalten flexibel schrumpfen
+   lassen, damit sie mit dem Gap in die Reihe passen. Mobile (<=600px) bleibt
+   gestapelt (eigene, spezifischere Regel greift dort). */
+@media (min-width: 601px) {
+    .es-home-services > .elementor-container,
+    .es-cards-grid > .elementor-container { gap: 28px !important; }
+    .es-home-services > .elementor-container > .elementor-column,
+    .es-cards-grid > .elementor-container > .elementor-column {
+        flex: 1 1 0 !important; width: auto !important; max-width: none !important; min-width: 0 !important;
+    }
+}
