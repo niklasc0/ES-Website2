@@ -969,8 +969,8 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     .es-stage [style*="grid-template-columns:auto 1fr"] { grid-template-columns: 1fr !important; gap: 32px !important; }
     .es-stage [style*="grid-template-columns:repeat(2"],
     .es-stage [style*="grid-template-columns: repeat(2"] { grid-template-columns: 1fr !important; }
-    .es-stage h1 { font-size: 40px !important; }
-    .es-stage h2 { font-size: 30px !important; }
+    .es-stage h1 { font-size: 40px; }
+    .es-stage h2 { font-size: 30px; }
     .es-footer__cta-grid { grid-template-columns: 1fr !important; }
 }
 
@@ -1650,11 +1650,11 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     background: var(--es-paper); border: var(--es-border);
     padding: 64px 48px !important; text-align: center;
 }
-.es-pullquote__quote .elementor-heading-title { font-size: clamp(26px, 3.2vw, 48px) !important; font-weight: 300 !important; letter-spacing: -0.025em !important; line-height: 1.25 !important; color: var(--es-ink); margin: 0; }
+.es-pullquote__quote .elementor-heading-title { font-size: clamp(26px, 3.2vw, 48px); font-weight: 300; letter-spacing: -0.025em; line-height: 1.25; color: var(--es-ink); margin: 0; }
 .es-pullquote__attr p { font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--es-accent); font-weight: 500; margin-top: 40px !important; }
 
 /* Home Intro-Strip — größere H2 "Wir arbeiten hoch spezialisiert ..." */
-.es-home-intro__headline .elementor-heading-title { font-size: clamp(28px, 3.2vw, 44px) !important; font-weight: 400 !important; letter-spacing: -0.025em !important; line-height: 1.2 !important; color: var(--es-ink); margin: 0 !important; }
+.es-home-intro__headline .elementor-heading-title { font-size: clamp(28px, 3.2vw, 44px); font-weight: 400; letter-spacing: -0.025em; line-height: 1.2; color: var(--es-ink); margin: 0; }
 .es-home-intro__headline .text-bg-green { color: var(--es-accent); font-weight: inherit; }
 
 /* Home news section title mit weniger bottom-margin */
@@ -1676,19 +1676,16 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
    haben (0,2,0) Specificity — unsere Tag-Regeln würden verlieren.
    Deshalb !important auf die Tag-Basiswerte. So ändert sich Text
    wirklich, wenn im Editor H2↔H1 gewechselt wird. */
-.es-stage h1, .es-stage .elementor-heading-title[class*=elementor-size] ~ .nope {}
-.es-stage h1.elementor-heading-title,
-.es-stage h1 { font-size: clamp(44px, 6vw, 80px) !important; font-weight: 300 !important; letter-spacing: -0.04em !important; line-height: 1.02 !important; }
-.es-stage h2.elementor-heading-title,
-.es-stage h2 { font-size: clamp(32px, 4vw, 52px) !important; font-weight: 400 !important; letter-spacing: -0.03em !important; line-height: 1.1 !important; }
-.es-stage h3.elementor-heading-title,
-.es-stage h3 { font-size: clamp(22px, 2.4vw, 32px) !important; font-weight: 500 !important; letter-spacing: -0.015em !important; line-height: 1.18 !important; }
-.es-stage h4.elementor-heading-title,
-.es-stage h4 { font-size: clamp(18px, 1.6vw, 24px) !important; font-weight: 500 !important; letter-spacing: -0.01em !important; line-height: 1.25 !important; }
-.es-stage h5.elementor-heading-title,
-.es-stage h5 { font-size: 16px !important; font-weight: 500 !important; line-height: 1.3 !important; }
-.es-stage h6.elementor-heading-title,
-.es-stage h6 { font-size: 14px !important; font-weight: 500 !important; line-height: 1.3 !important; }
+/* Tag-basierte Default-Skala (globale Vorgabe) — OHNE !important und ohne
+   .elementor-heading-title-Booster, damit eine im Elementor-Editor pro Widget
+   gesetzte Typografie (Spezifität .elementor-element-XXX .elementor-heading-title)
+   immer gewinnt. Der h-Tag liefert nur noch den Standard. */
+.es-stage h1 { font-size: clamp(44px, 6vw, 80px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.02; }
+.es-stage h2 { font-size: clamp(32px, 4vw, 52px); font-weight: 400; letter-spacing: -0.03em; line-height: 1.1; }
+.es-stage h3 { font-size: clamp(22px, 2.4vw, 32px); font-weight: 500; letter-spacing: -0.015em; line-height: 1.18; }
+.es-stage h4 { font-size: clamp(18px, 1.6vw, 24px); font-weight: 500; letter-spacing: -0.01em; line-height: 1.25; }
+.es-stage h5 { font-size: 16px; font-weight: 500; line-height: 1.3; }
+.es-stage h6 { font-size: 14px; font-weight: 500; line-height: 1.3; }
 .es-stage p.elementor-heading-title,
 .es-stage p { font-size: inherit; line-height: inherit; }
 /* Akzent-Span immer gleiche Stärke wie Parent-Heading */
@@ -1748,7 +1745,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     content: ""; display: block; width: 4px; height: 28px;
     background: var(--es-accent); margin-bottom: 24px;
 }
-.es-cards-grid--quads .es-card-pillar__title .elementor-heading-title { font-size: 20px !important; font-weight: 500 !important; letter-spacing: -0.015em !important; line-height: 1.25 !important; margin: 0 0 10px !important; }
+.es-cards-grid--quads .es-card-pillar__title .elementor-heading-title { font-size: 20px; font-weight: 500; letter-spacing: -0.015em; line-height: 1.25; margin: 0 0 10px; }
 .es-cards-grid--quads .es-card-pillar__desc p { font-size: 13px; color: var(--es-text-mute); line-height: 1.6; margin: 0; }
 
 /* 6) Einzelleistungen in Bereichs-Block: Heading auf vorige Größe (20px) */
@@ -2079,7 +2076,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     /* ─── HERO MOBILE ─── */
     /* Claims: kleineren Text + tighter */
     .es-hero-claims-inner > .elementor-container { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; }
-    .es-hero-claims-inner .es-hero-claims__wert .elementor-heading-title { font-size: 26px !important; }
+    .es-hero-claims-inner .es-hero-claims__wert .elementor-heading-title { font-size: 26px; }
 
     /* Gap innerhalb von .es-stage (Margin zwischen inneren widgets) reduzieren */
     .es-stage .elementor-widget { margin-bottom: 18px !important; }

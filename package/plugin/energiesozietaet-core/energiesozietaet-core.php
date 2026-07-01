@@ -33,6 +33,7 @@ require_once ESC_DIR . 'inc/colors-settings.php';
 require_once ESC_DIR . 'inc/footer-settings.php';
 require_once ESC_DIR . 'inc/karriere-settings.php';
 require_once ESC_DIR . 'inc/typography-settings.php';
+require_once ESC_DIR . 'inc/elementor-globals.php';
 require_once ESC_DIR . 'inc/layout-settings.php';
 require_once ESC_DIR . 'inc/contact-form.php';
 require_once ESC_DIR . 'inc/linkedin.php';
