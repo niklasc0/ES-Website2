@@ -330,16 +330,15 @@ class ESC_Shortcodes {
 				'management'           => 'Büroleitung',
 			);
 			$base = remove_query_arg( 'feld' );
-			// data-filter am Pill + data-field am Card → Filterung passiert clientseitig
-			// im Browser (kein Reload, keine Server-Query, kein Cache dazwischen).
-			$filter_html .= '<div class="es-team-filter" data-team-filter>';
+			// Gefiltert wird clientseitig (ui.js) anhand von data-field am Card.
+			$filter_html .= '<div class="es-team-filter">';
 			$filter_html .= '<div class="es-eyebrow" style="margin:0 28px 0 0;">Filter</div><div class="es-team-filter__pills">';
 			foreach ( $fields as $slug => $label ) {
 				$url = $slug ? esc_url( add_query_arg( 'feld', $slug ) ) : esc_url( $base );
 				$active = ( (string) $active_field === (string) $slug ) ? ' is-active' : '';
-				$filter_html .= '<a class="es-team-filter__pill' . $active . '" data-filter="' . esc_attr( $slug ) . '" href="' . $url . '">' . esc_html( $label ) . '</a>';
+				$filter_html .= '<a class="es-team-filter__pill' . $active . '" href="' . $url . '">' . esc_html( $label ) . '</a>';
 			}
-			$filter_html .= '</div><div class="es-team-filter__count" data-team-count>' . (int) $initial_count . ' Teammitglieder</div></div>';
+			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $initial_count . ' Teammitglieder</div></div>';
 		}
 
 		if ( empty( $members ) ) {
@@ -357,7 +356,7 @@ class ESC_Shortcodes {
 		ob_start();
 		echo $filter_html;
 		?>
-		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid" data-team-grid>
+		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid">
 			<?php foreach ( $members as $mp ) : $GLOBALS['post'] = $mp; setup_postdata( $mp );
 				$role      = get_post_meta( get_the_ID(), 'es_role', true );
 				$thumb_id  = get_post_thumbnail_id();

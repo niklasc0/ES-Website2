@@ -85,14 +85,14 @@
 	//     → immer leer → alles ausgeblendet → „0 Teammitglieder").
 	var teamFilter = document.querySelector('.es-team-filter');
 	if (teamFilter) {
-		var teamGrid = document.querySelector('[data-team-grid]') || document.querySelector('.esc-team-grid') || document.querySelector('.esc-grid');
+		var teamGrid = document.querySelector('.esc-team-grid') || document.querySelector('.esc-grid');
 		var teamCountEl = teamFilter.querySelector('.es-team-filter__count');
 		var teamPills = Array.prototype.slice.call(teamFilter.querySelectorAll('.es-team-filter__pill'));
 		var teamCards = teamGrid ? Array.prototype.slice.call(teamGrid.querySelectorAll('.esc-team-card')) : [];
 
 		function pillFeld(p) {
 			try { return new URL(p.href, window.location.origin).searchParams.get('feld') || ''; }
-			catch (err) { return p.getAttribute('data-filter') || ''; }
+			catch (err) { return ''; }
 		}
 
 		function applyTeamFilter(feld, animate) {
