@@ -1093,6 +1093,8 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 }
 .es-team-filter__pill:hover { background: var(--es-paper-warm); color: var(--es-ink); }
 .es-team-filter__pill.is-active { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
+/* Clientseitige Team-Filterung: ausgeblendete Karten. */
+.esc-team-card.is-hidden { display: none !important; }
 .es-team-filter__count { margin-left: auto; font-size: 13px; color: var(--es-text-mute); }
 
 /* ─────────────────────────────────────────────────────────────

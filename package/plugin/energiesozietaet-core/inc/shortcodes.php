@@ -309,17 +309,15 @@ class ESC_Shortcodes {
 			'orderby'        => $atts['orderby'],
 			'order'          => $atts['order'],
 		) );
-		// Beratungsfeld-Filter direkt am Backend-Tag (es_field) in PHP — bewusst
-		// KEINE meta_query, weil die auf dieser Installation 0 zurückgab, obwohl
-		// die Werte korrekt gesetzt sind (Query-Filter eines anderen Plugins o. ä.).
-		$members = array();
-		foreach ( $q->posts as $mp ) {
-			if ( '' === $active_field || (string) get_post_meta( $mp->ID, 'es_field', true ) === $active_field ) {
-				$members[] = $mp;
-			}
-		}
+		$members = $q->posts;
 		if ( (int) $atts['limit'] > 0 ) { $members = array_slice( $members, 0, (int) $atts['limit'] ); }
-		$member_count = count( $members );
+		// Feld je Mitglied vorab (für data-field am Card + korrekten Startzähler).
+		$field_of = array();
+		foreach ( $members as $mp ) { $field_of[ $mp->ID ] = (string) get_post_meta( $mp->ID, 'es_field', true ); }
+		$initial_count = 0;
+		foreach ( $members as $mp ) {
+			if ( '' === $active_field || $field_of[ $mp->ID ] === $active_field ) { $initial_count++; }
+		}
 		$cols = max( 2, min( 4, (int) $atts['columns'] ) );
 
 		$filter_html = '';
@@ -332,18 +330,20 @@ class ESC_Shortcodes {
 				'management'           => 'Büroleitung',
 			);
 			$base = remove_query_arg( 'feld' );
-			$filter_html .= '<div class="es-team-filter">';
+			// data-filter am Pill + data-field am Card → Filterung passiert clientseitig
+			// im Browser (kein Reload, keine Server-Query, kein Cache dazwischen).
+			$filter_html .= '<div class="es-team-filter" data-team-filter>';
 			$filter_html .= '<div class="es-eyebrow" style="margin:0 28px 0 0;">Filter</div><div class="es-team-filter__pills">';
 			foreach ( $fields as $slug => $label ) {
 				$url = $slug ? esc_url( add_query_arg( 'feld', $slug ) ) : esc_url( $base );
 				$active = ( (string) $active_field === (string) $slug ) ? ' is-active' : '';
-				$filter_html .= '<a class="es-team-filter__pill' . $active . '" href="' . $url . '">' . esc_html( $label ) . '</a>';
+				$filter_html .= '<a class="es-team-filter__pill' . $active . '" data-filter="' . esc_attr( $slug ) . '" href="' . $url . '">' . esc_html( $label ) . '</a>';
 			}
-			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $member_count . ' Teammitglieder</div></div>';
+			$filter_html .= '</div><div class="es-team-filter__count" data-team-count>' . (int) $initial_count . ' Teammitglieder</div></div>';
 		}
 
 		if ( empty( $members ) ) {
-			$empty = '<p style="color:#899092;font-size:15px;">Aktuell keine Teammitglieder in diesem Bereich.</p>';
+			$empty = '<p style="color:#899092;font-size:15px;">Aktuell keine Teammitglieder.</p>';
 			return $filter_html . $empty;
 		}
 
@@ -357,13 +357,15 @@ class ESC_Shortcodes {
 		ob_start();
 		echo $filter_html;
 		?>
-		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid">
+		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid" data-team-grid>
 			<?php foreach ( $members as $mp ) : $GLOBALS['post'] = $mp; setup_postdata( $mp );
-				$role     = get_post_meta( get_the_ID(), 'es_role', true );
-				$thumb_id = get_post_thumbnail_id();
-				$linkedin = (string) get_post_meta( get_the_ID(), 'es_linkedin', true );
-				$bio      = get_the_excerpt(); ?>
-				<div class="esc-team-card es-reveal">
+				$role      = get_post_meta( get_the_ID(), 'es_role', true );
+				$thumb_id  = get_post_thumbnail_id();
+				$linkedin  = (string) get_post_meta( get_the_ID(), 'es_linkedin', true );
+				$bio       = get_the_excerpt();
+				$mem_field = isset( $field_of[ get_the_ID() ] ) ? $field_of[ get_the_ID() ] : '';
+				$hidden    = ( $active_field && $mem_field !== $active_field ) ? ' is-hidden' : ''; ?>
+				<div class="esc-team-card es-reveal<?php echo $hidden; ?>" data-field="<?php echo esc_attr( $mem_field ); ?>">
 					<a class="esc-team-card__photo" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
 						<?php if ( $thumb_id ) { echo wp_get_attachment_image( $thumb_id, 'es-team', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); }
 						else { echo '<span class="esc-team-card__initial">' . esc_html( mb_substr( get_the_title(), 0, 1 ) ) . '</span>'; } ?>
