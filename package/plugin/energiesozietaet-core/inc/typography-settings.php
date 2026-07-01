@@ -16,6 +16,8 @@ class ESC_Typography_Settings {
 		add_action( 'admin_menu',  array( __CLASS__, 'menu' ) );
 		// @font-face früh in den Head, damit der Font sofort vorgeladen wird
 		add_action( 'wp_head',     array( __CLASS__, 'print_font_face' ), 5 );
+		// Globale Schriftgrößen-Overrides (drei Standardgrößen) — nach dem Theme-CSS
+		add_action( 'wp_head',     array( __CLASS__, 'print_size_vars' ), 100 );
 		// Overrides im FOOTER nach Elementor — so gewinnen sie in der CSS-
 		// Cascade immer, egal wie spät Elementor nachlädt
 		add_action( 'wp_footer',   array( __CLASS__, 'print_overrides' ), 99999 );
@@ -31,6 +33,11 @@ class ESC_Typography_Settings {
 			'font_woff'    => 0,
 			'font_weight'  => '400',
 			'font_style'   => 'normal',
+			// Die Standard-Schriftgrößen (global). Werte in px.
+			'fs_heading'   => 20, // Karten-/Unterüberschriften
+			'fs_body'      => 16, // Inhaltstext
+			'fs_meta'      => 13, // Hairline / Datum / Meta
+			'fs_eyebrow'   => 11, // Eyebrow / Label (uppercase)
 		);
 	}
 
@@ -67,7 +74,35 @@ class ESC_Typography_Settings {
 			'font_woff'   => (int) ( $input['font_woff'] ?? 0 ),
 			'font_weight' => sanitize_text_field( $input['font_weight'] ?? $d['font_weight'] ),
 			'font_style'  => in_array( $input['font_style'] ?? '', array( 'normal', 'italic' ), true ) ? $input['font_style'] : 'normal',
+			'fs_heading'  => max( 12, min( 60, (int) ( $input['fs_heading'] ?? $d['fs_heading'] ) ) ),
+			'fs_body'     => max( 10, min( 32, (int) ( $input['fs_body']    ?? $d['fs_body'] ) ) ),
+			'fs_meta'     => max( 8,  min( 24, (int) ( $input['fs_meta']    ?? $d['fs_meta'] ) ) ),
+			'fs_eyebrow'  => max( 8,  min( 20, (int) ( $input['fs_eyebrow'] ?? $d['fs_eyebrow'] ) ) ),
 		);
+	}
+
+	/** Gibt die globalen Schriftgrößen als :root-Override aus (nur was vom
+	 *  Theme-Default abweicht). Läuft im wp_head nach dem Theme-Stylesheet;
+	 *  überschreibt nur die CSS-Variablen — pro Widget in Elementor gesetzte
+	 *  Größen (explizite px am Element) gewinnen weiterhin. */
+	public static function print_size_vars() {
+		$o    = self::get();
+		$map  = array(
+			'--es-fs-heading-sub' => array( 'fs_heading', 20 ),
+			'--es-fs-body'        => array( 'fs_body',    16 ),
+			'--es-fs-meta'        => array( 'fs_meta',    13 ),
+			'--es-fs-eyebrow'     => array( 'fs_eyebrow', 11 ),
+		);
+		$decl = '';
+		foreach ( $map as $var => $info ) {
+			$val = (int) $o[ $info[0] ];
+			if ( $val && $val !== (int) $info[1] ) {
+				$decl .= $var . ':' . $val . 'px;';
+			}
+		}
+		if ( $decl ) {
+			echo '<style id="esc-typo-sizes">:root{' . $decl . '}</style>';
+		}
 	}
 
 	public static function menu() {
@@ -177,6 +212,27 @@ class ESC_Typography_Settings {
 							<option value="normal" <?php selected( self::get( 'font_style' ), 'normal' ); ?>>Normal</option>
 							<option value="italic" <?php selected( self::get( 'font_style' ), 'italic' ); ?>>Kursiv</option>
 						</select>
+					</td></tr>
+				</tbody></table>
+
+				<h2 style="margin-top:32px;">Standard-Schriftgrößen</h2>
+				<p>Die Standardgrößen der Website. Änderungen hier werden überall automatisch übernommen (Inhaltstexte, Metazeilen, Karten-/Unterüberschriften). Große Hero-/Sektions-Titel skalieren eigenständig und lassen sich pro Widget in Elementor anpassen.</p>
+				<table class="form-table"><tbody>
+					<tr><th scope="row"><label>Überschrift <span style="color:#787c82;font-weight:400;">(Karten &amp; Unterüberschriften)</span></label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_heading]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_heading' ) ); ?>" min="12" max="60" step="1" style="width:90px;"> px
+						<p class="description">Standard: 20 px.</p>
+					</td></tr>
+					<tr><th scope="row"><label>Inhaltstext</label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_body]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_body' ) ); ?>" min="10" max="32" step="1" style="width:90px;"> px
+						<p class="description">Standard: 16 px. Fließtext, Listen, Beschreibungen, Kontaktangaben.</p>
+					</td></tr>
+					<tr><th scope="row"><label>Hairline / Meta <span style="color:#787c82;font-weight:400;">(Datum, Breadcrumb …)</span></label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_meta]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_meta' ) ); ?>" min="8" max="24" step="1" style="width:90px;"> px
+						<p class="description">Standard: 13 px.</p>
+					</td></tr>
+					<tr><th scope="row"><label>Eyebrow / Label <span style="color:#787c82;font-weight:400;">(kleine Großbuchstaben-Labels)</span></label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_eyebrow]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_eyebrow' ) ); ?>" min="8" max="20" step="1" style="width:90px;"> px
+						<p class="description">Standard: 11 px.</p>
 					</td></tr>
 				</tbody></table>
 				<?php submit_button(); ?>

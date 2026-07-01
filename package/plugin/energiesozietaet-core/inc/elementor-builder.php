@@ -188,7 +188,7 @@ class ESC_Elementor_Builder {
 			$html .= '<h1 style="max-width:1100px;margin:0 0 28px;">' . $args['headline_html'] . '</h1>';
 		}
 		if ( $args['lead'] ) {
-			$html .= '<p style="max-width:780px;font-size:16px;line-height:1.55;color:rgba(255,255,255,0.78);font-weight:300;margin:0 0 36px;">' . $args['lead'] . '</p>';
+			$html .= '<p style="max-width:780px;font-size:var(--es-fs-body);line-height:1.55;color:rgba(255,255,255,0.78);font-weight:300;margin:0 0 36px;">' . $args['lead'] . '</p>';
 		}
 		if ( ! empty( $args['buttons'] ) ) {
 			$html .= '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;">';
@@ -412,7 +412,7 @@ class ESC_Elementor_Builder {
 		$html .= '<div class="' . esc_attr( $eyebrow_class ) . '" style="margin-bottom:20px;">' . esc_html( $eyebrow ) . '</div>';
 		$html .= '<h2 style="font-size:clamp(32px,4.2vw,52px);line-height:1.05;font-weight:400;letter-spacing:-0.03em;max-width:720px;' . $max . 'color:' . $title_color . ';margin:0;">' . $title_html . '</h2>';
 		if ( $lede ) {
-			$html .= '<p style="font-size:16px;line-height:1.55;margin-top:24px;color:' . $lede_color . ';max-width:620px;' . $max . '">' . $lede . '</p>';
+			$html .= '<p style="font-size:var(--es-fs-body);line-height:1.55;margin-top:24px;color:' . $lede_color . ';max-width:620px;' . $max . '">' . $lede . '</p>';
 		}
 		$html .= '</div>';
 		return self::section_html( $html, $variant );

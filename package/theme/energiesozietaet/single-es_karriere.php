@@ -95,17 +95,17 @@ while ( have_posts() ) : the_post();
 					if ( empty( $bn[0] ) ) continue; ?>
 					<div style="padding:24px;border:1px solid #DADEC5;border-radius:14px;">
 						<div style="width:4px;height:20px;background:#95D708;margin-bottom:14px;"></div>
-						<div style="font-size:20px;font-weight:500;letter-spacing:-0.015em;margin-bottom:6px;"><?php echo esc_html( $bn[0] ); ?></div>
-						<?php if ( ! empty( $bn[1] ) ) : ?><div style="font-size:16px;color:#899092;"><?php echo esc_html( $bn[1] ); ?></div><?php endif; ?>
+						<div style="font-size:var(--es-fs-heading-sub);font-weight:500;letter-spacing:-0.015em;margin-bottom:6px;"><?php echo esc_html( $bn[0] ); ?></div>
+						<?php if ( ! empty( $bn[1] ) ) : ?><div style="font-size:var(--es-fs-body);color:#899092;"><?php echo esc_html( $bn[1] ); ?></div><?php endif; ?>
 					</div>
 				<?php endforeach; ?>
 			</div>
 
 			<div style="padding:32px;background:#122023;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;border-radius:var(--es-radius-card);">
 				<div>
-					<div style="color:#95D708;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;"><?php echo esc_html( $kget( 'cta_eyebrow', 'Deine Bewerbung' ) ); ?></div>
-					<div style="font-size:20px;font-weight:500;letter-spacing:-0.015em;"><?php echo esc_html( $kget( 'cta_title', 'Bereit, gemeinsam durchzustarten?' ) ); ?></div>
-					<div style="font-size:16px;color:rgba(255,255,255,0.6);margin-top:6px;"><?php echo esc_html( $kget( 'cta_subtitle', '' ) ); ?></div>
+					<div style="color:#95D708;font-size:var(--es-fs-eyebrow);letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;"><?php echo esc_html( $kget( 'cta_eyebrow', 'Deine Bewerbung' ) ); ?></div>
+					<div style="font-size:var(--es-fs-heading-sub);font-weight:500;letter-spacing:-0.015em;"><?php echo esc_html( $kget( 'cta_title', 'Bereit, gemeinsam durchzustarten?' ) ); ?></div>
+					<div style="font-size:var(--es-fs-body);color:rgba(255,255,255,0.6);margin-top:6px;"><?php echo esc_html( $kget( 'cta_subtitle', '' ) ); ?></div>
 				</div>
 				<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $kget( 'cta_recipient', 'karriere@energiesozietaet.de' ) ); ?>?subject=<?php echo esc_attr( 'Bewerbung — ' . get_the_title() ); ?>"><?php echo esc_html( $kget( 'cta_button_label', 'Jetzt bewerben' ) ); ?> →</a>
 			</div>

@@ -633,11 +633,11 @@ class ESC_Page_Blueprints {
 
 	protected static function field( $label, $name, $type = 'text' ) {
 		$out  = '<div>';
-		$out .= '<div style="font-size:13px;color:#899092;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">' . esc_html( $label ) . '</div>';
+		$out .= '<div style="font-size:var(--es-fs-meta);color:#899092;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">' . esc_html( $label ) . '</div>';
 		if ( 'textarea' === $type ) {
-			$out .= '<textarea name="' . esc_attr( $name ) . '" rows="5" style="width:100%;border:0;border-bottom:1px solid #122023;background:transparent;padding:10px 0;font:inherit;font-size:16px;resize:vertical;outline:none;"></textarea>';
+			$out .= '<textarea name="' . esc_attr( $name ) . '" rows="5" style="width:100%;border:0;border-bottom:1px solid #122023;background:transparent;padding:10px 0;font:inherit;font-size:var(--es-fs-body);resize:vertical;outline:none;"></textarea>';
 		} else {
-			$out .= '<input type="' . esc_attr( $type ) . '" name="' . esc_attr( $name ) . '" style="width:100%;border:0;border-bottom:1px solid #122023;background:transparent;padding:10px 0;font:inherit;font-size:16px;outline:none;" />';
+			$out .= '<input type="' . esc_attr( $type ) . '" name="' . esc_attr( $name ) . '" style="width:100%;border:0;border-bottom:1px solid #122023;background:transparent;padding:10px 0;font:inherit;font-size:var(--es-fs-body);outline:none;" />';
 		}
 		$out .= '</div>';
 		return $out;

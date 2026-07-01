@@ -88,7 +88,7 @@ while ( have_posts() ) : the_post();
 					<?php if ( $more_bio ) : ?>
 						<div class="es-team-single__section">
 							<h3>Profil</h3>
-							<div style="font-size:16px;line-height:1.7;color:#899092;"><?php echo wp_kses_post( wpautop( $more_bio ) ); ?></div>
+							<div style="font-size:var(--es-fs-body);line-height:1.7;color:#899092;"><?php echo wp_kses_post( wpautop( $more_bio ) ); ?></div>
 						</div>
 					<?php endif; ?>
 
