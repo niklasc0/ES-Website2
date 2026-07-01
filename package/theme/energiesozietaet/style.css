@@ -470,28 +470,28 @@ html.js .esc-card.es-reveal {
 .es-hero--split > .elementor-container { align-items: center; }
 .es-hero__side > .elementor-widget-wrap,
 .es-hero__side .elementor-widget-container { height: 100%; }
-.es-hero-stats { display: flex; gap: 16px; width: 100%; justify-content: flex-end; }
+.es-hero-stats { display: flex; gap: 20px; width: 100%; justify-content: flex-end; }
 .es-hero-stat {
-    flex: 1 1 0; min-width: 0; max-width: 218px;
-    padding: 24px 24px 26px; border-radius: var(--es-radius-card);
+    flex: 1 1 0; min-width: 0; min-height: 300px;
+    padding: 34px 34px 36px; border-radius: var(--es-radius-lg);
     display: flex; flex-direction: column; text-decoration: none;
-    box-shadow: 0 22px 55px rgba(6,12,14,0.38);
+    box-shadow: 0 30px 70px rgba(6,12,14,0.45);
     transition: transform var(--es-duration-fast) var(--es-easing);
 }
 .es-hero-stat:hover { transform: translateY(-4px); }
 .es-hero-stat--dark  { background: var(--es-ink); }
 .es-hero-stat--light { background: var(--es-paper); }
-.es-hero-stat__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 46px; }
-.es-hero-stat__label { font-size: 14px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em; }
+.es-hero-stat__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: auto; }
+.es-hero-stat__label { font-size: 16px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em; }
 .es-hero-stat__arrow {
-    width: 32px; height: 32px; border-radius: 999px; flex: none;
+    width: 40px; height: 40px; border-radius: 999px; flex: none;
     background: var(--es-accent); color: var(--es-ink);
-    display: inline-flex; align-items: center; justify-content: center; font-size: 16px;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 19px;
     transition: transform var(--es-duration-fast) var(--es-easing);
 }
 .es-hero-stat:hover .es-hero-stat__arrow { transform: translate(2px, -2px); }
-.es-hero-stat__num { font-family: var(--es-font-display); font-size: 42px; font-weight: var(--es-fw-medium); letter-spacing: -0.03em; line-height: 1; }
-.es-hero-stat__sub { font-size: 13px; margin-top: 6px; }
+.es-hero-stat__num { font-family: var(--es-font-display); font-size: 64px; font-weight: var(--es-fw-medium); letter-spacing: -0.03em; line-height: 1; margin-top: 20px; }
+.es-hero-stat__sub { font-size: 15px; margin-top: 8px; }
 /* Explizite, gut lesbare Textfarben je Card (opake Hintergründe). */
 .es-hero-stat--dark  .es-hero-stat__label, .es-hero-stat--dark  .es-hero-stat__num { color: var(--es-paper); }
 .es-hero-stat--dark  .es-hero-stat__sub { color: var(--es-on-dark-text); }
@@ -502,14 +502,14 @@ html.js .esc-card.es-reveal {
 @media (max-width: 1024px) {
     .es-hero--split > .elementor-container { flex-direction: column; align-items: stretch; }
     .es-hero--split .elementor-column { width: 100% !important; max-width: 100% !important; }
-    .es-hero__side { margin-top: 36px; }
+    .es-hero__side { margin-top: 40px; }
     .es-hero-stats { justify-content: flex-start; }
-    .es-hero-stat { max-width: 240px; }
+    .es-hero-stat { min-height: 220px; }
 }
 @media (max-width: 520px) {
-    .es-hero-stats { flex-direction: column; gap: 12px; }
-    .es-hero-stat { max-width: 320px; }
-    .es-hero-stat__top { margin-bottom: 26px; }
+    .es-hero-stats { flex-direction: column; gap: 14px; }
+    .es-hero-stat { min-height: 172px; padding: 28px 28px 30px; }
+    .es-hero-stat__num { font-size: 52px; margin-top: 16px; }
 }
 /* Mobile: Hero-Content strikt aufs Viewport begrenzen (kein H-Overflow). */
 @media (max-width: 767px) {
@@ -629,7 +629,18 @@ html.js .esc-card.es-reveal {
     width: 30px; height: 30px; color: var(--es-text-mute);
 }
 .esc-team-card__li:hover { color: var(--es-accent); }
-@media (max-width: 600px) { .esc-team-grid.esc-grid { grid-template-columns: 1fr; } }
+/* Tablet + Mobile: Card stapelt — Bild oben, Text unten (statt schmalem
+   Foto links). Foto bekommt festes Seitenverhältnis, damit es nicht schmal
+   und die Card nicht überlang wird. */
+@media (max-width: 1024px) {
+    .esc-team-card { grid-template-columns: 1fr; min-height: 0; }
+    .esc-team-card__photo { height: auto; aspect-ratio: 4 / 3; }
+    .esc-team-card__body { padding: var(--es-space-6) var(--es-space-7) var(--es-space-7); }
+}
+@media (max-width: 600px) {
+    .esc-team-grid.esc-grid { grid-template-columns: 1fr; }
+    .esc-team-card__photo { aspect-ratio: 3 / 2; }
+}
 
 /* Karriere — ah5 Job-Reihen: Bild links + helle Card rechts, gestapelt */
 .esc-job-list.esc-grid { grid-template-columns: 1fr; gap: var(--es-space-8); }
