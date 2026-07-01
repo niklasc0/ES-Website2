@@ -303,28 +303,26 @@ class ESC_Shortcodes {
 			'order'   => 'ASC',
 		), $atts, 'es_team' );
 		$active_field = isset( $_GET['feld'] ) ? sanitize_text_field( wp_unslash( $_GET['feld'] ) ) : (string) $atts['field'];
-		$q_args = array(
+		$q = new WP_Query( array(
 			'post_type'      => 'es_team',
-			'posts_per_page' => (int) $atts['limit'],
+			'posts_per_page' => -1,
 			'orderby'        => $atts['orderby'],
 			'order'          => $atts['order'],
-		);
-		// Beratungsfeld-Filter = exakt das Backend-Tag (es_field-Meta des Mitglieds).
-		if ( $active_field ) {
-			$q_args['meta_query'] = array( array( 'key' => 'es_field', 'value' => $active_field ) );
+		) );
+		// Beratungsfeld-Filter direkt am Backend-Tag (es_field) in PHP — bewusst
+		// KEINE meta_query, weil die auf dieser Installation 0 zurückgab, obwohl
+		// die Werte korrekt gesetzt sind (Query-Filter eines anderen Plugins o. ä.).
+		$members = array();
+		foreach ( $q->posts as $mp ) {
+			if ( '' === $active_field || (string) get_post_meta( $mp->ID, 'es_field', true ) === $active_field ) {
+				$members[] = $mp;
+			}
 		}
-		$q = new WP_Query( $q_args );
+		if ( (int) $atts['limit'] > 0 ) { $members = array_slice( $members, 0, (int) $atts['limit'] ); }
+		$member_count = count( $members );
 		$cols = max( 2, min( 4, (int) $atts['columns'] ) );
 
-		// TEMP-Diagnose: unsichtbarer HTML-Kommentar mit dem ROHEN es_field jedes
-		// Mitglieds. Auf /team/ „Seitenquelltext anzeigen" → nach ESDBG suchen.
-		$dbg = '<!-- ESDBG feld=' . esc_html( $active_field ) . ' | ';
-		foreach ( get_posts( array( 'post_type' => 'es_team', 'numberposts' => -1 ) ) as $tp ) {
-			$dbg .= esc_html( $tp->post_title ) . '=[' . esc_html( var_export( get_post_meta( $tp->ID, 'es_field', true ), true ) ) . '] ';
-		}
-		$dbg .= '-->';
-
-		$filter_html = $dbg;
+		$filter_html = '';
 		if ( '1' === (string) $atts['filter'] ) {
 			$fields = array(
 				''                     => 'Alle',
@@ -341,10 +339,10 @@ class ESC_Shortcodes {
 				$active = ( (string) $active_field === (string) $slug ) ? ' is-active' : '';
 				$filter_html .= '<a class="es-team-filter__pill' . $active . '" href="' . $url . '">' . esc_html( $label ) . '</a>';
 			}
-			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $q->found_posts . ' Teammitglieder</div></div>';
+			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $member_count . ' Teammitglieder</div></div>';
 		}
 
-		if ( ! $q->have_posts() ) {
+		if ( empty( $members ) ) {
 			$empty = '<p style="color:#899092;font-size:15px;">Aktuell keine Teammitglieder in diesem Bereich.</p>';
 			return $filter_html . $empty;
 		}
@@ -360,7 +358,7 @@ class ESC_Shortcodes {
 		echo $filter_html;
 		?>
 		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid">
-			<?php while ( $q->have_posts() ) : $q->the_post();
+			<?php foreach ( $members as $mp ) : $GLOBALS['post'] = $mp; setup_postdata( $mp );
 				$role     = get_post_meta( get_the_ID(), 'es_role', true );
 				$thumb_id = get_post_thumbnail_id();
 				$linkedin = (string) get_post_meta( get_the_ID(), 'es_linkedin', true );
@@ -381,7 +379,7 @@ class ESC_Shortcodes {
 						<?php endif; ?>
 					</div>
 				</div>
-			<?php endwhile; wp_reset_postdata(); ?>
+			<?php endforeach; wp_reset_postdata(); ?>
 		</div>
 		<?php return ob_get_clean();
 	}
