@@ -3709,3 +3709,52 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
     body .es-hero-claims-inner > .elementor-container { display: flex !important; flex-wrap: wrap !important; }
     body .es-hero-claims-inner > .elementor-container > .elementor-column { flex: 1 1 100% !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   News-/„LinkedIn"-Karten (.esc-card--news) — sauberes ah5-Verhalten.
+   Behebt: (1) dunkler Streifen (Platzhalter füllt jetzt den Medienbereich),
+   (2) eckiger dunkler Hover-Hintergrund, der die Rundung schluckt,
+   (3) Band, das „hinter" der Rundung schwebt. Steht am Dateiende, damit es
+   die generischen .esc-card:hover-Regeln sicher überschreibt.
+   ═══════════════════════════════════════════════════════════════════════ */
+/* Platzhalter/Bild füllt den Medienbereich vollständig — überall wo eine
+   Kachel den .es-ph-cat-Fallback nutzt. */
+.esc-card__media .es-ph-cat,
+.esc-card__media img {
+    width: 100% !important; height: 100% !important; aspect-ratio: auto !important;
+    border-radius: 0 !important; display: block;
+}
+/* Karte selbst: rahmenlos, transparent — kein eckiger Kasten dahinter. */
+.esc-card--news,
+.esc-card--news:hover { background: transparent !important; border: 0 !important; border-radius: 0 !important; overflow: visible !important; }
+.esc-card--news::before { content: none !important; }   /* altes Card-Band aus */
+.esc-card--news:hover { transform: translateY(-4px); }
+
+/* Medienbereich: gerundet, dünner heller Rand, Band + Bild sitzen INNEN
+   (overflow:hidden beschneidet sie an der Rundung). */
+.esc-card--news .esc-card__media {
+    position: relative;
+    aspect-ratio: 16 / 11;
+    border-radius: var(--es-radius-card);
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+    transition: box-shadow var(--es-duration-fast) var(--es-easing);
+}
+/* Grünes Band — oben im Bild, von der Rundung beschnitten, baut sich von links auf. */
+.esc-card--news .esc-card__media::after {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 2;
+    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--es-duration-normal) var(--es-easing);
+}
+.esc-card--news:hover .esc-card__media::after { transform: scaleX(1); }
+/* Hover: Karte hebt per Lift + Schatten ab (setzt sich klar vom Abschnitt ab,
+   egal welche Abschnittsfarbe) — KEIN flächiger, blendender Text-Hintergrund. */
+.esc-card--news:hover .esc-card__media {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 24px 48px rgba(6, 12, 14, 0.22);
+}
+.esc-card--news:hover .esc-card__media img { transform: scale(1.05); }
+/* Textfarben NICHT invertieren (kein Weiß-auf-Weiß / dunkler Kasten). */
+.esc-card--news .esc-card__title,
+.esc-card--news:hover .esc-card__title { color: var(--es-ink); }
+.esc-card--news .esc-card__date,
+.esc-card--news:hover .esc-card__date { color: var(--es-text-soft); }
