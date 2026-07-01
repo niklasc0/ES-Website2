@@ -103,7 +103,7 @@ while ( have_posts() ) : the_post();
 
 			<div style="padding:32px;background:#122023;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;border-radius:var(--es-radius-card);">
 				<div>
-					<div style="color:#95D708;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;"><?php echo esc_html( $kget( 'cta_eyebrow', 'Deine Bewerbung' ) ); ?></div>
+					<div style="color:#95D708;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;"><?php echo esc_html( $kget( 'cta_eyebrow', 'Deine Bewerbung' ) ); ?></div>
 					<div style="font-size:20px;font-weight:500;letter-spacing:-0.015em;"><?php echo esc_html( $kget( 'cta_title', 'Bereit, gemeinsam durchzustarten?' ) ); ?></div>
 					<div style="font-size:16px;color:rgba(255,255,255,0.6);margin-top:6px;"><?php echo esc_html( $kget( 'cta_subtitle', '' ) ); ?></div>
 				</div>
