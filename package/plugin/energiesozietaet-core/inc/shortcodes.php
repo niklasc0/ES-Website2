@@ -623,7 +623,7 @@ class ESC_Shortcodes {
 				$href = $link ? ' href="' . esc_url( $link ) . '" target="_blank" rel="noopener"' : ''; ?>
 				<<?php echo $tag; ?> class="esc-card"<?php echo $href; ?> style="padding:32px;">
 					<div class="esc-card__meta"><?php echo esc_html( $cat ); ?></div>
-					<h3 style="font-size:19px;font-weight:500;line-height:1.3;letter-spacing:-0.01em;margin:16px 0 20px;"><?php the_title(); ?></h3>
+					<h3 style="font-size:19px;font-weight:500;line-height:1.3;letter-spacing:-0.01em;margin:16px 0 20px;overflow-wrap:break-word;word-break:break-word;hyphens:auto;"><?php the_title(); ?></h3>
 					<?php if ( $src ) : ?><div style="font-size:12px;color:#B6BAAF;font-family:var(--es-font-mono);margin-bottom:20px;"><?php echo esc_html( $src ); ?></div><?php endif; ?>
 					<span class="esc-card__link"><?php echo $link ? 'Zur Publikation ↗︎' : 'Lesen'; ?></span>
 				</<?php echo $tag; ?>>

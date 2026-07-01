@@ -598,19 +598,16 @@ html.js .esc-card.es-reveal {
     letter-spacing: 0.14em; text-transform: uppercase;
     font-family: var(--es-font-mono);
 }
-.esc-card__title { font-size: 20px; font-weight: var(--es-fw-medium); line-height: 1.28; letter-spacing: -0.015em; margin: 0; }
+.esc-card__title { font-size: 20px; font-weight: var(--es-fw-medium); line-height: 1.28; letter-spacing: -0.015em; margin: 0; overflow-wrap: break-word; word-break: break-word; hyphens: auto; }
 .esc-card__text { font-size: 14px; color: var(--es-text-mute); line-height: 1.6; margin: 0; }
 .esc-card__link { margin-top: auto; font-size: 13px; color: var(--es-ink); font-weight: var(--es-fw-medium); display: inline-flex; align-items: center; gap: 6px; padding-top: 10px; }
 
-/* ah5 News-Karte: borderless, Bild-first (gerundetes Bild + Titel + Datum).
-   Die „von links aufbauende" Band-Geste (.esc-card::before) bleibt über dem Bild. */
-.esc-card--news { background: transparent; border: 0; border-radius: 0; overflow: visible; }
-.esc-card--news .esc-card__media { border-radius: var(--es-radius-card); aspect-ratio: 16/11; }
-.esc-card--news .esc-card__body { padding: 18px 2px 0; gap: 10px; }
+/* ah5 News-/Fachbeitrags-Karte: solide Card wie die LinkedIn-Karten —
+   Hintergrund hinter Bild UND Text, gemeinsame Hover-Animation der ganzen
+   Card (erbt von der Basis-.esc-card). */
 .esc-card--news .esc-card__title { font-size: 19px; line-height: 1.3; }
-.esc-card--news .esc-card__date { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--es-text-soft); }
+.esc-card--news .esc-card__date { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--es-text-soft); margin-top: auto; }
 .esc-card--news .esc-card__date svg { flex: none; }
-.esc-card--news:hover { transform: translateY(-2px); }
 
 /* Team card — ah5: Foto links + Text rechts in heller, gerundeter Card */
 .esc-team-grid.esc-grid { grid-template-columns: repeat(2, 1fr); gap: var(--es-space-8); }
@@ -1982,7 +1979,18 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     background: transparent !important;
     font-weight: var(--es-fw-medium);
 }
-.es-nav .sub-menu a::after { background: var(--es-accent); bottom: 6px; width: calc(100% - 40px); left: 20px; }
+/* Strich-Animation auch im Untermenü (Leistungen-Dropdown) — von links
+   aufbauend wie bei den Top-Level-Menüpunkten. */
+.es-nav .sub-menu a::after {
+    display: block; content: ""; position: absolute;
+    left: 20px; right: 20px; bottom: 6px; width: auto; height: 2px;
+    background: var(--es-accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform var(--es-duration-normal) var(--es-easing);
+}
+.es-nav .sub-menu a:hover::after { transform: scaleX(1); }
+.es-nav .sub-menu .current-menu-item > a::after,
+.es-nav .sub-menu .current_page_item > a::after { transform: scaleX(1); }
 
 /* ─── Publikationen: doppelte Linie am Jahresende beseitigen ─── */
 .esc-pub-year__items .esc-pub-row:last-child { border-bottom: 0; }
@@ -3804,40 +3812,15 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
     width: 100% !important; height: 100% !important; aspect-ratio: auto !important;
     border-radius: 0 !important; display: block;
 }
-/* Karte selbst: rahmenlos, transparent — kein eckiger Kasten dahinter. */
-.esc-card--news,
-.esc-card--news:hover { background: transparent !important; border: 0 !important; border-radius: 0 !important; overflow: visible !important; }
-.esc-card--news::before { content: none !important; }   /* altes Card-Band aus */
+/* Solide Card wie die LinkedIn-Karten: der Basis-.esc-card liefert Hintergrund,
+   Rundung, grünes Band (::before) und den gemeinsamen Hover (ganze Card hebt
+   sich, Hintergrund dunkelt, Bild + Text animieren zusammen). Hier nur die
+   News-spezifischen Feinheiten. */
 .esc-card--news:hover { transform: translateY(-4px); }
-
-/* Medienbereich: gerundet, dünner heller Rand, Band + Bild sitzen INNEN
-   (overflow:hidden beschneidet sie an der Rundung). */
-.esc-card--news .esc-card__media {
-    position: relative;
-    aspect-ratio: 16 / 11;
-    border-radius: var(--es-radius-card);
-    overflow: hidden;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-    transition: box-shadow var(--es-duration-fast) var(--es-easing);
-}
-/* Grünes Band — oben im Bild, von der Rundung beschnitten, baut sich von links auf. */
-.esc-card--news .esc-card__media::after {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 2;
-    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
-    transition: transform var(--es-duration-normal) var(--es-easing);
-}
-.esc-card--news:hover .esc-card__media::after { transform: scaleX(1); }
-/* Hover: nur der dünne Rand am Bild wird kräftiger — die Elevation trägt der
-   Karten-Schatten (::before), NICHT ein separater Bild-Schatten. */
-.esc-card--news:hover .esc-card__media {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
-}
+.esc-card--news .esc-card__media { aspect-ratio: 16 / 10; }
 .esc-card--news:hover .esc-card__media img { transform: scale(1.05); }
-/* Textfarben NICHT invertieren (kein Weiß-auf-Weiß / dunkler Kasten). */
-.esc-card--news .esc-card__title,
-.esc-card--news:hover .esc-card__title { color: var(--es-ink); }
-.esc-card--news .esc-card__date,
-.esc-card--news:hover .esc-card__date { color: var(--es-text-soft); }
+/* Datum: auf dem dunklen Hover-Hintergrund hell halten (wie Titel/Text). */
+.esc-card--news:hover .esc-card__date { color: rgba(255, 255, 255, 0.72); }
 
 /* ═══════════════════════════════════════════════════════════════════════
    Karten-Abstände: Service-Karten (Home) und Pillar-/Quad-Karten liegen als
