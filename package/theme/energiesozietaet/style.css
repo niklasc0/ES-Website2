@@ -47,7 +47,7 @@ Tags: elementor, business, one-column, custom-colors, custom-menu, featured-imag
     --es-fs-h3:         32px;
     --es-fs-h4:         24px;
     --es-fs-body-l:     20px;
-    --es-fs-body:       17px;
+    --es-fs-body:       16px;
     --es-fs-body-s:     15px;
     --es-fs-meta:       13px;
     --es-fs-eyebrow:    11px;
@@ -3833,12 +3833,3 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
         flex: 1 1 0 !important; width: auto !important; max-width: none !important; min-width: 0 !important;
     }
 }
-
-/* ═══════════════════════════════════════════════════════════════════════
-   Typo-Vereinheitlichung — drei Standardgrößen flächendeckend.
-   Elementor-Fließtext (Global-Typo = 17px) an den Inhaltstext (16px) koppeln,
-   ohne Überschriften/Eyebrows anzutasten. Body-Präfix schlägt die Kit-Regel.
-   ═══════════════════════════════════════════════════════════════════════ */
-body .elementor-widget-text-editor,
-body .elementor-widget-text-editor p,
-body .elementor-widget-text-editor li { font-size: 16px; }
