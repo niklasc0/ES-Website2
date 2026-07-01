@@ -1787,14 +1787,37 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-news-toolbar__pill:hover { background: var(--es-paper-warm); color: var(--es-ink); }
 .es-news-toolbar__pill.is-active { background: var(--es-ink); color: var(--es-paper); border-color: var(--es-ink); }
 .es-news-toolbar__pill.is-disabled { opacity: 0.4; pointer-events: none; cursor: default; }
-.es-news-archive__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
-/* News-Karten erst ab >1024px zweispaltig: das fixe 200px-Bild plus lange
-   Titelwoerter ("Energienetzentgeltregulierung:") wuerden zweispaltig sonst
-   rechts ueber den Rand hinauslaufen (Horizontal-Scroll). */
+.es-news-archive__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--es-space-8); }
+/* News-Beitrag = gerundete Karte, Bild links / Text rechts (wie Team/Stellen).
+   Zweispaltig erst ab >1024px, sonst würden 200px-Bild + lange Titel überlaufen. */
 @media (max-width: 1024px) { .es-news-archive__grid { grid-template-columns: 1fr; } }
-/* Innenraster + Titel bruchsicher gegen Horizontal-Ueberlauf. */
-.es-news-archive__grid > a { grid-template-columns: 200px minmax(0, 1fr) !important; }
-.es-news-archive__grid h3, .es-news-archive__featured h2 { overflow-wrap: break-word; word-break: break-word; }
+.es-news-row {
+    position: relative; display: grid; grid-template-columns: 210px minmax(0, 1fr);
+    color: var(--es-ink); background: var(--es-paper-cool);
+    border-radius: var(--es-radius-card); overflow: hidden;
+    transition: transform var(--es-duration-fast) var(--es-easing);
+}
+.es-news-row::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
+    background: var(--es-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--es-duration-normal) var(--es-easing);
+}
+.es-news-row:hover::before { transform: scaleX(1); }
+.es-news-row:hover { transform: translateY(-2px); }
+.es-news-row__media { overflow: hidden; background: var(--es-paper-warm); min-height: 190px; }
+.es-news-row__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--es-easing); }
+.es-news-row:hover .es-news-row__media img { transform: scale(1.04); }
+.es-news-row__media .es-ph-cat { width: 100%; height: 100%; border-radius: 0; aspect-ratio: auto; }
+.es-news-row__body { padding: var(--es-space-8); display: flex; flex-direction: column; justify-content: center; }
+.es-news-row__date { font-size: 11px; color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase; font-family: var(--es-font-mono); margin-bottom: 10px; }
+.es-news-row__title { font-size: 19px; font-weight: var(--es-fw-medium); line-height: 1.28; letter-spacing: -0.015em; margin: 0 0 10px; overflow-wrap: break-word; word-break: break-word; }
+.es-news-row__text { font-size: 14px; color: var(--es-text-mute); line-height: 1.55; margin: 0; }
+/* Mobile: Bild oben, Text unten (wie Team-Karte). */
+@media (max-width: 600px) {
+    .es-news-row { grid-template-columns: 1fr; }
+    .es-news-row__media { aspect-ratio: 16 / 9; min-height: 0; }
+}
+.es-news-archive__featured h2 { overflow-wrap: break-word; word-break: break-word; }
 .es-news-archive__featured { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) !important; }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2274,10 +2297,8 @@ a, span, p, li {
     }
 }
 
-/* F) News (mobile): Beitragsbild ausblenden in Liste, Title-Hyphenation */
+/* F) News (mobile): Featured stapelt (Beitragskarten stapeln via .es-news-row). */
 @media (max-width: 600px) {
-    .es-news-archive__grid > a { grid-template-columns: 1fr !important; gap: 12px !important; }
-    .es-news-archive__grid > a > div:first-child { display: none !important; }
     .es-news-archive__featured { grid-template-columns: 1fr !important; gap: 24px !important; }
     .es-news-archive__featured > div:first-child { aspect-ratio: 16/9 !important; }
 }

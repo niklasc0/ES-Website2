@@ -199,12 +199,12 @@ class ESC_Shortcodes {
 				<?php while ( $rq->have_posts() ) : $rq->the_post();
 					$thumb_id = get_post_thumbnail_id();
 					$img = $thumb_id ? wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>'; ?>
-					<a href="<?php the_permalink(); ?>" style="display:grid;grid-template-columns:200px 1fr;gap:28px;color:#122023;">
-						<div style="width:200px;height:160px;overflow:hidden;background:#1D2D2D;"><?php echo $img; ?></div>
-						<div>
-							<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;font-family:var(--es-font-mono);"><?php echo esc_html( get_the_date() ); ?></div>
-							<h3 style="font-size:20px;font-weight:500;line-height:1.25;letter-spacing:-0.015em;margin:0 0 10px;"><?php the_title(); ?></h3>
-							<p style="font-size:14px;color:#899092;line-height:1.5;margin:0;"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
+					<a class="es-news-row" href="<?php the_permalink(); ?>">
+						<div class="es-news-row__media"><?php echo $img; ?></div>
+						<div class="es-news-row__body">
+							<div class="es-news-row__date"><?php echo esc_html( get_the_date() ); ?></div>
+							<h3 class="es-news-row__title"><?php the_title(); ?></h3>
+							<p class="es-news-row__text"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
 						</div>
 					</a>
 				<?php endwhile; wp_reset_postdata(); ?>
