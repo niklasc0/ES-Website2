@@ -580,31 +580,36 @@ class ESC_Page_Blueprints {
 		// Das Formular kommt aus dem [es_kontakt_form]-Shortcode; Felder, Themen
 		// und Empfänger sind unter Einstellungen → Kontaktformular pflegbar.
 
-		$loc_html = '<div class="es-kontakt-locations">';
+		// Standorte-Modul: Karte + Standortkarten in EINEM Container, über
+		// data-loc gekoppelt (Hover Standort ↔ Punkt auf der Karte). Punkt-Labels
+		// dauerhaft sichtbar, damit die Zuordnung Karte↔Adresse sofort klar ist.
 		$offices = array(
-			array( 'Düsseldorf', array( 'Roßstraße 92 / Kennedyhaus', '40476 Düsseldorf' ), '+49 211 159232-0', true ),
-			array( 'Hamburg',    array( 'Caffamacherreihe 8', '20355 Hamburg' ),           '+49 211 159232-0', false ),
-			array( 'Mannheim',   array( 'Jungbuschstraße 6', '68159 Mannheim' ),           '+49 211 159232-0', false ),
+			array( 'slug' => 'duesseldorf', 'city' => 'Düsseldorf', 'lines' => array( 'Roßstraße 92 / Kennedyhaus', '40476 Düsseldorf' ), 'tel' => '+49 211 159232-0', 'hq' => true,  'pos' => 'left:13%;top:46%' ),
+			array( 'slug' => 'hamburg',     'city' => 'Hamburg',    'lines' => array( 'Caffamacherreihe 8', '20355 Hamburg' ),           'tel' => '+49 211 159232-0',     'hq' => false, 'pos' => 'left:43%;top:18%' ),
+			array( 'slug' => 'mannheim',    'city' => 'Mannheim',   'lines' => array( 'Jungbuschstraße 6', '68159 Mannheim' ),           'tel' => '+49 211 159232-0',    'hq' => false, 'pos' => 'left:30%;top:71%' ),
 		);
-		foreach ( $offices as $i => $o ) {
-			$loc_html .= '<div class="es-kontakt-location' . ( $i === count( $offices ) - 1 ? ' is-last' : '' ) . '">';
-			$loc_html .= '<div class="es-kontakt-location__head">' . esc_html( $o[0] );
-			if ( $o[3] ) { $loc_html .= ' <span class="es-kontakt-location__badge">Hauptsitz</span>'; }
-			$loc_html .= '</div>';
-			foreach ( $o[1] as $ln ) { $loc_html .= '<div class="es-kontakt-location__line">' . esc_html( $ln ) . '</div>'; }
-			$loc_html .= '<a class="es-kontakt-location__tel" href="tel:' . esc_attr( str_replace( ' ', '', $o[2] ) ) . '">' . esc_html( $o[2] ) . '</a>';
-			$loc_html .= '</div>';
-		}
-		$loc_html .= '<div class="es-kontakt-general"><div class="es-eyebrow">Allgemeine Anfragen</div><a href="mailto:info@energiesozietaet.de">info@energiesozietaet.de</a><div>Für allgemeine und organisatorische Anfragen.</div></div></div>';
-
-		// Deutschlandkarte mit grünen Standort-Punkten (Düsseldorf/Hamburg/Mannheim).
 		$map_uri = function_exists( 'get_template_directory_uri' ) ? get_template_directory_uri() : '';
-		$map_html  = '<div class="es-germany-map">';
-		$map_html .= '<img src="' . esc_url( $map_uri . '/assets/img/germany.png' ) . '" alt="Unsere Standorte in Deutschland" loading="lazy" />';
-		$map_html .= '<span class="es-germany-dot" style="left:13%;top:46%"><span class="es-germany-dot__label">Düsseldorf</span></span>';
-		$map_html .= '<span class="es-germany-dot" style="left:43%;top:18%"><span class="es-germany-dot__label">Hamburg</span></span>';
-		$map_html .= '<span class="es-germany-dot" style="left:30%;top:71%"><span class="es-germany-dot__label">Mannheim</span></span>';
-		$map_html .= '</div>';
+
+		$std_html  = '<div class="es-kontakt-standorte">';
+		$std_html .= '<div class="es-germany-map">';
+		$std_html .= '<img src="' . esc_url( $map_uri . '/assets/img/germany.png' ) . '" alt="Unsere Standorte in Deutschland" loading="lazy" />';
+		foreach ( $offices as $o ) {
+			$std_html .= '<span class="es-germany-dot" data-loc="' . esc_attr( $o['slug'] ) . '" style="' . esc_attr( $o['pos'] ) . '"><span class="es-germany-dot__label">' . esc_html( $o['city'] ) . '</span></span>';
+		}
+		$std_html .= '</div>';
+		$std_html .= '<div class="es-kontakt-locations">';
+		foreach ( $offices as $o ) {
+			$std_html .= '<div class="es-kontakt-location" data-loc="' . esc_attr( $o['slug'] ) . '">';
+			$std_html .= '<div class="es-kontakt-location__head">' . esc_html( $o['city'] );
+			if ( $o['hq'] ) { $std_html .= ' <span class="es-kontakt-location__badge">Hauptsitz</span>'; }
+			$std_html .= '</div>';
+			foreach ( $o['lines'] as $ln ) { $std_html .= '<div class="es-kontakt-location__line">' . esc_html( $ln ) . '</div>'; }
+			$std_html .= '<a class="es-kontakt-location__tel" href="tel:' . esc_attr( str_replace( ' ', '', $o['tel'] ) ) . '">' . esc_html( $o['tel'] ) . '</a>';
+			$std_html .= '</div>';
+		}
+		$std_html .= '</div>';
+		$std_html .= '<div class="es-kontakt-general"><div class="es-eyebrow">Allgemeine Anfragen</div><a href="mailto:info@energiesozietaet.de">info@energiesozietaet.de</a><div>Für allgemeine und organisatorische Anfragen.</div></div>';
+		$std_html .= '</div>';
 
 		$s[] = $b::section_native( array(
 			'padding' => array( '80', '0', '140', '0' ),
@@ -619,8 +624,7 @@ class ESC_Page_Blueprints {
 				),
 				array(
 					$b::wid_heading( 'Unsere Standorte', 'p', 'es-eyebrow' ),
-					$b::wid_html( $loc_html ),
-					$b::wid_html( $map_html ),
+					$b::wid_html( $std_html ),
 				),
 			),
 		) );

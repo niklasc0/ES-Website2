@@ -1404,19 +1404,24 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-kontakt-form__submit > span { font-size: 12px; color: var(--es-text-mute); max-width: 400px; }
 
 /* Kontakt-Standorte */
-.es-kontakt-locations { display: grid; gap: 0; }
-.es-kontakt-location { padding: 28px 0; border-bottom: var(--es-border); }
-.es-kontakt-location.is-last { border-bottom: 0; }
+/* Standorte-Modul: Karte oben + gekoppelte Adress-Karten darunter. */
+.es-kontakt-standorte { margin-top: 24px; }
+.es-kontakt-locations { display: grid; gap: 10px; margin-top: 28px; }
+.es-kontakt-location {
+    padding: 18px; border: 1px solid var(--es-rule); border-radius: var(--es-radius-card);
+    transition: border-color var(--es-duration-fast) var(--es-easing), background var(--es-duration-fast) var(--es-easing);
+}
+.es-kontakt-location:hover { border-color: var(--es-ink); background: var(--es-paper-cool); }
 .es-kontakt-location__head {
-    font-size: 24px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 12px;
+    font-size: 19px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 8px;
     display: flex; align-items: center; gap: 10px;
 }
 .es-kontakt-location__badge {
     font-size: 10px; color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase;
     padding: 3px 8px; border: 1px solid var(--es-accent); border-radius: var(--es-radius-pill);
 }
-.es-kontakt-location__line { font-size: 15px; color: var(--es-text-mute); line-height: 1.5; }
-.es-kontakt-location__tel { font-size: 15px; color: var(--es-ink); font-family: var(--es-font-mono); display: block; margin-top: 10px; }
+.es-kontakt-location__line { font-size: 14px; color: var(--es-text-mute); line-height: 1.5; }
+.es-kontakt-location__tel { font-size: 14px; color: var(--es-ink); font-family: var(--es-font-mono); display: block; margin-top: 8px; }
 .es-kontakt-general {
     margin-top: 40px; padding: 28px; background: var(--es-paper-warm); border: var(--es-border);
     border-radius: var(--es-radius-xs);
@@ -1426,12 +1431,13 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-kontakt-general > div:last-child { font-size: 14px; color: var(--es-text-mute); }
 
 /* Deutschlandkarte mit grünen Standort-Punkten (Kontakt). */
-.es-germany-map { position: relative; margin-top: 44px; max-width: 320px; }
+.es-germany-map { position: relative; margin: 0 auto; max-width: 340px; }
 .es-germany-map img { width: 100%; display: block; }
 .es-germany-dot {
     position: absolute; width: 13px; height: 13px; transform: translate(-50%, -50%);
     border-radius: 999px; background: var(--es-accent);
     box-shadow: 0 0 0 4px rgba(149,215,8,0.22);
+    transition: width var(--es-duration-fast) var(--es-easing), height var(--es-duration-fast) var(--es-easing), box-shadow var(--es-duration-fast) var(--es-easing);
 }
 .es-germany-dot::after {
     content: ""; position: absolute; inset: 0; border-radius: 999px;
@@ -1439,15 +1445,34 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     animation: esDotPulse 2.4s ease-out infinite;
 }
 @keyframes esDotPulse { to { box-shadow: 0 0 0 15px rgba(149,215,8,0); } }
+/* Punkt-Labels dauerhaft sichtbar → Karte↔Adresse sofort zuordenbar. */
 .es-germany-dot__label {
     position: absolute; left: 50%; top: -9px; transform: translate(-50%, -100%);
     font-size: 11px; font-weight: var(--es-fw-medium); color: var(--es-ink);
     background: var(--es-paper); padding: 3px 9px; border-radius: 999px;
-    white-space: nowrap; border: 1px solid var(--es-rule);
-    opacity: 0; transition: opacity var(--es-duration-fast) var(--es-easing); pointer-events: none;
+    white-space: nowrap; border: 1px solid var(--es-rule); pointer-events: none;
+    transition: background var(--es-duration-fast) var(--es-easing), color var(--es-duration-fast) var(--es-easing), border-color var(--es-duration-fast) var(--es-easing);
 }
-.es-germany-dot:hover .es-germany-dot__label { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .es-germany-dot::after { animation: none; } }
+
+/* Kopplung Karte ↔ Adress-Karte über data-loc (in beide Richtungen). */
+.es-germany-dot:hover,
+.es-kontakt-standorte:has(.es-kontakt-location[data-loc="duesseldorf"]:hover) .es-germany-dot[data-loc="duesseldorf"],
+.es-kontakt-standorte:has(.es-kontakt-location[data-loc="hamburg"]:hover)    .es-germany-dot[data-loc="hamburg"],
+.es-kontakt-standorte:has(.es-kontakt-location[data-loc="mannheim"]:hover)   .es-germany-dot[data-loc="mannheim"] {
+    width: 18px; height: 18px; box-shadow: 0 0 0 7px rgba(149,215,8,0.34); z-index: 2;
+}
+.es-germany-dot:hover .es-germany-dot__label,
+.es-kontakt-standorte:has(.es-kontakt-location[data-loc="duesseldorf"]:hover) .es-germany-dot[data-loc="duesseldorf"] .es-germany-dot__label,
+.es-kontakt-standorte:has(.es-kontakt-location[data-loc="hamburg"]:hover)    .es-germany-dot[data-loc="hamburg"] .es-germany-dot__label,
+.es-kontakt-standorte:has(.es-kontakt-location[data-loc="mannheim"]:hover)   .es-germany-dot[data-loc="mannheim"] .es-germany-dot__label {
+    background: var(--es-ink); color: var(--es-on-dark-title); border-color: var(--es-ink);
+}
+.es-kontakt-standorte:has(.es-germany-dot[data-loc="duesseldorf"]:hover) .es-kontakt-location[data-loc="duesseldorf"],
+.es-kontakt-standorte:has(.es-germany-dot[data-loc="hamburg"]:hover)    .es-kontakt-location[data-loc="hamburg"],
+.es-kontakt-standorte:has(.es-germany-dot[data-loc="mannheim"]:hover)   .es-kontakt-location[data-loc="mannheim"] {
+    border-color: var(--es-ink); background: var(--es-paper-cool);
+}
 
 /* Section-Title generisch */
 .elementor-widget.es-section__title .elementor-heading-title,
