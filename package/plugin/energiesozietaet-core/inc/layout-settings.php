@@ -27,6 +27,7 @@ class ESC_Layout_Settings {
 			'back_to_top'   => 1,
 			'btt_threshold' => 400,
 			'hero_scroll'   => 1,
+			'team_filter'   => 0,
 		);
 	}
 
@@ -45,6 +46,7 @@ class ESC_Layout_Settings {
 			'back_to_top'   => empty( $input['back_to_top']   ) ? 0 : 1,
 			'btt_threshold' => max( 50, min( 5000, (int) ( $input['btt_threshold'] ?? 400 ) ) ),
 			'hero_scroll'   => empty( $input['hero_scroll']   ) ? 0 : 1,
+			'team_filter'   => empty( $input['team_filter']   ) ? 0 : 1,
 		);
 	}
 
@@ -102,6 +104,10 @@ class ESC_Layout_Settings {
 					</td></tr>
 					<tr><th scope="row">Scroll-Down-Indikator im Hero (Startseite)</th><td>
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[hero_scroll]' ); ?>" value="1" <?php checked( self::get( 'hero_scroll' ), 1 ); ?>> Kleiner Hinweis rechts unten im Hero, der zum Weiterscrollen einlädt.</label>
+					</td></tr>
+					<tr><th scope="row">Team-Filter</th><td>
+						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[team_filter]' ); ?>" value="1" <?php checked( self::get( 'team_filter' ), 1 ); ?>> Filter-Pills (nach Beratungsfeld) über der Team-Übersicht anzeigen.</label>
+						<p class="description">Standardmäßig aus. Bei Bedarf hier aktivieren — der clientseitige Filter ist bereits eingebaut.</p>
 					</td></tr>
 				</tbody></table>
 				<?php submit_button(); ?>

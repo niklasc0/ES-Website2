@@ -298,10 +298,14 @@ class ESC_Shortcodes {
 			'columns' => 4,
 			'limit'   => -1,
 			'field'   => '', // rechtsberatung|steuerberatung|unternehmensberatung|management
-			'filter'  => '0', // "1" → rendert Filter-Pills oben
-			'orderby' => 'menu_order title',
+			'filter'  => '0', // "1" → erzwingt Filter-Pills (sonst steuert die Backend-Option)
+			'orderby' => 'title', // alphabetisch nach Name
 			'order'   => 'ASC',
 		), $atts, 'es_team' );
+		// Filter ist standardmäßig aus und wird allein über die Backend-Option
+		// (Design → Layout → Team-Filter) gesteuert — unabhängig davon, was im
+		// Seiten-Blueprint als filter="…" steht.
+		$filter_on = class_exists( 'ESC_Layout_Settings' ) && ESC_Layout_Settings::get( 'team_filter' );
 		$active_field = isset( $_GET['feld'] ) ? sanitize_text_field( wp_unslash( $_GET['feld'] ) ) : (string) $atts['field'];
 		$q = new WP_Query( array(
 			'post_type'      => 'es_team',
@@ -321,7 +325,7 @@ class ESC_Shortcodes {
 		$cols = max( 2, min( 4, (int) $atts['columns'] ) );
 
 		$filter_html = '';
-		if ( '1' === (string) $atts['filter'] ) {
+		if ( $filter_on ) {
 			$fields = array(
 				''                     => 'Alle',
 				'rechtsberatung'       => 'Rechtsberatung',
@@ -361,7 +365,6 @@ class ESC_Shortcodes {
 				$role      = get_post_meta( get_the_ID(), 'es_role', true );
 				$thumb_id  = get_post_thumbnail_id();
 				$linkedin  = (string) get_post_meta( get_the_ID(), 'es_linkedin', true );
-				$bio       = get_the_excerpt();
 				$mem_field = isset( $field_of[ get_the_ID() ] ) ? $field_of[ get_the_ID() ] : '';
 				$hidden    = ( $active_field && $mem_field !== $active_field ) ? ' is-hidden' : ''; ?>
 				<div class="esc-team-card es-reveal<?php echo $hidden; ?>" data-field="<?php echo esc_attr( $mem_field ); ?>">
@@ -372,7 +375,6 @@ class ESC_Shortcodes {
 					<div class="esc-team-card__body">
 						<h3 class="esc-team-card__name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 						<?php if ( $role ) : ?><p class="esc-team-card__role"><?php echo esc_html( $role ); ?></p><?php endif; ?>
-						<?php if ( $bio ) : ?><p class="esc-team-card__bio"><?php echo esc_html( wp_trim_words( $bio, 26 ) ); ?></p><?php endif; ?>
 						<?php if ( $linkedin ) : ?>
 							<a class="esc-team-card__li" href="<?php echo esc_url( $linkedin ); ?>" target="_blank" rel="noopener" aria-label="LinkedIn-Profil">
 								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5 2.5 2.5 0 0 0 4.98 3.5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21H20.6v-5.6c0-1.34-.02-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21H12.7z"/></svg>

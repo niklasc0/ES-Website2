@@ -29,8 +29,10 @@ Tags: elementor, business, one-column, custom-colors, custom-menu, featured-imag
     --es-accent:       #95D708;  /* Limetten-Akzent (Link/Hover) */
     --es-accent-soft:  #E1FCAD;  /* blasses Limette (Titel auf Dunkel, Highlights) */
 
-    /* Text-Rollen auf dunklen Flächen (dunkle Sektionen / Footer / CTA). */
-    --es-on-dark-title: #E1FCAD;
+    /* Text-Rollen auf dunklen Flächen (dunkle Sektionen / Footer / CTA).
+       Titel auf Dunkel: weiß (früher blasses Limette #E1FCAD). Der satte
+       Akzent (--es-accent) bleibt der einzige grüne Highlight. */
+    --es-on-dark-title: #FFFFFF;
     --es-on-dark-text:  #CAD0BE;
     --es-on-dark-meta:  #A6AC9B;
 
@@ -610,25 +612,24 @@ html.js .esc-card.es-reveal {
 .esc-card--news .esc-card__date svg { flex: none; }
 
 /* Team card — ah5: Foto links + Text rechts in heller, gerundeter Card */
-.esc-team-grid.esc-grid { grid-template-columns: repeat(2, 1fr); gap: var(--es-space-8); }
+.esc-team-grid.esc-grid { gap: var(--es-space-8); }
+/* ah5 / Alt-Website: vertikale Card — Foto oben, Name + Position darunter,
+   kein Vorschautext. Vier nebeneinander (responsiv 3 / 2 / 1). */
 .esc-team-card {
-    display: grid; grid-template-columns: 38% 1fr; align-items: stretch;
-    min-height: 260px;
+    display: flex; flex-direction: column;
     color: var(--es-ink); background: var(--es-paper-cool);
     border-radius: var(--es-radius-card); overflow: hidden;
     transition: transform var(--es-duration-fast) var(--es-easing), box-shadow var(--es-duration-fast) var(--es-easing);
 }
 /* Original-Verhalten: nur Lift beim Hover, kein aufbauendes Band. */
 .esc-team-card:hover { color: var(--es-ink); transform: translateY(-2px); }
-/* Foto füllt die linke Grid-Zelle (Breite = Spalte, Höhe = Card). KEIN
-   aspect-ratio — das würde mit stretch die Breite aus der Höhe ableiten
-   und den Text überlappen. */
 .esc-team-card__photo {
     background: var(--es-paper-warm);
     overflow: hidden;
-    position: relative; display: block; height: 100%;
+    position: relative; display: block;
+    aspect-ratio: 4 / 5;
 }
-.esc-team-card__photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--es-easing); }
+.esc-team-card__photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; transition: transform 600ms var(--es-easing); }
 .esc-team-card:hover .esc-team-card__photo img { transform: scale(1.04); }
 .esc-team-card__initial {
     position: absolute; inset: 0;
@@ -636,31 +637,23 @@ html.js .esc-card.es-reveal {
     font-size: 56px; font-weight: var(--es-fw-light); color: var(--es-on-dark-title);
     background: var(--es-paper-warm);
 }
-.esc-team-card__body { padding: var(--es-space-6, 24px) var(--es-space-8, 32px); display: flex; flex-direction: column; }
-.esc-team-card__name { font-size: 19px; font-weight: var(--es-fw-medium); letter-spacing: -0.015em; margin: 0; }
+.esc-team-card__body { padding: var(--es-space-6, 24px) var(--es-space-6, 24px) var(--es-space-8, 32px); display: flex; flex-direction: column; flex: 1; }
+.esc-team-card__name { font-size: 18px; font-weight: var(--es-fw-medium); letter-spacing: -0.015em; line-height: 1.25; margin: 0; }
 .esc-team-card__name a { color: inherit; }
 .esc-team-card__name a:hover { color: var(--es-accent); }
-.esc-team-card__role { font-size: 13px; color: var(--es-text-mute); margin: 5px 0 0; }
-.esc-team-card__bio { font-size: 13px; color: var(--es-text-mute); line-height: 1.6; margin: 12px 0 0; }
+.esc-team-card__role { font-size: 13px; color: var(--es-text-mute); margin: 6px 0 0; }
+.esc-team-card__bio { display: none; } /* Vorschautext entfernt */
 .esc-team-card__li {
     margin-top: auto; padding-top: 16px;
     display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; color: var(--es-text-mute);
 }
 .esc-team-card__li:hover { color: var(--es-accent); }
-/* Tablet + Mobile: Card stapelt — Bild oben, Text unten (statt schmalem
-   Foto links). Portrait-Ratio + object-position:top, damit die Köpfe NICHT
-   oben abgeschnitten werden. Body mit klarem seitlichem Innenabstand. */
-@media (max-width: 1024px) {
-    .esc-team-card { grid-template-columns: 1fr; min-height: 0; }
-    .esc-team-card__photo { height: auto; aspect-ratio: 4 / 5; }
-    .esc-team-card__photo img { object-position: center top; }
-    .esc-team-card__body { padding: var(--es-space-6, 24px) var(--es-space-8, 32px) var(--es-space-8, 32px); }
-}
-@media (max-width: 600px) {
-    .esc-team-grid.esc-grid { grid-template-columns: 1fr; }
-    .esc-team-card__photo { aspect-ratio: 4 / 5; }
-}
+/* Vier nebeneinander; responsiv herunterbrechen. */
+.esc-team-grid.esc-grid { grid-template-columns: repeat(4, 1fr); gap: var(--es-space-8); }
+@media (max-width: 1100px) { .esc-team-grid.esc-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 820px)  { .esc-team-grid.esc-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px)  { .esc-team-grid.esc-grid { grid-template-columns: 1fr; } }
 
 /* Karriere — ah5 Job-Reihen: Bild links + helle Card rechts, gestapelt */
 .esc-job-list.esc-grid { grid-template-columns: 1fr; gap: var(--es-space-8); }
@@ -794,7 +787,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     border-radius: var(--es-radius-lg);
 }
 .es-team-single__contact-card .es-eyebrow { color: var(--es-accent); }
-.es-team-single__contact-row { margin-bottom: 10px; font-size: 14px; line-height: 1.6; }
+.es-team-single__contact-row { margin-bottom: 10px; font-size: 16px; line-height: 1.6; }
 .es-team-single__contact-row small { display: block; color: rgba(255,255,255,0.5); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 2px; }
 .es-team-single__contact-actions { margin-top: var(--es-space-6); display: flex; flex-direction: column; gap: 8px; }
 .es-team-single__contact-actions .es-btn { width: 100%; justify-content: center; }
@@ -802,13 +795,14 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-team-single__role-eyebrow { color: var(--es-accent); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: var(--es-fw-medium); margin-bottom: 20px; display: inline-block; }
 .es-team-single__name { font-size: clamp(40px, 5vw, 64px); line-height: 1.02; font-weight: var(--es-fw-regular); letter-spacing: -0.035em; margin: 0 0 12px; }
 .es-team-single__role { font-size: 17px; color: var(--es-text-mute); margin: 0 0 var(--es-space-10); }
-.es-team-single__bio { font-size: 19px; line-height: 1.6; color: var(--es-text-mute); margin-bottom: var(--es-space-12); }
+/* Inhaltstext im Profil = einheitliche 16px (Beschreibung + Bullet-Listen). */
+.es-team-single__bio { font-size: 16px; line-height: 1.7; color: var(--es-text-mute); margin-bottom: var(--es-space-12); }
 
 .es-team-single__section { border-top: var(--es-border); padding-top: var(--es-space-12); margin-top: var(--es-space-12); }
 .es-team-single__section h3 { font-size: 22px; font-weight: var(--es-fw-medium); letter-spacing: -0.015em; margin: 0 0 20px; }
 
 .es-team-single__focus { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.es-team-single__focus-item { font-size: 14px; padding: 10px 0; color: var(--es-text); display: flex; align-items: center; gap: 10px; }
+.es-team-single__focus-item { font-size: 16px; padding: 10px 0; color: var(--es-text); display: flex; align-items: center; gap: 10px; }
 .es-team-single__focus-item::before { content: ""; width: 4px; height: 4px; background: var(--es-accent); border-radius: 999px; }
 
 .es-team-single__career { display: grid; gap: 16px; }
@@ -818,9 +812,9 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 }
 .es-team-single__career-row:last-child { border-bottom: 0; }
 .es-team-single__career-when { font-size: 13px; color: var(--es-text-soft); font-family: var(--es-font-mono); }
-.es-team-single__career-what { font-size: 15px; }
+.es-team-single__career-what { font-size: 16px; }
 
-.es-team-single__pubs a { display: block; padding: 16px 0; border-bottom: var(--es-border); font-size: 15px; }
+.es-team-single__pubs a { display: block; padding: 16px 0; border-bottom: var(--es-border); font-size: 16px; }
 .es-team-single__pubs a:last-child { border-bottom: 0; }
 
 .es-team-single__back {
