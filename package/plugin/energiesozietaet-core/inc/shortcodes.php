@@ -335,21 +335,34 @@ class ESC_Shortcodes {
 			}
 			return $v;
 		};
-		$member_field_match = function ( $post_id, $field ) use ( $canon ) {
+		$known_slugs = array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung', 'management' );
+		$member_field_match = function ( $post_id, $field ) use ( $canon, $known_slugs ) {
 			$want = $canon( $field );
 			if ( '' === $want ) { return true; }
-			$vals = array();
+
+			// 1) Explizite Feldangaben (es_field, es_fields, Taxonomie).
+			$field_vals = array();
 			$single = get_post_meta( $post_id, 'es_field', true );
-			if ( is_string( $single ) && '' !== $single ) { $vals[] = $single; }
+			if ( is_string( $single ) && '' !== $single ) { $field_vals[] = $single; }
 			$multi = get_post_meta( $post_id, 'es_fields', true );
-			if ( is_array( $multi ) ) { $vals = array_merge( $vals, $multi ); }
-			// Fallback: Beratungsfeld-Taxonomie (falls dort statt Meta gepflegt)
+			if ( is_array( $multi ) ) { $field_vals = array_merge( $field_vals, $multi ); }
 			$terms = get_the_terms( $post_id, 'es_beratungsfeld' );
 			if ( is_array( $terms ) ) {
-				foreach ( $terms as $term ) { $vals[] = $term->slug; $vals[] = $term->name; }
+				foreach ( $terms as $term ) { $field_vals[] = $term->slug; $field_vals[] = $term->name; }
 			}
-			foreach ( $vals as $v ) {
-				if ( $canon( $v ) === $want ) { return true; }
+			$recognised = array();
+			foreach ( $field_vals as $v ) {
+				$c = $canon( $v );
+				if ( in_array( $c, $known_slugs, true ) ) { $recognised[] = $c; }
+			}
+			// Hat das Mitglied ein ERKANNTES Feld → ausschliesslich danach filtern.
+			if ( ! empty( $recognised ) ) { return in_array( $want, $recognised, true ); }
+
+			// 2) Fallback NUR wenn kein erkennbares Feld gesetzt ist: Rolle/Abteilung
+			//    („Rechtsanwalt", „Steuerberater" …) bestimmt das Feld.
+			foreach ( array( 'es_role', 'es_department' ) as $k ) {
+				$rv = get_post_meta( $post_id, $k, true );
+				if ( is_string( $rv ) && '' !== $rv && $canon( $rv ) === $want ) { return true; }
 			}
 			return false;
 		};
@@ -381,9 +394,28 @@ class ESC_Shortcodes {
 			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $member_count . ' Teammitglieder</div></div>';
 		}
 
+		// Optionale Diagnose: /team/?esdebug=1 (ggf. mit &feld=…) zeigt, welchen
+		// Feldwert jedes Mitglied WIRKLICH gespeichert hat. Nur für angemeldete
+		// Redakteure sichtbar, damit auf der Live-Seite nichts durchsickert.
+		$debug_html = '';
+		if ( isset( $_GET['esdebug'] ) && function_exists( 'current_user_can' ) && current_user_can( 'edit_posts' ) ) {
+			$rows = '';
+			foreach ( $q->posts as $mp ) {
+				$rf  = get_post_meta( $mp->ID, 'es_field', true );
+				$rfs = get_post_meta( $mp->ID, 'es_fields', true );
+				$ro  = get_post_meta( $mp->ID, 'es_role', true );
+				$ok  = $member_field_match( $mp->ID, $active_field ) ? 'YES' : 'no';
+				$rows .= esc_html( $mp->post_title ) . ' | es_field=' . esc_html( var_export( $rf, true ) )
+					. ' | es_fields=' . esc_html( var_export( $rfs, true ) )
+					. ' | role=' . esc_html( (string) $ro )
+					. ' | match[' . esc_html( $active_field ) . ']=' . $ok . "\n";
+			}
+			$debug_html = '<pre style="background:#0b0f10;color:#95D708;padding:16px;border-radius:8px;overflow:auto;font-size:12px;">ES-DEBUG active_field=' . esc_html( $active_field ) . ' → canon=' . esc_html( $canon( $active_field ) ) . "\n\n" . $rows . '</pre>';
+		}
+
 		if ( empty( $members ) ) {
 			$empty = '<p style="color:#899092;font-size:15px;">Aktuell keine Teammitglieder in diesem Bereich.</p>';
-			return $filter_html . $empty;
+			return $filter_html . $debug_html . $empty;
 		}
 
 		$labels = array(
@@ -395,6 +427,7 @@ class ESC_Shortcodes {
 
 		ob_start();
 		echo $filter_html;
+		echo $debug_html;
 		?>
 		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid">
 			<?php foreach ( $members as $mp ) : $GLOBALS['post'] = $mp; setup_postdata( $mp );
