@@ -1746,7 +1746,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     background: var(--es-accent); margin-bottom: 24px;
 }
 .es-cards-grid--quads .es-card-pillar__title .elementor-heading-title { font-size: 20px; font-weight: 500; letter-spacing: -0.015em; line-height: 1.25; margin: 0 0 10px; }
-.es-cards-grid--quads .es-card-pillar__desc p { font-size: 13px; color: var(--es-text-mute); line-height: 1.6; margin: 0; }
+.es-cards-grid--quads .es-card-pillar__desc p { font-size: 16px; color: var(--es-text-mute); line-height: 1.6; margin: 0; }
 
 /* 6) Einzelleistungen in Bereichs-Block: Heading auf vorige Größe (20px) */
 .es-bereich__topic-name h3 { font-size: 20px !important; font-weight: 500 !important; letter-spacing: -0.015em !important; line-height: 1.25 !important; margin: 0 !important; }
