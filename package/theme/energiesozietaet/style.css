@@ -470,46 +470,58 @@ html.js .esc-card.es-reveal {
 .es-hero--split > .elementor-container { align-items: center; }
 .es-hero__side > .elementor-widget-wrap,
 .es-hero__side .elementor-widget-container { height: 100%; }
-.es-hero-stats { display: flex; gap: 20px; width: 100%; justify-content: flex-end; }
+/* Spaltenbreiten hart erzwingen (Elementor-Col-CSS greift hier nicht immer;
+   ohne feste Basis kollabiert die Card-Spalte auf Content-Breite). ah5: ~40/60. */
+@media (min-width: 1025px) {
+    .es-hero--split > .elementor-container > .es-hero__main.elementor-column { width: 42%; flex: 0 0 42%; max-width: 42%; }
+    .es-hero--split > .elementor-container > .es-hero__side.elementor-column { width: 58%; flex: 0 0 58%; max-width: 58%; }
+}
+/* Zwei Cards STAPELN vertikal in der rechten Spalte (wie ah5): Item 1 (Team,
+   dunkel/ink) oben, Item 2 (Leistungen, Frosted-Glass) darunter. */
+.es-hero-stats { display: flex; flex-direction: column; gap: 18px; width: 100%; max-width: 600px; margin-left: auto; }
 .es-hero-stat {
-    flex: 1 1 0; min-width: 0; min-height: 300px;
-    padding: 34px 34px 36px; border-radius: var(--es-radius-lg);
+    padding: 30px 32px; border-radius: 40px;
     display: flex; flex-direction: column; text-decoration: none;
-    box-shadow: 0 30px 70px rgba(6,12,14,0.45);
     transition: transform var(--es-duration-fast) var(--es-easing);
 }
 .es-hero-stat:hover { transform: translateY(-4px); }
-.es-hero-stat--dark  { background: var(--es-ink); }
-.es-hero-stat--light { background: var(--es-paper); }
-.es-hero-stat__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: auto; }
-.es-hero-stat__label { font-size: 16px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em; }
+/* Card 1: solides Ink (#122023 — ah5 alt_bg). Card 2: Frosted Glass über dem Foto. */
+.es-hero-stat--dark  { background: var(--es-ink); box-shadow: 0 30px 70px rgba(6,12,14,0.45); }
+.es-hero-stat--light {
+    background: linear-gradient(135deg, rgba(255,255,255,0.42), rgba(255,255,255,0.20));
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.42);
+    box-shadow: 0 30px 70px rgba(6,12,14,0.28);
+}
+.es-hero-stat__top { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+.es-hero-stat__label { font-size: 20px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em; }
 .es-hero-stat__arrow {
-    width: 40px; height: 40px; border-radius: 999px; flex: none;
-    background: var(--es-accent); color: var(--es-ink);
-    display: inline-flex; align-items: center; justify-content: center; font-size: 19px;
+    width: 56px; height: 56px; border-radius: 999px; flex: none;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 22px;
     transition: transform var(--es-duration-fast) var(--es-easing);
 }
+.es-hero-stat--dark  .es-hero-stat__arrow { background: #122023; color: var(--es-on-dark-title); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12); }
+.es-hero-stat--light .es-hero-stat__arrow { background: #1F242E; color: #fff; }
 .es-hero-stat:hover .es-hero-stat__arrow { transform: translate(2px, -2px); }
-.es-hero-stat__num { font-family: var(--es-font-display); font-size: 64px; font-weight: var(--es-fw-medium); letter-spacing: -0.03em; line-height: 1; margin-top: 20px; }
+.es-hero-stat__num { font-family: var(--es-font-display); font-size: 58px; font-weight: var(--es-fw-medium); letter-spacing: -0.03em; line-height: 1; }
 .es-hero-stat__sub { font-size: 15px; margin-top: 8px; }
-/* Explizite, gut lesbare Textfarben je Card (opake Hintergründe). */
+/* Textfarben: Card 1 hell auf dunkel; Card 2 (Glass über Foto) weiß. */
 .es-hero-stat--dark  .es-hero-stat__label, .es-hero-stat--dark  .es-hero-stat__num { color: var(--es-paper); }
 .es-hero-stat--dark  .es-hero-stat__sub { color: var(--es-on-dark-text); }
-.es-hero-stat--light .es-hero-stat__label, .es-hero-stat--light .es-hero-stat__num { color: var(--es-ink); }
-.es-hero-stat--light .es-hero-stat__sub { color: var(--es-text-mute); }
+.es-hero-stat--light .es-hero-stat__label, .es-hero-stat--light .es-hero-stat__num { color: #fff; }
+.es-hero-stat--light .es-hero-stat__sub { color: rgba(255,255,255,0.82); }
 
 /* Tablet + darunter: Hero stapelt (Text oben, Cards darunter, linksbündig). */
 @media (max-width: 1024px) {
     .es-hero--split > .elementor-container { flex-direction: column; align-items: stretch; }
     .es-hero--split .elementor-column { width: 100% !important; max-width: 100% !important; }
     .es-hero__side { margin-top: 40px; }
-    .es-hero-stats { justify-content: flex-start; }
-    .es-hero-stat { min-height: 220px; }
+    .es-hero-stats { max-width: none; margin-left: 0; }
 }
 @media (max-width: 520px) {
-    .es-hero-stats { flex-direction: column; gap: 14px; }
-    .es-hero-stat { min-height: 172px; padding: 28px 28px 30px; }
-    .es-hero-stat__num { font-size: 52px; margin-top: 16px; }
+    .es-hero-stat { padding: 26px 26px; border-radius: 30px; }
+    .es-hero-stat__num { font-size: 50px; }
+    .es-hero-stat__arrow { width: 48px; height: 48px; }
 }
 /* Mobile: Hero-Content strikt aufs Viewport begrenzen (kein H-Overflow). */
 @media (max-width: 767px) {
@@ -630,16 +642,17 @@ html.js .esc-card.es-reveal {
 }
 .esc-team-card__li:hover { color: var(--es-accent); }
 /* Tablet + Mobile: Card stapelt — Bild oben, Text unten (statt schmalem
-   Foto links). Foto bekommt festes Seitenverhältnis, damit es nicht schmal
-   und die Card nicht überlang wird. */
+   Foto links). Portrait-Ratio + object-position:top, damit die Köpfe NICHT
+   oben abgeschnitten werden. Body mit klarem seitlichem Innenabstand. */
 @media (max-width: 1024px) {
     .esc-team-card { grid-template-columns: 1fr; min-height: 0; }
-    .esc-team-card__photo { height: auto; aspect-ratio: 4 / 3; }
-    .esc-team-card__body { padding: var(--es-space-6) var(--es-space-7) var(--es-space-7); }
+    .esc-team-card__photo { height: auto; aspect-ratio: 4 / 5; }
+    .esc-team-card__photo img { object-position: center top; }
+    .esc-team-card__body { padding: var(--es-space-6) var(--es-space-8) var(--es-space-8); }
 }
 @media (max-width: 600px) {
     .esc-team-grid.esc-grid { grid-template-columns: 1fr; }
-    .esc-team-card__photo { aspect-ratio: 3 / 2; }
+    .esc-team-card__photo { aspect-ratio: 4 / 5; }
 }
 
 /* Karriere — ah5 Job-Reihen: Bild links + helle Card rechts, gestapelt */

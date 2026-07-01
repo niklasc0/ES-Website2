@@ -637,8 +637,8 @@ class ESC_Elementor_Builder {
 				'content_width' => 1280,
 				'gap' => 'wider',
 				'column_settings' => array(
-					array( '_column_size' => 58, 'css_classes' => 'es-hero__main',  '_css_classes' => 'es-hero__main' ),
-					array( '_column_size' => 42, 'css_classes' => 'es-hero__side',  '_css_classes' => 'es-hero__side' ),
+					array( '_column_size' => 42, 'css_classes' => 'es-hero__main',  '_css_classes' => 'es-hero__main' ),
+					array( '_column_size' => 58, 'css_classes' => 'es-hero__side',  '_css_classes' => 'es-hero__side' ),
 				),
 			) );
 		}
