@@ -464,6 +464,38 @@ html.js .esc-card.es-reveal {
     padding-top: var(--es-space-8);
     border-top: 1px solid rgba(255,255,255,0.14);
 }
+/* Home: schwebende Stat-Cards über dem Foto-Hero (Team / Leistungen).
+   Der Container (.elementor-container) ist der Offset-Parent (position:relative);
+   das umschließende HTML-Widget wird static gesetzt, damit die Cards am Hero
+   verankern (oben-rechts) statt am Widget (unten im Flow). */
+.es-hero .elementor-widget-html:has(.es-hero-stats),
+.es-hero .elementor-widget-html:has(.es-hero-stats) .elementor-widget-container,
+.es-hero .elementor-element:has(> .elementor-widget-container > .es-hero-stats) { position: static !important; }
+.es-hero-stats {
+    position: absolute; right: 0; top: 118px; z-index: 3;
+    display: flex; gap: 16px;
+}
+.es-hero-stat {
+    width: 196px; padding: 22px 22px 24px;
+    border-radius: var(--es-radius-card);
+    display: flex; flex-direction: column; color: inherit; text-decoration: none;
+    box-shadow: 0 18px 50px rgba(10,18,20,0.28);
+    transition: transform var(--es-duration-fast) var(--es-easing);
+}
+.es-hero-stat--dark  { background: rgba(18,32,35,0.86); color: var(--es-paper); border: 1px solid rgba(255,255,255,0.10); }
+.es-hero-stat--light { background: rgba(245,245,245,0.94); color: var(--es-ink); }
+.es-hero-stat:hover { transform: translateY(-3px); }
+.es-hero-stat__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 44px; }
+.es-hero-stat__label { font-size: 14px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em; }
+.es-hero-stat__arrow {
+    width: 30px; height: 30px; border-radius: 999px; flex: none;
+    background: var(--es-accent); color: var(--es-ink);
+    display: inline-flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.es-hero-stat__num { font-family: var(--es-font-display); font-size: 40px; font-weight: var(--es-fw-medium); letter-spacing: -0.03em; line-height: 1; }
+.es-hero-stat__sub { font-size: 13px; opacity: 0.78; margin-top: 5px; }
+@media (max-width: 1120px) { .es-hero-stats { display: none; } }
+
 .es-hero-claims__wert { font-size: 32px; font-weight: var(--es-fw-regular); letter-spacing: -0.03em; }
 .es-hero-claims__label { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 6px; letter-spacing: 0.12em; text-transform: uppercase; }
 @media (max-width: 900px) { .es-hero-claims { grid-template-columns: repeat(2, 1fr); } }
@@ -1121,8 +1153,19 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-hero__buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
 
 /* Pillar-Cards (Philosophie, Benefits) */
-.elementor-column.es-card-pillar { padding: 48px 36px !important; background: var(--es-paper-cool); border: 1px solid transparent; border-radius: var(--es-radius-card); }
-.es-stage--warm .elementor-column.es-card-pillar { background: var(--es-paper-cool); }
+/* Pillar-Cards: Card-Fläche auf dem INNEREN Element (nicht der Spalte), damit
+   echte Lücken zwischen den Karten bleiben (kein grau-Spalte + weißer Kasten). */
+.elementor-column.es-card-pillar { padding: 0 !important; background: transparent !important; border: 0 !important; }
+.elementor-column.es-card-pillar > .elementor-widget-wrap,
+.elementor-column.es-card-pillar .elementor-element-populated {
+    padding: 44px 34px !important;
+    background: var(--es-paper-cool);
+    border: 1px solid transparent;
+    border-radius: var(--es-radius-card);
+    height: 100%;
+}
+.es-stage--warm .elementor-column.es-card-pillar > .elementor-widget-wrap,
+.es-stage--warm .elementor-column.es-card-pillar .elementor-element-populated { background: var(--es-paper-cool); }
 .es-card-pillar__num { font-family: var(--es-font-mono); font-size: 11px; color: var(--es-accent); letter-spacing: 0.16em; margin-bottom: 32px; }
 .elementor-widget.es-card-pillar__title .elementor-heading-title,
 .es-card-pillar__title > .elementor-heading-title { font-size: 30px; line-height: 1.15; font-weight: 400; letter-spacing: -0.025em; margin: 0 0 20px; }

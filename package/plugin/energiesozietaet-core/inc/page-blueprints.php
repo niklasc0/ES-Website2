@@ -133,6 +133,15 @@ class ESC_Page_Blueprints {
 				array( '3', 'Standorte · DUS · HH · MA' ),
 			),
 			'padding' => 'tall',
+			'extra_html' =>
+				'<div class="es-hero-stats" aria-hidden="false">'
+				. '<a class="es-hero-stat es-hero-stat--dark" href="/team/">'
+				.   '<span class="es-hero-stat__top"><span class="es-hero-stat__label">Team</span><span class="es-hero-stat__arrow">↗</span></span>'
+				.   '<span class="es-hero-stat__num">20+</span><span class="es-hero-stat__sub">Beschäftigte</span></a>'
+				. '<a class="es-hero-stat es-hero-stat--light" href="/leistungen/">'
+				.   '<span class="es-hero-stat__top"><span class="es-hero-stat__label">Leistungen</span><span class="es-hero-stat__arrow">↗</span></span>'
+				.   '<span class="es-hero-stat__num">30+</span><span class="es-hero-stat__sub">Fachgebiete</span></a>'
+				. '</div>',
 		) );
 
 		// 2. Intro (Split Text warm) — H2 als eigentliche Überschrift, Eyebrow klein

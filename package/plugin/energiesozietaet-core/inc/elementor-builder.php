@@ -585,6 +585,7 @@ class ESC_Elementor_Builder {
 		$args = array_merge( array(
 			'eyebrow' => '', 'headline_html' => '', 'lead' => '',
 			'buttons' => array(), 'claims' => array(), 'padding' => 'default',
+			'extra_html' => '',
 		), $args );
 
 		$pad = ( 'tall' === $args['padding'] ) ? array( '140', '0', '140', '0' ) : ( ( 'short' === $args['padding'] ) ? array( '100', '0', '100', '0' ) : array( '120', '0', '120', '0' ) );
@@ -625,6 +626,10 @@ class ESC_Elementor_Builder {
 			// Mark it as inner section
 			$last_idx = count( $widgets ) - 1;
 			$widgets[ $last_idx ]['isInner'] = true;
+		}
+		// Optionales Extra-HTML (z.B. schwebende Stat-Cards über dem Foto-Hero)
+		if ( $args['extra_html'] ) {
+			$widgets[] = self::html( $args['extra_html'] );
 		}
 
 		return self::section_native( array(
