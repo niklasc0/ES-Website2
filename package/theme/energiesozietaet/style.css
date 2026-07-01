@@ -47,8 +47,9 @@ Tags: elementor, business, one-column, custom-colors, custom-menu, featured-imag
     --es-fs-h3:         32px;
     --es-fs-h4:         24px;
     --es-fs-body-l:     20px;
-    /* ── Die drei/vier Standard-Schriftgrößen (im Backend global änderbar:
+    /* ── Die Standard-Schriftgrößen (im Backend global änderbar:
           Design → Typografie). Alle Inhaltsregeln referenzieren diese Vars. ── */
+    --es-fs-heading-feature: 30px; /* Feature-/Pillar-Karten (Home-Beratungsfelder, Benefits) */
     --es-fs-heading-sub: 20px;  /* Karten-/Unterüberschriften */
     --es-fs-body:       16px;   /* Inhaltstext */
     --es-fs-body-s:     15px;
@@ -641,10 +642,10 @@ html.js .esc-card.es-reveal {
     background: var(--es-paper-warm);
 }
 .esc-team-card__body { padding: var(--es-space-6, 24px) var(--es-space-6, 24px) var(--es-space-8, 32px); display: flex; flex-direction: column; flex: 1; }
-.esc-team-card__name { font-size: var(--es-fs-heading-sub); font-weight: var(--es-fw-medium); letter-spacing: -0.015em; line-height: 1.25; margin: 0; }
+.esc-team-card .esc-team-card__name { font-size: var(--es-fs-heading-sub); font-weight: var(--es-fw-medium); letter-spacing: -0.015em; line-height: 1.25; margin: 0; }
 .esc-team-card__name a { color: inherit; }
 .esc-team-card__name a:hover { color: var(--es-accent); }
-.esc-team-card__role { font-size: var(--es-fs-meta); color: var(--es-text-mute); margin: 6px 0 0; }
+.esc-team-card .esc-team-card__role { font-size: var(--es-fs-meta); color: var(--es-text-mute); margin: 6px 0 0; }
 .esc-team-card__bio { display: none; } /* Vorschautext entfernt */
 .esc-team-card__li {
     margin-top: auto; padding-top: 16px;
@@ -713,7 +714,7 @@ html.js .esc-card.es-reveal {
 }
 .esc-pub-row__cat { font-size: var(--es-fs-eyebrow); color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase; }
 .esc-pub-row__title { font-size: var(--es-fs-heading-sub); font-weight: var(--es-fw-medium); letter-spacing: -0.015em; line-height: 1.3; margin: 0 0 6px; }
-.esc-pub-row__author { font-size: var(--es-fs-meta); color: var(--es-text-mute); margin: 0; }
+.esc-pub-row .esc-pub-row__author { font-size: var(--es-fs-meta); color: var(--es-text-mute); margin: 0; }
 .esc-pub-row__src { font-size: var(--es-fs-meta); color: var(--es-text-soft); font-family: var(--es-font-mono); line-height: 1.4; }
 .esc-pub-row__arrow { font-size: 18px; text-align: right; }
 @media (max-width: 900px) {
@@ -1119,7 +1120,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     font-family: var(--es-font-mono);
 }
 .esc-pub-row__title { font-size: var(--es-fs-heading-sub); font-weight: var(--es-fw-medium); letter-spacing: -0.015em; line-height: 1.3; margin: 0 0 6px; }
-.esc-pub-row__author { font-size: var(--es-fs-meta); color: var(--es-text-mute); margin: 0; }
+.esc-pub-row .esc-pub-row__author { font-size: var(--es-fs-meta); color: var(--es-text-mute); margin: 0; }
 .esc-pub-row__cta {
     justify-self: end; display: inline-flex; align-items: center; gap: 8px;
     font-size: 14px; font-weight: var(--es-fw-medium); color: var(--es-on-dark-text);
@@ -1243,7 +1244,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-stage--warm .elementor-column.es-card-pillar .elementor-element-populated { background: var(--es-paper-cool); }
 .es-card-pillar__num { font-family: var(--es-font-mono); font-size: var(--es-fs-meta); color: var(--es-accent); letter-spacing: 0.16em; margin-bottom: 32px; }
 .elementor-widget.es-card-pillar__title .elementor-heading-title,
-.es-card-pillar__title > .elementor-heading-title { font-size: 30px; line-height: 1.15; font-weight: 400; letter-spacing: -0.025em; margin: 0 0 20px; }
+.es-card-pillar__title > .elementor-heading-title { font-size: var(--es-fs-heading-feature); line-height: 1.15; font-weight: 400; letter-spacing: -0.025em; margin: 0 0 20px; }
 .elementor-widget.es-card-pillar__desc p,
 .es-card-pillar__desc p { font-size: var(--es-fs-body); color: var(--es-text-mute); line-height: 1.65; margin: 0; }
 
@@ -1314,7 +1315,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-service-card__dot  { width: 6px; height: 6px; border-radius: 999px; background: var(--es-accent); display: inline-block; }
 .elementor-widget.es-service-card__title .elementor-heading-title,
 .es-service-card__title > .elementor-heading-title {
-    font-size: 28px; line-height: 1.1; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 16px;
+    font-size: var(--es-fs-heading-feature); line-height: 1.1; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 16px;
 }
 .elementor-widget.es-service-card__body .elementor-widget-container p,
 .es-service-card__body p { font-size: var(--es-fs-body); color: var(--es-text-mute); line-height: 1.55; }
@@ -1913,7 +1914,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     font-size: 32px !important; font-weight: 400 !important; letter-spacing: -0.03em !important; line-height: 1 !important; color: var(--es-paper) !important;
 }
 .es-hero-claims-inner > .elementor-container > .elementor-column .es-hero-claims__label .elementor-heading-title {
-    font-size: 12px !important; color: rgba(255,255,255,0.55) !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; margin-top: 6px !important; font-weight: 500 !important;
+    font-size: var(--es-fs-eyebrow); color: rgba(255,255,255,0.55) !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; margin-top: 6px !important; font-weight: 500 !important;
 }
 
 /* F) GF-Zitat nativ */
@@ -1992,7 +1993,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 
 /* ─── Kontakt: Allgemeine-Anfragen-Kasten — E-Mail auf eigener Zeile ─── */
 .es-kontakt-general a {
-    display: block; word-break: break-word; font-size: 17px; font-weight: 500;
+    display: block; word-break: break-word; font-size: var(--es-fs-body); font-weight: 500;
     color: var(--es-ink); margin: 6px 0 4px;
 }
 .es-kontakt-general > div:last-child { font-size: var(--es-fs-body); color: var(--es-text-mute); }

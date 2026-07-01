@@ -34,6 +34,7 @@ class ESC_Typography_Settings {
 			'font_weight'  => '400',
 			'font_style'   => 'normal',
 			// Die Standard-Schriftgrößen (global). Werte in px.
+			'fs_heading_feature' => 30, // Feature-/Pillar-Karten (Home-Beratungsfelder, Benefits)
 			'fs_heading'   => 20, // Karten-/Unterüberschriften
 			'fs_body'      => 16, // Inhaltstext
 			'fs_meta'      => 13, // Hairline / Datum / Meta
@@ -74,6 +75,7 @@ class ESC_Typography_Settings {
 			'font_woff'   => (int) ( $input['font_woff'] ?? 0 ),
 			'font_weight' => sanitize_text_field( $input['font_weight'] ?? $d['font_weight'] ),
 			'font_style'  => in_array( $input['font_style'] ?? '', array( 'normal', 'italic' ), true ) ? $input['font_style'] : 'normal',
+			'fs_heading_feature' => max( 16, min( 72, (int) ( $input['fs_heading_feature'] ?? $d['fs_heading_feature'] ) ) ),
 			'fs_heading'  => max( 12, min( 60, (int) ( $input['fs_heading'] ?? $d['fs_heading'] ) ) ),
 			'fs_body'     => max( 10, min( 32, (int) ( $input['fs_body']    ?? $d['fs_body'] ) ) ),
 			'fs_meta'     => max( 8,  min( 24, (int) ( $input['fs_meta']    ?? $d['fs_meta'] ) ) ),
@@ -88,6 +90,7 @@ class ESC_Typography_Settings {
 	public static function print_size_vars() {
 		$o    = self::get();
 		$map  = array(
+			'--es-fs-heading-feature' => array( 'fs_heading_feature', 30 ),
 			'--es-fs-heading-sub' => array( 'fs_heading', 20 ),
 			'--es-fs-body'        => array( 'fs_body',    16 ),
 			'--es-fs-meta'        => array( 'fs_meta',    13 ),
@@ -218,6 +221,10 @@ class ESC_Typography_Settings {
 				<h2 style="margin-top:32px;">Standard-Schriftgrößen</h2>
 				<p>Die Standardgrößen der Website. Änderungen hier werden überall automatisch übernommen (Inhaltstexte, Metazeilen, Karten-/Unterüberschriften). Große Hero-/Sektions-Titel skalieren eigenständig und lassen sich pro Widget in Elementor anpassen.</p>
 				<table class="form-table"><tbody>
+					<tr><th scope="row"><label>Feature-Überschrift <span style="color:#787c82;font-weight:400;">(große Feld-/Pillar-Karten)</span></label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_heading_feature]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_heading_feature' ) ); ?>" min="16" max="72" step="1" style="width:90px;"> px
+						<p class="description">Standard: 30 px. Home-Beratungsfeld-Karten, „Warum wir"-Benefits, Philosophie-Pillars.</p>
+					</td></tr>
 					<tr><th scope="row"><label>Überschrift <span style="color:#787c82;font-weight:400;">(Karten &amp; Unterüberschriften)</span></label></th><td>
 						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_heading]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_heading' ) ); ?>" min="12" max="60" step="1" style="width:90px;"> px
 						<p class="description">Standard: 20 px.</p>
