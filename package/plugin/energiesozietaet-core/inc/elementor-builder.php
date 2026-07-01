@@ -585,7 +585,7 @@ class ESC_Elementor_Builder {
 		$args = array_merge( array(
 			'eyebrow' => '', 'headline_html' => '', 'lead' => '',
 			'buttons' => array(), 'claims' => array(), 'padding' => 'default',
-			'extra_html' => '',
+			'side_html' => '',
 		), $args );
 
 		$pad = ( 'tall' === $args['padding'] ) ? array( '140', '0', '140', '0' ) : ( ( 'short' === $args['padding'] ) ? array( '100', '0', '100', '0' ) : array( '120', '0', '120', '0' ) );
@@ -627,9 +627,20 @@ class ESC_Elementor_Builder {
 			$last_idx = count( $widgets ) - 1;
 			$widgets[ $last_idx ]['isInner'] = true;
 		}
-		// Optionales Extra-HTML (z.B. schwebende Stat-Cards über dem Foto-Hero)
-		if ( $args['extra_html'] ) {
-			$widgets[] = self::html( $args['extra_html'] );
+		// Mit rechter Spalte (z.B. Stat-Cards) → 2-Spalten-Hero; sonst einspaltig.
+		if ( $args['side_html'] ) {
+			return self::section_native( array(
+				'cols' => array( $widgets, array( self::html( $args['side_html'] ) ) ),
+				'variant' => 'ink',
+				'css_classes' => 'es-hero es-hero--split',
+				'padding' => $pad,
+				'content_width' => 1280,
+				'gap' => 'wider',
+				'column_settings' => array(
+					array( '_column_size' => 58, 'css_classes' => 'es-hero__main',  '_css_classes' => 'es-hero__main' ),
+					array( '_column_size' => 42, 'css_classes' => 'es-hero__side',  '_css_classes' => 'es-hero__side' ),
+				),
+			) );
 		}
 
 		return self::section_native( array(

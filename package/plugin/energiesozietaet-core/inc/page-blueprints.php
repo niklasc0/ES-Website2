@@ -122,10 +122,6 @@ class ESC_Page_Blueprints {
 			'eyebrow' => 'Recht · Steuern · Beratung',
 			'headline_html' => 'Expertise trifft <span class="text-bg-green">Leidenschaft.</span>',
 			'lead' => '<p>Wir sind ein <em>junges, innovatives Beratungsunternehmen</em>, dessen langjährig erfahrene Rechtsanwälte, Steuer- und Unternehmensberater sich der <em>Transformation der öffentlichen Hand und der Energiewirtschaft</em> verschrieben haben. Wir arbeiten hoch spezialisiert, fachübergreifend und fokussiert an den Themen unserer Zeit.</p>',
-			'buttons' => array(
-				array( 'Leistungen entdecken', '/leistungen/', 'paper' ),
-				array( 'Unser Team kennenlernen', '/team/', 'ghost-paper' ),
-			),
 			'claims' => array(
 				array( '20+', 'Berufsträger & Mitarbeiter' ),
 				array( '3', 'Beratungsfelder' ),
@@ -133,13 +129,15 @@ class ESC_Page_Blueprints {
 				array( '3', 'Standorte · DUS · HH · MA' ),
 			),
 			'padding' => 'tall',
-			'extra_html' =>
-				'<div class="es-hero-stats" aria-hidden="false">'
+			// Rechte Spalte: die zwei Stat-Cards ersetzen die früheren Buttons
+			// und sind die interaktiven Elemente (Team / Leistungen).
+			'side_html' =>
+				'<div class="es-hero-stats">'
 				. '<a class="es-hero-stat es-hero-stat--dark" href="/team/">'
-				.   '<span class="es-hero-stat__top"><span class="es-hero-stat__label">Team</span><span class="es-hero-stat__arrow">↗</span></span>'
+				.   '<span class="es-hero-stat__top"><span class="es-hero-stat__label">Team</span><span class="es-hero-stat__arrow" aria-hidden="true">↗</span></span>'
 				.   '<span class="es-hero-stat__num">20+</span><span class="es-hero-stat__sub">Beschäftigte</span></a>'
 				. '<a class="es-hero-stat es-hero-stat--light" href="/leistungen/">'
-				.   '<span class="es-hero-stat__top"><span class="es-hero-stat__label">Leistungen</span><span class="es-hero-stat__arrow">↗</span></span>'
+				.   '<span class="es-hero-stat__top"><span class="es-hero-stat__label">Leistungen</span><span class="es-hero-stat__arrow" aria-hidden="true">↗</span></span>'
 				.   '<span class="es-hero-stat__num">30+</span><span class="es-hero-stat__sub">Fachgebiete</span></a>'
 				. '</div>',
 		) );

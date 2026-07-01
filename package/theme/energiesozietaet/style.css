@@ -112,7 +112,8 @@ body {
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; overflow-x: clip; }
+body { overflow-x: clip; }
 body {
     margin: 0;
     font-family: var(--es-font-sans);
@@ -464,37 +465,63 @@ html.js .esc-card.es-reveal {
     padding-top: var(--es-space-8);
     border-top: 1px solid rgba(255,255,255,0.14);
 }
-/* Home: schwebende Stat-Cards über dem Foto-Hero (Team / Leistungen).
-   Der Container (.elementor-container) ist der Offset-Parent (position:relative);
-   das umschließende HTML-Widget wird static gesetzt, damit die Cards am Hero
-   verankern (oben-rechts) statt am Widget (unten im Flow). */
-.es-hero .elementor-widget-html:has(.es-hero-stats),
-.es-hero .elementor-widget-html:has(.es-hero-stats) .elementor-widget-container,
-.es-hero .elementor-element:has(> .elementor-widget-container > .es-hero-stats) { position: static !important; }
-.es-hero-stats {
-    position: absolute; right: 0; top: 118px; z-index: 3;
-    display: flex; gap: 16px;
-}
+/* Home: 2-Spalten-Hero — Stat-Cards in der rechten Spalte (ersetzen die
+   Buttons, sind die interaktiven Elemente). In-flow, kein absolut. */
+.es-hero--split > .elementor-container { align-items: center; }
+.es-hero__side > .elementor-widget-wrap,
+.es-hero__side .elementor-widget-container { height: 100%; }
+.es-hero-stats { display: flex; gap: 16px; width: 100%; justify-content: flex-end; }
 .es-hero-stat {
-    width: 196px; padding: 22px 22px 24px;
-    border-radius: var(--es-radius-card);
-    display: flex; flex-direction: column; color: inherit; text-decoration: none;
-    box-shadow: 0 18px 50px rgba(10,18,20,0.28);
+    flex: 1 1 0; min-width: 0; max-width: 218px;
+    padding: 24px 24px 26px; border-radius: var(--es-radius-card);
+    display: flex; flex-direction: column; text-decoration: none;
+    box-shadow: 0 22px 55px rgba(6,12,14,0.38);
     transition: transform var(--es-duration-fast) var(--es-easing);
 }
-.es-hero-stat--dark  { background: rgba(18,32,35,0.86); color: var(--es-paper); border: 1px solid rgba(255,255,255,0.10); }
-.es-hero-stat--light { background: rgba(245,245,245,0.94); color: var(--es-ink); }
-.es-hero-stat:hover { transform: translateY(-3px); }
-.es-hero-stat__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 44px; }
+.es-hero-stat:hover { transform: translateY(-4px); }
+.es-hero-stat--dark  { background: var(--es-ink); }
+.es-hero-stat--light { background: var(--es-paper); }
+.es-hero-stat__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 46px; }
 .es-hero-stat__label { font-size: 14px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em; }
 .es-hero-stat__arrow {
-    width: 30px; height: 30px; border-radius: 999px; flex: none;
+    width: 32px; height: 32px; border-radius: 999px; flex: none;
     background: var(--es-accent); color: var(--es-ink);
-    display: inline-flex; align-items: center; justify-content: center; font-size: 15px;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 16px;
+    transition: transform var(--es-duration-fast) var(--es-easing);
 }
-.es-hero-stat__num { font-family: var(--es-font-display); font-size: 40px; font-weight: var(--es-fw-medium); letter-spacing: -0.03em; line-height: 1; }
-.es-hero-stat__sub { font-size: 13px; opacity: 0.78; margin-top: 5px; }
-@media (max-width: 1120px) { .es-hero-stats { display: none; } }
+.es-hero-stat:hover .es-hero-stat__arrow { transform: translate(2px, -2px); }
+.es-hero-stat__num { font-family: var(--es-font-display); font-size: 42px; font-weight: var(--es-fw-medium); letter-spacing: -0.03em; line-height: 1; }
+.es-hero-stat__sub { font-size: 13px; margin-top: 6px; }
+/* Explizite, gut lesbare Textfarben je Card (opake Hintergründe). */
+.es-hero-stat--dark  .es-hero-stat__label, .es-hero-stat--dark  .es-hero-stat__num { color: var(--es-paper); }
+.es-hero-stat--dark  .es-hero-stat__sub { color: var(--es-on-dark-text); }
+.es-hero-stat--light .es-hero-stat__label, .es-hero-stat--light .es-hero-stat__num { color: var(--es-ink); }
+.es-hero-stat--light .es-hero-stat__sub { color: var(--es-text-mute); }
+
+/* Tablet + darunter: Hero stapelt (Text oben, Cards darunter, linksbündig). */
+@media (max-width: 1024px) {
+    .es-hero--split > .elementor-container { flex-direction: column; align-items: stretch; }
+    .es-hero--split .elementor-column { width: 100% !important; max-width: 100% !important; }
+    .es-hero__side { margin-top: 36px; }
+    .es-hero-stats { justify-content: flex-start; }
+    .es-hero-stat { max-width: 240px; }
+}
+@media (max-width: 520px) {
+    .es-hero-stats { flex-direction: column; gap: 12px; }
+    .es-hero-stat { max-width: 320px; }
+    .es-hero-stat__top { margin-bottom: 26px; }
+}
+/* Mobile: Hero-Content strikt aufs Viewport begrenzen (kein H-Overflow). */
+@media (max-width: 767px) {
+    body .es-hero.elementor-section > .elementor-container { max-width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; flex-wrap: wrap !important; }
+    body .es-hero .elementor-column { width: 100% !important; max-width: 100% !important; min-width: 0 !important; flex: 1 1 100% !important; }
+    body .es-hero .elementor-element-populated,
+    body .es-hero .elementor-widget-wrap { padding-left: 22px !important; padding-right: 22px !important; }
+    body .es-hero__title .elementor-heading-title,
+    body .es-hero__lead p,
+    body .es-hero__lead .elementor-widget-container p { max-width: calc(100vw - 44px) !important; overflow-wrap: break-word; }
+    body .es-hero-claims-inner > .elementor-container { padding-left: 0 !important; padding-right: 0 !important; }
+}
 
 .es-hero-claims__wert { font-size: 32px; font-weight: var(--es-fw-regular); letter-spacing: -0.03em; }
 .es-hero-claims__label { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 6px; letter-spacing: 0.12em; text-transform: uppercase; }
