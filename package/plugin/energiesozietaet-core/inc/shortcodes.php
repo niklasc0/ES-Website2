@@ -168,7 +168,7 @@ class ESC_Shortcodes {
 			<a class="es-news-archive__featured" href="<?php echo esc_url( $f_link ); ?>" style="display:grid;grid-template-columns:1.3fr 1fr;gap:56px;margin-bottom:56px;color:#122023;">
 				<div style="aspect-ratio:16/10;overflow:hidden;background:#1D2D2D;"><?php echo $f_img; ?></div>
 				<div style="align-self:center;">
-					<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;font-family:var(--es-font-mono);">Featured &middot; <?php echo esc_html( $f_date ); ?></div>
+					<div style="font-size:13px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;font-family:var(--es-font-mono);">Featured &middot; <?php echo esc_html( $f_date ); ?></div>
 					<h2 style="font-size:clamp(28px,3.4vw,48px);line-height:1.1;font-weight:400;letter-spacing:-0.03em;margin:0 0 24px;"><?php echo esc_html( $f_title ); ?></h2>
 					<p style="font-size:16px;color:#899092;line-height:1.6;margin:0 0 32px;"><?php echo esc_html( $f_excerpt ); ?></p>
 					<span class="es-link">Weiterlesen &rarr;</span>
@@ -261,7 +261,7 @@ class ESC_Shortcodes {
 		}
 		$q = new WP_Query( $args );
 		if ( ! $q->have_posts() ) {
-			return '<div class="es-bereich__topics-empty" style="padding:24px 0;color:#899092;font-size:14px;">In diesem Bereich sind noch keine Einzelleistungen angelegt.</div>';
+			return '<div class="es-bereich__topics-empty" style="padding:24px 0;color:#899092;font-size:16px;">In diesem Bereich sind noch keine Einzelleistungen angelegt.</div>';
 		}
 
 		$cols = max( 1, min( 3, (int) ( $atts['columns'] ?? 3 ) ) );
@@ -346,7 +346,7 @@ class ESC_Shortcodes {
 		}
 
 		if ( empty( $members ) ) {
-			$empty = '<p style="color:#899092;font-size:15px;">Aktuell keine Teammitglieder.</p>';
+			$empty = '<p style="color:#899092;font-size:16px;">Aktuell keine Teammitglieder.</p>';
 			return $filter_html . $empty;
 		}
 
@@ -625,8 +625,8 @@ class ESC_Shortcodes {
 				$href = $link ? ' href="' . esc_url( $link ) . '" target="_blank" rel="noopener"' : ''; ?>
 				<<?php echo $tag; ?> class="esc-card"<?php echo $href; ?> style="padding:32px;">
 					<div class="esc-card__meta"><?php echo esc_html( $cat ); ?></div>
-					<h3 style="font-size:19px;font-weight:500;line-height:1.3;letter-spacing:-0.01em;margin:16px 0 20px;overflow-wrap:break-word;word-break:break-word;hyphens:auto;"><?php the_title(); ?></h3>
-					<?php if ( $src ) : ?><div style="font-size:12px;color:#B6BAAF;font-family:var(--es-font-mono);margin-bottom:20px;"><?php echo esc_html( $src ); ?></div><?php endif; ?>
+					<h3 style="font-size:20px;font-weight:500;line-height:1.3;letter-spacing:-0.01em;margin:16px 0 20px;overflow-wrap:break-word;word-break:break-word;hyphens:auto;"><?php the_title(); ?></h3>
+					<?php if ( $src ) : ?><div style="font-size:13px;color:#B6BAAF;font-family:var(--es-font-mono);margin-bottom:20px;"><?php echo esc_html( $src ); ?></div><?php endif; ?>
 					<span class="esc-card__link"><?php echo $link ? 'Zur Publikation ↗︎' : 'Lesen'; ?></span>
 				</<?php echo $tag; ?>>
 			<?php endwhile; wp_reset_postdata(); ?>
