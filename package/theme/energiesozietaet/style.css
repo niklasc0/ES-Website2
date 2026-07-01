@@ -498,8 +498,15 @@ html.js .esc-card.es-reveal {
 .es-hero-stat__label { font-size: 20px; font-weight: var(--es-fw-medium); letter-spacing: -0.01em; }
 .es-hero-stat__arrow {
     width: 56px; height: 56px; border-radius: 999px; flex: none;
-    display: inline-flex; align-items: center; justify-content: center; font-size: 22px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0;   /* Glyph ↗ ausblenden — wird als Emoji (blau) gerendert */
     transition: transform var(--es-duration-fast) var(--es-easing);
+}
+/* Echter Vektor-Pfeil statt Emoji-Glyph — nimmt via currentColor die Pfeilfarbe. */
+.es-hero-stat__arrow::before {
+    content: ""; width: 20px; height: 20px; background: currentColor;
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>') center / contain no-repeat;
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>') center / contain no-repeat;
 }
 .es-hero-stat--dark  .es-hero-stat__arrow { background: #122023; color: var(--es-on-dark-title); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12); }
 .es-hero-stat--light .es-hero-stat__arrow { background: #1F242E; color: #fff; }
