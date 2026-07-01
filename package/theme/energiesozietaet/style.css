@@ -1282,6 +1282,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     border-radius: var(--es-radius-card);
     background: var(--es-paper-cool);
     min-height: 380px;
+    overflow: hidden;   /* Band wird von der Rundung beschnitten → sitzt IN der Rundung */
     transition: background 500ms ease-in-out, border-color 200ms var(--es-easing), transform 200ms var(--es-easing);
 }
 .elementor-column.es-service-card:hover .elementor-element-populated {
@@ -1663,12 +1664,12 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 
 /* 3) Home Beratungsfeld-Kacheln: genau wie News-Kacheln animiert
    (Top-Balken grün slide-in beim Hover + subtile Hebung). */
-.es-home-services > .elementor-container > .elementor-column { position: relative; overflow: hidden; }
+.es-home-services > .elementor-container > .elementor-column { position: relative; }
 .es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap,
 .es-home-services > .elementor-container > .elementor-column > .elementor-element-populated { position: relative; }
 .es-home-services > .elementor-container > .elementor-column > .elementor-widget-wrap::before,
 .es-home-services > .elementor-container > .elementor-column > .elementor-element-populated::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
     background: var(--es-accent); transform: scaleX(0); transform-origin: left;
     transition: transform 300ms var(--es-easing);
     z-index: 2;
