@@ -3778,8 +3778,19 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 /* Karte selbst: rahmenlos, transparent — kein eckiger Kasten dahinter. */
 .esc-card--news,
 .esc-card--news:hover { background: transparent !important; border: 0 !important; border-radius: 0 !important; overflow: visible !important; }
-.esc-card--news::before { content: none !important; }   /* altes Card-Band aus */
+.esc-card--news { position: relative; }
+/* Hover-Schatten hinter der GESAMTEN Karte (Bild + Text heben als EINE Einheit
+   ab) — ersetzt den isolierten Bild-Schatten, der Bild und Text getrennt
+   wirken ließ. Transparente Fläche, nur der Schatten trägt die Elevation. */
+.esc-card--news::before {
+    content: ""; position: absolute; inset: -16px -14px -14px; z-index: 0;
+    border-radius: 22px; pointer-events: none;
+    box-shadow: 0 22px 46px rgba(6, 12, 14, 0);
+    transition: box-shadow var(--es-duration-fast) var(--es-easing);
+}
+.esc-card--news > * { position: relative; z-index: 1; }
 .esc-card--news:hover { transform: translateY(-4px); }
+.esc-card--news:hover::before { box-shadow: 0 22px 46px rgba(6, 12, 14, 0.16); }
 
 /* Medienbereich: gerundet, dünner heller Rand, Band + Bild sitzen INNEN
    (overflow:hidden beschneidet sie an der Rundung). */
@@ -3798,10 +3809,10 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
     transition: transform var(--es-duration-normal) var(--es-easing);
 }
 .esc-card--news:hover .esc-card__media::after { transform: scaleX(1); }
-/* Hover: Karte hebt per Lift + Schatten ab (setzt sich klar vom Abschnitt ab,
-   egal welche Abschnittsfarbe) — KEIN flächiger, blendender Text-Hintergrund. */
+/* Hover: nur der dünne Rand am Bild wird kräftiger — die Elevation trägt der
+   Karten-Schatten (::before), NICHT ein separater Bild-Schatten. */
 .esc-card--news:hover .esc-card__media {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 24px 48px rgba(6, 12, 14, 0.22);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
 }
 .esc-card--news:hover .esc-card__media img { transform: scale(1.05); }
 /* Textfarben NICHT invertieren (kein Weiß-auf-Weiß / dunkler Kasten). */

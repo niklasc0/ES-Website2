@@ -311,15 +311,47 @@ class ESC_Shortcodes {
 			'orderby'        => $atts['orderby'],
 			'order'          => $atts['order'],
 		) );
-		$member_field_match = function ( $post_id, $field ) {
-			if ( '' === $field ) { return true; }
+		// Kanonisiert jeden Feldwert (Slug, Label, Rolle, Teilstring) auf einen der
+		// vier Slugs — damit die Filterung unabhängig davon funktioniert, wie das
+		// Beratungsfeld in den Daten gespeichert ist.
+		$canon = function ( $v ) {
+			$v = strtolower( trim( (string) $v ) );
+			if ( '' === $v ) { return ''; }
+			$exact = array(
+				'rechtsberatung' => 'rechtsberatung', 'recht' => 'rechtsberatung',
+				'steuerberatung' => 'steuerberatung', 'steuern' => 'steuerberatung',
+				'unternehmensberatung' => 'unternehmensberatung',
+				'management' => 'management', 'büroleitung' => 'management', 'bueroleitung' => 'management',
+			);
+			if ( isset( $exact[ $v ] ) ) { return $exact[ $v ]; }
+			$needles = array(
+				'steuer' => 'steuerberatung',
+				'unternehmens' => 'unternehmensberatung', 'consult' => 'unternehmensberatung',
+				'büro' => 'management', 'buero' => 'management', 'management' => 'management',
+				'recht' => 'rechtsberatung',   // zuletzt: „Rechtsanwalt" etc.
+			);
+			foreach ( $needles as $needle => $slug ) {
+				if ( false !== strpos( $v, $needle ) ) { return $slug; }
+			}
+			return $v;
+		};
+		$member_field_match = function ( $post_id, $field ) use ( $canon ) {
+			$want = $canon( $field );
+			if ( '' === $want ) { return true; }
 			$vals = array();
 			$single = get_post_meta( $post_id, 'es_field', true );
 			if ( is_string( $single ) && '' !== $single ) { $vals[] = $single; }
 			$multi = get_post_meta( $post_id, 'es_fields', true );
 			if ( is_array( $multi ) ) { $vals = array_merge( $vals, $multi ); }
-			$vals = array_map( 'strtolower', array_map( 'strval', $vals ) );
-			return in_array( strtolower( $field ), $vals, true );
+			// Fallback: Beratungsfeld-Taxonomie (falls dort statt Meta gepflegt)
+			$terms = get_the_terms( $post_id, 'es_beratungsfeld' );
+			if ( is_array( $terms ) ) {
+				foreach ( $terms as $term ) { $vals[] = $term->slug; $vals[] = $term->name; }
+			}
+			foreach ( $vals as $v ) {
+				if ( $canon( $v ) === $want ) { return true; }
+			}
+			return false;
 		};
 		$members = array();
 		foreach ( $q->posts as $mp ) {
