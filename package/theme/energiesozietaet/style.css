@@ -986,7 +986,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-nav a { position: relative; border-bottom: 0 !important; padding-bottom: 4px; }
 .es-nav a::after {
     content: ""; position: absolute; left: 0; bottom: 0;
-    width: 100%; height: 1px; background: currentColor;
+    width: 100%; height: 2px; background: var(--es-accent);
     transform: scaleX(0); transform-origin: left;
     transition: transform 260ms var(--es-easing);
 }
@@ -3817,6 +3817,9 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
    sich, Hintergrund dunkelt, Bild + Text animieren zusammen). Hier nur die
    News-spezifischen Feinheiten. */
 .esc-card--news:hover { transform: translateY(-4px); }
+/* Grünes Band über dem Bild halten: das gehoverte <img> bekommt ein
+   transform (scale) und würde die Card-::before-Bande sonst überdecken. */
+.esc-card--news::before { z-index: 3; }
 .esc-card--news .esc-card__media { aspect-ratio: 16 / 10; }
 .esc-card--news:hover .esc-card__media img { transform: scale(1.05); }
 /* Datum: auf dem dunklen Hover-Hintergrund hell halten (wie Titel/Text). */
