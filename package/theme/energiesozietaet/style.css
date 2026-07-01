@@ -1345,6 +1345,30 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-kontakt-general a { font-size: 17px; font-weight: 500; color: var(--es-ink); display: inline-block; margin-bottom: 4px; }
 .es-kontakt-general > div:last-child { font-size: 14px; color: var(--es-text-mute); }
 
+/* Deutschlandkarte mit grünen Standort-Punkten (Kontakt). */
+.es-germany-map { position: relative; margin-top: 44px; max-width: 320px; }
+.es-germany-map img { width: 100%; display: block; }
+.es-germany-dot {
+    position: absolute; width: 13px; height: 13px; transform: translate(-50%, -50%);
+    border-radius: 999px; background: var(--es-accent);
+    box-shadow: 0 0 0 4px rgba(149,215,8,0.22);
+}
+.es-germany-dot::after {
+    content: ""; position: absolute; inset: 0; border-radius: 999px;
+    box-shadow: 0 0 0 0 rgba(149,215,8,0.55);
+    animation: esDotPulse 2.4s ease-out infinite;
+}
+@keyframes esDotPulse { to { box-shadow: 0 0 0 15px rgba(149,215,8,0); } }
+.es-germany-dot__label {
+    position: absolute; left: 50%; top: -9px; transform: translate(-50%, -100%);
+    font-size: 11px; font-weight: var(--es-fw-medium); color: var(--es-ink);
+    background: var(--es-paper); padding: 3px 9px; border-radius: 999px;
+    white-space: nowrap; border: 1px solid var(--es-rule);
+    opacity: 0; transition: opacity var(--es-duration-fast) var(--es-easing); pointer-events: none;
+}
+.es-germany-dot:hover .es-germany-dot__label { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .es-germany-dot::after { animation: none; } }
+
 /* Section-Title generisch */
 .elementor-widget.es-section__title .elementor-heading-title,
 .es-section__title > .elementor-heading-title {

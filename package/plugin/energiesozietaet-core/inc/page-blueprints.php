@@ -591,6 +591,15 @@ class ESC_Page_Blueprints {
 		}
 		$loc_html .= '<div class="es-kontakt-general"><div class="es-eyebrow">Allgemeine Anfragen</div><a href="mailto:info@energiesozietaet.de">info@energiesozietaet.de</a><div>Für allgemeine und organisatorische Anfragen.</div></div></div>';
 
+		// Deutschlandkarte mit grünen Standort-Punkten (Düsseldorf/Hamburg/Mannheim).
+		$map_uri = function_exists( 'get_template_directory_uri' ) ? get_template_directory_uri() : '';
+		$map_html  = '<div class="es-germany-map">';
+		$map_html .= '<img src="' . esc_url( $map_uri . '/assets/img/germany.png' ) . '" alt="Unsere Standorte in Deutschland" loading="lazy" />';
+		$map_html .= '<span class="es-germany-dot" style="left:13%;top:46%"><span class="es-germany-dot__label">Düsseldorf</span></span>';
+		$map_html .= '<span class="es-germany-dot" style="left:43%;top:18%"><span class="es-germany-dot__label">Hamburg</span></span>';
+		$map_html .= '<span class="es-germany-dot" style="left:30%;top:71%"><span class="es-germany-dot__label">Mannheim</span></span>';
+		$map_html .= '</div>';
+
 		$s[] = $b::section_native( array(
 			'padding' => array( '80', '0', '140', '0' ),
 			'gap' => 'wider',
@@ -605,6 +614,7 @@ class ESC_Page_Blueprints {
 				array(
 					$b::wid_heading( 'Unsere Standorte', 'p', 'es-eyebrow' ),
 					$b::wid_html( $loc_html ),
+					$b::wid_html( $map_html ),
 				),
 			),
 		) );
