@@ -441,6 +441,23 @@ html.js .esc-card.es-reveal {
             mask-image: linear-gradient(to left, #000 0%, rgba(0,0,0,0.45) 35%, transparent 62%);
 }
 
+/* Home: Vollbild-Foto-Hero (Flugdrache am Strand) mit dunklem Verlauf für
+   Textlesbarkeit. Die ::before-Füllung trägt Foto + Overlay; die gerundete
+   Unterkante + Ecken-Überlappung bleiben erhalten. Dot-Textur entfällt hier. */
+.home .es-hero::before,
+.es-single-home .es-hero::before {
+    background-color: var(--es-ink);
+    background-image:
+        linear-gradient(105deg, rgba(14,26,30,0.94) 0%, rgba(14,26,30,0.72) 38%, rgba(14,26,30,0.30) 70%, rgba(14,26,30,0.12) 100%),
+        linear-gradient(to top, rgba(14,26,30,0.55) 0%, rgba(14,26,30,0) 45%),
+        url("assets/img/hero-drache.jpg");
+    background-size: cover, cover, cover;
+    background-position: center, center, center right;
+    background-repeat: no-repeat;
+}
+.home .es-hero::after,
+.es-single-home .es-hero::after { display: none; }
+
 /* Claim grid under hero (H1) */
 .es-hero-claims {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--es-space-8);
