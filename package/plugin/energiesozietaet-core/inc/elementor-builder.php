@@ -55,26 +55,20 @@ class ESC_Elementor_Builder {
 
 	/** Full-width container holding an HTML widget; optional background variant. */
 	public static function section_html( $html, $variant = '' ) {
+		// Overlap-Mechanik (siehe section_native): eigene Farbe via ::before
+		// (es-own-*) + gerundete Unterkante; Untergrund (= nächste Sektion) via CSS.
+		$own     = $variant ? $variant : 'paper';
+		$overlap = 'es-stage-sec es-own-' . $own . ' es-round-bottom';
 		$settings = array(
 			'layout'        => 'full_width',
 			'content_width' => array( 'unit' => 'px', 'size' => 1280 ),
 			'padding'       => array( 'unit' => 'px', 'top' => '0', 'right' => '0', 'bottom' => '0', 'left' => '0', 'isLinked' => false ),
 			'gap'           => 'no',
+			'css_classes'   => $overlap,
+			'_css_classes'  => $overlap,
 		);
-		// ah5: dunkle Bänder (ink/warm) schweben als eingerückte, gerundete Blöcke.
-		// Hintergrund + Rundung liegen auf dem .es-stage-Wrapper (CSS), die Section
-		// bleibt transparent und bekommt nur einen seitlichen Gutter. Helle Bänder
-		// (cool) bleiben vollflächige Sektionen.
-		$float = ( 'ink' === $variant || 'warm' === $variant );
-		if ( $float ) {
-			$settings['padding'] = array( 'unit' => 'px', 'top' => '0', 'right' => '24', 'bottom' => '0', 'left' => '24', 'isLinked' => false );
-		} elseif ( 'cool' === $variant ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#F5F5F5';
-		}
-		// Stage-Wrapper damit CSS-Selektoren wie .es-stage--ink h1 greifen
+		// Stage-Wrapper (innen) damit CSS-Selektoren wie .es-stage--ink h1 greifen
 		$stage_class = $variant ? 'es-stage es-stage--' . $variant : 'es-stage';
-		if ( $float ) { $stage_class .= ' es-stage--float'; }
 		$wrapped = '<div class="' . esc_attr( $stage_class ) . '">' . $html . '</div>';
 		return self::section( array( array( 'widgets' => array( self::html( $wrapped ) ) ) ), $settings );
 	}
@@ -544,7 +538,11 @@ class ESC_Elementor_Builder {
 			'column_classes' => '',
 		), $args );
 
-		$classes = 'es-stage ' . ( $args['variant'] ? 'es-stage--' . $args['variant'] . ' ' : '' ) . $args['css_classes'];
+		// Overlap-Mechanik: eigene Farbe (es-own-*) + gerundete Unterkante.
+		// Der Untergrund (= Farbe der nächsten Sektion) kommt per CSS :has().
+		$own     = $args['variant'] ? $args['variant'] : 'paper';
+		$overlap = 'es-stage-sec es-own-' . $own . ' es-round-bottom';
+		$classes = 'es-stage ' . ( $args['variant'] ? 'es-stage--' . $args['variant'] . ' ' : '' ) . $overlap . ' ' . $args['css_classes'];
 		$classes = trim( $classes );
 
 		$settings = array(
@@ -558,16 +556,9 @@ class ESC_Elementor_Builder {
 			'css_classes'  => $classes,
 			'_css_classes' => $classes,
 		);
-		if ( 'ink' === $args['variant'] ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#122023';
-		} elseif ( 'warm' === $args['variant'] ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#1D2D2D';
-		} elseif ( 'cool' === $args['variant'] ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#F5F5F5';
-		}
+		// Kein Inline-Hintergrund: Füllung via ::before (es-own-*), Untergrund
+		// (= nächste Sektion) via CSS :has(). Sonst würde Inline-BG das :has-CSS
+		// überschreiben und die Ecken-Überlappung ginge verloren.
 
 		$col_cfgs = array();
 		foreach ( $args['cols'] as $i => $widgets ) {

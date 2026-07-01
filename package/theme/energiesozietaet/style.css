@@ -397,16 +397,41 @@ html.js .esc-card.es-reveal {
    Hero, Claim-Grid, Split, Bereichs-Block, Cards, Grids
    ───────────────────────────────────────────────────────────── */
 
-/* ah5 Page-Hero-Band: dunkles Teal, unten großzügig gerundet, dezente
-   Punkt-Textur mit grünen Flecken rechts. Inhalt liegt darüber (z-index). */
-.es-hero {
-    position: relative;
+/* ═══════════════════════════════════════════════════════════════
+   ah5 „Überlappungs"-Sektionen (zentrale Design-Mechanik)
+   Jede Sektion füllt sich mit ihrer EIGENEN Farbe über ein unten
+   gerundetes ::before. Der Sektions-Hintergrund selbst wird auf die
+   Farbe der NÄCHSTEN Sektion gesetzt (via :has(+ …)) — dadurch zeigen
+   die kleinen Dreiecks-Ecken neben der Rundung die nächste Fläche, und
+   die Abschnitte wirken gestapelt/überlappend.
+   ═══════════════════════════════════════════════════════════════ */
+.es-stage-sec { position: relative; }
+.es-round-bottom::before {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
     border-bottom-left-radius: var(--es-radius-section);
     border-bottom-right-radius: var(--es-radius-section);
+    background: var(--es-paper);
 }
-.es-hero::before {
+.es-own-ink.es-round-bottom::before   { background: var(--es-ink); }
+.es-own-warm.es-round-bottom::before  { background: var(--es-paper-warm); }
+.es-own-cool.es-round-bottom::before  { background: var(--es-paper-cool); }
+.es-own-paper.es-round-bottom::before { background: var(--es-paper); }
+/* Inhalt liegt über der Füllung */
+.es-stage-sec > .elementor-container { position: relative; z-index: 1; }
+/* Untergrund = Farbe der NÄCHSTEN Sektion → Ecken-Dreiecke */
+.es-stage-sec:has(+ .es-own-ink)   { background: var(--es-ink); }
+.es-stage-sec:has(+ .es-own-warm)  { background: var(--es-paper-warm); }
+.es-stage-sec:has(+ .es-own-cool)  { background: var(--es-paper-cool); }
+.es-stage-sec:has(+ .es-own-paper) { background: var(--es-paper); }
+/* letzte Content-Sektion überlappt in den (dunklen) Footer */
+.es-stage-sec:not(:has(+ .es-stage-sec)) { background: var(--es-ink); }
+
+/* Hero: zusätzlich dezente Punkt-Textur mit grünen Flecken (auf ::after,
+   damit die ::before-Füllung frei bleibt). */
+.es-hero::after {
     content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    border-radius: inherit;
+    border-bottom-left-radius: var(--es-radius-section);
+    border-bottom-right-radius: var(--es-radius-section);
     background-image:
         radial-gradient(rgba(255,255,255,0.06) 1.5px, transparent 1.6px),
         radial-gradient(rgba(149,215,8,0.18) 1.5px, transparent 1.6px);
@@ -415,14 +440,6 @@ html.js .esc-card.es-reveal {
     -webkit-mask-image: linear-gradient(to left, #000 0%, rgba(0,0,0,0.45) 35%, transparent 62%);
             mask-image: linear-gradient(to left, #000 0%, rgba(0,0,0,0.45) 35%, transparent 62%);
 }
-.es-hero > .elementor-container,
-.es-hero > .es-wrap { position: relative; z-index: 1; }
-
-/* ah5: dunkle Floating-Bänder — eingerückt (Gutter via Section-Padding),
-   stark gerundet, schweben auf weißem Grund. */
-.es-stage--float { border-radius: var(--es-radius-section); overflow: hidden; }
-.es-stage--ink.es-stage--float  { background: var(--es-ink); }
-.es-stage--warm.es-stage--float { background: var(--es-paper-warm); }
 
 /* Claim grid under hero (H1) */
 .es-hero-claims {
