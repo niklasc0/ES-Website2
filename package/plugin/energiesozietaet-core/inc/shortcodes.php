@@ -316,7 +316,15 @@ class ESC_Shortcodes {
 		$q = new WP_Query( $q_args );
 		$cols = max( 2, min( 4, (int) $atts['columns'] ) );
 
-		$filter_html = '';
+		// TEMP-Diagnose: unsichtbarer HTML-Kommentar mit dem ROHEN es_field jedes
+		// Mitglieds. Auf /team/ „Seitenquelltext anzeigen" → nach ESDBG suchen.
+		$dbg = '<!-- ESDBG feld=' . esc_html( $active_field ) . ' | ';
+		foreach ( get_posts( array( 'post_type' => 'es_team', 'numberposts' => -1 ) ) as $tp ) {
+			$dbg .= esc_html( $tp->post_title ) . '=[' . esc_html( var_export( get_post_meta( $tp->ID, 'es_field', true ), true ) ) . '] ';
+		}
+		$dbg .= '-->';
+
+		$filter_html = $dbg;
 		if ( '1' === (string) $atts['filter'] ) {
 			$fields = array(
 				''                     => 'Alle',
@@ -326,7 +334,7 @@ class ESC_Shortcodes {
 				'management'           => 'Büroleitung',
 			);
 			$base = remove_query_arg( 'feld' );
-			$filter_html = '<div class="es-team-filter">';
+			$filter_html .= '<div class="es-team-filter">';
 			$filter_html .= '<div class="es-eyebrow" style="margin:0 28px 0 0;">Filter</div><div class="es-team-filter__pills">';
 			foreach ( $fields as $slug => $label ) {
 				$url = $slug ? esc_url( add_query_arg( 'feld', $slug ) ) : esc_url( $base );
