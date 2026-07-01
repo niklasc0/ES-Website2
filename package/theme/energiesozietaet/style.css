@@ -743,14 +743,12 @@ html.js .esc-card.es-reveal {
 }
 .es-bereich--warm::after { background: var(--es-paper-warm); }
 .es-bereich > .es-wrap { position: relative; z-index: 1; }
-/* Untergrund = Farbe der nächsten Sektion */
-.es-bereich:has(+ .es-bereich--warm) { background: var(--es-paper-warm); }
-.es-bereich--warm:has(+ .es-bereich:not(.es-bereich--warm)) { background: var(--es-paper); }
-/* letzte bereich überlappt in den (dunklen) Footer */
-.es-bereich:not(:has(+ .es-bereich)) { background: var(--es-ink); }
-/* vorherige es-stage-sec (Hero/Split) rundet passend in die erste bereich */
-.es-stage-sec:has(+ .es-bereich--warm) { background: var(--es-paper-warm); }
-.es-stage-sec:has(+ .es-bereich:not(.es-bereich--warm)) { background: var(--es-paper); }
+/* Untergrund = Farbe der NÄCHSTEN Sektion (per Klasse gesetzt, da die Blöcke
+   im DOM KEINE Geschwister sind → :has(+ …) greift nicht). Die Ecken-Dreiecke
+   neben der Rundung zeigen dadurch die Folgefarbe. */
+.es-bereich--next-paper { background: var(--es-paper); }
+.es-bereich--next-warm  { background: var(--es-paper-warm); }
+.es-bereich--next-ink   { background: var(--es-ink); }
 .es-bereich__inner { padding: var(--es-space-30) 0; }
 .es-bereich__top { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--es-space-16); align-items: start; margin-bottom: var(--es-space-16); }
 .es-bereich__meta { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }

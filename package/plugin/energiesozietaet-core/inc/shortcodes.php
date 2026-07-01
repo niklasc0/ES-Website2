@@ -303,22 +303,30 @@ class ESC_Shortcodes {
 			'order'   => 'ASC',
 		), $atts, 'es_team' );
 		$active_field = isset( $_GET['feld'] ) ? sanitize_text_field( wp_unslash( $_GET['feld'] ) ) : (string) $atts['field'];
-		$q_args = array(
+		// Immer ALLE laden und in PHP filtern — robust gegen jedes Speicherformat
+		// des Beratungsfelds (es_field-Einzelwert, es_fields-Array, Groß/Klein).
+		$q = new WP_Query( array(
 			'post_type'      => 'es_team',
-			'posts_per_page' => (int) $atts['limit'],
+			'posts_per_page' => -1,
 			'orderby'        => $atts['orderby'],
 			'order'          => $atts['order'],
-		);
-		if ( $active_field ) {
-			// Robust: Feld kann als Einzelwert (es_field) ODER als Array
-			// (es_fields, serialisiert) gespeichert sein — beide matchen.
-			$q_args['meta_query'] = array(
-				'relation' => 'OR',
-				array( 'key' => 'es_field', 'value' => $active_field ),
-				array( 'key' => 'es_fields', 'value' => '"' . $active_field . '"', 'compare' => 'LIKE' ),
-			);
+		) );
+		$member_field_match = function ( $post_id, $field ) {
+			if ( '' === $field ) { return true; }
+			$vals = array();
+			$single = get_post_meta( $post_id, 'es_field', true );
+			if ( is_string( $single ) && '' !== $single ) { $vals[] = $single; }
+			$multi = get_post_meta( $post_id, 'es_fields', true );
+			if ( is_array( $multi ) ) { $vals = array_merge( $vals, $multi ); }
+			$vals = array_map( 'strtolower', array_map( 'strval', $vals ) );
+			return in_array( strtolower( $field ), $vals, true );
+		};
+		$members = array();
+		foreach ( $q->posts as $mp ) {
+			if ( $member_field_match( $mp->ID, $active_field ) ) { $members[] = $mp; }
 		}
-		$q = new WP_Query( $q_args );
+		if ( (int) $atts['limit'] > 0 ) { $members = array_slice( $members, 0, (int) $atts['limit'] ); }
+		$member_count = count( $members );
 		$cols = max( 2, min( 4, (int) $atts['columns'] ) );
 
 		$filter_html = '';
@@ -338,10 +346,10 @@ class ESC_Shortcodes {
 				$active = ( (string) $active_field === (string) $slug ) ? ' is-active' : '';
 				$filter_html .= '<a class="es-team-filter__pill' . $active . '" href="' . $url . '">' . esc_html( $label ) . '</a>';
 			}
-			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $q->found_posts . ' Teammitglieder</div></div>';
+			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $member_count . ' Teammitglieder</div></div>';
 		}
 
-		if ( ! $q->have_posts() ) {
+		if ( empty( $members ) ) {
 			$empty = '<p style="color:#899092;font-size:15px;">Aktuell keine Teammitglieder in diesem Bereich.</p>';
 			return $filter_html . $empty;
 		}
@@ -357,7 +365,7 @@ class ESC_Shortcodes {
 		echo $filter_html;
 		?>
 		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid">
-			<?php while ( $q->have_posts() ) : $q->the_post();
+			<?php foreach ( $members as $mp ) : $GLOBALS['post'] = $mp; setup_postdata( $mp );
 				$role     = get_post_meta( get_the_ID(), 'es_role', true );
 				$thumb_id = get_post_thumbnail_id();
 				$linkedin = (string) get_post_meta( get_the_ID(), 'es_linkedin', true );
@@ -378,7 +386,7 @@ class ESC_Shortcodes {
 						<?php endif; ?>
 					</div>
 				</div>
-			<?php endwhile; wp_reset_postdata(); ?>
+			<?php endforeach; wp_reset_postdata(); ?>
 		</div>
 		<?php return ob_get_clean();
 	}

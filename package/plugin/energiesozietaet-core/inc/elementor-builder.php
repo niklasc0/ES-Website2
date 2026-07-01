@@ -257,8 +257,10 @@ class ESC_Elementor_Builder {
 			'n' => '01', 'title' => '', 'title_html' => '', 'sub' => '', 'lede' => '', 'link' => '',
 			'field' => '',                 // Wenn gesetzt, zieht bereich() die Einzelleistungen dynamisch
 			'topics' => array(), 'stripe' => 'odd', 'image_html' => '',
+			'next_bg' => 'ink',            // Farbe der FOLGENDEN Sektion (paper|warm|ink) → Ecken-Überlappung
 		), $args );
 		$warm = 'even' === $args['stripe'] ? ' es-bereich--warm' : '';
+		$next = in_array( $args['next_bg'], array( 'paper', 'warm', 'ink' ), true ) ? ' es-bereich--next-' . $args['next_bg'] : '';
 		$h2_content = $args['title_html'] ? $args['title_html'] : esc_html( $args['title'] );
 
 		// Dynamik: wenn $field gesetzt und keine Topics vorgegeben, ruft der
@@ -280,7 +282,7 @@ class ESC_Elementor_Builder {
 			$img_html = '<div class="es-bereich__img"><div class="es-ph-cat"><span>' . esc_html( $args['title'] ) . '</span></div></div>';
 		}
 
-		$html  = '<section class="es-bereich' . $warm . '"><div class="es-wrap"><div class="es-bereich__inner">';
+		$html  = '<section class="es-bereich' . $warm . $next . '"><div class="es-wrap"><div class="es-bereich__inner">';
 		$html .= '<div class="es-bereich__top">';
 		$html .= '<div>';
 		$html .= '<div class="es-bereich__meta"><span class="es-bereich__num">' . esc_html( $args['n'] ) . ' / 03</span><span class="es-bereich__sep"></span><span class="es-bereich__sub">' . esc_html( $args['sub'] ) . '</span></div>';

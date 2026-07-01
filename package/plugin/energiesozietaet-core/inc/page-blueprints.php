@@ -345,9 +345,17 @@ class ESC_Page_Blueprints {
 			'steuerberatung'       => 'Steuer-<br>beratung',
 			'unternehmensberatung' => 'Unternehmens-<br>beratung',
 		);
-		$i = 0;
-		foreach ( array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' ) as $slug ) {
+		$order = array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' );
+		$count = count( $order );
+		foreach ( $order as $i => $slug ) {
 			$cfg = $bf[ $slug ];
+			// Farbe der FOLGENDEN Sektion für die Ecken-Überlappung: nächster
+			// Block (odd=weiß/paper, even=warm) bzw. Footer (ink) beim letzten.
+			if ( $i + 1 < $count ) {
+				$next_bg = ( ( $i + 1 ) % 2 === 0 ) ? 'paper' : 'warm';
+			} else {
+				$next_bg = 'ink';
+			}
 			$s[] = $b::bereich( array(
 				'n' => $cfg['n'],
 				'title' => $cfg['title'],
@@ -358,8 +366,8 @@ class ESC_Page_Blueprints {
 				'field' => $slug,        // dynamische Einzelleistungen, Links auf Permalink
 				'topics' => array(),     // nicht hartcodiert — wird zur Laufzeit geholt
 				'stripe' => ( $i % 2 === 0 ) ? 'odd' : 'even',
+				'next_bg' => $next_bg,
 			) );
-			$i++;
 		}
 		return $s;
 	}
