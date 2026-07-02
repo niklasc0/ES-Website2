@@ -55,6 +55,12 @@ function es_theme_setup() {
 }
 add_action( 'after_setup_theme', 'es_theme_setup' );
 
+// WordPress 6.7 hängt bei Lazy-Bildern automatisch `sizes="auto, …"` an. In
+// Grids (z. B. Team-Übersicht) wählt der Browser dadurch einen zu kleinen
+// srcset-Kandidaten → sichtbar unscharfe Bilder. Feature deaktivieren, damit
+// die korrekten (bzw. explizit gesetzten) sizes greifen.
+add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );
+
 /**
  * Enqueue styles & scripts.
  */

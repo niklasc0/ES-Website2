@@ -393,7 +393,7 @@ class ESC_Shortcodes {
 				$hidden    = ( $active_field && $mem_field !== $active_field ) ? ' is-hidden' : ''; ?>
 				<div class="esc-team-card es-reveal<?php echo $hidden; ?>" data-field="<?php echo esc_attr( $mem_field ); ?>">
 					<a class="esc-team-card__photo" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
-						<?php if ( $thumb_id ) { echo wp_get_attachment_image( $thumb_id, 'es-team', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); }
+						<?php if ( $thumb_id ) { echo wp_get_attachment_image( $thumb_id, 'es-team', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;', 'sizes' => '(max-width: 520px) 90vw, (max-width: 820px) 45vw, (max-width: 1100px) 31vw, 320px' ) ); }
 						else { echo '<span class="esc-team-card__initial">' . esc_html( mb_substr( get_the_title(), 0, 1 ) ) . '</span>'; } ?>
 					</a>
 					<div class="esc-team-card__body">
