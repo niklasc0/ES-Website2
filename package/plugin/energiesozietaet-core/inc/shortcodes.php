@@ -293,6 +293,21 @@ class ESC_Shortcodes {
 		return ob_get_clean();
 	}
 
+	/** Normalisiert einen Namen für alphabetische Sortierung (Umlaute → ASCII,
+	 *  Kleinschreibung). „Bürgermeister" → „burgermeister". */
+	public static function norm_name( $s ) {
+		return strtolower( trim( remove_accents( (string) $s ) ) );
+	}
+
+	/** Sortier-Schlüssel eines Teammitglieds = Nachname. Nutzt das optionale
+	 *  Feld es_sort_name; sonst automatisch das letzte Wort des Namens. */
+	public static function team_sortkey( $post ) {
+		$override = trim( (string) get_post_meta( $post->ID, 'es_sort_name', true ) );
+		if ( '' !== $override ) { return self::norm_name( $override ); }
+		$parts = preg_split( '/\s+/', trim( (string) $post->post_title ) );
+		return self::norm_name( end( $parts ) );
+	}
+
 	public static function team( $atts ) {
 		$atts = shortcode_atts( array(
 			'columns' => 4,
@@ -310,10 +325,19 @@ class ESC_Shortcodes {
 		$q = new WP_Query( array(
 			'post_type'      => 'es_team',
 			'posts_per_page' => -1,
-			'orderby'        => $atts['orderby'],
-			'order'          => $atts['order'],
+			'orderby'        => 'title',
+			'order'          => 'ASC',
 		) );
 		$members = $q->posts;
+		// Alphabetisch nach Nachname sortieren. Nachname = optionales Feld
+		// es_sort_name; sonst automatisch das letzte Wort des Namens (Titel).
+		// Vollständiger Name als Tiebreaker (z. B. gleicher Nachname).
+		usort( $members, function ( $a, $b ) {
+			$c = strcmp( self::team_sortkey( $a ), self::team_sortkey( $b ) );
+			if ( 0 !== $c ) { return $c; }
+			return strcmp( self::norm_name( $a->post_title ), self::norm_name( $b->post_title ) );
+		} );
+		if ( 'DESC' === strtoupper( (string) $atts['order'] ) ) { $members = array_reverse( $members ); }
 		if ( (int) $atts['limit'] > 0 ) { $members = array_slice( $members, 0, (int) $atts['limit'] ); }
 		// Feld je Mitglied vorab (für data-field am Card + korrekten Startzähler).
 		$field_of = array();

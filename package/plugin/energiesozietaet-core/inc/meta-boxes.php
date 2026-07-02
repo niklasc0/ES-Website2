@@ -84,6 +84,8 @@ class ESC_MetaBoxes {
 		self::field( 'Telefon',          'es_phone',    get_post_meta( $post->ID, 'es_phone', true ) );
 		self::field( 'LinkedIn-URL',     'es_linkedin', get_post_meta( $post->ID, 'es_linkedin', true ), 'url' );
 		self::field( 'Standort',         'es_location', get_post_meta( $post->ID, 'es_location', true ) );
+		self::field( 'Nachname für Sortierung (optional)', 'es_sort_name', get_post_meta( $post->ID, 'es_sort_name', true ) );
+		echo '<p class="description" style="margin:-8px 0 16px;">Leer lassen — dann wird automatisch nach dem letzten Namensteil sortiert (z.&nbsp;B. „Otto" bei „Prof. Dr. Sven-Joachim Otto"). Nur bei mehrteiligen Nachnamen (z.&nbsp;B. „van der Berg") hier den Sortier-Nachnamen eintragen.</p>';
 		self::field(
 			'Beratungsfeld',
 			'es_field',
@@ -210,7 +212,7 @@ class ESC_MetaBoxes {
 		if ( ! current_user_can( 'edit_post', $post_id ) ) { return; }
 
 		$scalars = array(
-			'es_role','es_gender','es_email','es_phone','es_linkedin','es_location','es_field','es_more_bio',
+			'es_role','es_gender','es_email','es_phone','es_linkedin','es_location','es_sort_name','es_field','es_more_bio',
 			'es_subtitle','es_closing','es_ansprechpartner',
 			'es_department','es_employment_type','es_start_date',
 			'es_end_date','es_kind','es_registration_url',
