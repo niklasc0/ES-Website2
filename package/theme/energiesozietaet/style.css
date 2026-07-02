@@ -755,7 +755,7 @@ html.js .esc-card.es-reveal {
 .es-bereich__img img { width: 100%; height: 100%; object-fit: cover; }
 .es-bereich__topics-label { font-size: var(--es-fs-meta); letter-spacing: 0.2em; text-transform: uppercase; color: var(--es-text-soft); margin-bottom: 24px; }
 .es-bereich__topics { display: grid; grid-template-columns: repeat(3, 1fr); border-top: var(--es-border); }
-.es-bereich__topic { padding: 28px 0; border-bottom: var(--es-border); color: var(--es-ink); display: block; }
+.es-bereich__topic { padding: 28px 0; border-bottom: var(--es-border); color: var(--es-ink); display: block; border-radius: var(--es-radius-card); }
 .es-bereich__topic + .es-bereich__topic:not(:nth-child(3n+1)) { padding-left: var(--es-space-8); border-left: var(--es-border); }
 .es-bereich__topic-name { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
 .es-bereich__topic-name > span:first-child { width: 6px; height: 6px; border-radius: 999px; background: var(--es-accent); display: inline-block; }
