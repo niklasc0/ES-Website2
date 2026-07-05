@@ -432,6 +432,20 @@ html.js .esc-card.es-reveal {
 .es-stage-sec:has(+ .es-own-paper) { background: var(--es-paper); }
 /* letzte Content-Sektion überlappt in den (dunklen) Footer */
 .es-stage-sec:not(:has(+ .es-stage-sec)) { background: var(--es-ink); }
+/* … ABER wenn die letzte Sektion dunkel ist (gleiche Farbe wie der Footer),
+   fehlt der visuelle Bruch. Dann als gerundetes Panel absetzen: Boden runden,
+   Ecken zeigen die weiße Seite → klarer Übergang zum Footer. */
+.es-stage-sec.es-own-ink:not(:has(+ .es-stage-sec)),
+.es-stage-sec.es-own-warm:not(:has(+ .es-stage-sec)) { background: var(--es-paper); }
+.es-stage-sec.es-own-ink:not(:has(+ .es-stage-sec))::before,
+.es-stage-sec.es-own-warm:not(:has(+ .es-stage-sec))::before {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    border-bottom-left-radius: var(--es-radius-section);
+    border-bottom-right-radius: var(--es-radius-section);
+}
+.es-stage-sec.es-own-ink:not(:has(+ .es-stage-sec))::before  { background: var(--es-ink); }
+.es-stage-sec.es-own-warm:not(:has(+ .es-stage-sec))::before { background: var(--es-paper-warm); }
+.es-stage-sec:not(:has(+ .es-stage-sec)) > .elementor-container { position: relative; z-index: 1; }
 
 /* Hero: zusätzlich dezente Punkt-Textur mit grünen Flecken (auf ::after,
    damit die ::before-Füllung frei bleibt). */
@@ -534,7 +548,9 @@ html.js .esc-card.es-reveal {
 }
 @media (max-width: 520px) {
     .es-hero-stats { flex-direction: column; }
-    .es-hero-stat { min-height: 0; padding: 24px 26px 26px; border-radius: 28px; }
+    /* Gestapelt: Karten an ihren Inhalt anpassen statt die Container-Höhe
+       zu teilen (sonst kollabieren sie auf ~50px → Inhalt läuft über). */
+    .es-hero-stat { flex: 0 0 auto; min-height: 0; padding: 24px 26px 26px; border-radius: 28px; }
     .es-hero-stat__top { margin-bottom: 24px; }
     .es-hero-stat__num { font-size: 50px; margin-top: 0; }
     .es-hero-stat__arrow { width: 48px; height: 48px; }
@@ -1036,7 +1052,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
    ───────────────────────────────────────────────────────────── */
 .es-pullquote-panel {
     background: var(--es-paper);
-    border: var(--es-border);
+    border: 0;
     padding: var(--es-space-16) var(--es-space-12);
     max-width: 1080px;
     margin: 0 auto;
@@ -1565,7 +1581,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 
 /* 6) Pullquote — Panel wenn Wrapper es-pullquote hat */
 .es-pullquote-panel {
-    background: var(--es-paper); border: var(--es-border);
+    background: var(--es-paper); border: 0;
     padding: var(--es-space-16) var(--es-space-12);
     max-width: 1080px; margin: 0 auto; text-align: center;
 }
@@ -1651,7 +1667,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 }
 .es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-widget-wrap,
 .es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-element-populated {
-    background: var(--es-paper); border: var(--es-border);
+    background: var(--es-paper); border: 0;
     padding: 64px 48px !important; text-align: center;
 }
 .es-pullquote__quote .elementor-heading-title { font-size: clamp(26px, 3.2vw, 48px); font-weight: 300; letter-spacing: -0.025em; line-height: 1.25; color: var(--es-ink); margin: 0; }
