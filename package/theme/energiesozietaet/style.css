@@ -432,21 +432,14 @@ html.js .esc-card.es-reveal {
 .es-stage-sec:has(+ .es-own-warm)  { background: var(--es-paper-warm); }
 .es-stage-sec:has(+ .es-own-cool)  { background: var(--es-paper-cool); }
 .es-stage-sec:has(+ .es-own-paper) { background: var(--es-paper); }
-/* letzte Content-Sektion überlappt in den (dunklen) Footer */
+/* Letzte Content-Sektion: Untergrund = Footer-Ink → die gerundeten Ecken
+   zeigen die Footerfarbe (paper- und warm-Panels runden sichtbar in den
+   Footer, KEINE weißen Eck-Schnipsel). */
 .es-stage-sec:not(:has(+ .es-stage-sec)) { background: var(--es-ink); }
-/* … ABER wenn die letzte Sektion dunkel ist (gleiche Farbe wie der Footer),
-   fehlt der visuelle Bruch. Dann als gerundetes Panel absetzen: Boden runden,
-   Ecken zeigen die weiße Seite → klarer Übergang zum Footer. */
-.es-stage-sec.es-own-ink:not(:has(+ .es-stage-sec)),
-.es-stage-sec.es-own-warm:not(:has(+ .es-stage-sec)) { background: var(--es-paper); }
-.es-stage-sec.es-own-ink:not(:has(+ .es-stage-sec))::before,
-.es-stage-sec.es-own-warm:not(:has(+ .es-stage-sec))::before {
-    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    border-bottom-left-radius: var(--es-radius-section);
-    border-bottom-right-radius: var(--es-radius-section);
-}
-.es-stage-sec.es-own-ink:not(:has(+ .es-stage-sec))::before  { background: var(--es-ink); }
-.es-stage-sec.es-own-warm:not(:has(+ .es-stage-sec))::before { background: var(--es-paper-warm); }
+/* Sonderfall: Ist die letzte Sektion selbst ink (= exakt Footerfarbe),
+   wäre der Übergang unsichtbar (Philosophie-Problem). Dann warm
+   hinterlegen — dezenter dunkler Bruch statt greller weißer Ecken. */
+.es-stage-sec.es-own-ink:not(:has(+ .es-stage-sec)) { background: var(--es-paper-warm); }
 .es-stage-sec:not(:has(+ .es-stage-sec)) > .elementor-container { position: relative; z-index: 1; }
 
 /* Hero: zusätzlich dezente Punkt-Textur mit grünen Flecken (auf ::after,
