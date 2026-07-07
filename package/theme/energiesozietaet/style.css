@@ -622,7 +622,7 @@ html.js .esc-card.es-reveal {
     letter-spacing: 0.14em; text-transform: uppercase;
     font-family: var(--es-font-mono);
 }
-.esc-card__title { font-size: var(--es-fs-heading-sub); font-weight: var(--es-fw-medium); line-height: 1.28; letter-spacing: -0.015em; margin: 0; overflow-wrap: break-word; word-break: break-word; hyphens: auto; }
+.esc-card__title { font-size: var(--es-fs-heading-sub); font-weight: var(--es-fw-medium); line-height: 1.28; letter-spacing: -0.015em; margin: 0; overflow-wrap: break-word; word-break: normal; hyphens: auto; -webkit-hyphens: auto; }
 .esc-card__text { font-size: var(--es-fs-body); color: var(--es-text-mute); line-height: 1.6; margin: 0; }
 .esc-card__link { margin-top: auto; font-size: var(--es-fs-meta); color: var(--es-ink); font-weight: var(--es-fw-medium); display: inline-flex; align-items: center; gap: 6px; padding-top: 10px; }
 
@@ -1074,7 +1074,8 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
-    word-break: break-word;
+    word-break: normal; overflow-wrap: break-word;
+    hyphens: auto; -webkit-hyphens: auto;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -1526,7 +1527,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-ph-cat span {
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden; text-overflow: ellipsis;
-    max-width: calc(100% - 16px); word-break: break-word;
+    max-width: calc(100% - 16px); word-break: normal; overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto;
     padding-right: 16px;
 }
 
@@ -1847,7 +1848,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-news-row__date { font-size: var(--es-fs-eyebrow); color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase; font-family: var(--es-font-mono); margin-bottom: 8px; }
 /* Höhere Spezifität (.es-news-row …) nötig, weil .es-stage h3 / .es-stage p die
    News-Beiträge sonst auf 32px/17px zwingen. */
-.es-news-row .es-news-row__title { font-size: var(--es-fs-body) !important; font-weight: 500 !important; line-height: 1.35 !important; letter-spacing: -0.01em; margin: 0 0 7px; overflow-wrap: break-word; word-break: break-word;
+.es-news-row .es-news-row__title { font-size: var(--es-fs-body) !important; font-weight: 500 !important; line-height: 1.35 !important; letter-spacing: -0.01em; margin: 0 0 7px; overflow-wrap: break-word; word-break: normal; hyphens: auto; -webkit-hyphens: auto;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .es-news-row .es-news-row__text { font-size: var(--es-fs-meta); color: var(--es-text-mute); line-height: 1.55; margin: 0;
     display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
@@ -1856,7 +1857,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     .es-news-row { grid-template-columns: 1fr; }
     .es-news-row__media { aspect-ratio: 16 / 9; min-height: 0; }
 }
-.es-news-archive__featured h2 { overflow-wrap: break-word; word-break: break-word; }
+.es-news-archive__featured h2 { overflow-wrap: break-word; word-break: normal; hyphens: auto; -webkit-hyphens: auto; }
 .es-news-archive__featured { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) !important; }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2060,6 +2061,15 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
        voll ausnutzen. */
     .es-kontakt-grid-wrap .elementor-widget-wrap,
     .es-kontakt-grid-wrap .elementor-element-populated { padding-left: 0 !important; padding-right: 0 !important; }
+
+    /* Leistungs-Unterseiten (Recht/Steuern/Unternehmensberatung): beim
+       Stapeln der zwei Spalten addieren sich Wrap-Padding (30) + Spalten-
+       Margin (32) + Wrap-Padding (30) zu einem Loch zwischen Intro-Text
+       und den Beratungsfeld-Karten — eng zusammenziehen. */
+    .es-bereich-detail__split-section .elementor-top-column { margin-bottom: 0 !important; }
+    .es-bereich-detail__split-section .elementor-top-column > .elementor-widget-wrap {
+        padding-top: 12px !important; padding-bottom: 12px !important;
+    }
 
     /* Vertikale Abstände reduzieren — weniger Leerraum zwischen Abschnitten. */
     .es-stage > .elementor-container,
@@ -2364,22 +2374,24 @@ a, span, p, li {
 }
 
 /* G) Universal: Title-Wrap auf langen Woertern (mobile)
-   Nur lange Woerter umbrechen, die SELBST nicht in eine Zeile passen.
-   `overflow-wrap: break-word` greift erst, wenn ein Wort alleine zu
-   breit ist. `hyphens: auto` und `overflow-wrap: anywhere` wuerden
-   bereits passende Woerter mid-word trennen, wenn vorhergehende Woerter
-   in der Zeile stehen — das wollen wir nicht. */
+   `hyphens: auto` (Seite ist lang="de-DE"): gebrochen wird nur, wenn die
+   Zeile voll ist — aber an Silbengrenzen MIT Bindestrich
+   ("Zuständigkeits-regelungen") statt roh an einem beliebigen Buchstaben.
+   `overflow-wrap: break-word` bleibt als letzte Notbremse, `word-break:
+   normal` damit der rohe Umbruch der Silbentrennung nicht zuvorkommt. */
 @media (max-width: 768px) {
     .es-article__title,
     .es-team-single__name,
     .es-bereich__title,
+    .esc-pub-row__title,
+    .es-news-row__title,
     .es-stage h1,
     .es-stage h2,
     .es-stage h3 {
         overflow-wrap: break-word;
         word-break: normal;
-        hyphens: manual;
-        -webkit-hyphens: manual;
+        hyphens: auto;
+        -webkit-hyphens: auto;
     }
 }
 
@@ -2452,12 +2464,12 @@ a, span, p, li {
 /* E) Header: Skip-Link aus Vollbild-Mobile-Menu sicher ausblenden */
 .es-header.is-nav-open .screen-reader-text { display: none; }
 
-/* F) Title-Wrap auf .esc-card und News-Listings (mobile) — Wort wird nur
-   umgebrochen, wenn es alleine zu lang ist. Siehe v14/G fuer die Logik. */
+/* F) Title-Wrap auf .esc-card und News-Listings (mobile) — deutsche
+   Silbentrennung statt rohem Umbruch. Siehe v14/G fuer die Logik. */
 @media (max-width: 600px) {
     .esc-card__title, .es-news-archive__featured h2, .es-news-archive__grid h3 {
         overflow-wrap: break-word; word-break: normal;
-        hyphens: manual; -webkit-hyphens: manual;
+        hyphens: auto; -webkit-hyphens: auto;
     }
 }
 

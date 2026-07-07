@@ -300,3 +300,18 @@ function es_fallback_menu() {
 	}
 	echo '</ul>';
 }
+
+/**
+ * Sprach-Attribut absichern: Die Website ist durchgehend deutschsprachig.
+ * Steht WordPress noch auf der unkonfigurierten Standard-Locale (en_US),
+ * würde `hyphens: auto` mit englischen Trennmustern deutsche Wörter falsch
+ * bzw. gar nicht trennen (und Screenreader läsen Deutsch mit englischer
+ * Aussprache). Ist die Site-Sprache bereits auf Deutsch (oder etwas anderes
+ * Bewusstes) gestellt, greift der Filter nicht ein.
+ */
+add_filter( 'language_attributes', function ( $output ) {
+	if ( 'en_US' === get_locale() ) {
+		return 'lang="de-DE"';
+	}
+	return $output;
+} );
