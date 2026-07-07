@@ -273,8 +273,10 @@ html.js .esc-card.es-reveal {
     color: var(--es-text);
     padding-bottom: 4px;
 }
-/* Menü-Hover: gleiche „von links aufbauende" Band-Animation wie die Kacheln. */
-.es-nav a::after {
+/* Menü-Hover: gleiche „von links aufbauende" Band-Animation wie die Kacheln.
+   :not(.es-btn) — die Button-Pills im (Mobile-)Menü sind ebenfalls a in
+   .es-nav und dürfen weder Unterstrich noch Hover-Band bekommen. */
+.es-nav a:not(.es-btn)::after {
     content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%;
     background: var(--es-accent);
     transform: scaleX(0); transform-origin: left;
@@ -997,8 +999,12 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 /* ─────────────────────────────────────────────────────────────
    Menu hover underline slide-in
    ───────────────────────────────────────────────────────────── */
-.es-nav a { position: relative; border-bottom: 0 !important; padding-bottom: 4px; }
-.es-nav a::after {
+/* :not(.es-btn): Im Mobile-Menü liegen die Button-Pills (Stellenangebote/
+   Kontakt) INNERHALB von .es-nav — border-bottom:0 !important würde ihnen
+   sonst die untere Rahmenlinie wegnehmen (optisch abgeschnittene Pille),
+   und das ::after würde einen grünen Strich durch die Pille ziehen. */
+.es-nav a:not(.es-btn) { position: relative; border-bottom: 0 !important; padding-bottom: 4px; }
+.es-nav a:not(.es-btn)::after {
     content: ""; position: absolute; left: 0; bottom: 0;
     width: 100%; height: 2px; background: var(--es-accent);
     transform: scaleX(0); transform-origin: left;
@@ -3110,19 +3116,24 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
         box-sizing: border-box;
     }
 
-    /* (E) Kontakt-Button: zuverlässiger Kontrast (super-spezifischer Selektor) */
-    body .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-btn-kontakt,
-    body .es-header.is-nav-open.es-header--dark .es-nav .es-header__actions--in-nav .es-btn-kontakt {
+    /* (E) Button-Pills: zuverlässiger Kontrast + kompletter Rahmen.
+       WICHTIG: Selektoren müssen auf die ECHTEN Markup-Klassen zeigen
+       (header.php: .es-btn--accent bzw. .es-header__cta--jobs) — die alten
+       .es-btn-kontakt/.es-btn-jobs existieren im Markup nicht. Das
+       border-Shorthand stellt zugleich die von der Underline-Mechanik
+       (border-bottom:0) entfernte Unterkante sicher. */
+    body .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-btn--accent,
+    body .es-header.is-nav-open.es-header--dark .es-nav .es-header__actions--in-nav .es-btn--accent {
         background-color: var(--es-accent) !important;
         color: var(--es-ink) !important;
         border: 1px solid var(--es-accent) !important;
     }
-    body .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-btn-jobs {
+    body .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__cta--jobs {
         background-color: transparent !important;
         color: var(--es-ink) !important;
         border: 1px solid var(--es-ink) !important;
     }
-    body .es-header.es-header--dark.is-nav-open .es-nav .es-header__actions--in-nav .es-btn-jobs {
+    body .es-header.es-header--dark.is-nav-open .es-nav .es-header__actions--in-nav .es-header__cta--jobs {
         color: var(--es-paper) !important;
         border-color: var(--es-paper) !important;
     }
