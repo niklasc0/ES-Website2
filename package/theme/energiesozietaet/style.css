@@ -1157,9 +1157,21 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .esc-event-row:hover .esc-event-row__pill { background: var(--es-accent); color: var(--es-ink); }
 
 @media (max-width: 900px) {
-    .esc-pub-year { grid-template-columns: 1fr; gap: 20px; }
-    .esc-pub-year__label { position: static; }
+    /* Einspaltig. WICHTIG: display:block statt Grid — als Grid-Item wäre die
+       sticky Jahreszahl auf ihre eigene (flache) Grid-Zelle begrenzt und
+       könnte nicht mitwandern. Im Block-Layout klebt sie über die gesamte
+       Höhe der Jahres-Gruppe (wie auf Desktop). */
+    .esc-pub-year { display: block; }
+    .esc-pub-year__label {
+        position: sticky; top: 0; z-index: 5;
+        display: flex; align-items: baseline; gap: 12px;
+        background: var(--es-paper);
+        padding: 12px 0 10px; margin-bottom: 12px;
+        border-bottom: var(--es-border);
+    }
+    html.es-header-sticky .esc-pub-year__label { top: var(--es-header-h, 78px); }
     .esc-pub-year__num { font-size: 32px; }
+    .esc-pub-year__count { margin-top: 0; }
     .esc-pub-row { grid-template-columns: 1fr; gap: 8px; }
     .esc-pub-row__cta { justify-self: start; }
 }
@@ -1390,7 +1402,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
    ───────────────────────────────────────────────────────────── */
 .es-kontakt-form {
     display: grid; gap: 24px; max-width: none;
-    background: #F4F6F8; border: var(--es-border); border-radius: var(--es-radius-xs);
+    background: #F4F6F8; border: var(--es-border); border-radius: var(--es-radius-card);
     padding: 40px;
 }
 @media (max-width: 1024px) { .es-kontakt-form { max-width: 600px; } }
@@ -1437,7 +1449,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-kontakt-location__tel { font-size: var(--es-fs-body); color: var(--es-ink); font-family: var(--es-font-mono); display: block; margin-top: 8px; }
 .es-kontakt-general {
     margin-top: 40px; padding: 28px; background: var(--es-paper-warm); border: var(--es-border);
-    border-radius: var(--es-radius-xs);
+    border-radius: var(--es-radius-card);
 }
 .es-kontakt-general .es-eyebrow { margin-bottom: 12px; }
 .es-kontakt-general a { font-size: var(--es-fs-body); font-weight: 500; color: var(--es-ink); display: inline-block; margin-bottom: 4px; }
@@ -1497,6 +1509,13 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-ph-cat {
     padding: 24px 32px 24px 24px; overflow: hidden;
     display: flex; align-items: flex-end; justify-content: flex-start;
+}
+/* Featured-News: Medien-Wrapper rundet (wie andere Bildflächen); der
+   Platzhalter füllt ihn komplett aus — sonst behält er sein eigenes
+   16/10-Seitenverhältnis und rechts bleibt ein dunkler Streifen stehen. */
+.es-news-archive__featured > div:first-child { border-radius: var(--es-radius-lg); }
+.es-news-archive__featured .es-ph-cat {
+    width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0;
 }
 .es-ph-cat span {
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
@@ -2030,6 +2049,11 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     body .es-home-news .elementor-container,
     body .es-cta .elementor-container,
     body .es-gf-quote .elementor-container { padding-left: 24px !important; padding-right: 24px !important; }
+    /* Kontakt: das gap-wider-Spaltenpolster (30px je Seite) frisst auf Mobile
+       zu viel Breite — Formular-/Anfragen-Kästen sollen den 24px-Seitenrand
+       voll ausnutzen. */
+    .es-kontakt-grid-wrap .elementor-widget-wrap,
+    .es-kontakt-grid-wrap .elementor-element-populated { padding-left: 0 !important; padding-right: 0 !important; }
 
     /* Vertikale Abstände reduzieren — weniger Leerraum zwischen Abschnitten. */
     .es-stage > .elementor-container,
@@ -2833,7 +2857,7 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
         display: flex !important;
         flex-direction: column !important;
         gap: 10px !important;
-        padding: 16px 0 0 !important;
+        padding: 16px 0 24px !important; /* Luft unter den Pills: iOS Safari verschluckt das padding-bottom des Scroll-Containers (.es-nav), sonst wird der Pill-Rahmen unten abgeschnitten */
         margin-top: auto !important;
         width: 100% !important;
     }
@@ -2950,7 +2974,7 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
         flex-direction: row !important;
         flex-wrap: wrap !important;
         gap: 12px !important;
-        padding: 16px 0 0 !important;
+        padding: 16px 0 24px !important; /* Luft unter den Pills: iOS Safari verschluckt das padding-bottom des Scroll-Containers (.es-nav), sonst wird der Pill-Rahmen unten abgeschnitten */
         margin-top: auto !important;
         width: 100% !important;
         justify-content: flex-start !important;
@@ -3069,7 +3093,7 @@ html.es-header-sticky .es-header.is-nav-open.es-header--dark {
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         gap: 12px !important;
-        padding: 16px 0 0 !important;
+        padding: 16px 0 24px !important; /* Luft unter den Pills: iOS Safari verschluckt das padding-bottom des Scroll-Containers (.es-nav), sonst wird der Pill-Rahmen unten abgeschnitten */
         margin-top: auto !important;
         width: 100% !important;
     }
