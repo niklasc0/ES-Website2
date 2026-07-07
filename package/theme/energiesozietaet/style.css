@@ -2037,6 +2037,11 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     body .elementor-section.es-stage,
     body .es-stage { padding-top: 56px !important; padding-bottom: 56px !important; }
     body .es-stage--ink.es-hero { padding-top: 72px !important; padding-bottom: 64px !important; }
+    /* Bereich-Sektionen (Leistungen) sind gerundete Farbflächen, die direkt
+       aneinander liegen müssen – die Ecken einer Fläche zeigen die Farbe der
+       nächsten. Das 56px-Stage-Padding würde dazwischen eine weiße Lücke
+       reißen und die Farbadaption an den Rundungen zerstören. Daher hier 0. */
+    body .es-stage:has(> .es-bereich) { padding-top: 0 !important; padding-bottom: 0 !important; }
 
     /* Home News-Teaser: Titel enger an die Karten */
     .es-home-news .elementor-widget-shortcode { margin-top: 20px !important; }
