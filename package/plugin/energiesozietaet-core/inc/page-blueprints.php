@@ -137,14 +137,7 @@ class ESC_Page_Blueprints {
 				'hide_mobile'  => 'hidden-phone',
 			),
 			// Rechte Spalte: die zwei Stat-Cards ersetzen die früheren Buttons
-			// und sind die interaktiven Elemente (Team / Leistungen).
-			// Standardmäßig auf ALLEN Bildschirmgrößen ausgeblendet (Elementor
-			// Erweitert → Responsiv) – dort jederzeit wieder aktivierbar.
-			'side_settings' => array(
-				'hide_desktop' => 'hidden-desktop',
-				'hide_tablet'  => 'hidden-tablet',
-				'hide_mobile'  => 'hidden-phone',
-			),
+			// und sind die interaktiven Elemente (Team / Leistungen) – sichtbar.
 			'side_html' =>
 				'<div class="es-hero-stats">'
 				. '<a class="es-hero-stat es-hero-stat--dark" href="/team/">'
