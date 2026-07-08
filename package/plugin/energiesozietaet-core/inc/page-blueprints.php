@@ -129,6 +129,13 @@ class ESC_Page_Blueprints {
 				array( '3', 'Standorte · DUS · HH · MA' ),
 			),
 			'padding' => 'tall',
+			// Zahlen-Stats (Claims-Grid) ebenfalls standardmäßig auf allen
+			// Bildschirmgrößen ausgeblendet (Elementor Erweitert → Responsiv).
+			'claims_settings' => array(
+				'hide_desktop' => 'hidden-desktop',
+				'hide_tablet'  => 'hidden-tablet',
+				'hide_mobile'  => 'hidden-phone',
+			),
 			// Rechte Spalte: die zwei Stat-Cards ersetzen die früheren Buttons
 			// und sind die interaktiven Elemente (Team / Leistungen).
 			// Standardmäßig auf ALLEN Bildschirmgrößen ausgeblendet (Elementor

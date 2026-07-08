@@ -588,6 +588,7 @@ class ESC_Elementor_Builder {
 		$args = array_merge( array(
 			'eyebrow' => '', 'headline_html' => '', 'lead' => '',
 			'buttons' => array(), 'claims' => array(), 'padding' => 'default',
+			'claims_settings' => array(),
 			'side_html' => '',
 			'side_settings' => array(),
 		), $args );
@@ -619,14 +620,14 @@ class ESC_Elementor_Builder {
 					self::wid_heading( $c[1], 'div', 'es-hero-claims__label' ),
 				);
 			}
-			$widgets[] = self::section( array_map( function( $cw ) { return array( 'widgets' => $cw ); }, $claim_cols ), array(
+			$widgets[] = self::section( array_map( function( $cw ) { return array( 'widgets' => $cw ); }, $claim_cols ), array_merge( array(
 				'structure'     => '40',
 				'layout'        => 'boxed',
 				'gap'           => 'default',
 				'css_classes'   => 'es-hero-claims-inner',
 				'_css_classes'  => 'es-hero-claims-inner',
 				'padding'       => array( 'unit' => 'px', 'top' => '40', 'right' => '0', 'bottom' => '0', 'left' => '0', 'isLinked' => false ),
-			) );
+			), $args['claims_settings'] ) );
 			// Mark it as inner section
 			$last_idx = count( $widgets ) - 1;
 			$widgets[ $last_idx ]['isInner'] = true;
