@@ -47,7 +47,7 @@ class ESC_CPTs {
 		// Individual-post rewrite slugs are namespaced so they never collide with the
 		// top-level static pages (team, karriere, news, veranstaltungen, publikationen
 		// and the leistungen/<beratungsfeld>/ pages). The static pages carry the grid
-		// shortcode and serve as the canonical overview — CPT archives are disabled.
+		// shortcode and serve as the canonical overview – CPT archives are disabled.
 		self::cpt( 'es_team', 'Teammitglied', 'Team', array(
 			'menu_icon'    => 'dashicons-groups',
 			'rewrite'      => array( 'slug' => 'teammitglied', 'with_front' => false ),

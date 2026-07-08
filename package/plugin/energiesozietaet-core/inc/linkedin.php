@@ -1,6 +1,6 @@
 <?php
 /**
- * LinkedIn-Feed — Auto-Fetch via RSS-Bridge + Fallback auf CPT.
+ * LinkedIn-Feed – Auto-Fetch via RSS-Bridge + Fallback auf CPT.
  *
  * LinkedIn selbst liefert keinen öffentlichen Feed; ein RSS-Bridge-Dienst
  * (rss.app, fetchrss.com, rss-bridge) bringt das Company-Profil aber auf
@@ -112,7 +112,7 @@ class ESC_LinkedIn {
 		?>
 		<div class="wrap">
 			<h1>LinkedIn-Feed</h1>
-			<p>Zieh automatisch die neuesten Posts aus einem LinkedIn-Profil oder einer Unternehmensseite. Technisch nötig ist eine <strong>RSS-URL</strong>, weil LinkedIn selbst keinen öffentlichen Feed ausliefert. Einmal eintragen — danach aktualisiert sich der Home-Feed von selbst.</p>
+			<p>Zieh automatisch die neuesten Posts aus einem LinkedIn-Profil oder einer Unternehmensseite. Technisch nötig ist eine <strong>RSS-URL</strong>, weil LinkedIn selbst keinen öffentlichen Feed ausliefert. Einmal eintragen – danach aktualisiert sich der Home-Feed von selbst.</p>
 
 			<form method="post" action="options.php">
 				<?php settings_fields( 'esc_li_group' ); ?>
@@ -127,7 +127,7 @@ class ESC_LinkedIn {
 							<strong>So erstellst Du die RSS-URL in 2 Minuten:</strong><br>
 							1. Bei <a href="https://rss.app/new-rss-feed/linkedin-rss-feed" target="_blank" rel="noopener">rss.app</a> (kostenloser Plan reicht) registrieren.<br>
 							2. „New Feed" → LinkedIn-Profil- oder Company-URL einfügen → RSS-URL kopieren.<br>
-							3. Hier einfügen und speichern. Fertig — das Plugin zieht ab sofort die neuesten Posts automatisch.<br>
+							3. Hier einfügen und speichern. Fertig – das Plugin zieht ab sofort die neuesten Posts automatisch.<br>
 							Alternative Dienste: <a href="https://fetchrss.com/" target="_blank" rel="noopener">fetchrss.com</a>, <a href="https://rss-bridge.org/" target="_blank" rel="noopener">rss-bridge.org</a> (selbst-gehostet).<br>
 							<em>Wenn leer: das Plugin greift automatisch auf die LinkedIn-Post-Einträge im CPT zurück (Demo-Inhalte).</em>
 						</p>

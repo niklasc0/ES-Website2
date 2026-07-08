@@ -1,6 +1,6 @@
 <?php
 /**
- * Single Einzelleistung — redaktionelles Leistungs-Layout:
+ * Single Einzelleistung – redaktionelles Leistungs-Layout:
  * Header (Breadcrumb, Eyebrow, Titel, optionale Lede) + zweispaltig
  * (Artikeltext mit klarer Typo-Hierarchie + Sticky-Kontakt-Aside).
  *

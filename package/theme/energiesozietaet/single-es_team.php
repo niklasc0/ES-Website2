@@ -1,6 +1,6 @@
 <?php
 /**
- * Single Team-Mitglied — nach Mockup S3.
+ * Single Team-Mitglied – nach Mockup S3.
  * Position über dem Namen (groß), keine Duplicate-Rolle, Kontakt-Box mit
  * E-Mail + Telefon, vCard-Download automatisch, Sections Schwerpunkte,
  * Werdegang, Publikationen (Reverse-Lookup via es_author_ids).
@@ -71,7 +71,7 @@ while ( have_posts() ) : the_post();
 							</div>
 						<?php endif; ?>
 						<div class="es-team-single__contact-actions">
-							<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $email ? $email : 'info@energiesozietaet.de' ); ?>?subject=<?php echo esc_attr( 'Terminanfrage — ' . get_the_title() ); ?>">Termin vereinbaren →</a>
+							<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $email ? $email : 'info@energiesozietaet.de' ); ?>?subject=<?php echo esc_attr( 'Terminanfrage – ' . get_the_title() ); ?>">Termin vereinbaren →</a>
 							<a class="es-btn es-btn--ghost-paper" href="<?php echo esc_url( $vcard ); ?>">Visitenkarte (vCard)</a>
 						</div>
 					</div>

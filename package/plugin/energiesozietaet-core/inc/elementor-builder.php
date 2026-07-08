@@ -43,13 +43,14 @@ class ESC_Elementor_Builder {
 		);
 	}
 
-	/** Raw HTML block — most layout work happens here, styled by theme CSS classes. */
-	public static function html( $html ) {
+	/** Raw HTML block – most layout work happens here, styled by theme CSS classes.
+	 *  $settings: zusätzliche Elementor-Widget-Settings (z. B. hide_desktop). */
+	public static function html( $html, $settings = array() ) {
 		return array(
 			'id'         => self::id(),
 			'elType'     => 'widget',
 			'widgetType' => 'html',
-			'settings'   => array( 'html' => $html ),
+			'settings'   => array_merge( array( 'html' => $html ), $settings ),
 		);
 	}
 
@@ -152,7 +153,7 @@ class ESC_Elementor_Builder {
 	}
 
 	/* =========================================================================
-	 * Compound builders — whole sections returned as HTML blocks.
+	 * Compound builders – whole sections returned as HTML blocks.
 	 * These use the theme's CSS classes (es-*) for layout.
 	 * ========================================================================= */
 
@@ -291,7 +292,7 @@ class ESC_Elementor_Builder {
 		if ( $args['link'] ) {
 			// Button als es-btn-Klasse, aber via CSS wirkt visuell wie ein
 			// Primary-Button. (Native Button-Widgets passen hier schlecht, da
-			// die ganze Section HTML-basiert ist — Umbau auf section_native
+			// die ganze Section HTML-basiert ist – Umbau auf section_native
 			// wäre ein grösserer Umbau, den der User explizit bewahren will.)
 			$html .= '<a class="es-btn es-btn--primary" href="' . esc_url( $args['link'] ) . '">Zur ' . esc_html( $args['title'] ) . ' →</a>';
 		}
@@ -344,7 +345,7 @@ class ESC_Elementor_Builder {
 	}
 
 	/**
-	 * Pullquote section — huge centered quote on warm background.
+	 * Pullquote section – huge centered quote on warm background.
 	 */
 	public static function pullquote( $quote_html, $attribution = '' ) {
 		// Native Version: Wrapper-Section mit Klasse es-pullquote-panel, Inhalt
@@ -368,7 +369,7 @@ class ESC_Elementor_Builder {
 	 */
 	public static function gf_quote( $args ) {
 		// Native Version: 2-Col Section, Photo-HTML links (nicht editierbarer
-		// Decor), Eyebrow + Zitat (Heading) + Name/Rolle (Text) rechts —
+		// Decor), Eyebrow + Zitat (Heading) + Name/Rolle (Text) rechts –
 		// alle textlichen Inhalte via Elementor-Widget editierbar.
 		$args = array_merge( array(
 			'quote'           => '',
@@ -377,7 +378,7 @@ class ESC_Elementor_Builder {
 			'photo_slug'      => 'prof-dr-sven-joachim-otto',
 			'eyebrow'         => 'Unser Anspruch',
 		), $args );
-		// Layout: Eyebrow + Zitat oben (volle Breite) — darunter Portrait links
+		// Layout: Eyebrow + Zitat oben (volle Breite) – darunter Portrait links
 		// neben Name/Rolle. Portrait via HTML-Widget (rundes Bild), Name/Rolle
 		// als native Text-Widgets editierbar.
 		$photo_html = '<div class="es-gf-quote__photo">' . do_shortcode( '[es_team_photo slug="' . esc_attr( $args['photo_slug'] ) . '" size=88]' ) . '</div>';
@@ -421,7 +422,7 @@ class ESC_Elementor_Builder {
 	/** Shortcode inside a boxed wrap with optional background. */
 	public static function wrap_shortcode( $shortcode, $variant = '', $padding = '0 0 120px 0' ) {
 		$html = '<div class="es-wrap" style="padding:' . $padding . ';">' . do_shortcode( $shortcode ) . '</div>';
-		// Do not expand shortcode at build-time — let the page evaluate it on render.
+		// Do not expand shortcode at build-time – let the page evaluate it on render.
 		$html = '<div class="es-wrap" style="padding:' . $padding . ';">' . $shortcode . '</div>';
 		return self::section_html( $html, $variant );
 	}
@@ -553,7 +554,7 @@ class ESC_Elementor_Builder {
 			'padding'       => array( 'unit' => 'px', 'top' => (string) $args['padding'][0], 'right' => (string) $args['padding'][1], 'bottom' => (string) $args['padding'][2], 'left' => (string) $args['padding'][3], 'isLinked' => false ),
 			'gap'           => $args['gap'],
 			// Elementor's Advanced tab: "CSS Classes" field. Elementor rendert
-			// beide Schlüssel — _css_classes wird zuverlässig an die section
+			// beide Schlüssel – _css_classes wird zuverlässig an die section
 			// weitergereicht, css_classes ist für ältere Versionen.
 			'css_classes'  => $classes,
 			'_css_classes' => $classes,
@@ -577,7 +578,7 @@ class ESC_Elementor_Builder {
 	}
 
 	/**
-	 * Native editorial hero — heading + lead + buttons (+ optional html claims grid)
+	 * Native editorial hero – heading + lead + buttons (+ optional html claims grid)
 	 * $args = [
 	 *   eyebrow, headline_html (mit <br>, <em>, <span class=text-bg-green>),
 	 *   lead, buttons [[label, url, style]], claims [[wert, label]], padding
@@ -588,6 +589,7 @@ class ESC_Elementor_Builder {
 			'eyebrow' => '', 'headline_html' => '', 'lead' => '',
 			'buttons' => array(), 'claims' => array(), 'padding' => 'default',
 			'side_html' => '',
+			'side_settings' => array(),
 		), $args );
 
 		$pad = ( 'tall' === $args['padding'] ) ? array( '140', '0', '140', '0' ) : ( ( 'short' === $args['padding'] ) ? array( '100', '0', '100', '0' ) : array( '120', '0', '120', '0' ) );
@@ -608,7 +610,7 @@ class ESC_Elementor_Builder {
 				$widgets[] = self::wid_button( $b[0] . ' →', $b[1], 'es-hero__button es-btn--' . $style );
 			}
 		}
-		// Claims-Grid als native widgets pro Spalte — editierbar im Elementor.
+		// Claims-Grid als native widgets pro Spalte – editierbar im Elementor.
 		if ( ! empty( $args['claims'] ) ) {
 			$claim_cols = array();
 			foreach ( $args['claims'] as $c ) {
@@ -632,7 +634,7 @@ class ESC_Elementor_Builder {
 		// Mit rechter Spalte (z.B. Stat-Cards) → 2-Spalten-Hero; sonst einspaltig.
 		if ( $args['side_html'] ) {
 			return self::section_native( array(
-				'cols' => array( $widgets, array( self::html( $args['side_html'] ) ) ),
+				'cols' => array( $widgets, array( self::html( $args['side_html'], $args['side_settings'] ) ) ),
 				'variant' => 'ink',
 				'css_classes' => 'es-hero es-hero--split',
 				'padding' => $pad,
@@ -700,7 +702,7 @@ class ESC_Elementor_Builder {
 	}
 
 	/**
-	 * Native dark CTA (G3) — 2 cols, col1 eyebrow+H2, col2 buttons.
+	 * Native dark CTA (G3) – 2 cols, col1 eyebrow+H2, col2 buttons.
 	 */
 	public static function cta_dark_native( $args = array() ) {
 		$args = array_merge( array(
@@ -756,7 +758,7 @@ class ESC_Elementor_Builder {
 			$desc  = isset( $it[2] ) ? $it[2] : '';
 			$widgets = array();
 			if ( $num ) {
-				$widgets[] = self::wid_html( '<div class="es-card-pillar__num">' . esc_html( $num ) . ' —</div>' );
+				$widgets[] = self::wid_html( '<div class="es-card-pillar__num">' . esc_html( $num ) . ' –</div>' );
 			}
 			$widgets[] = self::wid_heading( $title, 'h3', 'es-card-pillar__title' );
 			$widgets[] = self::wid_text( $desc, 'es-card-pillar__desc' );

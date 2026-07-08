@@ -1,6 +1,6 @@
 <?php
 /**
- * Kontaktformular — Shortcode [es_kontakt_form] + Submit-Handler + Settings.
+ * Kontaktformular – Shortcode [es_kontakt_form] + Submit-Handler + Settings.
  *
  * Backend-konfigurierbar: Empfänger, Subject, Erfolgs-/Fehlertext, Pflichtfelder,
  * Themen-Optionen. Anti-Spam: Honeypot + Nonce + simples Time-Trap.
@@ -26,7 +26,7 @@ class ESC_Contact_Form {
 		return array(
 			'recipient'    => get_option( 'admin_email' ),
 			'subject'      => 'Neue Anfrage über das Kontaktformular: [thema]',
-			'success_msg'  => 'Vielen Dank — Ihre Nachricht ist bei uns eingegangen. Wir melden uns binnen eines Werktags.',
+			'success_msg'  => 'Vielen Dank – Ihre Nachricht ist bei uns eingegangen. Wir melden uns binnen eines Werktags.',
 			'error_msg'    => 'Beim Senden ist etwas schief gelaufen. Bitte versuchen Sie es erneut oder schreiben Sie direkt an info@energiesozietaet.de.',
 			'consent_text' => 'Mit dem Absenden stimmen Sie unserer <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> zu.',
 			'topics'       => "Rechtsberatung\nSteuerberatung\nUnternehmensberatung\nKarriere\nPresse\nSonstiges",
@@ -99,7 +99,7 @@ class ESC_Contact_Form {
 					</td></tr>
 					<tr><th scope="row"><label>Themen-Optionen</label></th><td>
 						<textarea name="<?php echo esc_attr( self::OPT . '[topics]' ); ?>" rows="6" style="width:100%;max-width:480px;"><?php echo esc_textarea( self::get( 'topics' ) ); ?></textarea>
-						<p class="description">Eine Option pro Zeile — wird als Pill-Auswahl gerendert.</p>
+						<p class="description">Eine Option pro Zeile – wird als Pill-Auswahl gerendert.</p>
 					</td></tr>
 					<tr><th scope="row">Optionale Felder</th><td>
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[show_company]' ); ?>" value="1" <?php checked( self::get( 'show_company' ), 1 ); ?>> Feld „Unternehmen / Organisation" anzeigen</label><br>
@@ -198,7 +198,7 @@ class ESC_Contact_Form {
 		exit;
 	}
 
-	/** [es_kontakt_form] — Frontend-Markup. */
+	/** [es_kontakt_form] – Frontend-Markup. */
 	public static function render() {
 		$opts   = self::get();
 		$flash  = self::consume_flash();

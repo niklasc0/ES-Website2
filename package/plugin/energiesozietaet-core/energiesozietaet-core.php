@@ -56,7 +56,7 @@ register_deactivation_hook( __FILE__, function () {
 } );
 
 /**
- * Grid-/Card-Styling kommt vollständig aus dem Theme (style.css) — die alte
+ * Grid-/Card-Styling kommt vollständig aus dem Theme (style.css) – die alte
  * Plugin-CSS-Schicht assets/css/grid.css wird NICHT mehr geladen, da sie mit
  * dem ah5-Re-Skin kollidierte (eigene .esc-grid/.esc-card/.esc-team-card-Regeln,
  * z.B. aspect-ratio 1/1 + auto-fill-Spalten → Layout-Konflikte). Datei bleibt

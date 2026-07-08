@@ -65,7 +65,7 @@ class ESC_Importer {
 
 	public static function reset() {
 		delete_option( self::OPT_DONE );
-		// Do not delete the actual content — users may have edited it.
+		// Do not delete the actual content – users may have edited it.
 	}
 
 	protected static function load_data() {
@@ -358,7 +358,7 @@ class ESC_Importer {
 			foreach ( $existing as $item ) { wp_delete_post( $item->ID, true ); }
 		}
 
-		// Kontakt + Karriere leben in den Header-Buttons rechts — nicht im Hauptmenü.
+		// Kontakt + Karriere leben in den Header-Buttons rechts – nicht im Hauptmenü.
 		$order = array(
 			'philosophie', 'leistungen', 'team', 'publikationen', 'news', 'veranstaltungen',
 		);
@@ -412,7 +412,7 @@ class ESC_Importer {
 			update_option( 'show_on_front', 'page' );
 			update_option( 'page_on_front', (int) $map['page:home'] );
 		}
-		// NOTE: Do NOT set page_for_posts to the "news" page — we want /news/ to render
+		// NOTE: Do NOT set page_for_posts to the "news" page – we want /news/ to render
 		// the Elementor-composed page (which itself embeds the es_news CPT grid).
 		update_option( 'page_for_posts', 0 );
 		// Pretty permalinks (for pages + CPTs)

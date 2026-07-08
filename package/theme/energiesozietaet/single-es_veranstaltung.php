@@ -30,7 +30,7 @@ while ( have_posts() ) : the_post();
 						<strong><?php echo esc_html( date_i18n( 'd', $ts ) ); ?></strong>
 						<span><?php echo esc_html( date_i18n( 'M Y', $ts ) ); ?></span>
 						<?php if ( $ts2 && $ts2 !== $ts ) : ?>
-							<span style="color:#B6BAAF;margin:0 8px;">—</span>
+							<span style="color:#B6BAAF;margin:0 8px;">–</span>
 							<strong style="color:#122023;"><?php echo esc_html( date_i18n( 'd', $ts2 ) ); ?></strong>
 							<span><?php echo esc_html( date_i18n( 'M Y', $ts2 ) ); ?></span>
 						<?php endif; ?>

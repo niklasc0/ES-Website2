@@ -2,11 +2,11 @@
 /**
  * Site footer.
  * Inhalte kommen aus den Footer-Einstellungen (Design → Footer). Spalten
- * mit leerer Überschrift werden ausgeblendet — die übrigen rücken zusammen.
+ * mit leerer Überschrift werden ausgeblendet – die übrigen rücken zusammen.
  *
  * @package Energiesozietaet
  */
-// ah5: keine globale Footer-CTA — die Startseite bringt ihre eigene CTA-Sektion
+// ah5: keine globale Footer-CTA – die Startseite bringt ihre eigene CTA-Sektion
 // aus der Blueprint mit; Unterseiten haben keine. Vermeidet Doppelung.
 $es_no_cta = true;
 

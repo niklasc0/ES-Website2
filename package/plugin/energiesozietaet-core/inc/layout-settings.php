@@ -1,6 +1,6 @@
 <?php
 /**
- * Layout-Einstellungen — globale UI-Toggles:
+ * Layout-Einstellungen – globale UI-Toggles:
  *   • Sticky-Header (an/aus)
  *   • Back-To-Top-Button (an/aus, Schwellenwert)
  *   • Hero Scroll-Down-CTA (an/aus)
@@ -107,7 +107,7 @@ class ESC_Layout_Settings {
 					</td></tr>
 					<tr><th scope="row">Team-Filter</th><td>
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[team_filter]' ); ?>" value="1" <?php checked( self::get( 'team_filter' ), 1 ); ?>> Filter-Pills (nach Beratungsfeld) über der Team-Übersicht anzeigen.</label>
-						<p class="description">Standardmäßig aus. Bei Bedarf hier aktivieren — der clientseitige Filter ist bereits eingebaut.</p>
+						<p class="description">Standardmäßig aus. Bei Bedarf hier aktivieren – der clientseitige Filter ist bereits eingebaut.</p>
 					</td></tr>
 				</tbody></table>
 				<?php submit_button(); ?>

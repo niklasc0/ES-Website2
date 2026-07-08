@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin UI — Importer trigger under Tools menu.
+ * Admin UI – Importer trigger under Tools menu.
  *
  * @package Energiesozietaet_Core
  */
@@ -31,7 +31,7 @@ class ESC_Admin {
 		$nonce = wp_create_nonce( 'esc_import' );
 		?>
 		<div class="wrap">
-			<h1>Energiesozietät — Demo-Inhalte importieren</h1>
+			<h1>Energiesozietät – Demo-Inhalte importieren</h1>
 			<p>Erstellt alle Seiten, Team-Mitglieder, Einzelleistungen, Stellenangebote, Veranstaltungen, News-Artikel, Publikationen und das Hauptmenü aus den gebündelten Daten. Bestehende Inhalte mit passendem Slug werden aktualisiert.</p>
 
 			<?php if ( $done ) : ?>

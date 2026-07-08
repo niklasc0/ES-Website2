@@ -1,6 +1,6 @@
 <?php
 /**
- * Fallback template — used when no more specific template matches.
+ * Fallback template – used when no more specific template matches.
  *
  * @package Energiesozietaet
  */

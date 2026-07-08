@@ -1,6 +1,6 @@
 <?php
 /**
- * Single Stellenangebot — nach Mockup S4.
+ * Single Stellenangebot – nach Mockup S4.
  * "Bereich" zeigt den Beratungsbereich (Meta es_field, Mapping zu Label) statt
  * der Rolle. Du-Form statt Sie-Form für Karriere-Kontext.
  *
@@ -107,7 +107,7 @@ while ( have_posts() ) : the_post();
 					<div style="font-size:var(--es-fs-heading-sub);font-weight:500;letter-spacing:-0.015em;"><?php echo esc_html( $kget( 'cta_title', 'Bereit, gemeinsam durchzustarten?' ) ); ?></div>
 					<div style="font-size:var(--es-fs-body);color:rgba(255,255,255,0.6);margin-top:6px;"><?php echo esc_html( $kget( 'cta_subtitle', '' ) ); ?></div>
 				</div>
-				<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $kget( 'cta_recipient', 'karriere@energiesozietaet.de' ) ); ?>?subject=<?php echo esc_attr( 'Bewerbung — ' . get_the_title() ); ?>"><?php echo esc_html( $kget( 'cta_button_label', 'Jetzt bewerben' ) ); ?> →</a>
+				<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $kget( 'cta_recipient', 'karriere@energiesozietaet.de' ) ); ?>?subject=<?php echo esc_attr( 'Bewerbung – ' . get_the_title() ); ?>"><?php echo esc_html( $kget( 'cta_button_label', 'Jetzt bewerben' ) ); ?> →</a>
 			</div>
 
 			<div style="margin-top:56px;">

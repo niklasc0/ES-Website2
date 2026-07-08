@@ -1,6 +1,6 @@
 <?php
 /**
- * Single News-Beitrag — nach Mockup S1 News-Artikel.
+ * Single News-Beitrag – nach Mockup S1 News-Artikel.
  * Schmaler Header (780px), full-width Artikelbild, Fließtext in 720px.
  *
  * @package Energiesozietaet

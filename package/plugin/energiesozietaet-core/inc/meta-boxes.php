@@ -44,7 +44,7 @@ class ESC_MetaBoxes {
 			echo '<input type="url" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '" style="width:100%;" />';
 		} elseif ( $type === 'select' ) {
 			echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" style="max-width:360px;">';
-			echo '<option value="">— bitte wählen —</option>';
+			echo '<option value="">– bitte wählen –</option>';
 			foreach ( (array) ( $opts['options'] ?? array() ) as $k => $v ) {
 				echo '<option value="' . esc_attr( $k ) . '"' . selected( $value, $k, false ) . '>' . esc_html( $v ) . '</option>';
 			}
@@ -75,9 +75,9 @@ class ESC_MetaBoxes {
 			get_post_meta( $post->ID, 'es_gender', true ),
 			'select',
 			array( 'options' => array(
-				'm' => 'männlich — „Ihr Ansprechpartner"',
-				'w' => 'weiblich — „Ihre Ansprechpartnerin"',
-				'd' => 'divers — „Ihr:e Ansprechpartner:in"',
+				'm' => 'männlich – „Ihr Ansprechpartner"',
+				'w' => 'weiblich – „Ihre Ansprechpartnerin"',
+				'd' => 'divers – „Ihr:e Ansprechpartner:in"',
 			) )
 		);
 		self::field( 'E-Mail',           'es_email',    get_post_meta( $post->ID, 'es_email', true ) );
@@ -85,7 +85,7 @@ class ESC_MetaBoxes {
 		self::field( 'LinkedIn-URL',     'es_linkedin', get_post_meta( $post->ID, 'es_linkedin', true ), 'url' );
 		self::field( 'Standort',         'es_location', get_post_meta( $post->ID, 'es_location', true ) );
 		self::field( 'Nachname für Sortierung (optional)', 'es_sort_name', get_post_meta( $post->ID, 'es_sort_name', true ) );
-		echo '<p class="description" style="margin:-8px 0 16px;">Leer lassen — dann wird automatisch nach dem letzten Namensteil sortiert (z.&nbsp;B. „Otto" bei „Prof. Dr. Sven-Joachim Otto"). Nur bei mehrteiligen Nachnamen (z.&nbsp;B. „van der Berg") hier den Sortier-Nachnamen eintragen.</p>';
+		echo '<p class="description" style="margin:-8px 0 16px;">Leer lassen – dann wird automatisch nach dem letzten Namensteil sortiert (z.&nbsp;B. „Otto" bei „Prof. Dr. Sven-Joachim Otto"). Nur bei mehrteiligen Nachnamen (z.&nbsp;B. „van der Berg") hier den Sortier-Nachnamen eintragen.</p>';
 		self::field(
 			'Beratungsfeld',
 			'es_field',
@@ -95,7 +95,7 @@ class ESC_MetaBoxes {
 		);
 		self::field( 'Erweiterte Vita (optional)', 'es_more_bio', get_post_meta( $post->ID, 'es_more_bio', true ), 'textarea' );
 
-		// Schwerpunkte — eine Zeile pro Stichpunkt
+		// Schwerpunkte – eine Zeile pro Stichpunkt
 		$focus = get_post_meta( $post->ID, 'es_focus_areas', true );
 		$focus_lines = array();
 		if ( is_array( $focus ) ) {
@@ -110,7 +110,7 @@ class ESC_MetaBoxes {
 		echo '<p><label><strong>Ausgewählte Schwerpunkte</strong><br /><em style="color:#667;font-weight:400;">Ein Schwerpunkt pro Zeile.</em></label>';
 		echo '<textarea name="es_focus_areas_raw" rows="6" style="width:100%;">' . esc_textarea( implode( "\n", $focus_lines ) ) . '</textarea></p>';
 
-		// Werdegang — Zeile je Station: "Zeit ||| Text"
+		// Werdegang – Zeile je Station: "Zeit ||| Text"
 		$career = get_post_meta( $post->ID, 'es_career', true );
 		$career_lines = array();
 		if ( is_array( $career ) ) {
@@ -151,20 +151,20 @@ class ESC_MetaBoxes {
 		self::field( 'Anstellungsart',     'es_employment_type', get_post_meta( $post->ID, 'es_employment_type', true ) );
 		self::field( 'Eintrittsdatum',     'es_start_date',      get_post_meta( $post->ID, 'es_start_date', true ), 'date' );
 
-		// Aufgaben (Was erwarten Dich für Aufgaben?) — Legacy-Fallback: es_bullets
+		// Aufgaben (Was erwarten Dich für Aufgaben?) – Legacy-Fallback: es_bullets
 		$tasks = get_post_meta( $post->ID, 'es_tasks', true );
 		if ( empty( $tasks ) ) {
 			$legacy = get_post_meta( $post->ID, 'es_bullets', true );
 			if ( is_array( $legacy ) ) { $tasks = $legacy; }
 		}
 		$tasks_txt = is_array( $tasks ) ? implode( "\n", $tasks ) : '';
-		echo '<p><label><strong>Was erwarten Dich für Aufgaben?</strong><br /><em style="color:#667;font-weight:400;">Eine Aufgabe pro Zeile — wird als Bullet-Liste ausgegeben.</em></label>';
+		echo '<p><label><strong>Was erwarten Dich für Aufgaben?</strong><br /><em style="color:#667;font-weight:400;">Eine Aufgabe pro Zeile – wird als Bullet-Liste ausgegeben.</em></label>';
 		echo '<textarea name="es_tasks_raw" rows="6" style="width:100%;">' . esc_textarea( $tasks_txt ) . '</textarea></p>';
 
 		// Profil (Dein Profil)
 		$profile = get_post_meta( $post->ID, 'es_profile', true );
 		$profile_txt = is_array( $profile ) ? implode( "\n", $profile ) : '';
-		echo '<p><label><strong>Dein Profil</strong><br /><em style="color:#667;font-weight:400;">Eine Anforderung pro Zeile — wird als Bullet-Liste ausgegeben.</em></label>';
+		echo '<p><label><strong>Dein Profil</strong><br /><em style="color:#667;font-weight:400;">Eine Anforderung pro Zeile – wird als Bullet-Liste ausgegeben.</em></label>';
 		echo '<textarea name="es_profile_raw" rows="6" style="width:100%;">' . esc_textarea( $profile_txt ) . '</textarea></p>';
 	}
 
@@ -195,7 +195,7 @@ class ESC_MetaBoxes {
 		}
 		echo '</select></p>';
 
-		// Beratungsfelder (Mehrfach via es_beratungsfeld-Taxonomie existiert schon für Einzelleistung — hier nutzen wir zusätzlich ein Meta für Publikation, da Taxonomie auf es_einzelleistung limitiert ist)
+		// Beratungsfelder (Mehrfach via es_beratungsfeld-Taxonomie existiert schon für Einzelleistung – hier nutzen wir zusätzlich ein Meta für Publikation, da Taxonomie auf es_einzelleistung limitiert ist)
 		$field_selected = (array) get_post_meta( $post->ID, 'es_fields', true );
 		echo '<p><label><strong>Beratungsfelder</strong><br /><em style="color:#667;font-weight:400;">Diese Zuordnung führt dazu, dass die Publikation auf der jeweiligen Beratungsfeld-Seite als Fachbeitrag erscheint.</em></label>';
 		foreach ( self::FIELDS as $k => $v ) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Energiesozietät — theme bootstrap.
+ * Energiesozietät – theme bootstrap.
  *
  * @package Energiesozietaet
  */
@@ -65,7 +65,7 @@ add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );
  * Enqueue styles & scripts.
  */
 function es_theme_enqueue_assets() {
-	// Manrope (Text/UI) + Sora (Display/Headlines) — Design-Sprache des ah5/Elementra-Templates.
+	// Manrope (Text/UI) + Sora (Display/Headlines) – Design-Sprache des ah5/Elementra-Templates.
 	wp_enqueue_style(
 		'es-fonts',
 		'https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap',
@@ -95,7 +95,7 @@ function es_resource_hints( $urls, $relation_type ) {
 add_filter( 'wp_resource_hints', 'es_resource_hints', 10, 2 );
 
 /**
- * Elementor global colors + fonts — makes every Elementor page pick up our design tokens.
+ * Elementor global colors + fonts – makes every Elementor page pick up our design tokens.
  */
 function es_elementor_globals() {
 	if ( ! did_action( 'elementor/loaded' ) ) { return; }
@@ -124,7 +124,7 @@ function es_body_classes( $classes ) {
 add_filter( 'body_class', 'es_body_classes' );
 
 /**
- * Elementor compat — expose text-bg-green class to Elementor's rich text editors.
+ * Elementor compat – expose text-bg-green class to Elementor's rich text editors.
  */
 function es_elementor_editor_stylesheets( $post_css ) {
 	if ( ! is_admin() ) { return $post_css; }
@@ -285,7 +285,7 @@ function es_excerpt( $post, $length = 28 ) {
  * Light-weight fallback header menu if no menu assigned.
  */
 function es_fallback_menu() {
-	// Kontakt + Karriere leben in den Header-Buttons rechts — nicht im Hauptmenü.
+	// Kontakt + Karriere leben in den Header-Buttons rechts – nicht im Hauptmenü.
 	$items = array(
 		home_url( '/philosophie/' )     => __( 'Philosophie', 'energiesozietaet' ),
 		home_url( '/leistungen/' )      => __( 'Leistungen', 'energiesozietaet' ),

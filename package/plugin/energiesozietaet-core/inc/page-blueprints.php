@@ -1,6 +1,6 @@
 <?php
 /**
- * Page blueprints — Elementor-JSON für jede Top-Level-Seite.
+ * Page blueprints – Elementor-JSON für jede Top-Level-Seite.
  * Layouts folgen dem Design-Mockup "ES.Website.3" (handoff/blocks.md +
  * handoff/templates.md). Jede Methode erzeugt die sections-Liste für ein Slug.
  *
@@ -31,7 +31,7 @@ class ESC_Page_Blueprints {
 	}
 
 	/* ==========================================================================
-	 * Hilfsdaten — Beratungsfelder, Ansprechpartner, Topic-Texte aus Mockup.
+	 * Hilfsdaten – Beratungsfelder, Ansprechpartner, Topic-Texte aus Mockup.
 	 * ========================================================================== */
 
 	protected static function beratungsfelder() {
@@ -45,13 +45,13 @@ class ESC_Page_Blueprints {
 					array( 'prof-dr-sven-joachim-otto', 'Prof. Dr. Sven-Joachim Otto', 'Partner · Rechtsanwalt' ),
 					array( 'dr-bernhardine-kleinhenz-jeannot', 'Dr. Bernhardine Kleinhenz-Jeannot', 'Partnerin · Rechtsanwältin' ),
 				),
-				'long_title' => 'Wir stellen juristische Lösungen in den Gesamtkontext — mit Blick auf das wirtschaftliche Ziel.',
+				'long_title' => 'Wir stellen juristische Lösungen in den Gesamtkontext – mit Blick auf das wirtschaftliche Ziel.',
 				'long_copy' => array(
 					'Wir haben ein ausgeprägtes Verständnis von Energiemärkten, Verwaltungsorganisationen und ihren politischen Entscheidungsprozessen. Politikberatung ist integraler Bestandteil unserer Tätigkeit, um die Projekte unserer Mandanten zum Erfolg zu führen.',
-					'Energiewirtschaftsrechtliche Fragestellungen stehen selten für sich allein — sie sind eingebettet in unternehmerische, steuerliche und regulatorische Zusammenhänge. Wir beraten interdisziplinär, Hand in Hand mit unseren Steuer- und Unternehmensberatern.',
+					'Energiewirtschaftsrechtliche Fragestellungen stehen selten für sich allein – sie sind eingebettet in unternehmerische, steuerliche und regulatorische Zusammenhänge. Wir beraten interdisziplinär, Hand in Hand mit unseren Steuer- und Unternehmensberatern.',
 				),
 				'topics' => array(
-					array( 'Energie', 'Transformation unserer Energieversorgung — eine gesamtgesellschaftliche Aufgabe.' ),
+					array( 'Energie', 'Transformation unserer Energieversorgung – eine gesamtgesellschaftliche Aufgabe.' ),
 					array( 'Kommunalwirtschaft', 'Wirtschaftliche Betätigung von Kommunen unter besonderen Spielregeln.' ),
 					array( 'Vergaberecht', 'Anspruchsvolle rechtliche Anforderungen an öffentliche Beschaffung.' ),
 					array( 'Gesellschaftsrecht', 'Gesellschaftsrechtlicher Rahmen für strukturelle Veränderungen.' ),
@@ -63,15 +63,15 @@ class ESC_Page_Blueprints {
 				'n' => '02',
 				'title' => 'Steuerberatung',
 				'sub' => 'Fortlaufend · Gestaltend · Strukturierend',
-				'lede' => 'Fortlaufende Steuerberatung, Gestaltungsberatung oder herausfordernde Neustrukturierungen — mit besonderem Know-how in der Betreuung der öffentlichen Hand und ihrer Unternehmen.',
+				'lede' => 'Fortlaufende Steuerberatung, Gestaltungsberatung oder herausfordernde Neustrukturierungen – mit besonderem Know-how in der Betreuung der öffentlichen Hand und ihrer Unternehmen.',
 				'ansprechpartner' => array(
-					array( 'elke-beermann', 'Elke Beermann', 'Partnerin · Steuerberaterin' ),
-					array( 'christopher-siebler', 'Christopher Siebler', 'Associated Partner · Steuerberater' ),
+					array( 'torsten-stockem', 'Torsten Stockem', 'Partner · Steuerberater' ),
+					array( 'jana-fengler', 'Jana Fengler', 'Steuerberaterin' ),
 				),
-				'long_title' => 'Besonderes Know-how in der Betreuung der öffentlichen Hand — erfolgreich eingesetzt auch in der Privatwirtschaft.',
+				'long_title' => 'Besonderes Know-how in der Betreuung der öffentlichen Hand – erfolgreich eingesetzt auch in der Privatwirtschaft.',
 				'long_copy' => array(
 					'Wir kennen die steuerlichen Besonderheiten von Eigenbetrieben, Beteiligungsgesellschaften und juristischen Personen des öffentlichen Rechts. Dieses Wissen setzen wir ebenso erfolgreich in der Privatwirtschaft ein.',
-					'Von der laufenden Steuerberatung über Deklarationen bis hin zu strukturellen Neustrukturierungen — wir denken steuerliche Lösungen im Gesamtkontext unserer Mandanten.',
+					'Von der laufenden Steuerberatung über Deklarationen bis hin zu strukturellen Neustrukturierungen – wir denken steuerliche Lösungen im Gesamtkontext unserer Mandanten.',
 				),
 				'topics' => array(
 					array( 'Gründungs- und Strukturberatung', 'Neues schaffen, Bestehendes grundlegend verändern.' ),
@@ -88,13 +88,13 @@ class ESC_Page_Blueprints {
 				'sub' => 'Strategie · Wirtschaft · Finanzen',
 				'lede' => 'Wir navigieren Sie durch die Anforderungen neuer Energieträger und Erzeugungsarten sowie die damit verbundenen wirtschaftlichen und finanziellen Fragestellungen.',
 				'ansprechpartner' => array(
-					array( 'torsten-stockem', 'Torsten Stockem', 'Partner · Unternehmensberatung' ),
+					array( 'elke-beermann', 'Elke Beermann', 'Partnerin · Steuerberaterin' ),
 					array( 'hartmut-muller', 'Hartmut Müller', 'Senior Advisor' ),
 				),
 				'long_title' => 'Investier- und Finanzierbarkeit von Transformation erreichen.',
 				'long_copy' => array(
 					'In der Energiebranche erzeugt die Erfordernis, den Klimazielen gerecht zu werden, enormen Druck. Traditionellen Geschäftsmodellen werden Grenzen aufgezeigt. Neue Energieträger, innovative Erzeugungstechnologien und leistungsfähige Netze sollen die Energieversorgung von morgen sicherstellen.',
-					'Unsere Experten begleiten Sie von Beginn an — als Sparringspartner, bei der Entwicklung von Strategieoptionen, deren Konkretisierung in Business Plänen, bei der Finanzierung und der Suche nach strategischen Partnern für die Umsetzung.',
+					'Unsere Experten begleiten Sie von Beginn an – als Sparringspartner, bei der Entwicklung von Strategieoptionen, deren Konkretisierung in Business Plänen, bei der Finanzierung und der Suche nach strategischen Partnern für die Umsetzung.',
 				),
 				'topics' => array(
 					array( 'Strategie & Geschäftsmodelle', 'Zukunftsfähige Modelle für eine Branche im Wandel.' ),
@@ -102,8 +102,8 @@ class ESC_Page_Blueprints {
 					array( 'Finanzierung & Förderung', 'Finanzierungsstrukturen und Fördermittel zielgenau nutzen.' ),
 					array( 'Organisationsentwicklung', 'Prozesse, Rollen und Governance für neue Anforderungen.' ),
 					array( 'Transformationsbegleitung', 'Projekte von der Idee bis zur Umsetzung.' ),
-					array( 'Post-Merger-Integration', 'Zusammenführung nach Transaktionen — operativ wie kulturell.' ),
-					array( 'Projektmanagement', 'Transformation anstoßen, entwickeln und umsetzen — Projekte, die ankommen.' ),
+					array( 'Post-Merger-Integration', 'Zusammenführung nach Transaktionen – operativ wie kulturell.' ),
+					array( 'Projektmanagement', 'Transformation anstoßen, entwickeln und umsetzen – Projekte, die ankommen.' ),
 				),
 			),
 		);
@@ -131,6 +131,13 @@ class ESC_Page_Blueprints {
 			'padding' => 'tall',
 			// Rechte Spalte: die zwei Stat-Cards ersetzen die früheren Buttons
 			// und sind die interaktiven Elemente (Team / Leistungen).
+			// Standardmäßig auf ALLEN Bildschirmgrößen ausgeblendet (Elementor
+			// Erweitert → Responsiv) – dort jederzeit wieder aktivierbar.
+			'side_settings' => array(
+				'hide_desktop' => 'hidden-desktop',
+				'hide_tablet'  => 'hidden-tablet',
+				'hide_mobile'  => 'hidden-phone',
+			),
 			'side_html' =>
 				'<div class="es-hero-stats">'
 				. '<a class="es-hero-stat es-hero-stat--dark" href="/team/">'
@@ -142,12 +149,12 @@ class ESC_Page_Blueprints {
 				. '</div>',
 		) );
 
-		// 2. Intro (Split Text warm) — H2 als eigentliche Überschrift, Eyebrow klein
+		// 2. Intro (Split Text warm) – H2 als eigentliche Überschrift, Eyebrow klein
 		$s[] = $b::split_native( array(
 			'eyebrow' => 'Unser Anspruch',
 			'title_html' => 'Hoch spezialisiert.<br>Fachübergreifend.<br><span class="text-bg-green">Ergebnisorientiert.</span>',
 			'paragraphs' => array(
-				'<p>Wir arbeiten hoch spezialisiert, fachübergreifend und fokussiert an den Themen unserer Zeit — unaufgeregt, ergebnisorientiert und mit individuellen Persönlichkeiten.</p>',
+				'<p>Wir arbeiten hoch spezialisiert, fachübergreifend und fokussiert an den Themen unserer Zeit – unaufgeregt, ergebnisorientiert und mit individuellen Persönlichkeiten.</p>',
 				'<p><a class="es-link" href="/philosophie/">Unsere Philosophie</a> · <a class="es-link" href="/team/">Unser Team</a></p>',
 			),
 			'variant' => 'warm',
@@ -195,9 +202,9 @@ class ESC_Page_Blueprints {
 			),
 		) );
 
-		// 4. GF Quote (bleibt als gf_quote-Helper — enthält bereits Image+Blockquote)
+		// 4. GF Quote (bleibt als gf_quote-Helper – enthält bereits Image+Blockquote)
 		$s[] = $b::gf_quote( array(
-			'quote' => 'Wir wollen mit unserer langjährigen Beratungs- und Netzwerkerfahrung unsere Mandantschaft bei den anstehenden Transformationen begleiten — und mit den individuellen Persönlichkeiten unseres Teams Mehrwert bieten.',
+			'quote' => 'Wir wollen mit unserer langjährigen Beratungs- und Netzwerkerfahrung unsere Mandantschaft bei den anstehenden Transformationen begleiten – und mit den individuellen Persönlichkeiten unseres Teams Mehrwert bieten.',
 		) );
 
 		// 5. News Teaser (shortcode widget)
@@ -238,17 +245,17 @@ class ESC_Page_Blueprints {
 		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Philosophie',
 			'headline_html' => 'Transformation ist eine<br><span class="text-bg-green">Mammutaufgabe.</span>',
-			'lead' => '<p>Dafür braucht es viele. Das schafft niemand allein. Wir — das Team der Energiesozietät — verstehen uns als einer der vielen.</p>',
+			'lead' => '<p>Dafür braucht es viele. Das schafft niemand allein. Wir – das Team der Energiesozietät – verstehen uns als einer der vielen.</p>',
 			'padding' => 'tall',
 		) );
 
-		// Split: "Wie wir arbeiten — Fokussiert/Ergebnisorientiert/Kreativ"
+		// Split: "Wie wir arbeiten – Fokussiert/Ergebnisorientiert/Kreativ"
 		$s[] = $b::split_native( array(
 			'eyebrow' => 'Wie wir arbeiten',
 			'title_html' => 'Fokussiert.<br>Ergebnis&shy;orientiert.<br><span class="text-bg-green">Kreativ.</span>',
 			'paragraphs' => array(
 				'<p>Wir sind Experten. Wir arbeiten hoch spezialisiert. Wir entwickeln ganzheitliche Lösungen, die strategische, betriebs- und finanzwirtschaftliche, juristische sowie steuerliche Fragen immer im Gesamtkontext betrachten.</p>',
-				'<p>Das erfordert interdisziplinäres Denken, langjährige Erfahrung und die Bereitschaft, neu zu denken — gerade dort, wo sich Energiemärkte, regulatorische Rahmen und politische Entscheidungsprozesse gleichzeitig verändern.</p>',
+				'<p>Das erfordert interdisziplinäres Denken, langjährige Erfahrung und die Bereitschaft, neu zu denken – gerade dort, wo sich Energiemärkte, regulatorische Rahmen und politische Entscheidungsprozesse gleichzeitig verändern.</p>',
 			),
 			'variant' => 'warm',
 			'padding' => 'default',
@@ -284,7 +291,7 @@ class ESC_Page_Blueprints {
 			array( '', 'Steuerberater', 'Steuerliche Struktur, Compliance und Gestaltungsspielräume.' ),
 		), 'warm', 'es-cards-grid--quads' );
 
-		// Mandantschaft — Liste als Shortcode, im Elementor-Editor anpassbar
+		// Mandantschaft – Liste als Shortcode, im Elementor-Editor anpassbar
 		$s[] = $b::split_native( array(
 			'eyebrow' => 'Mandantschaft',
 			'title_html' => 'Wen wir beraten.',
@@ -303,7 +310,7 @@ class ESC_Page_Blueprints {
 			'title_html' => 'Lösungen, die im<br>politischen Prozess<br><span class="text-bg-green">Akzeptanz finden.</span>',
 			'paragraphs' => array(
 				'<p>Wir haben ein ausgeprägtes Verständnis von Energiemärkten, Verwaltungsorganisationen und ihren politischen Entscheidungsprozessen. Politikberatung ist integraler Bestandteil unserer Tätigkeit, um die Projekte unserer Mandanten zum Erfolg zu führen.</p>',
-				'<p>Wir entwickeln Konzepte für die Kommunikation von Lösungen im politischen Entscheidungsprozess — mit dem Ziel, bestmögliche Lösungen zu präsentieren, die eine breite Akzeptanz finden.</p>',
+				'<p>Wir entwickeln Konzepte für die Kommunikation von Lösungen im politischen Entscheidungsprozess – mit dem Ziel, bestmögliche Lösungen zu präsentieren, die eine breite Akzeptanz finden.</p>',
 			),
 			'variant' => 'ink',
 			'padding' => 'default',
@@ -364,7 +371,7 @@ class ESC_Page_Blueprints {
 				'lede' => $cfg['lede'],
 				'link' => '/' . $slug . '/',
 				'field' => $slug,        // dynamische Einzelleistungen, Links auf Permalink
-				'topics' => array(),     // nicht hartcodiert — wird zur Laufzeit geholt
+				'topics' => array(),     // nicht hartcodiert – wird zur Laufzeit geholt
 				'stripe' => ( $i % 2 === 0 ) ? 'odd' : 'even',
 				'next_bg' => $next_bg,
 			) );
@@ -404,7 +411,7 @@ class ESC_Page_Blueprints {
 			) ),
 		) );
 
-		// Content Split — Section mit 2 Columns (40/60), native Widgets links
+		// Content Split – Section mit 2 Columns (40/60), native Widgets links
 		// damit der Text in Elementor direkt editierbar ist. Mobile-Umbruch
 		// auf 1 Column 100% per CSS-Override mit hoher Spezifitaet.
 		$s[] = $b::section_native( array(
@@ -429,7 +436,7 @@ class ESC_Page_Blueprints {
 			),
 		) );
 
-		// Publikationen & Fachbeiträge — 3 neueste getaggt mit Beratungsfeld
+		// Publikationen & Fachbeiträge – 3 neueste getaggt mit Beratungsfeld
 		$s[] = $b::section_native( array(
 			'variant' => 'warm',
 			'padding' => array( '120', '0', '120', '0' ),
@@ -528,8 +535,8 @@ class ESC_Page_Blueprints {
 		) );
 		$s[] = $b::cards_native( array(
 			array( '01', 'Echte Verantwortung', 'Du arbeitest von Tag eins direkt am Mandat, mit Mandantenkontakt und eigener Themenverantwortung.' ),
-			array( '02', 'Interdisziplinarität', 'Kein Silodenken. Wir bringen Recht, Steuern und Unternehmensberatung zusammen — und Dich mittendrin.' ),
-			array( '03', 'Persönliche Entwicklung', 'Fortbildung, Promotion, Fachanwaltschaften — wir fördern gezielt und individuell.' ),
+			array( '02', 'Interdisziplinarität', 'Kein Silodenken. Wir bringen Recht, Steuern und Unternehmensberatung zusammen – und Dich mittendrin.' ),
+			array( '03', 'Persönliche Entwicklung', 'Fortbildung, Promotion, Fachanwaltschaften – wir fördern gezielt und individuell.' ),
 		), 'warm' );
 		return $s;
 	}
@@ -597,6 +604,9 @@ class ESC_Page_Blueprints {
 			$std_html .= '<span class="es-germany-dot" data-loc="' . esc_attr( $o['slug'] ) . '" style="' . esc_attr( $o['pos'] ) . '"><span class="es-germany-dot__label">' . esc_html( $o['city'] ) . '</span></span>';
 		}
 		$std_html .= '</div>';
+		// Anfragen-Box VOR den Standort-Cards: Mannheim ist das letzte Element
+		// der Spalte, damit das Formular exakt auf dessen Unterkante enden kann.
+		$std_html .= '<div class="es-kontakt-general"><div class="es-eyebrow">Allgemeine Anfragen</div><a href="mailto:info@energiesozietaet.de">info@energiesozietaet.de</a><div>Für allgemeine und organisatorische Anfragen.</div></div>';
 		$std_html .= '<div class="es-kontakt-locations">';
 		foreach ( $offices as $o ) {
 			$std_html .= '<div class="es-kontakt-location" data-loc="' . esc_attr( $o['slug'] ) . '">';
@@ -608,7 +618,6 @@ class ESC_Page_Blueprints {
 			$std_html .= '</div>';
 		}
 		$std_html .= '</div>';
-		$std_html .= '<div class="es-kontakt-general"><div class="es-eyebrow">Allgemeine Anfragen</div><a href="mailto:info@energiesozietaet.de">info@energiesozietaet.de</a><div>Für allgemeine und organisatorische Anfragen.</div></div>';
 		$std_html .= '</div>';
 
 		$s[] = $b::section_native( array(

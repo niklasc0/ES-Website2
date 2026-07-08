@@ -274,7 +274,7 @@ class ESC_Shortcodes {
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$sub_raw  = trim( wp_strip_all_tags( (string) get_post_meta( get_the_ID(), 'es_subtitle', true ) ) );
 				$body_raw = $sub_raw ? $sub_raw : trim( wp_strip_all_tags( get_the_content() ) );
-				// Trunc nach dem ersten Satzpunkt — maximal 160 Zeichen Fallback
+				// Trunc nach dem ersten Satzpunkt – maximal 160 Zeichen Fallback
 				if ( preg_match( '/^(.{20,160}?[\.!\?])\s/u', $body_raw, $m ) ) {
 					$short = $m[1];
 				} else {
@@ -318,7 +318,7 @@ class ESC_Shortcodes {
 			'order'   => 'ASC',
 		), $atts, 'es_team' );
 		// Filter ist standardmäßig aus und wird allein über die Backend-Option
-		// (Design → Layout → Team-Filter) gesteuert — unabhängig davon, was im
+		// (Design → Layout → Team-Filter) gesteuert – unabhängig davon, was im
 		// Seiten-Blueprint als filter="…" steht.
 		$filter_on = class_exists( 'ESC_Layout_Settings' ) && ESC_Layout_Settings::get( 'team_filter' );
 		$active_field = isset( $_GET['feld'] ) ? sanitize_text_field( wp_unslash( $_GET['feld'] ) ) : (string) $atts['field'];
@@ -493,7 +493,7 @@ class ESC_Shortcodes {
 					$kind  = get_post_meta( get_the_ID(), 'es_kind', true ); ?>
 					<a class="esc-event-row" href="<?php the_permalink(); ?>">
 						<div>
-							<div class="esc-event-row__day"><?php echo esc_html( $ts ? date_i18n( 'd', $ts ) : '—' ); ?></div>
+							<div class="esc-event-row__day"><?php echo esc_html( $ts ? date_i18n( 'd', $ts ) : '–' ); ?></div>
 							<div class="esc-event-row__month"><?php echo esc_html( $ts ? date_i18n( 'M Y', $ts ) : '' ); ?></div>
 						</div>
 						<h3 class="esc-event-row__title"><?php the_title(); ?></h3>
@@ -569,7 +569,7 @@ class ESC_Shortcodes {
 	}
 
 	public static function publikationen( $atts ) {
-		// Jahres-gruppierte Liste nach Datum sortiert. Kein Detail — externer Link führt direkt zur Quelle.
+		// Jahres-gruppierte Liste nach Datum sortiert. Kein Detail – externer Link führt direkt zur Quelle.
 		$atts = shortcode_atts( array( 'layout' => 'years', 'limit' => -1, 'field' => '' ), $atts, 'es_publikationen' );
 		$q_args = array( 'post_type' => 'es_publikation', 'posts_per_page' => (int) $atts['limit'], 'orderby' => 'date', 'order' => 'DESC' );
 		if ( $atts['field'] ) {
@@ -630,7 +630,7 @@ class ESC_Shortcodes {
 		<?php return ob_get_clean();
 	}
 
-	/** Fachbeiträge im Beratungsfeld — 3 neueste mit Card-Layout. */
+	/** Fachbeiträge im Beratungsfeld – 3 neueste mit Card-Layout. */
 	public static function pub_teaser( $atts ) {
 		$atts = shortcode_atts( array( 'field' => '', 'limit' => 3 ), $atts, 'es_pub_teaser' );
 		$q_args = array( 'post_type' => 'es_publikation', 'posts_per_page' => (int) $atts['limit'], 'orderby' => 'date', 'order' => 'DESC' );

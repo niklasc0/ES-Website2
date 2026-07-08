@@ -17,7 +17,7 @@ $obj = get_queried_object();
 if ( is_post_type_archive( 'es_team' ) ) {
 	$title   = 'Team';
 	$eyebrow = 'Unser Team';
-	$lead    = 'Ein erfahrenes Team, das seit vielen Jahren zusammenarbeitet — agil, pragmatisch, interdisziplinär.';
+	$lead    = 'Ein erfahrenes Team, das seit vielen Jahren zusammenarbeitet – agil, pragmatisch, interdisziplinär.';
 	$grid    = 'es-grid es-grid--4';
 } elseif ( is_post_type_archive( 'es_einzelleistung' ) ) {
 	$title   = 'Einzelleistungen';

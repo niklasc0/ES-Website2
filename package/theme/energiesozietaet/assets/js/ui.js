@@ -1,5 +1,5 @@
 /*!
- * Energiesozietät UI — minimal JS for nav toggle + scroll reveal + header condense.
+ * Energiesozietät UI – minimal JS for nav toggle + scroll reveal + header condense.
  */
 (function () {
 	'use strict';
@@ -7,7 +7,7 @@
 	// 0. Mark html as JS-enabled so reveal CSS becomes active
 	document.documentElement.classList.add('js');
 
-	// 1. Mobile nav toggle — Klasse kommt auf den HEADER (passend zum CSS).
+	// 1. Mobile nav toggle – Klasse kommt auf den HEADER (passend zum CSS).
 	var toggle = document.querySelector('.es-nav-toggle');
 	var header = document.getElementById('es-header');
 	var nav    = document.getElementById('es-nav');
@@ -58,7 +58,7 @@
 		window.addEventListener('scroll', condense, { passive: true });
 	}
 
-	// 3. Scroll reveal via IntersectionObserver — auto-tag standard blocks.
+	// 3. Scroll reveal via IntersectionObserver – auto-tag standard blocks.
 	if ('IntersectionObserver' in window) {
 		// Auto-tag common targets that aren't already reveal
 		var autoTargets = document.querySelectorAll('.es-card, .es-team-card, .es-section h2, .es-section > .es-wrap > .es-grid, .es-prose > :first-child');
@@ -170,7 +170,7 @@
 		}
 	}
 
-	// 4. Smooth anchor scrolling — respects reduced motion
+	// 4. Smooth anchor scrolling – respects reduced motion
 	var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	if (!prefersReduced) {
 		document.addEventListener('click', function (e) {

@@ -1,11 +1,11 @@
 <?php
 /**
- * Elementor Global Fonts — die native „globale Vorgabe" für Schriftfamilien.
+ * Elementor Global Fonts – die native „globale Vorgabe" für Schriftfamilien.
  *
  * Setzt die Global-Fonts des aktiven Kits (Site Settings → Global Fonts) auf
  * die ah5-Schriften (Sora für Überschriften, Manrope für Text). Dadurch sind
  * die Schriften nativ in Elementor sichtbar und pro Widget auf „Global"
- * umstellbar. Läuft einmalig als versionierte Migration bei admin_init —
+ * umstellbar. Läuft einmalig als versionierte Migration bei admin_init –
  * kein Demo-Import nötig. Ändert nichts an der Größen-Skala (die bleibt als
  * überschreibbarer Theme-Default) und überschreibt keine anderen Kit-Werte.
  *

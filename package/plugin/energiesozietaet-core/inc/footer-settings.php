@@ -1,8 +1,8 @@
 <?php
 /**
- * Footer-Einstellungen — generische 3 Spalten + Brand + CTA + Copyright.
+ * Footer-Einstellungen – generische 3 Spalten + Brand + CTA + Copyright.
  * Spalten werden im Frontend nur gerendert, wenn ihre Überschrift gesetzt
- * ist — leere Spalten werden ausgeblendet und die übrigen rücken zusammen.
+ * ist – leere Spalten werden ausgeblendet und die übrigen rücken zusammen.
  *
  * @package Energiesozietaet_Core
  */
@@ -29,7 +29,7 @@ class ESC_Footer_Settings {
 
 			'brand_name'    => 'Energiesozietät GmbH',
 			'brand_sub'     => 'Recht · Steuern · Beratung',
-			'brand_claim'   => 'Beratung mit Leidenschaft — Ergebnisse, die weitertragen.',
+			'brand_claim'   => 'Beratung mit Leidenschaft – Ergebnisse, die weitertragen.',
 			'badges'        => "BVÖD\nForum Contracting\nVKU",
 
 			// Spalte 1 (Adresse) + Spalte 2 (Navigation) erscheinen im Grid;
@@ -128,7 +128,7 @@ class ESC_Footer_Settings {
 		?>
 		<div class="wrap">
 			<h1>Footer</h1>
-			<p>Alle Inhalte des Seiten-Footers zentral pflegen. <strong>Spalten ohne Überschrift werden ausgeblendet</strong> — die übrigen rücken automatisch zusammen.</p>
+			<p>Alle Inhalte des Seiten-Footers zentral pflegen. <strong>Spalten ohne Überschrift werden ausgeblendet</strong> – die übrigen rücken automatisch zusammen.</p>
 			<form method="post" action="options.php">
 				<?php settings_fields( 'esc_footer_group' ); ?>
 
@@ -161,7 +161,7 @@ class ESC_Footer_Settings {
 					<table class="form-table"><tbody>
 						<?php
 						self::input(    "col{$i}_heading", 'Überschrift' );
-						self::textarea( "col{$i}_lines",   'Zeilen · Format „Label | URL"', 'Eine Zeile pro Eintrag — Format <code>Text | URL</code>. URL optional.', 5 );
+						self::textarea( "col{$i}_lines",   'Zeilen · Format „Label | URL"', 'Eine Zeile pro Eintrag – Format <code>Text | URL</code>. URL optional.', 5 );
 						?>
 					</tbody></table>
 				<?php endfor; ?>

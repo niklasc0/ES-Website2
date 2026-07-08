@@ -1,6 +1,6 @@
 <?php
 /**
- * Farben — globale Marken-Farben als CSS-Variablen-Override. Liegt unter
+ * Farben – globale Marken-Farben als CSS-Variablen-Override. Liegt unter
  * Theme Options -> Farben. Leere Felder = Theme-Default.
  *
  * @package Energiesozietaet_Core
@@ -68,7 +68,7 @@ class ESC_Colors_Settings {
 		wp_add_inline_script( 'wp-color-picker', 'jQuery(function($){$(".es-color-field").wpColorPicker();});' );
 	}
 
-	/** :root-Override im Head — nur gesetzte Werte, Theme-Default bleibt sonst. */
+	/** :root-Override im Head – nur gesetzte Werte, Theme-Default bleibt sonst. */
 	public static function print_vars() {
 		$opts  = self::get();
 		$decls = array();
@@ -86,7 +86,7 @@ class ESC_Colors_Settings {
 		if ( ! current_user_can( 'manage_options' ) ) { return; }
 		if ( isset( $_POST['esc_colors_reset'] ) && check_admin_referer( 'esc_colors_reset' ) ) {
 			delete_option( self::OPT );
-			echo '<div class="notice notice-success is-dismissible"><p>Farben zurueckgesetzt — Theme-Defaults sind wieder aktiv.</p></div>';
+			echo '<div class="notice notice-success is-dismissible"><p>Farben zurueckgesetzt – Theme-Defaults sind wieder aktiv.</p></div>';
 		}
 		?>
 		<div class="wrap">

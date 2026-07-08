@@ -1,6 +1,6 @@
 <?php
 /**
- * Typografie-Einstellungen — globale Font-Family + optionaler Font-Upload
+ * Typografie-Einstellungen – globale Font-Family + optionaler Font-Upload
  * (woff/woff2). Generiert @font-face + CSS-Variable-Override im Front-End.
  *
  * @package Energiesozietaet_Core
@@ -16,9 +16,9 @@ class ESC_Typography_Settings {
 		add_action( 'admin_menu',  array( __CLASS__, 'menu' ) );
 		// @font-face früh in den Head, damit der Font sofort vorgeladen wird
 		add_action( 'wp_head',     array( __CLASS__, 'print_font_face' ), 5 );
-		// Globale Schriftgrößen-Overrides (drei Standardgrößen) — nach dem Theme-CSS
+		// Globale Schriftgrößen-Overrides (drei Standardgrößen) – nach dem Theme-CSS
 		add_action( 'wp_head',     array( __CLASS__, 'print_size_vars' ), 100 );
-		// Overrides im FOOTER nach Elementor — so gewinnen sie in der CSS-
+		// Overrides im FOOTER nach Elementor – so gewinnen sie in der CSS-
 		// Cascade immer, egal wie spät Elementor nachlädt
 		add_action( 'wp_footer',   array( __CLASS__, 'print_overrides' ), 99999 );
 		// Uploads: woff/woff2 erlauben
@@ -85,7 +85,7 @@ class ESC_Typography_Settings {
 
 	/** Gibt die globalen Schriftgrößen als :root-Override aus (nur was vom
 	 *  Theme-Default abweicht). Läuft im wp_head nach dem Theme-Stylesheet;
-	 *  überschreibt nur die CSS-Variablen — pro Widget in Elementor gesetzte
+	 *  überschreibt nur die CSS-Variablen – pro Widget in Elementor gesetzte
 	 *  Größen (explizite px am Element) gewinnen weiterhin. */
 	public static function print_size_vars() {
 		$o    = self::get();
@@ -125,7 +125,7 @@ class ESC_Typography_Settings {
 		return '"' . esc_html( $family ) . '",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
 	}
 
-	/** Wird im wp_head bei Priorität 5 ausgegeben — Font-Face möglichst früh. */
+	/** Wird im wp_head bei Priorität 5 ausgegeben – Font-Face möglichst früh. */
 	public static function print_font_face() {
 		$opts = self::get();
 		if ( empty( $opts['font_family'] ) ) { return; }
@@ -142,7 +142,7 @@ class ESC_Typography_Settings {
 		echo '<style id="esc-typography-face">';
 		if ( $src ) {
 			echo '@font-face{font-family:"' . esc_html( $family ) . '";font-style:' . esc_html( $opts['font_style'] ) . ';font-weight:' . esc_html( $opts['font_weight'] ) . ';font-display:swap;src:' . implode( ',', $src ) . ';}';
-			// Preload-Hint für WOFF2 — lädt Font parallel zum ersten Paint
+			// Preload-Hint für WOFF2 – lädt Font parallel zum ersten Paint
 			$p_url = wp_get_attachment_url( (int) $opts['font_woff2'] );
 			if ( $p_url ) {
 				echo '</style>';
@@ -159,7 +159,7 @@ class ESC_Typography_Settings {
 		echo '</style>';
 	}
 
-	/** Wird im wp_footer mit Priorität 99999 ausgegeben — nach Elementor's
+	/** Wird im wp_footer mit Priorität 99999 ausgegeben – nach Elementor's
 	 *  Post-CSS-Ladephase und allen per JS nachgeladenen Stylesheets. */
 	public static function print_overrides() {
 		$opts = self::get();
@@ -179,7 +179,7 @@ class ESC_Typography_Settings {
 		$fn  = $val ? basename( wp_get_attachment_url( $val ) ) : '';
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
 		echo '<input type="hidden" id="esc_typo_' . esc_attr( $name ) . '" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" />';
-		echo '<span id="esc_typo_' . esc_attr( $name ) . '_preview" style="font-family:monospace;font-size:13px;color:#5A6577;margin-right:12px;">' . esc_html( $fn ? $fn : '— noch keine Datei —' ) . '</span>';
+		echo '<span id="esc_typo_' . esc_attr( $name ) . '_preview" style="font-family:monospace;font-size:13px;color:#5A6577;margin-right:12px;">' . esc_html( $fn ? $fn : '– noch keine Datei –' ) . '</span>';
 		echo '<button type="button" class="button esc-typo-upload" data-target="esc_typo_' . esc_attr( $name ) . '" data-preview="esc_typo_' . esc_attr( $name ) . '_preview" data-accept="' . esc_attr( $accept ) . '">Datei wählen</button> ';
 		echo '<button type="button" class="button esc-typo-clear" data-target="esc_typo_' . esc_attr( $name ) . '" data-preview="esc_typo_' . esc_attr( $name ) . '_preview">Entfernen</button>';
 		echo '</td></tr>';
@@ -191,7 +191,7 @@ class ESC_Typography_Settings {
 		// Reset-Action
 		if ( isset( $_POST['esc_typo_reset'] ) && check_admin_referer( 'esc_typo_reset' ) ) {
 			delete_option( self::OPT );
-			echo '<div class="notice notice-success is-dismissible"><p>Typografie zurückgesetzt — Theme-Default (Inter) ist wieder aktiv.</p></div>';
+			echo '<div class="notice notice-success is-dismissible"><p>Typografie zurückgesetzt – Theme-Default (Inter) ist wieder aktiv.</p></div>';
 		}
 		?>
 		<div class="wrap">
@@ -204,8 +204,8 @@ class ESC_Typography_Settings {
 						<input type="text" name="<?php echo esc_attr( self::OPT . '[font_family]' ); ?>" value="<?php echo esc_attr( self::get( 'font_family' ) ); ?>" placeholder="z.B. „Söhne" oder „Inter"" style="width:100%;max-width:420px;" />
 						<p class="description">Name wie Du ihn in CSS als <code>font-family</code> verwendest. Wenn der Name zu einer Web-Safe-Schrift (<em>Arial</em>, <em>Georgia</em>) passt, reicht das. Für eigene Fonts bitte zusätzlich die Dateien unten hochladen.</p>
 					</td></tr>
-					<?php self::media_upload_field( 'font_woff2', 'Font-Datei (.woff2) — empfohlen' ); ?>
-					<?php self::media_upload_field( 'font_woff',  'Font-Datei (.woff) — Fallback' ); ?>
+					<?php self::media_upload_field( 'font_woff2', 'Font-Datei (.woff2) – empfohlen' ); ?>
+					<?php self::media_upload_field( 'font_woff',  'Font-Datei (.woff) – Fallback' ); ?>
 					<tr><th scope="row"><label>Schriftstärke</label></th><td>
 						<input type="text" name="<?php echo esc_attr( self::OPT . '[font_weight]' ); ?>" value="<?php echo esc_attr( self::get( 'font_weight' ) ); ?>" style="max-width:180px;" placeholder="400 / 500 / 700" />
 						<p class="description">Bei Variable-Fonts <code>100 900</code>, bei einzelnen Schnitten die Zahl (400 = Regular, 500 = Medium, 700 = Bold).</p>
@@ -275,7 +275,7 @@ class ESC_Typography_Settings {
 				btn.addEventListener('click', function(e){
 					e.preventDefault();
 					document.getElementById(btn.getAttribute('data-target')).value = '0';
-					document.getElementById(btn.getAttribute('data-preview')).textContent = '— noch keine Datei —';
+					document.getElementById(btn.getAttribute('data-preview')).textContent = '– noch keine Datei –';
 				});
 			});
 		})();
