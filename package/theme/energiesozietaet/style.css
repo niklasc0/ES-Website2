@@ -3790,7 +3790,7 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 
 /* Sticky Kontakt-Aside (Optik wie Team-Single-Kontaktkarte) */
 .es-leistung__aside { position: sticky; top: calc(var(--es-header-h, 78px) + 24px); display: flex; flex-direction: column; gap: 20px; }
-.es-leistung__card { background: var(--es-ink); color: var(--es-paper); padding: 32px 28px; border-radius: var(--es-radius-xs); }
+.es-leistung__card { background: var(--es-ink); color: var(--es-paper); padding: 32px 28px; border-radius: var(--es-radius-card); }
 .es-leistung__card .es-eyebrow { color: var(--es-accent); margin-bottom: 16px; }
 .es-leistung__card-title { font-size: var(--es-fs-heading-sub); line-height: 1.2; font-weight: var(--es-fw-regular); letter-spacing: -0.02em; margin: 0 0 12px; color: var(--es-paper); }
 .es-leistung__card-text { font-size: var(--es-fs-body); line-height: 1.6; color: rgba(255,255,255,0.7); margin: 0 0 24px; }
