@@ -591,9 +591,11 @@ class ESC_Page_Blueprints {
 		// data-loc gekoppelt (Hover Standort ↔ Punkt auf der Karte). Punkt-Labels
 		// dauerhaft sichtbar, damit die Zuordnung Karte↔Adresse sofort klar ist.
 		$offices = array(
-			array( 'slug' => 'duesseldorf', 'city' => 'Düsseldorf', 'lines' => array( 'Roßstraße 92 / Kennedyhaus', '40476 Düsseldorf' ), 'tel' => '+49 211 159232-0', 'hq' => true,  'pos' => 'left:13%;top:46%' ),
-			array( 'slug' => 'hamburg',     'city' => 'Hamburg',    'lines' => array( 'Caffamacherreihe 8', '20355 Hamburg' ),           'tel' => '+49 211 159232-0',     'hq' => false, 'pos' => 'left:43%;top:18%' ),
-			array( 'slug' => 'mannheim',    'city' => 'Mannheim',   'lines' => array( 'Jungbuschstraße 6', '68159 Mannheim' ),           'tel' => '+49 211 159232-0',    'hq' => false, 'pos' => 'left:30%;top:71%' ),
+			// Punkt-Positionen: aus echten Koordinaten via Mercator auf die
+			// Karten-Boundingbox gerechnet (Punkt sitzt jeweils im Stadtgebiet).
+			array( 'slug' => 'duesseldorf', 'city' => 'Düsseldorf', 'lines' => array( 'Roßstraße 92 / Kennedyhaus', '40476 Düsseldorf' ), 'tel' => '+49 211 159232-0', 'hq' => true,  'pos' => 'left:11.1%;top:51.4%' ),
+			array( 'slug' => 'hamburg',     'city' => 'Hamburg',    'lines' => array( 'Caffamacherreihe 8', '20355 Hamburg' ),           'tel' => '+49 211 159232-0',     'hq' => false, 'pos' => 'left:45.1%;top:21.4%' ),
+			array( 'slug' => 'mannheim',    'city' => 'Mannheim',   'lines' => array( 'Jungbuschstraße 6', '68159 Mannheim' ),           'tel' => '+49 211 159232-0',    'hq' => false, 'pos' => 'left:29%;top:73%' ),
 		);
 		$map_uri = function_exists( 'get_template_directory_uri' ) ? get_template_directory_uri() : '';
 
