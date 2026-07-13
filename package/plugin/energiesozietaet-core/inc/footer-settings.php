@@ -20,16 +20,16 @@ class ESC_Footer_Settings {
 	public static function defaults() {
 		return array(
 			'cta_eyebrow'     => 'Kontakt',
-			'cta_title'       => 'Sprechen Sie mit uns.',
-			'cta_subtitle'    => 'Unaufgeregt, direkt, fachlich.',
-			'cta_btn1_label'  => 'Termin vereinbaren',
+			'cta_title'       => 'Haben wir Ihr Interesse geweckt?',
+			'cta_subtitle'    => '',
+			'cta_btn1_label'  => 'Kontaktieren Sie uns!',
 			'cta_btn1_url'    => home_url( '/kontakt/' ),
 			'cta_btn2_label'  => 'info@energiesozietaet.de',
 			'cta_btn2_url'    => 'mailto:info@energiesozietaet.de',
 
 			'brand_name'    => 'Energiesozietät GmbH',
 			'brand_sub'     => 'Recht · Steuern · Beratung',
-			'brand_claim'   => 'Beratung mit Leidenschaft – Ergebnisse, die weitertragen.',
+			'brand_claim'   => 'Ergebnisse, die weitertragen.',
 			'badges'        => "BVÖD\nForum Contracting\nVKU",
 
 			// Spalte 1 (Adresse) + Spalte 2 (Navigation) erscheinen im Grid;

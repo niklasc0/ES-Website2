@@ -32,7 +32,7 @@ class ESC_Karriere_Settings {
 
 			'cta_eyebrow'      => 'Deine Bewerbung',
 			'cta_title'        => 'Bereit, gemeinsam durchzustarten?',
-			'cta_subtitle'     => 'Schicke uns Deine Unterlagen – wir melden uns binnen eines Werktags.',
+			'cta_subtitle'     => 'Wir freuen uns auf Deine Bewerbung.',
 			'cta_button_label' => 'Jetzt bewerben',
 			'cta_recipient'    => 'karriere@energiesozietaet.de',
 		);

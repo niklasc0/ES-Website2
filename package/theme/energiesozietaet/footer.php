@@ -53,7 +53,7 @@ $legal_links = call_user_func( $parse_links, $g( 'col3_lines' ) );
 			<div>
 				<div class="es-eyebrow es-eyebrow--accent"><?php echo esc_html( $g( 'cta_eyebrow', 'Kontakt' ) ); ?></div>
 				<h2>
-					<?php echo esc_html( $g( 'cta_title', 'Sprechen Sie mit uns.' ) ); ?>
+					<?php echo esc_html( $g( 'cta_title', 'Haben wir Ihr Interesse geweckt?' ) ); ?>
 					<?php if ( $g( 'cta_subtitle' ) ) : ?>
 						<br/><span class="es-footer__cta-sub"><?php echo wp_kses_post( $g( 'cta_subtitle' ) ); ?></span>
 					<?php endif; ?>

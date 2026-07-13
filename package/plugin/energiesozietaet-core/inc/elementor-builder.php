@@ -317,10 +317,10 @@ class ESC_Elementor_Builder {
 	public static function cta_dark( $args = array() ) {
 		$args = array_merge( array(
 			'eyebrow' => 'Kontakt',
-			'title_html' => 'Sprechen Sie mit uns.',
-			'sub' => 'Unaufgeregt, direkt, fachlich.',
+			'title_html' => 'Haben wir Ihr Interesse geweckt?',
+			'sub' => '',
 			'buttons' => array(
-				array( 'Termin vereinbaren', '/kontakt/', 'paper' ),
+				array( 'Kontaktieren Sie uns!', '/kontakt/', 'paper' ),
 				array( 'Unser Team', '/team/', 'ghost-paper' ),
 			),
 		), $args );
@@ -708,10 +708,10 @@ class ESC_Elementor_Builder {
 	public static function cta_dark_native( $args = array() ) {
 		$args = array_merge( array(
 			'eyebrow' => 'Kontakt',
-			'title_html' => 'Sprechen Sie mit uns.',
-			'sub' => 'Unaufgeregt, direkt, fachlich.',
+			'title_html' => 'Haben wir Ihr Interesse geweckt?',
+			'sub' => '',
 			'buttons' => array(
-				array( 'Termin vereinbaren', '/kontakt/', 'paper' ),
+				array( 'Kontaktieren Sie uns!', '/kontakt/', 'paper' ),
 				array( 'Unser Team', '/team/', 'ghost-paper' ),
 			),
 		), $args );

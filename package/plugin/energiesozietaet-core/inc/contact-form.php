@@ -26,7 +26,7 @@ class ESC_Contact_Form {
 		return array(
 			'recipient'    => get_option( 'admin_email' ),
 			'subject'      => 'Neue Anfrage über das Kontaktformular: [thema]',
-			'success_msg'  => 'Vielen Dank – Ihre Nachricht ist bei uns eingegangen. Wir melden uns binnen eines Werktags.',
+			'success_msg'  => 'Vielen Dank – Ihre Nachricht ist bei uns eingegangen. Wir melden uns bei Ihnen.',
 			'error_msg'    => 'Beim Senden ist etwas schief gelaufen. Bitte versuchen Sie es erneut oder schreiben Sie direkt an info@energiesozietaet.de.',
 			'consent_text' => 'Mit dem Absenden stimmen Sie unserer <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> zu.',
 			'topics'       => "Rechtsberatung\nSteuerberatung\nUnternehmensberatung\nKarriere\nPresse\nSonstiges",
