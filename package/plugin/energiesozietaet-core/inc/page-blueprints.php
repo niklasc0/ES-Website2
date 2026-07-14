@@ -37,6 +37,7 @@ class ESC_Page_Blueprints {
 	protected static function beratungsfelder() {
 		return array(
 			'rechtsberatung' => array(
+				'teaser' => 'Wir stellen juristische Lösungen in den Gesamtkontext.',
 				'n' => '01',
 				'title' => 'Rechtsberatung',
 				'sub' => 'Juristische Lösungen im Gesamtkontext',
@@ -51,7 +52,7 @@ class ESC_Page_Blueprints {
 					'Wir haben ein ausgeprägtes Verständnis von Energiemärkten, Verwaltungsorganisationen und ihren politischen Entscheidungsprozessen. Politikberatung ist integraler Bestandteil unserer Tätigkeit, um Ihre Projekte zum Erfolg zu führen.',
 				),
 				'topics' => array(
-					array( 'Energie', 'Die Transformation unserer Energieversorgung ist eine der größten Herausforderungen unserer Zeit und eine gesamtgesellschaftliche Aufgabe.' ),
+					array( 'Energie', 'Die Transformation unserer Energieversorgung ist eine der größten Herausforderungen unserer Zeit.' ),
 					array( 'Kommunalwirtschaft', 'Die wirtschaftliche Betätigung von Kommunen unterliegt besonderen Spielregeln.' ),
 					array( 'Vergaberecht', 'Öffentliche Beschaffung unterliegt umfangreichen, inhaltlich anspruchsvollen, rechtlichen Anforderungen. Zudem sind personelle Ressourcen hierfür in der öffentlichen Verwaltung häufig knapp.' ),
 					array( 'Gesellschaftsrecht', 'Strukturelle Veränderungen benötigen einen gesellschaftsrechtlichen Rahmen.' ),
@@ -60,6 +61,7 @@ class ESC_Page_Blueprints {
 				),
 			),
 			'steuerberatung' => array(
+				'teaser' => 'Fortlaufende Steuerberatung, Gestaltungsberatung oder herausfordernde Neustrukturierungen?',
 				'n' => '02',
 				'title' => 'Steuerberatung',
 				'sub' => 'Fortlaufend · Gestaltend · Strukturierend',
@@ -83,6 +85,7 @@ class ESC_Page_Blueprints {
 				),
 			),
 			'unternehmensberatung' => array(
+				'teaser' => 'Wir navigieren Sie durch die Anforderungen neuer Energieträger und -erzeugungsarten sowie ihrer wirtschaftlichen und finanziellen Fragestellungen.',
 				'n' => '03',
 				'title' => 'Unternehmensberatung',
 				'sub' => 'Strategie · Wirtschaft · Finanzen',
@@ -274,8 +277,8 @@ class ESC_Page_Blueprints {
 
 		// Überleitung + die 7 Punkte "Was uns besonders macht" (Original Live-Seite)
 		$s[] = $b::section_native( array(
-			'variant' => 'warm',
-			'padding' => array( '80', '0', '20', '0' ),
+			'variant' => '',
+			'padding' => array( '120', '0', '120', '0' ),
 			'cols' => array( array(
 				$b::wid_heading( 'Was uns besonders macht', 'p', 'es-eyebrow' ),
 				$b::wid_heading( 'Langjährige interdisziplinäre Beratungserfahrung, vielfach erprobt.', 'h2', 'es-split__title' ),
@@ -385,7 +388,7 @@ class ESC_Page_Blueprints {
 				'title' => $cfg['title'],
 				'title_html' => $titles_html[ $slug ],
 				'sub' => $cfg['sub'],
-				'lede' => $cfg['lede'],
+				'lede' => isset( $cfg['teaser'] ) ? $cfg['teaser'] : $cfg['lede'],
 				'link' => '/' . $slug . '/',
 				'field' => $slug,        // dynamische Einzelleistungen, Links auf Permalink
 				'topics' => array(),     // nicht hartcodiert – wird zur Laufzeit geholt
@@ -436,8 +439,8 @@ class ESC_Page_Blueprints {
 			'padding' => array( '120', '0', '120', '0' ),
 			'gap' => 'wider',
 			'column_settings' => array(
-				array( '_column_size' => 40, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
-				array( '_column_size' => 60, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+				array( '_column_size' => 46, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+				array( '_column_size' => 54, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
 			),
 			'cols' => array(
 				array(
@@ -524,7 +527,7 @@ class ESC_Page_Blueprints {
 
 		// Split-Hero: H1 links, Lead rechts (beide Text-Editor + Heading Widgets)
 		$s[] = $b::section_native( array(
-			'variant' => 'ink', 'css_classes' => 'es-hero',
+			'variant' => 'ink', 'css_classes' => 'es-hero es-hero--karriere',
 			'padding' => array( '100', '0', '140', '0' ),
 			'gap' => 'wider',
 			'column_settings' => array( array( '_column_size' => 60 ), array( '_column_size' => 40 ) ),

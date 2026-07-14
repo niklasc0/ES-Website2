@@ -42,7 +42,7 @@ while ( have_posts() ) : the_post();
 			<div class="es-leistung__grid">
 				<div class="es-leistung__main">
 					<div class="es-article__body es-leistung__body">
-						<?php the_content(); ?>
+						<?php echo es_accordionize( apply_filters( 'the_content', get_the_content() ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 
 						<?php if ( is_array( $bullets ) && ! empty( $bullets ) ) : ?>
 							<ul>

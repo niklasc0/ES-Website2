@@ -315,3 +315,25 @@ add_filter( 'language_attributes', function ( $output ) {
 	}
 	return $output;
 } );
+
+
+/**
+ * h3-Abschnitte langer Leistungsbeschreibungen in Akkordeons (details/summary)
+ * umwandeln. Greift nur bei 3+ h3-Überschriften; Übersichts-Abschnitte
+ * ("Kernkompetenzen") bleiben offen stehen.
+ */
+function es_accordionize( $html ) {
+	if ( substr_count( $html, '<h3' ) < 3 ) { return $html; }
+	$parts = preg_split( '/(<h3[^>]*>.*?<\/h3>)/s', $html, -1, PREG_SPLIT_DELIM_CAPTURE );
+	$out = $parts[0];
+	for ( $i = 1; $i < count( $parts ); $i += 2 ) {
+		$heading = wp_strip_all_tags( $parts[ $i ] );
+		$body    = isset( $parts[ $i + 1 ] ) ? $parts[ $i + 1 ] : '';
+		if ( false !== stripos( $heading, 'Kernkompetenz' ) ) {
+			$out .= $parts[ $i ] . $body;
+			continue;
+		}
+		$out .= '<details class="es-acc"><summary>' . esc_html( $heading ) . '</summary><div class="es-acc__body">' . $body . '</div></details>';
+	}
+	return $out;
+}

@@ -26,10 +26,17 @@ class ESC_Elementor_Builder {
 		foreach ( $columns as $cfg ) {
 			$col_widgets = isset( $cfg['widgets'] ) ? $cfg['widgets'] : $cfg;
 			$col_settings = isset( $cfg['settings'] ) ? $cfg['settings'] : array();
+			$settings = array_merge( array( '_column_size' => $size, '_inline_size' => null ), $col_settings );
+			// Elementor liefert nur für Preset-Größen (25/33/50/66/…) CSS-Klassen
+			// mit Breite aus. Für krumme Werte (46, 52, 58, …) MUSS _inline_size
+			// gesetzt sein, sonst kollabiert die Column auf Inhaltsbreite.
+			if ( null === $settings['_inline_size'] && isset( $settings['_column_size'] ) ) {
+				$settings['_inline_size'] = (int) $settings['_column_size'];
+			}
 			$out_cols[] = array(
 				'id'       => self::id(),
 				'elType'   => 'column',
-				'settings' => array_merge( array( '_column_size' => $size, '_inline_size' => null ), $col_settings ),
+				'settings' => $settings,
 				'elements' => array_values( array_filter( $col_widgets ) ),
 				'isInner'  => false,
 			);
@@ -696,8 +703,8 @@ class ESC_Elementor_Builder {
 			'padding' => $pad,
 			'gap' => 'wider',
 			'column_settings' => array(
-				array( '_column_size' => 45 ),
-				array( '_column_size' => 55 ),
+				array( '_column_size' => 52 ),
+				array( '_column_size' => 48 ),
 			),
 		) );
 	}

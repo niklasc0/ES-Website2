@@ -147,7 +147,7 @@ class ESC_Shortcodes {
 		$f_img   = $f_thumb ? wp_get_attachment_image( $f_thumb, 'es-wide', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>';
 		$f_title   = get_the_title();
 		$f_link    = get_permalink();
-		$f_date    = get_the_date();
+		$f_date    = get_the_date( 'j. F Y' );
 		$f_excerpt = self::excerpt( get_post(), 36 );
 		wp_reset_postdata();
 
@@ -202,7 +202,7 @@ class ESC_Shortcodes {
 					<a class="es-news-row" href="<?php the_permalink(); ?>">
 						<div class="es-news-row__media"><?php echo $img; ?></div>
 						<div class="es-news-row__body">
-							<div class="es-news-row__date"><?php echo esc_html( get_the_date() ); ?></div>
+							<div class="es-news-row__date"><?php echo esc_html( get_the_date( 'j. F Y' ) ); ?></div>
 							<h3 class="es-news-row__title"><?php the_title(); ?></h3>
 							<p class="es-news-row__text"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
 						</div>
@@ -559,7 +559,7 @@ class ESC_Shortcodes {
 						<h3 class="esc-card__title"><?php the_title(); ?></h3>
 						<div class="esc-card__date">
 							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
-							<?php echo esc_html( get_the_date() ); ?>
+							<?php echo esc_html( get_the_date( 'j. F Y' ) ); ?>
 						</div>
 					</div>
 				</a>

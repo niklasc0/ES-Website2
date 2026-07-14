@@ -45,6 +45,8 @@ while ( have_posts() ) : the_post();
 		if ( is_array( $legacy ) && ! empty( $legacy ) ) { $tasks = $legacy; }
 	}
 	$profile  = es_meta( 'es_profile' );
+	$offer    = es_meta( 'es_offer' );
+	$closing  = es_meta( 'es_closing' );
 
 	// Globale Einstellungen (Settings-API)
 	$kset = class_exists( 'ESC_Karriere_Settings' ) ? ESC_Karriere_Settings::get() : array();
@@ -89,6 +91,19 @@ while ( have_posts() ) : the_post();
 				</ul>
 			<?php endif; ?>
 
+			<?php if ( is_array( $offer ) && ! empty( $offer ) ) : ?>
+				<div class="es-stelle-single__section-title">Was wir Dir bieten</div>
+				<ul class="es-stelle-single__list">
+					<?php foreach ( $offer as $o ) : ?><li><?php echo wp_kses_post( $o ); ?></li><?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+
+			<?php if ( $closing ) : ?>
+				<div class="es-stelle-single__section-title">Interesse geweckt?</div>
+				<div class="es-stelle-single__body"><?php echo wp_kses_post( wpautop( $closing ) ); ?></div>
+			<?php endif; ?>
+
+			<?php if ( empty( $offer ) ) : ?>
 			<div class="es-stelle-single__section-title"><?php echo esc_html( $kget( 'benefits_title', 'Was Dich bei uns erwartet' ) ); ?></div>
 			<div class="esc-grid esc-grid--cols-2" style="gap:16px;margin-bottom:56px;">
 				<?php foreach ( $benefits_list as $bn ) :
@@ -100,6 +115,7 @@ while ( have_posts() ) : the_post();
 					</div>
 				<?php endforeach; ?>
 			</div>
+			<?php endif; ?>
 
 			<div style="padding:32px;background:#122023;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;border-radius:var(--es-radius-card);">
 				<div>
