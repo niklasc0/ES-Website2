@@ -1734,6 +1734,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-widget-wrap,
 .es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-element-populated {
     background: var(--es-paper); border: 0;
+    border-radius: var(--es-radius-lg);
     padding: 64px 48px !important; text-align: center;
 }
 .es-pullquote__quote .elementor-heading-title { font-size: clamp(26px, 3.2vw, 48px); font-weight: 300; letter-spacing: -0.025em; line-height: 1.25; color: var(--es-ink); margin: 0; }

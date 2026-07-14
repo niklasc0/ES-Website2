@@ -547,7 +547,6 @@ class ESC_Page_Blueprints {
 		) );
 
 		$s[] = $b::section_native( array(
-			'variant' => 'cool',
 			'padding' => array( '80', '0', '100', '0' ),
 			'cols' => array( array(
 				$b::wid_heading( 'Offene Positionen', 'h2', 'es-section__title' ),
@@ -582,7 +581,6 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 		$s[] = $b::section_native( array(
-			'variant' => 'cool',
 			'padding' => array( '80', '0', '100', '0' ),
 			'cols' => array( array( $b::wid_shortcode( '[es_news_featured limit="9"]' ) ) ),
 		) );
@@ -604,7 +602,6 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 		$s[] = $b::section_native( array(
-			'variant' => 'cool',
 			'padding' => array( '80', '0', '140', '0' ),
 			'cols' => array( array( $b::wid_shortcode( '[es_veranstaltungen layout="row"]' ) ) ),
 		) );
@@ -662,7 +659,6 @@ class ESC_Page_Blueprints {
 		$std_html .= '</div>';
 
 		$s[] = $b::section_native( array(
-			'variant' => 'cool',
 			'padding' => array( '80', '0', '140', '0' ),
 			'gap' => 'wider',
 			'css_classes' => 'es-kontakt-grid-wrap',
