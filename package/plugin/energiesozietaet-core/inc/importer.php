@@ -46,6 +46,7 @@ class ESC_Importer {
 		self::cleanup_stale( 'es_team',           wp_list_pluck( $data['team'], 'slug' ) );
 		self::cleanup_stale( 'es_einzelleistung', wp_list_pluck( $data['einzelleistungen'], 'slug' ) );
 		self::cleanup_stale( 'es_karriere',       wp_list_pluck( $data['karriere'], 'slug' ) );
+		self::cleanup_stale( 'es_news',           wp_list_pluck( $data['news'], 'slug' ) );
 		self::import_veranstaltungen( $data['veranstaltungen'], $map );
 		self::import_news( $data['news'], $map );
 		self::import_publikationen( $data['publikationen'], $map );
@@ -236,6 +237,7 @@ class ESC_Importer {
 	}
 
 	protected static function import_karriere( $items, &$map ) {
+		$order = 0;
 		foreach ( $items as $k ) {
 			$id = self::upsert_post( array(
 				'post_type'    => 'es_karriere',
@@ -243,6 +245,7 @@ class ESC_Importer {
 				'post_title'   => $k['title'],
 				'post_content' => wpautop_safe( (string) $k['description'] ),
 				'post_excerpt' => wp_trim_words( wp_strip_all_tags( (string) $k['description'] ), 26, '…' ),
+				'menu_order'   => $order++,
 			) );
 			if ( ! $id ) { continue; }
 			update_post_meta( $id, 'es_department',      (string) ( $k['department'] ?? 'Consulting' ) );

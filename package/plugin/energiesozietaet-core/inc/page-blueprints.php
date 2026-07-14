@@ -442,7 +442,7 @@ class ESC_Page_Blueprints {
 			'cols' => array(
 				array(
 					$b::wid_heading( 'Was wir für Sie tun', 'p', 'es-eyebrow' ),
-					$b::wid_heading( $d['long_title'], 'h2', 'es-split__title' ),
+					$b::wid_heading( $d['title'] . '.', 'h2', 'es-split__title' ),
 					...array_map( function( $p ) use ( $b ) { return $b::wid_text( '<p>' . esc_html( $p ) . '</p>' ); }, $d['long_copy'] ),
 				),
 				array(
