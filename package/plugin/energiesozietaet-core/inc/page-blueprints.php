@@ -189,19 +189,19 @@ class ESC_Page_Blueprints {
 					$b::wid_html( '<div class="es-service-card__head"><span class="es-service-card__num">01 / 03</span><span class="es-service-card__dot"></span></div>' ),
 					$b::wid_heading( 'Rechtsberatung', 'h3', 'es-service-card__title' ),
 					$b::wid_text( '<p>Wir stellen juristische Lösungen in den Gesamtkontext.</p>', 'es-service-card__body' ),
-					$b::wid_html( '<a class="es-link" href="/rechtsberatung/">Mehr erfahren →</a>' ),
+					$b::wid_text( '<p><a class="es-link" href="/rechtsberatung/">Mehr erfahren →</a></p>' ),
 				),
 				array(
 					$b::wid_html( '<div class="es-service-card__head"><span class="es-service-card__num">02 / 03</span><span class="es-service-card__dot"></span></div>' ),
 					$b::wid_heading( 'Steuerberatung', 'h3', 'es-service-card__title' ),
 					$b::wid_text( '<p>Fortlaufende Steuerberatung, Gestaltungsberatung oder herausfordernde Neustrukturierungen?</p>', 'es-service-card__body' ),
-					$b::wid_html( '<a class="es-link" href="/steuerberatung/">Mehr erfahren →</a>' ),
+					$b::wid_text( '<p><a class="es-link" href="/steuerberatung/">Mehr erfahren →</a></p>' ),
 				),
 				array(
 					$b::wid_html( '<div class="es-service-card__head"><span class="es-service-card__num">03 / 03</span><span class="es-service-card__dot"></span></div>' ),
 					$b::wid_heading( 'Unternehmensberatung', 'h3', 'es-service-card__title' ),
 					$b::wid_text( '<p>Wir navigieren Sie durch strategische, wirtschaftliche und finanzielle Fragestellungen.</p>', 'es-service-card__body' ),
-					$b::wid_html( '<a class="es-link" href="/unternehmensberatung/">Mehr erfahren →</a>' ),
+					$b::wid_text( '<p><a class="es-link" href="/unternehmensberatung/">Mehr erfahren →</a></p>' ),
 				),
 			),
 		) );
@@ -220,7 +220,7 @@ class ESC_Page_Blueprints {
 				$b::wid_heading( 'Aktuelles', 'p', 'es-eyebrow' ),
 				$b::wid_heading( 'Neues aus der Energiebranche.', 'h2', 'es-home-news__title' ),
 				$b::wid_shortcode( '[es_news limit="3" columns="3"]' ),
-				$b::wid_html( '<p style="margin-top:32px;"><a class="es-link" href="/news/">Alle Beiträge ansehen →</a></p>' ),
+				$b::wid_text( '<p style="margin-top:32px;"><a class="es-link" href="/news/">Alle Beiträge ansehen →</a></p>' ),
 			) ),
 		) );
 
@@ -367,7 +367,8 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 
-		// 3 Bereichs-Blöcke mit dynamischen Einzelleistungen (auto-Permalink-Links)
+		// 3 Bereichs-Blöcke NATIV (Heading/Text/Button-Widgets, Bild aus dem
+		// Beitragsbild der Beratungsfeld-Seite, Einzelleistungen dynamisch)
 		$bf = self::beratungsfelder();
 		$titles_html = array(
 			'rechtsberatung'       => 'Rechts-<br>beratung',
@@ -375,28 +376,18 @@ class ESC_Page_Blueprints {
 			'unternehmensberatung' => 'Unternehmens-<br>beratung',
 		);
 		$order = array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' );
-		$count = count( $order );
 		foreach ( $order as $i => $slug ) {
 			$cfg = $bf[ $slug ];
-			// Farbe der FOLGENDEN Sektion für die Ecken-Überlappung: nächster
-			// Block (odd=weiß/paper, even=warm) bzw. Footer (ink) beim letzten.
-			if ( $i + 1 < $count ) {
-				$next_bg = ( ( $i + 1 ) % 2 === 0 ) ? 'paper' : 'warm';
-			} else {
-				$next_bg = 'ink';
-			}
-			$s[] = $b::bereich( array(
+			foreach ( $b::bereich_native( array(
 				'n' => $cfg['n'],
 				'title' => $cfg['title'],
 				'title_html' => $titles_html[ $slug ],
 				'sub' => $cfg['sub'],
 				'lede' => isset( $cfg['teaser'] ) ? $cfg['teaser'] : $cfg['lede'],
 				'link' => '/' . $slug . '/',
-				'field' => $slug,        // dynamische Einzelleistungen, Links auf Permalink
-				'topics' => array(),     // nicht hartcodiert – wird zur Laufzeit geholt
+				'field' => $slug,
 				'stripe' => ( $i % 2 === 0 ) ? 'odd' : 'even',
-				'next_bg' => $next_bg,
-			) );
+			) ) as $sec ) { $s[] = $sec; }
 		}
 		return $s;
 	}
@@ -414,7 +405,7 @@ class ESC_Page_Blueprints {
 			'css_classes' => 'es-hero',
 			'padding' => array( '80', '0', '110', '0' ),
 			'cols' => array( array(
-				$b::wid_html( $crumb_html ),
+				$b::wid_text( $crumb_html ),
 				$b::wid_heading( $d['n'] . ' · ' . $d['title'], 'p', 'es-eyebrow es-eyebrow--accent' ),
 				$b::wid_heading( $d['long_title'], 'h1', 'es-hero__title' ),
 				$b::wid_text( '<p>' . esc_html( $d['lede'] ) . '</p>', 'es-hero__lead' ),
@@ -465,7 +456,7 @@ class ESC_Page_Blueprints {
 				$b::wid_heading( 'Aus diesem Feld', 'p', 'es-eyebrow' ),
 				$b::wid_heading( 'Publikationen & Fachbeiträge', 'h2', 'es-home-news__title' ),
 				$b::wid_shortcode( '[es_pub_teaser field="' . esc_attr( $slug ) . '" limit="3"]' ),
-				$b::wid_html( '<p style="margin-top:32px;"><a class="es-link" href="/publikationen/?feld=' . esc_attr( $slug ) . '">Alle Publikationen →</a></p>' ),
+				$b::wid_text( '<p style="margin-top:32px;"><a class="es-link" href="/publikationen/?feld=' . esc_attr( $slug ) . '">Alle Publikationen →</a></p>' ),
 			) ),
 		) );
 		return $s;
@@ -551,7 +542,7 @@ class ESC_Page_Blueprints {
 			'cols' => array( array(
 				$b::wid_heading( 'Offene Positionen', 'h2', 'es-section__title' ),
 				$b::wid_shortcode( '[es_karriere columns="1"]' ),
-				$b::wid_html( '<p style="margin-top:32px;"><a class="es-link" href="mailto:info@energiesozietaet.de?subject=Initiativbewerbung">Initiativbewerbung →</a></p>' ),
+				$b::wid_text( '<p style="margin-top:32px;"><a class="es-link" href="mailto:info@energiesozietaet.de?subject=Initiativbewerbung">Initiativbewerbung →</a></p>' ),
 			) ),
 		) );
 

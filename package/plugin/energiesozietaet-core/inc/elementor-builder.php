@@ -319,6 +319,60 @@ class ESC_Elementor_Builder {
 	}
 
 	/**
+	 * Bereichs-Block NATIV (Leistungen): zwei gestapelte section_native
+	 * gleicher Farbe. Alle Texte sind echte Elementor-Widgets (Heading/
+	 * Text/Button), das Bild kommt dynamisch aus dem Beitragsbild der
+	 * Beratungsfeld-Seite ([es_field_image]), die Einzelleistungs-Kacheln
+	 * aus [es_einzelleistungen]. Gibt ein ARRAY von Sektionen zurück.
+	 */
+	public static function bereich_native( $args ) {
+		$args = array_merge( array(
+			'n' => '01', 'title' => '', 'title_html' => '', 'sub' => '', 'lede' => '',
+			'link' => '', 'field' => '', 'stripe' => 'odd',
+		), $args );
+		$variant = ( 'even' === $args['stripe'] ) ? 'warm' : '';
+		$h2      = $args['title_html'] ? $args['title_html'] : esc_html( $args['title'] );
+
+		$meta_html = '<span class="es-bereich__num">' . esc_html( $args['n'] ) . ' / 03</span>'
+			. '<span class="es-bereich__sep"></span>'
+			. '<span class="es-bereich__sub">' . esc_html( $args['sub'] ) . '</span>';
+
+		$top = self::section_native( array(
+			'variant'     => $variant,
+			'css_classes' => 'es-bereich-nat',
+			'padding'     => array( '110', '0', '48', '0' ),
+			'gap'         => 'wider',
+			'column_settings' => array(
+				array( '_column_size' => 55, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+				array( '_column_size' => 45, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+			),
+			'cols' => array(
+				array(
+					self::wid_heading( $meta_html, 'p', 'es-bereich__meta-nat' ),
+					self::wid_heading( $h2, 'h2', 'es-bereich__title-nat' ),
+					self::wid_text( '<p>' . esc_html( $args['lede'] ) . '</p>', 'es-bereich__lede-nat' ),
+					self::button( 'Zur ' . $args['title'] . ' →', $args['link'], 'primary' ),
+				),
+				array(
+					self::wid_shortcode( '[es_field_image field="' . esc_attr( $args['field'] ) . '"]' ),
+				),
+			),
+		) );
+
+		$topics = self::section_native( array(
+			'variant'     => $variant,
+			'css_classes' => 'es-bereich-nat-topics',
+			'padding'     => array( '0', '0', '110', '0' ),
+			'cols' => array( array(
+				self::wid_heading( 'Beratungsfelder', 'p', 'es-bereich__topics-label-nat' ),
+				self::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $args['field'] ) . '" columns="3" link="1"]' ),
+			) ),
+		) );
+
+		return array( $top, $topics );
+	}
+
+	/**
 	 * Dark CTA band (G3).
 	 */
 	public static function cta_dark( $args = array() ) {
@@ -390,14 +444,10 @@ class ESC_Elementor_Builder {
 		// Layout: Eyebrow + Zitat oben (volle Breite) – darunter Portrait links
 		// neben Name/Rolle. Portrait via HTML-Widget (rundes Bild), Name/Rolle
 		// als native Text-Widgets editierbar.
+		// Foto als (dekoratives) HTML-Widget, Name/Rolle als natives
+		// Text-Widget – per CSS nebeneinander gelegt und damit im
+		// Elementor-Editor direkt editierbar.
 		$photo_html = '<div class="es-gf-quote__photo">' . do_shortcode( '[es_team_photo slug="' . esc_attr( $args['photo_slug'] ) . '" size=88]' ) . '</div>';
-		$author_html = '<div class="es-gf-quote__author">'
-			. $photo_html
-			. '<div class="es-gf-quote__author-text">'
-			. '<p class="es-gf-quote__name">' . esc_html( $args['name'] ) . '</p>'
-			. '<p class="es-gf-quote__role">' . esc_html( $args['role'] ) . '</p>'
-			. '</div>'
-			. '</div>';
 		return self::section_native( array(
 			'variant' => 'warm',
 			'css_classes' => 'es-gf-quote',
@@ -405,7 +455,12 @@ class ESC_Elementor_Builder {
 			'cols' => array( array(
 				self::wid_heading( $args['eyebrow'], 'p', 'es-eyebrow' ),
 				self::wid_heading( '„' . $args['quote'] . '"', 'h2', 'es-gf-quote__text' ),
-				self::wid_html( $author_html ),
+				self::wid_html( $photo_html, 'es-gf-quote__photo-w' ),
+				self::wid_text(
+					'<p class="es-gf-quote__name">' . esc_html( $args['name'] ) . '</p>'
+					. '<p class="es-gf-quote__role">' . esc_html( $args['role'] ) . '</p>',
+					'es-gf-quote__author-w'
+				),
 			) ),
 		) );
 	}

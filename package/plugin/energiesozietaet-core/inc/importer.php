@@ -40,7 +40,7 @@ class ESC_Importer {
 		// 2. Create CPT entries
 		self::import_team( $data['team'], $media_map, $map );
 		self::import_einzelleistungen( $data['einzelleistungen'], $map );
-		self::import_karriere( $data['karriere'], $map );
+		self::import_karriere( $data['karriere'], $map, $media_map );
 		// Nicht mehr in den Quelldaten enthaltene Einträge in den Papierkorb
 		// (z.B. ausgeschiedene Teammitglieder, geschlossene Stellen).
 		self::cleanup_stale( 'es_team',           wp_list_pluck( $data['team'], 'slug' ) );
@@ -48,7 +48,7 @@ class ESC_Importer {
 		self::cleanup_stale( 'es_karriere',       wp_list_pluck( $data['karriere'], 'slug' ) );
 		self::cleanup_stale( 'es_news',           wp_list_pluck( $data['news'], 'slug' ) );
 		self::import_veranstaltungen( $data['veranstaltungen'], $map );
-		self::import_news( $data['news'], $map );
+		self::import_news( $data['news'], $map, $media_map );
 		self::import_publikationen( $data['publikationen'], $map );
 		self::import_linkedin( isset( $data['linkedin'] ) ? $data['linkedin'] : array(), $map );
 
@@ -106,24 +106,58 @@ class ESC_Importer {
 	/** Import bundled media into the WP media library. */
 	protected static function import_media( $data ) {
 		$map = array();
-		$dir = ESC_DIR . 'data/media/team/';
 		foreach ( (array) ( $data['team'] ?? array() ) as $t ) {
 			if ( empty( $t['image_file'] ) ) { continue; }
 			$src = ESC_DIR . 'data/media/' . $t['image_file'];
 			if ( ! file_exists( $src ) ) { continue; }
-			$attach_id = self::sideload( $src, $t['name'] . ' Portrait' );
+			$attach_id = self::sideload( $src, $t['name'] . ' Portrait', $t['image_file'] . ':' . md5_file( $src ) );
 			if ( $attach_id && ! is_wp_error( $attach_id ) ) {
 				$map[ 'team:' . $t['slug'] ] = $attach_id;
+			}
+		}
+		// News-Artikelbilder (data/media/news/<slug>.jpg)
+		foreach ( (array) ( $data['news'] ?? array() ) as $n ) {
+			if ( empty( $n['image_file'] ) ) { continue; }
+			$src = ESC_DIR . 'data/media/' . $n['image_file'];
+			if ( ! file_exists( $src ) ) { continue; }
+			$attach_id = self::sideload( $src, $n['title'], $n['image_file'] . ':' . md5_file( $src ) );
+			if ( $attach_id && ! is_wp_error( $attach_id ) ) {
+				$map[ 'newsimg:' . $n['slug'] ] = $attach_id;
+			}
+		}
+		// Stellenbilder (data/media/karriere/<slug>.jpg)
+		foreach ( (array) ( $data['karriere'] ?? array() ) as $k ) {
+			if ( empty( $k['image_file'] ) ) { continue; }
+			$src = ESC_DIR . 'data/media/' . $k['image_file'];
+			if ( ! file_exists( $src ) ) { continue; }
+			$attach_id = self::sideload( $src, $k['title'], $k['image_file'] . ':' . md5_file( $src ) );
+			if ( $attach_id && ! is_wp_error( $attach_id ) ) {
+				$map[ 'karriereimg:' . $k['slug'] ] = $attach_id;
 			}
 		}
 		return $map;
 	}
 
-	/** Sideload a file that already exists on disk into the media library. */
-	protected static function sideload( $src, $title = '' ) {
+	/** Sideload a file that already exists on disk into the media library.
+	 *  $source_key macht den Import idempotent: existiert bereits ein
+	 *  Attachment mit diesem Quell-Schlüssel, wird es wiederverwendet
+	 *  (kein Duplikat bei "Import erzwingen"). */
+	protected static function sideload( $src, $title = '', $source_key = '' ) {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/image.php';
+
+		if ( $source_key ) {
+			$existing = get_posts( array(
+				'post_type'      => 'attachment',
+				'post_status'    => 'inherit',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				'meta_key'       => '_esc_source_file',
+				'meta_value'     => $source_key,
+			) );
+			if ( ! empty( $existing ) ) { return (int) $existing[0]; }
+		}
 
 		$filename = wp_unique_filename( wp_upload_dir()['path'], basename( $src ) );
 		$dest = wp_upload_dir()['path'] . '/' . $filename;
@@ -142,6 +176,7 @@ class ESC_Importer {
 		if ( ! is_wp_error( $attach_id ) ) {
 			$meta = wp_generate_attachment_metadata( $attach_id, $dest );
 			wp_update_attachment_metadata( $attach_id, $meta );
+			if ( $source_key ) { update_post_meta( $attach_id, '_esc_source_file', $source_key ); }
 		}
 		return $attach_id;
 	}
@@ -236,7 +271,7 @@ class ESC_Importer {
 		}
 	}
 
-	protected static function import_karriere( $items, &$map ) {
+	protected static function import_karriere( $items, &$map, $media_map = array() ) {
 		$order = 0;
 		foreach ( $items as $k ) {
 			$id = self::upsert_post( array(
@@ -259,6 +294,9 @@ class ESC_Importer {
 			if ( ! empty( $k['closing'] ) ) { update_post_meta( $id, 'es_closing', (string) $k['closing'] ); }
 			else { delete_post_meta( $id, 'es_closing' ); }
 			delete_post_meta( $id, 'es_bullets' );
+			if ( ! empty( $media_map[ 'karriereimg:' . $k['slug'] ] ) ) {
+				set_post_thumbnail( $id, $media_map[ 'karriereimg:' . $k['slug'] ] );
+			}
 			$map[ 'karriere:' . $k['slug'] ] = $id;
 		}
 	}
@@ -284,7 +322,7 @@ class ESC_Importer {
 		}
 	}
 
-	protected static function import_news( $items, &$map ) {
+	protected static function import_news( $items, &$map, $media_map = array() ) {
 		foreach ( $items as $n ) {
 			$id = self::upsert_post( array(
 				'post_type'    => 'es_news',
@@ -297,6 +335,9 @@ class ESC_Importer {
 					: wp_trim_words( wp_strip_all_tags( (string) $n['body'] ), 28, '…' ),
 			) );
 			if ( ! $id ) { continue; }
+			if ( ! empty( $media_map[ 'newsimg:' . $n['slug'] ] ) ) {
+				set_post_thumbnail( $id, $media_map[ 'newsimg:' . $n['slug'] ] );
+			}
 			$map[ 'news:' . $n['slug'] ] = $id;
 		}
 	}

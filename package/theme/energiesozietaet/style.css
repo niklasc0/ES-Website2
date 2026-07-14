@@ -3802,6 +3802,12 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
     border-color: rgba(255,255,255,0.18) !important;
 }
 .es-bereich--warm .es-bereich__topic.es-bereich__topic.es-bereich__topic:hover { border-color: var(--es-accent) !important; }
+/* Native warme Bereichs-Sektionen (es-stage--warm statt es-bereich--warm) */
+.es-stage--warm .es-bereich__topic.es-bereich__topic.es-bereich__topic {
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.18) !important;
+}
+.es-stage--warm .es-bereich__topic.es-bereich__topic.es-bereich__topic:hover { border-color: var(--es-accent) !important; }
 @media (max-width: 768px) {
     .es-bereich__topics.es-bereich__topics.es-bereich__topics { gap: 12px !important; }
     .es-bereich__topic.es-bereich__topic.es-bereich__topic { padding: 18px !important; }
@@ -3952,6 +3958,43 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 @media (min-width: 768px) {
     .es-hero--karriere .elementor-column:last-child > .elementor-widget-wrap { padding-top: 55px; }
 }
+
+/* ─── Native Bereichs-Sektionen (Leistungen): Widget-Pendants zu den
+   klassischen .es-bereich__*-Regeln ─── */
+.elementor-widget.es-bereich__meta-nat .elementor-heading-title {
+    display: flex; align-items: center; gap: 14px; margin: 0 0 28px;
+    font-size: var(--es-fs-meta); font-weight: var(--es-fw-regular);
+}
+.elementor-widget.es-bereich__title-nat .elementor-heading-title {
+    font-size: clamp(40px, 5.4vw, 72px); font-weight: var(--es-fw-regular);
+    letter-spacing: -0.035em; line-height: 1.02; margin: 0 0 36px;
+}
+.elementor-widget.es-bereich__lede-nat p {
+    font-size: var(--es-fs-body); line-height: 1.6; color: var(--es-text-mute);
+    max-width: 580px; font-weight: var(--es-fw-light); margin: 0 0 40px;
+}
+.elementor-widget.es-bereich__topics-label-nat .elementor-heading-title {
+    font-size: var(--es-fs-meta); letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--es-text-soft); margin: 0 0 24px; font-weight: var(--es-fw-regular);
+}
+/* On-Dark-Pendants (Sektion warm) */
+.es-stage--warm .es-bereich__num { color: rgba(255,255,255,0.55); }
+.es-stage--warm .elementor-widget.es-bereich__lede-nat p { color: rgba(255,255,255,0.8); }
+.es-stage--warm .elementor-widget.es-bereich__topics-label-nat .elementor-heading-title { color: rgba(255,255,255,0.6); }
+.es-stage--warm .es-bereich__topic { color: var(--es-paper); }
+.es-stage--warm .es-bereich__topic-desc { color: rgba(255,255,255,0.7); }
+@media (max-width: 767px) {
+    .elementor-widget.es-bereich__title-nat .elementor-heading-title { font-size: 40px; line-height: 1.05; }
+}
+
+/* ─── GF-Quote: Foto-Widget + Autor-Text-Widget nebeneinander ─── */
+.es-gf-quote .elementor-widget.es-gf-quote__photo-w,
+.es-gf-quote .elementor-widget.es-gf-quote__author-w {
+    display: inline-block; width: auto; vertical-align: middle;
+    margin-bottom: 0 !important;
+}
+.es-gf-quote .elementor-widget.es-gf-quote__photo-w { margin-right: 16px; margin-top: 24px !important; }
+.es-gf-quote .elementor-widget.es-gf-quote__author-w .es-gf-quote__role { margin-top: 2px; }
 
 /* ─── Automatisch verlinkte Team-Namen in Fließtexten ─── */
 a.es-team-link {
