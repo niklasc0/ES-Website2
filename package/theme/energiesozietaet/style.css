@@ -1416,7 +1416,8 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 /* Service-Cards + Mandanten auch für es-stage--warm Hintergrund */
 .es-stage--warm .elementor-column.es-service-card .elementor-element-populated { background: var(--es-paper); }
 
-/* Sicherstellen, dass Elementor-Button-Widget unsere Custom-Klassen greift */
+/* Sicherstellen, dass Elementor-Button-Widget unsere Custom-Klassen greift
+   (vollständige Optik siehe Block "D) Native Elementor Button-Widget") */
 .elementor-widget-button .elementor-button {
     border-radius: var(--es-radius-pill); font-family: var(--es-font-sans);
     font-weight: var(--es-fw-medium); letter-spacing: 0; padding: 15px 30px;
@@ -1937,11 +1938,12 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 }
 
 /* D) Native Elementor Button-Widget – sieht 1:1 aus wie unsere .es-btn
-   (grüne Akzent-Pill). !important, damit auch Elementors Kit-/Global-
-   Farben (nach erster CSS-Generierung) sicher übersteuert werden. */
+   (dunkle Ink-Pill wie .es-btn--primary, Hover grün). !important, damit
+   auch Elementors Kit-/Global-Farben (nach erster CSS-Generierung)
+   sicher übersteuert werden. */
 .elementor-widget-button .elementor-button {
-    background: var(--es-accent) !important; color: var(--es-ink) !important;
-    border: 1px solid var(--es-accent) !important;
+    background: var(--es-ink) !important; color: var(--es-on-dark-text) !important;
+    border: 1px solid var(--es-ink) !important;
     border-radius: var(--es-radius-pill) !important;
     font-family: var(--es-font-sans) !important;
     font-size: 14px !important; font-weight: var(--es-fw-medium) !important; letter-spacing: 0 !important;
@@ -1949,7 +1951,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     transition: all var(--es-duration-fast) var(--es-easing);
     line-height: 1 !important;
 }
-.elementor-widget-button .elementor-button:hover { background: var(--es-ink) !important; color: var(--es-paper) !important; border-color: var(--es-ink) !important; }
+.elementor-widget-button .elementor-button:hover { background: var(--es-accent) !important; color: var(--es-ink) !important; border-color: var(--es-accent) !important; }
 
 /* --paper (auf dunklem Grund) */
 .elementor-widget-button.es-btn--paper .elementor-button,
@@ -3959,6 +3961,16 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 /* ─── Karriere-Hero: Lead rechts auf Höhe der H1 (Eyebrow-Versatz) ─── */
 @media (min-width: 768px) {
     .es-hero--karriere .elementor-column:last-child > .elementor-widget-wrap { padding-top: 55px; }
+}
+
+/* ─── Einheitliche Content-Kante für alle Stage-Sektionen:
+   Elementors gap-Stufen polstern Spalten unterschiedlich (default 10px,
+   wider 30px) – dadurch sprangen die linken/rechten Außenkanten
+   zwischen Sektionen um 20px. Außenkanten der wider-Sektionen auf die
+   10px-Kante angleichen; der breite Abstand ZWISCHEN Spalten bleibt. ─── */
+@media (min-width: 768px) {
+    .es-stage-sec > .elementor-container.elementor-column-gap-wider > .elementor-column:first-child > .elementor-widget-wrap { padding-left: 10px; }
+    .es-stage-sec > .elementor-container.elementor-column-gap-wider > .elementor-column:last-child > .elementor-widget-wrap { padding-right: 10px; }
 }
 
 /* ─── Native Bereichs-Sektionen (Leistungen): Widget-Pendants zu den

@@ -363,6 +363,7 @@ class ESC_Elementor_Builder {
 			'variant'     => $variant,
 			'css_classes' => 'es-bereich-nat-topics',
 			'padding'     => array( '0', '0', '110', '0' ),
+			'gap'         => 'wider', // gleiche Einrückung wie die Sektion darüber
 			'cols' => array( array(
 				self::wid_heading( 'Beratungsfelder', 'p', 'es-bereich__topics-label-nat' ),
 				self::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $args['field'] ) . '" columns="3" link="1"]' ),
