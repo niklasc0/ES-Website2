@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 class ESC_Elementor_Globals {
 
-	const VER = 1;
+	const VER = 2;
 	const OPT = 'esc_elementor_globals_ver';
 
 	public static function init() {
@@ -44,9 +44,15 @@ class ESC_Elementor_Globals {
 			array( '_id' => 'accent',    'title' => 'Accent',    'typography_typography' => 'custom', 'typography_font_family' => 'Manrope', 'typography_font_weight' => '500' ),
 		);
 
+		// Container-Breite der Site auf das Design-Raster (1280px) setzen.
+		// Elementors Kit-Default ist 1140px – sobald die Kit-CSS generiert
+		// wird (erstes Öffnen des Elementor-Editors), würden sonst alle
+		// Sektionen ohne eigene content_width auf 1140px gestaucht.
+		$settings['container_width'] = array( 'unit' => 'px', 'size' => 1280, 'sizes' => array() );
+
 		update_post_meta( $kit_id, '_elementor_page_settings', $settings );
 
-		// Elementor-CSS neu generieren, damit die Global-Fonts greifen.
+		// Elementor-CSS neu generieren, damit Global-Fonts + Breite greifen.
 		\Elementor\Plugin::$instance->files_manager->clear_cache();
 	}
 }
