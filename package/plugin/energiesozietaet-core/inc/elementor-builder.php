@@ -340,7 +340,7 @@ class ESC_Elementor_Builder {
 		$top = self::section_native( array(
 			'variant'     => $variant,
 			'css_classes' => 'es-bereich-nat',
-			'padding'     => array( '110', '0', '48', '0' ),
+			'padding'     => array( '90', '0', '24', '0' ),
 			'gap'         => 'wider',
 			'column_settings' => array(
 				array( '_column_size' => 55, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
@@ -362,7 +362,7 @@ class ESC_Elementor_Builder {
 		$topics = self::section_native( array(
 			'variant'     => $variant,
 			'css_classes' => 'es-bereich-nat-topics',
-			'padding'     => array( '0', '0', '110', '0' ),
+			'padding'     => array( '0', '0', '90', '0' ),
 			'gap'         => 'wider', // gleiche Einrückung wie die Sektion darüber
 			'cols' => array( array(
 				self::wid_heading( 'Beratungsfelder', 'p', 'es-bereich__topics-label-nat' ),
