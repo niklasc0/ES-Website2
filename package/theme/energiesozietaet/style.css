@@ -1281,6 +1281,9 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 }
 .es-stage--warm .elementor-column.es-card-pillar > .elementor-widget-wrap,
 .es-stage--warm .elementor-column.es-card-pillar .elementor-element-populated { background: var(--es-paper-cool); }
+/* Auf hellgrauen (cool) Sektionen: Karten weiß, sonst unsichtbar */
+.es-stage--cool .elementor-column.es-card-pillar > .elementor-widget-wrap,
+.es-stage--cool .elementor-column.es-card-pillar .elementor-element-populated { background: var(--es-paper); }
 .es-card-pillar__num { font-family: var(--es-font-mono); font-size: var(--es-fs-meta); color: var(--es-accent); letter-spacing: 0.16em; margin-bottom: 32px; }
 .elementor-widget.es-card-pillar__title .elementor-heading-title,
 .es-card-pillar__title > .elementor-heading-title { font-size: var(--es-fs-heading-feature); line-height: 1.15; font-weight: 400; letter-spacing: -0.025em; margin: 0 0 20px; }
@@ -1430,6 +1433,8 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     background: #F4F6F8; border: var(--es-border); border-radius: var(--es-radius-card);
     padding: 40px;
 }
+/* Auf hellgrauer (cool) Sektion: Formular-Card weiß, sonst kaum abgesetzt */
+.es-stage--cool .es-kontakt-form { background: var(--es-paper); }
 /* Formular-Spalte streckt sich auf die Höhe der Standort-Spalte: die
    Nachricht-Textarea absorbiert die Differenz → die Unterkante des
    Formulars schließt exakt mit der Mannheim-Card ab (Desktop, 2-spaltig). */
@@ -1478,6 +1483,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     transition: border-color var(--es-duration-fast) var(--es-easing), background var(--es-duration-fast) var(--es-easing);
 }
 .es-kontakt-location:hover { border-color: var(--es-ink); background: var(--es-paper-cool); }
+.es-stage--cool .es-kontakt-location:hover { background: var(--es-paper); }
 .es-kontakt-location__head {
     font-size: var(--es-fs-heading-sub); font-weight: 500; letter-spacing: -0.02em; margin-bottom: 8px;
     display: flex; align-items: center; gap: 10px;
@@ -3642,6 +3648,11 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-stage--warm .es-card-pillar__title .elementor-heading-title,
 .es-stage--warm .es-service-card__title .elementor-heading-title,
 .es-stage--warm .es-pullquote-panel .elementor-heading-title { color: var(--es-ink); }
+/* Native Pullquote (es-pullquote-panel-wrap): weißes Panel ⇒ Text ink,
+   auch wenn die Sektion warm/dunkel ist */
+.es-stage--warm .es-pullquote__quote .elementor-heading-title,
+.es-stage--warm .elementor-widget.es-pullquote__quote .elementor-heading-title { color: var(--es-ink); }
+.es-stage--warm .es-pullquote__attr p { color: var(--es-accent); }
 .es-stage--warm .es-card-pillar__desc p,
 .es-stage--warm .es-service-card__body p { color: var(--es-text-mute); }
 .es-stage--warm .es-pullquote-panel p { color: var(--es-accent); }

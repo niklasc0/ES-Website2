@@ -161,7 +161,7 @@ class ESC_Page_Blueprints {
 				'<p>Transformation ist eine Mammutaufgabe: dafür braucht es viele, das schafft niemand allein. Wir – das Team der Energiesozietät – verstehen uns als einer der vielen. Wir werden Teil sein und möchten Verantwortung übernehmen. Unser Ziel ist, Lösungen zu entwickeln für die überaus komplexen Transformationsfragen unserer Zeit. Wir unterstützen unsere Mandanten dabei, Rahmenbedingungen zu schaffen, Geschäftsmodelle zu entwickeln und Organisationen dafür zu verändern, dass sie die Herausforderungen der Zeit meistern.</p>',
 				'<p><a class="es-link" href="/philosophie/">Mehr erfahren</a> · <a class="es-link" href="/team/">Unser Team</a></p>',
 			),
-			'variant' => 'warm',
+			'variant' => 'cool',
 			'padding' => 'short',
 		) );
 
@@ -263,7 +263,7 @@ class ESC_Page_Blueprints {
 				'<p>Wir sind uns dieser Einflussfaktoren sehr bewusst. Deshalb beziehen wir Sie in unsere Lösungen stets mit ein, so dass unsere Beratungsergebnisse bestmöglich Ihren gestalterischen oder unternehmerischen Zielen dienen.</p>',
 				'<p>Wir denken unsere Projekte vom Ende her. Unsere Beratung endet nicht mit der Beantwortung Ihrer konkreten Fragestellung. Vielmehr beinhaltet sie, dass wir berücksichtigen, wie Sie mit dem Endprodukt unserer Beratung weiterarbeiten, und bezieht auch eine adressatengerechte Ergebnisdarstellung und -kommunikation mit ein.</p>',
 			),
-			'variant' => 'warm',
+			'variant' => 'cool',
 			'padding' => 'default',
 		) );
 
@@ -273,11 +273,11 @@ class ESC_Page_Blueprints {
 			array( '', 'Steigende regulatorische Anforderungen', '' ),
 			array( '', 'Komplexe Entscheidungsprozesse', '' ),
 			array( '', 'Multi-Stakeholder', '' ),
-		), 'warm', 'es-cards-grid--quads' );
+		), 'cool', 'es-cards-grid--quads' );
 
 		// Überleitung + die 7 Punkte "Was uns besonders macht" (Original Live-Seite)
 		$s[] = $b::section_native( array(
-			'variant' => 'cool',
+			'variant' => '',
 			'padding' => array( '120', '0', '120', '0' ),
 			'cols' => array( array(
 				$b::wid_heading( 'Was uns besonders macht', 'p', 'es-eyebrow' ),
@@ -287,15 +287,17 @@ class ESC_Page_Blueprints {
 			) ),
 		) );
 
-		// Pullquote (bleibt als gf-Helper gerendert im Panel)
+		// Pullquote (bleibt als gf-Helper gerendert im Panel) – dunkler
+		// Abschnitt, das weiße Zitat-Panel schwebt darauf
 		$s[] = $b::pullquote(
 			'„Unseren Mandanten ist eines gemein: Sie bewegen sich alle in einem <span class="text-bg-green">hochkomplexen</span> und <span class="text-bg-green">sich kontinuierlich weiterentwickelnden</span> Umfeld."',
-			'Unsere Überzeugung'
+			'Unsere Überzeugung',
+			'warm'
 		);
 
-		// 4 Perspektiven
+		// 4 Perspektiven – nächster Farbzyklus: hellgrau
 		$s[] = $b::section_native( array(
-			'variant' => 'warm',
+			'variant' => 'cool',
 			'padding' => array( '120', '0', '40', '0' ),
 			'cols' => array( array(
 				$b::wid_heading( 'Interdisziplinär', 'p', 'es-eyebrow' ),
@@ -308,7 +310,7 @@ class ESC_Page_Blueprints {
 			array( '', 'Steuerberater', 'Steuerliche Struktur, Compliance und Gestaltungsspielräume.' ),
 			array( '', 'Wirtschaftsingenieure', 'Technische Lösungen und Machbarkeit im Energiesystem.' ),
 			array( '', 'Kaufleute',     'Betriebs- und finanzwirtschaftliche Bewertung und Strukturierung.' ),
-		), 'warm', 'es-cards-grid--quads' );
+		), 'cool', 'es-cards-grid--quads' );
 
 		// Mandantschaft – Liste als Shortcode, im Elementor-Editor anpassbar
 		$s[] = $b::split_native( array(
@@ -361,7 +363,7 @@ class ESC_Page_Blueprints {
 				'<p>Die Energiesozietät ist seit ihrer Gründung Ende 2023 dynamisch gewachsen und verfügt heute über ein Team mit großem Erfahrungsschatz. Viele Teammitglieder haben jahrelang erfolgreich in Big-Four-Gesellschaften, spezialisierten Beratungsgesellschaften und Kanzleien gearbeitet.</p>',
 				'<p>Sollten wir selbst einmal nicht die geeigneten Spezialisten im Team haben, um Ihre Fragen bestmöglich zu beantworten, kooperieren wir mit namhaften Beratungsgesellschaften, mit denen wir seit vielen Jahren vertrauensvoll zusammenarbeiten.</p>',
 			),
-			'variant' => 'warm',
+			'variant' => 'cool',
 			'padding' => 'short',
 		) );
 
@@ -424,7 +426,7 @@ class ESC_Page_Blueprints {
 		$ansprech_slugs = array();
 		foreach ( $d['ansprechpartner'] as $p ) { $ansprech_slugs[] = $p[0]; }
 		$s[] = $b::section_native( array(
-			'variant' => 'warm',
+			'variant' => 'cool',
 			'padding' => array( '28', '0', '28', '0' ),
 			'cols' => array( array(
 				$b::wid_shortcode( '[es_ansprechpartner members="' . esc_attr( implode( ',', $ansprech_slugs ) ) . '" cta_url="/kontakt/" cta_label="Termin anfragen"]' ),
@@ -480,6 +482,7 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 		$s[] = $b::section_native( array(
+			'variant' => 'cool',
 			'padding' => array( '40', '0', '80', '0' ),
 			'cols' => array( array(
 				$b::wid_shortcode( '[es_team columns="2" filter="1"]' ),
@@ -493,7 +496,7 @@ class ESC_Page_Blueprints {
 				'<p>Sollten wir selbst einmal nicht die geeigneten Spezialisten im Team haben, kooperieren wir mit namhaften Beratungsgesellschaften, mit denen wir seit vielen Jahren vertrauensvoll zusammenarbeiten. Sprechen Sie uns gerne direkt an.</p>',
 			),
 			'variant' => 'warm', 'padding' => 'short',
-		) );
+		) ); // Team: Grid hellgrau → Netzwerk-Split dunkel (weiße Phase entfällt)
 		return $s;
 	}
 
@@ -508,7 +511,8 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 		$s[] = $b::section_native( array(
-			'padding' => array( '80', '0', '0', '0' ),
+			'variant' => 'cool',
+			'padding' => array( '80', '0', '80', '0' ),
 			'cols' => array( array(
 				$b::wid_text( '<p>Die Herausforderungen unserer Mandanten, die Transformation der öffentlichen Hand und der Energiewirtschaft voranzutreiben, stellen uns tagtäglich vor neue Herausforderungen. Lösungen für die Fragen unserer Zeit zu finden, erfordert es, sich auf seine Erfahrungen und Kompetenzen zu verlassen und erlernte Methoden in neuen Aufgabenstellungen anzuwenden. Gleichzeitig verändert sich der Handlungsrahmen, in dem wir uns bewegen, fortwährend.</p><p>Es gibt also zahlreiche Anlässe, Wissen und Sichtweisen zu teilen, um am Puls der Zeit zu sein.</p>' ),
 			) ),
@@ -543,6 +547,7 @@ class ESC_Page_Blueprints {
 		) );
 
 		$s[] = $b::section_native( array(
+			'variant' => 'cool',
 			'padding' => array( '80', '0', '100', '0' ),
 			'cols' => array( array(
 				$b::wid_heading( 'Offene Positionen', 'h2', 'es-section__title' ),
@@ -577,6 +582,7 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 		$s[] = $b::section_native( array(
+			'variant' => 'cool',
 			'padding' => array( '80', '0', '100', '0' ),
 			'cols' => array( array( $b::wid_shortcode( '[es_news_featured limit="9"]' ) ) ),
 		) );
@@ -598,6 +604,7 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 		$s[] = $b::section_native( array(
+			'variant' => 'cool',
 			'padding' => array( '80', '0', '140', '0' ),
 			'cols' => array( array( $b::wid_shortcode( '[es_veranstaltungen layout="row"]' ) ) ),
 		) );
@@ -655,6 +662,7 @@ class ESC_Page_Blueprints {
 		$std_html .= '</div>';
 
 		$s[] = $b::section_native( array(
+			'variant' => 'cool',
 			'padding' => array( '80', '0', '140', '0' ),
 			'gap' => 'wider',
 			'css_classes' => 'es-kontakt-grid-wrap',

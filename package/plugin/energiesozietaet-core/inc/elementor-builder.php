@@ -354,10 +354,11 @@ class ESC_Elementor_Builder {
 	/**
 	 * Pullquote section – huge centered quote on warm background.
 	 */
-	public static function pullquote( $quote_html, $attribution = '' ) {
+	public static function pullquote( $quote_html, $attribution = '', $variant = '' ) {
 		// Native Version: Wrapper-Section mit Klasse es-pullquote-panel, Inhalt
 		// aus Heading-Widget (quote) + Text-Widget (attribution). Komplett im
-		// Elementor-Editor klickbar.
+		// Elementor-Editor klickbar. Das innere Panel ist immer weiß – auf
+		// dunklen Varianten (warm) wirkt es als schwebende Karte.
 		$widgets = array(
 			self::wid_heading( $quote_html, 'h2', 'es-pullquote__quote' ),
 		);
@@ -366,6 +367,7 @@ class ESC_Elementor_Builder {
 		}
 		return self::section_native( array(
 			'cols' => array( $widgets ),
+			'variant' => $variant,
 			'css_classes' => 'es-pullquote-panel-wrap',
 			'padding' => array( '120', '0', '120', '0' ),
 		) );
