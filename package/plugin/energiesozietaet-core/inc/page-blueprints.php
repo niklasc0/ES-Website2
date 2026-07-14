@@ -277,7 +277,7 @@ class ESC_Page_Blueprints {
 
 		// Überleitung + die 7 Punkte "Was uns besonders macht" (Original Live-Seite)
 		$s[] = $b::section_native( array(
-			'variant' => '',
+			'variant' => 'cool',
 			'padding' => array( '120', '0', '120', '0' ),
 			'cols' => array( array(
 				$b::wid_heading( 'Was uns besonders macht', 'p', 'es-eyebrow' ),

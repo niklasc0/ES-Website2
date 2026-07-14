@@ -72,7 +72,7 @@ Tags: elementor, business, one-column, custom-colors, custom-menu, featured-imag
 
     --es-space-3:  12px;  --es-space-4:  16px;  --es-space-6:  24px;
     --es-space-8:  32px;  --es-space-10: 40px;  --es-space-12: 48px;
-    --es-space-16: 64px;  --es-space-20: 80px;  --es-space-24: 96px;
+    --es-space-14: 56px;  --es-space-16: 64px;  --es-space-20: 80px;  --es-space-24: 96px;
     --es-space-30: 120px; --es-space-35: 140px;
 
     --es-radius-xs: 2px; --es-radius-sm: 4px; --es-radius-pill: 999px;
@@ -3941,6 +3941,13 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 /* ─── Karriere-Hero: Lead rechts auf Höhe der H1 (Eyebrow-Versatz) ─── */
 @media (min-width: 768px) {
     .es-hero--karriere .elementor-column:last-child > .elementor-widget-wrap { padding-top: 55px; }
+}
+
+/* ─── Quad-Cards direkt nach einem Split (z. B. Philosophie
+   Einflussfaktoren): Abstand zum Text darüber verringern.
+   Elementor legt das Section-Padding auf das Section-Element selbst. ─── */
+@media (min-width: 768px) {
+    .elementor-section.es-split:has(+ .es-cards-grid--quads) { padding-bottom: 48px !important; }
 }
 
 /* ─── Split-Sektionen: feste 52/48-Verteilung (Fallback).
