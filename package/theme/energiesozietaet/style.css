@@ -4017,6 +4017,40 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-gf-quote .elementor-widget.es-gf-quote__photo-w { margin-right: 16px; margin-top: 24px !important; }
 .es-gf-quote .elementor-widget.es-gf-quote__author-w .es-gf-quote__role { margin-top: 2px; }
 
+/* ─── Mobile-Feinschliff Bereichs-Blöcke + Karten + E-Mails ─── */
+@media (max-width: 767px) {
+    /* 1) Bild-Spalte der Bereichs-Blöcke: das Bild ist mobil ohnehin
+       ausgeblendet – die leere Spalte erzeugte nur Leerraum über den
+       Beratungsfeld-Cards. Ganze Spalte kollabieren. */
+    .es-bereich-nat > .elementor-container > .elementor-column:last-child { display: none !important; }
+
+    /* 1b) Übergang Text → Beratungsfelder innerhalb eines Bereichs-
+       Blocks kompakt (Container-Polster raus, Spaltenpolster reicht) */
+    body .elementor-section.es-stage.es-bereich-nat > .elementor-container { padding-bottom: 0 !important; }
+    body .elementor-section.es-stage.es-bereich-nat-topics > .elementor-container { padding-top: 0 !important; }
+
+    /* 2) Beratungsfeld-Kacheln: grüner Punkt kostet auf schmalen Cards
+       nur Textbreite → mobil ausblenden */
+    .es-bereich__topic-name > span:first-child { display: none !important; }
+
+    /* 3) Einheitliche Content-Kante auch mobil: Elementors gap-Polster
+       (10px/30px je Sektion) auf 10px angleichen. Karten-Spalten
+       (eigene Innenpolster) bleiben unangetastet. */
+    .es-stage-sec > .elementor-container > .elementor-column:not(.es-card-pillar):not(.es-service-card) > .elementor-widget-wrap {
+        padding-left: 10px !important; padding-right: 10px !important;
+    }
+
+    /* 4) Lange E-Mail-Adressen in Kontakt-Karten: Schrift skaliert mit
+       der Bildschirmbreite, Umbruch mitten in der Adresse nur als
+       Notbremse */
+    .es-team-single__contact-row a,
+    .es-kontakt-general a,
+    .es-ansprech__people a {
+        font-size: clamp(12px, 3.6vw, 15px);
+        overflow-wrap: anywhere;
+    }
+}
+
 /* ─── Automatisch verlinkte Team-Namen in Fließtexten ─── */
 a.es-team-link {
     color: inherit;
