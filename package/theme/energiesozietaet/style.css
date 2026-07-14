@@ -1952,6 +1952,9 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     line-height: 1 !important;
 }
 .elementor-widget-button .elementor-button:hover { background: var(--es-accent) !important; color: var(--es-ink) !important; border-color: var(--es-accent) !important; }
+/* Auf dunklen (warm) Sektionen wie das alte .es-btn--primary-Verhalten:
+   Hover als Ghost mit weißem Rahmen */
+.es-stage--warm .elementor-widget-button .elementor-button:hover { background: transparent !important; color: var(--es-paper) !important; border-color: var(--es-paper) !important; }
 
 /* --paper (auf dunklem Grund) */
 .elementor-widget-button.es-btn--paper .elementor-button,
@@ -3975,21 +3978,25 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 
 /* ─── Native Bereichs-Sektionen (Leistungen): Widget-Pendants zu den
    klassischen .es-bereich__*-Regeln ─── */
+/* Abstände: Elementor legt zwischen Widgets 20px – die Margins hier sind
+   so gewählt, dass die EFFEKTIVEN Abstände denen der alten HTML-Version
+   entsprechen (meta 28 / title 36 / lede 40 / label 24). Titelgröße wie
+   zuvor effektiv gerendert (die .es-stage-h2-Skala, nicht das große clamp). */
 .elementor-widget.es-bereich__meta-nat .elementor-heading-title {
-    display: flex; align-items: center; gap: 14px; margin: 0 0 28px;
+    display: flex; align-items: center; gap: 14px; margin: 0 0 8px;
     font-size: var(--es-fs-meta); font-weight: var(--es-fw-regular);
 }
 .elementor-widget.es-bereich__title-nat .elementor-heading-title {
-    font-size: clamp(40px, 5.4vw, 72px); font-weight: var(--es-fw-regular);
-    letter-spacing: -0.035em; line-height: 1.02; margin: 0 0 36px;
+    font-size: clamp(32px, 4vw, 52px); font-weight: var(--es-fw-regular);
+    letter-spacing: -0.03em; line-height: 1.05; margin: 0 0 16px;
 }
 .elementor-widget.es-bereich__lede-nat p {
     font-size: var(--es-fs-body); line-height: 1.6; color: var(--es-text-mute);
-    max-width: 580px; font-weight: var(--es-fw-light); margin: 0 0 40px;
+    max-width: 580px; font-weight: var(--es-fw-light); margin: 0 0 20px;
 }
 .elementor-widget.es-bereich__topics-label-nat .elementor-heading-title {
     font-size: var(--es-fs-meta); letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--es-text-soft); margin: 0 0 24px; font-weight: var(--es-fw-regular);
+    color: var(--es-text-soft); margin: 0 0 4px; font-weight: var(--es-fw-regular);
 }
 /* On-Dark-Pendants (Sektion warm) */
 .es-stage--warm .es-bereich__num { color: rgba(255,255,255,0.55); }
