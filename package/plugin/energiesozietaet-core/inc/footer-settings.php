@@ -21,8 +21,8 @@ class ESC_Footer_Settings {
 		return array(
 			'cta_eyebrow'     => 'Kontakt',
 			'cta_title'       => 'Haben wir Ihr Interesse geweckt?',
-			'cta_subtitle'    => '',
-			'cta_btn1_label'  => 'Kontaktieren Sie uns!',
+			'cta_subtitle'    => 'Möchten Sie uns kennenlernen?',
+			'cta_btn1_label'  => 'Kontakt aufnehmen',
 			'cta_btn1_url'    => home_url( '/kontakt/' ),
 			'cta_btn2_label'  => 'info@energiesozietaet.de',
 			'cta_btn2_url'    => 'mailto:info@energiesozietaet.de',

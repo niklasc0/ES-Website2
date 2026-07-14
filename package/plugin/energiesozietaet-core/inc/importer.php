@@ -41,6 +41,11 @@ class ESC_Importer {
 		self::import_team( $data['team'], $media_map, $map );
 		self::import_einzelleistungen( $data['einzelleistungen'], $map );
 		self::import_karriere( $data['karriere'], $map );
+		// Nicht mehr in den Quelldaten enthaltene Einträge in den Papierkorb
+		// (z.B. ausgeschiedene Teammitglieder, geschlossene Stellen).
+		self::cleanup_stale( 'es_team',           wp_list_pluck( $data['team'], 'slug' ) );
+		self::cleanup_stale( 'es_einzelleistung', wp_list_pluck( $data['einzelleistungen'], 'slug' ) );
+		self::cleanup_stale( 'es_karriere',       wp_list_pluck( $data['karriere'], 'slug' ) );
 		self::import_veranstaltungen( $data['veranstaltungen'], $map );
 		self::import_news( $data['news'], $map );
 		self::import_publikationen( $data['publikationen'], $map );
@@ -141,6 +146,23 @@ class ESC_Importer {
 	}
 
 	/** Get or create a post. Returns post ID. */
+	/**
+	 * Posts eines Typs in den Papierkorb verschieben, die nicht (mehr) in den
+	 * Importdaten vorkommen – hält Team/Karriere/Leistungen synchron zur Quelle.
+	 */
+	protected static function cleanup_stale( $post_type, array $keep_slugs ) {
+		$posts = get_posts( array(
+			'post_type'   => $post_type,
+			'numberposts' => -1,
+			'post_status' => array( 'publish', 'draft', 'pending' ),
+		) );
+		foreach ( $posts as $p ) {
+			if ( ! in_array( $p->post_name, $keep_slugs, true ) ) {
+				wp_trash_post( $p->ID );
+			}
+		}
+	}
+
 	protected static function upsert_post( $args ) {
 		$defaults = array(
 			'post_status' => 'publish',
@@ -178,9 +200,13 @@ class ESC_Importer {
 			update_post_meta( $id, 'es_field',    (string) ( $t['field'] ?? 'rechtsberatung' ) );
 			if ( ! empty( $t['focus_areas'] ) ) {
 				update_post_meta( $id, 'es_focus_areas', $t['focus_areas'] );
+			} else {
+				delete_post_meta( $id, 'es_focus_areas' );
 			}
 			if ( ! empty( $t['career'] ) ) {
 				update_post_meta( $id, 'es_career', $t['career'] );
+			} else {
+				delete_post_meta( $id, 'es_career' );
 			}
 			if ( ! empty( $media_map[ 'team:' . $t['slug'] ] ) ) {
 				set_post_thumbnail( $id, $media_map[ 'team:' . $t['slug'] ] );

@@ -318,9 +318,9 @@ class ESC_Elementor_Builder {
 		$args = array_merge( array(
 			'eyebrow' => 'Kontakt',
 			'title_html' => 'Haben wir Ihr Interesse geweckt?',
-			'sub' => '',
+			'sub' => 'Möchten Sie uns kennenlernen?',
 			'buttons' => array(
-				array( 'Kontaktieren Sie uns!', '/kontakt/', 'paper' ),
+				array( 'Kontakt aufnehmen', '/kontakt/', 'paper' ),
 				array( 'Unser Team', '/team/', 'ghost-paper' ),
 			),
 		), $args );
@@ -709,9 +709,9 @@ class ESC_Elementor_Builder {
 		$args = array_merge( array(
 			'eyebrow' => 'Kontakt',
 			'title_html' => 'Haben wir Ihr Interesse geweckt?',
-			'sub' => '',
+			'sub' => 'Möchten Sie uns kennenlernen?',
 			'buttons' => array(
-				array( 'Kontaktieren Sie uns!', '/kontakt/', 'paper' ),
+				array( 'Kontakt aufnehmen', '/kontakt/', 'paper' ),
 				array( 'Unser Team', '/team/', 'ghost-paper' ),
 			),
 		), $args );

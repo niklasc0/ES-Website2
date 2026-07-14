@@ -53,7 +53,7 @@ class ESC_Page_Blueprints {
 				'topics' => array(
 					array( 'Energie', 'Die Transformation unserer Energieversorgung ist eine der größten Herausforderungen unserer Zeit und eine gesamtgesellschaftliche Aufgabe.' ),
 					array( 'Kommunalwirtschaft', 'Die wirtschaftliche Betätigung von Kommunen unterliegt besonderen Spielregeln.' ),
-					array( 'Vergaberecht', 'Öffentliche Beschaffung unterliegt umfangreichen, inhaltlich anspruchsvollen, rechtlichen Anforderungen.' ),
+					array( 'Vergaberecht', 'Öffentliche Beschaffung unterliegt umfangreichen, inhaltlich anspruchsvollen, rechtlichen Anforderungen. Zudem sind personelle Ressourcen hierfür in der öffentlichen Verwaltung häufig knapp.' ),
 					array( 'Gesellschaftsrecht', 'Strukturelle Veränderungen benötigen einen gesellschaftsrechtlichen Rahmen.' ),
 					array( 'Bau- und Planungsrecht', 'Komplexe Vorhaben sind unsere Stärke.' ),
 					array( 'Umweltrecht', 'Rechtsberatung für eine nachhaltige und innovative Zukunft.' ),
@@ -95,6 +95,7 @@ class ESC_Page_Blueprints {
 				'long_copy' => array(
 					'Neue Energieträger, innovative Erzeugungstechnologien und leistungsfähige Netze sollen die Energieversorgung von Morgen sicherstellen. Unternehmen müssen Geschäftsmodelle entwickeln und ihre Organisationen weiterentwickeln, um wegfallendes Bestandsgeschäft zu kompensieren und neue Wachstumsstrategien zu erschließen.',
 					'Unsere Experten unterstützen Sie bei diesen herausfordernden Fragestellungen von Beginn an: als Sparringspartner in allerersten Überlegungen, bei der Entwicklung von Strategieoptionen, bei deren Konkretisierung und Überprüfung in Business Plänen, bei der Finanzierung sowie bei der Suche nach strategischen Partnern für die Umsetzung.',
+					'Investier- und Finanzierbarkeit von Transformation erreichen: Erfolgreiche Energiewendeprojekte benötigen fundierte Planung, solide Finanzierung und nachhaltige Investorenmodelle. Wir unterstützen Unternehmen und Stadtwerke dabei, Energiewendeprojekte investierbar und finanzierbar aufzubauen – durch professionelle Geschäftsmodellentwicklung, moderne Finanzierungsstrukturen, die Optimierung der Kapitalstruktur, das Durchleuchten regulatorischer Rahmenbedingungen und die Begleitung beim Zugang zu Investoren und Kapitalmärkten.',
 				),
 				'topics' => array(
 					array( 'Erneuerbare Energien', 'Fundament für Versorgungssicherheit und Klimaschutz.' ),
@@ -120,7 +121,7 @@ class ESC_Page_Blueprints {
 		// 1. Hero
 		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Recht · Steuern · Beratung',
-			'headline_html' => 'Erfahrung und Innovation,<br><span class="text-bg-green">Spezialisierung und Weitblick.</span>',
+			'headline_html' => 'Expertise trifft <span class="text-bg-green">Leidenschaft.</span>',
 			'lead' => '<p>Wir sind ein <em>junges, innovatives Beratungsunternehmen</em>, dessen langjährig erfahrene Rechtsanwälte, Steuer- und Unternehmensberater sich der <em>Transformation der öffentlichen Hand und der Energiewirtschaft</em> verschrieben haben. Wir arbeiten hoch spezialisiert, fachübergreifend und fokussiert an den Themen unserer Zeit.</p>',
 			'claims' => array(
 				array( '20+', 'Berufsträger & Mitarbeiter' ),
@@ -152,7 +153,7 @@ class ESC_Page_Blueprints {
 		// 2. Intro (Split Text warm) – H2 als eigentliche Überschrift, Eyebrow klein
 		$s[] = $b::split_native( array(
 			'eyebrow' => 'Unsere Philosophie',
-			'title_html' => 'Individuelle Beratung in komplexen Fragestellungen: <span class="text-bg-green">fokussiert, ergebnisorientiert und kreativ.</span>',
+			'title_html' => 'Interdisziplinäre Beratung in komplexen Fragestellungen: <span class="text-bg-green">fokussiert, ergebnisorientiert und kreativ.</span>',
 			'paragraphs' => array(
 				'<p>Transformation ist eine Mammutaufgabe: dafür braucht es viele, das schafft niemand allein. Wir – das Team der Energiesozietät – verstehen uns als einer der vielen. Wir werden Teil sein und möchten Verantwortung übernehmen. Unser Ziel ist, Lösungen zu entwickeln für die überaus komplexen Transformationsfragen unserer Zeit. Wir unterstützen unsere Mandanten dabei, Rahmenbedingungen zu schaffen, Geschäftsmodelle zu entwickeln und Organisationen dafür zu verändern, dass sie die Herausforderungen der Zeit meistern.</p>',
 				'<p><a class="es-link" href="/philosophie/">Mehr erfahren</a> · <a class="es-link" href="/team/">Unser Team</a></p>',
@@ -190,7 +191,7 @@ class ESC_Page_Blueprints {
 				array(
 					$b::wid_html( '<div class="es-service-card__head"><span class="es-service-card__num">02 / 03</span><span class="es-service-card__dot"></span></div>' ),
 					$b::wid_heading( 'Steuerberatung', 'h3', 'es-service-card__title' ),
-					$b::wid_text( '<p>Fortlaufende Steuerberatung, Gestaltungsberatung oder herausfordernde Neustrukturierungen.</p>', 'es-service-card__body' ),
+					$b::wid_text( '<p>Fortlaufende Steuerberatung, Gestaltungsberatung oder herausfordernde Neustrukturierungen?</p>', 'es-service-card__body' ),
 					$b::wid_html( '<a class="es-link" href="/steuerberatung/">Mehr erfahren →</a>' ),
 				),
 				array(
@@ -204,7 +205,8 @@ class ESC_Page_Blueprints {
 
 		// 4. GF Quote (bleibt als gf_quote-Helper – enthält bereits Image+Blockquote)
 		$s[] = $b::gf_quote( array(
-			'quote' => 'Sustainable Progress.',
+			'quote' => 'Wir wollen mit unserer langjährigen Beratungs- und Netzwerkerfahrung unsere Mandantschaft bei den anstehenden Transformationen begleiten und mit den individuellen Persönlichkeiten unseres Teams Mehrwert bieten.',
+			'role' => 'Partner',
 		) );
 
 		// 5. News Teaser (shortcode widget)
@@ -254,7 +256,9 @@ class ESC_Page_Blueprints {
 			'eyebrow' => 'Ihre Aufgabe',
 			'title_html' => 'Wir wissen, wie komplex<br><span class="text-bg-green">Ihre Aufgabe ist.</span>',
 			'paragraphs' => array(
-				'<p>Entscheidungsträger und Gestalter in der öffentlichen Wirtschaft und der Energieversorgung bewegen sich in einem extrem komplexen Umfeld. Wir sind uns dieser Einflussfaktoren sehr bewusst. Deshalb beziehen wir Sie in unsere Lösungen stets mit ein, so dass unsere Beratungsergebnisse bestmöglich Ihren gestalterischen oder unternehmerischen Zielen dienen.</p>',
+				'<p>Entscheidungsträger und Gestalter in der öffentlichen Wirtschaft und der Energieversorgung bewegen sich in einem extrem komplexen Umfeld.</p>',
+				'<p>Wir sind uns dieser Einflussfaktoren sehr bewusst. Deshalb beziehen wir Sie in unsere Lösungen stets mit ein, so dass unsere Beratungsergebnisse bestmöglich Ihren gestalterischen oder unternehmerischen Zielen dienen.</p>',
+				'<p>Wir denken unsere Projekte vom Ende her. Unsere Beratung endet nicht mit der Beantwortung Ihrer konkreten Fragestellung. Vielmehr beinhaltet sie, dass wir berücksichtigen, wie Sie mit dem Endprodukt unserer Beratung weiterarbeiten, und bezieht auch eine adressatengerechte Ergebnisdarstellung und -kommunikation mit ein.</p>',
 			),
 			'variant' => 'warm',
 			'padding' => 'default',
@@ -268,22 +272,17 @@ class ESC_Page_Blueprints {
 			array( '', 'Multi-Stakeholder', '' ),
 		), 'warm', 'es-cards-grid--quads' );
 
-		// Überleitung zu den Pillar-Cards
+		// Überleitung + die 7 Punkte "Was uns besonders macht" (Original Live-Seite)
 		$s[] = $b::section_native( array(
 			'variant' => 'warm',
 			'padding' => array( '80', '0', '20', '0' ),
 			'cols' => array( array(
 				$b::wid_heading( 'Was uns besonders macht', 'p', 'es-eyebrow' ),
+				$b::wid_heading( 'Langjährige interdisziplinäre Beratungserfahrung, vielfach erprobt.', 'h2', 'es-split__title' ),
 				$b::wid_text( '<p>Die Teammitglieder der Energiesozietät haben in unzähligen Projekten Erfahrungen gesammelt. Jeder zeichnet sich durch besondere Fähigkeiten aus. Was uns in der Energiesozietät gemeinsam besonders macht:</p>' ),
+				$b::wid_shortcode( '[es_mandanten items="Was wir tun, tun wir mit Leidenschaft.|Als Energiesozietät vereinen wir jahrzehntelange Großkanzleierfahrung mit den Vorteilen einer schlagkräftigen, kleinen Einheit („Boutique“).|Wir sind klein, schnell und unkompliziert.|Wir sind Experten, in dem was wir tun.|Jeder Experte in unserem Team ist ein Stück weit ein Generalist, denn wir arbeiten interdisziplinär. Dies erlaubt es uns, den Blick zu weiten auf der Suche nach der besten Lösung.|Wir haben einen hohen Qualitätsanspruch an die Ergebnisse unserer Arbeit.|Wir sind vertrauenswürdig und zuverlässig."]' ),
 			) ),
 		) );
-
-		// 3 Pillar Cards
-		$s[] = $b::cards_native( array(
-			array( '01', 'Fokussiert',          'Wir arbeiten hoch spezialisiert an den Themen unserer Zeit. Kein Bauchladen, sondern vertiefte Expertise dort, wo die Transformation entschieden wird.' ),
-			array( '02', 'Ergebnisorientiert',  'Wir denken Lösungen vom Ende her. Strategische, technische, betriebs- und finanzwirtschaftliche, juristische sowie steuerliche Lösungen stellen wir in den Gesamtkontext.' ),
-			array( '03', 'Kreativ',             'Neue Fragestellungen verlangen neue Antworten. Wir verbinden langjährige Erfahrung aus Big-Four-Gesellschaften, spezialisierten Kanzleien und der Industrie mit einem agilen, pragmatischen Arbeitsrahmen.' ),
-		), 'warm' );
 
 		// Pullquote (bleibt als gf-Helper gerendert im Panel)
 		$s[] = $b::pullquote(
@@ -444,8 +443,7 @@ class ESC_Page_Blueprints {
 				array(
 					$b::wid_heading( 'Was wir für Sie tun', 'p', 'es-eyebrow' ),
 					$b::wid_heading( $d['long_title'], 'h2', 'es-split__title' ),
-					$b::wid_text( '<p>' . esc_html( $d['long_copy'][0] ) . '</p>' ),
-					$b::wid_text( '<p>' . esc_html( $d['long_copy'][1] ) . '</p>' ),
+					...array_map( function( $p ) use ( $b ) { return $b::wid_text( '<p>' . esc_html( $p ) . '</p>' ); }, $d['long_copy'] ),
 				),
 				array(
 					$b::wid_heading( 'Beratungsfelder', 'p', 'es-eyebrow' ),
@@ -475,7 +473,7 @@ class ESC_Page_Blueprints {
 		$s[] = $b::hero_native( array(
 			'eyebrow' => 'Team',
 			'headline_html' => 'Vielleicht kennen<br>Sie uns <span class="text-bg-green">schon?</span>',
-			'lead' => '<p>Die Energiesozietät gibt einem sehr erfahrenen Team einen agilen und pragmatischen Rahmen. Die Teammitglieder arbeiten seit vielen Jahren zusammen und bilden so mit großem Vertrauen ein eingespieltes Team.</p>',
+			'lead' => '<p>Die Energiesozietät gibt einem sehr erfahrenen Team einen agilen und pragmatischen Rahmen. Die Teammitglieder arbeiten seit vielen Jahren zusammen.</p>',
 			'padding' => 'short',
 		) );
 		$s[] = $b::section_native( array(
@@ -507,7 +505,13 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 		$s[] = $b::section_native( array(
-			'padding' => array( '80', '0', '140', '0' ),
+			'padding' => array( '80', '0', '0', '0' ),
+			'cols' => array( array(
+				$b::wid_text( '<p>Die Herausforderungen unserer Mandanten, die Transformation der öffentlichen Hand und der Energiewirtschaft voranzutreiben, stellen uns tagtäglich vor neue Herausforderungen. Lösungen für die Fragen unserer Zeit zu finden, erfordert es, sich auf seine Erfahrungen und Kompetenzen zu verlassen und erlernte Methoden in neuen Aufgabenstellungen anzuwenden. Gleichzeitig verändert sich der Handlungsrahmen, in dem wir uns bewegen, fortwährend.</p><p>Es gibt also zahlreiche Anlässe, Wissen und Sichtweisen zu teilen, um am Puls der Zeit zu sein.</p>' ),
+			) ),
+		) );
+		$s[] = $b::section_native( array(
+			'padding' => array( '40', '0', '140', '0' ),
 			'cols' => array( array( $b::wid_shortcode( '[es_publikationen]' ) ) ),
 		) );
 		return $s;
@@ -530,7 +534,7 @@ class ESC_Page_Blueprints {
 					$b::wid_heading( 'Starte gemeinsam<br>mit uns <span class="text-bg-green">durch!</span>', 'h1', 'es-hero__title' ),
 				),
 				array(
-					$b::wid_text( '<p>Entfalte Dich selbst in einem jungen, schnell wachsenden Beratungsunternehmen. Wir suchen Persönlichkeiten, die Verantwortung übernehmen wollen.</p>', 'es-hero__lead' ),
+					$b::wid_text( '<p>Entfalte Dich selbst in einem jungen, schnell wachsenden Beratungsunternehmen.</p>', 'es-hero__lead' ),
 				),
 			),
 		) );
@@ -570,8 +574,13 @@ class ESC_Page_Blueprints {
 			'padding' => 'short',
 		) );
 		$s[] = $b::section_native( array(
-			'padding' => array( '80', '0', '140', '0' ),
+			'padding' => array( '80', '0', '100', '0' ),
 			'cols' => array( array( $b::wid_shortcode( '[es_news_featured limit="9"]' ) ) ),
+		) );
+		$s[] = $b::gf_quote( array(
+			'quote' => 'Wir möchten unsere Mandanten mit exzellenten, pragmatischen Lösungen unterstützen.',
+			'role'  => 'Partner',
+			'eyebrow' => 'Unser Anspruch',
 		) );
 		return $s;
 	}
@@ -650,7 +659,8 @@ class ESC_Page_Blueprints {
 			'cols' => array(
 				array(
 					$b::wid_heading( 'Schreiben Sie uns', 'p', 'es-eyebrow' ),
-					$b::wid_heading( 'Nutzen Sie auch unser Kontaktformular!', 'h2', 'es-split__title' ),
+					$b::wid_heading( 'Kontaktformular', 'h2', 'es-split__title' ),
+					$b::wid_text( '<p>Sie haben ein konkretes Anliegen oder wissen schon, mit wem Sie bei der Energiesozietät sprechen möchten? Dann nutzen Sie gerne in der Rubrik <a href="/team/">Team</a> die Möglichkeit zur direkten Kontaktaufnahme mit dem jeweiligen Experten.</p><p>Sie möchten uns kennenlernen? Dann hinterlassen Sie uns gerne eine Nachricht mit Ihren Kontaktdaten. Wir melden uns umgehend bei Ihnen, um einen Termin zu vereinbaren.</p><p>Sie wünschen eine Einladung zu einem Event oder sind an Publikationen interessiert? Lassen Sie es uns bitte wissen.</p>' ),
 					$b::wid_shortcode( '[es_kontakt_form]' ),
 				),
 				array(
