@@ -304,10 +304,10 @@ class ESC_Page_Blueprints {
 			) ),
 		) );
 		$s[] = $b::cards_native( array(
-			array( '', 'Ingenieure',    'Technische Lösungen und Machbarkeit im Energiesystem.' ),
-			array( '', 'Kaufleute',     'Betriebs- und finanzwirtschaftliche Bewertung und Strukturierung.' ),
 			array( '', 'Rechtsanwälte', 'Juristische Gestaltung im regulatorischen Gesamtkontext.' ),
 			array( '', 'Steuerberater', 'Steuerliche Struktur, Compliance und Gestaltungsspielräume.' ),
+			array( '', 'Wirtschaftsingenieure', 'Technische Lösungen und Machbarkeit im Energiesystem.' ),
+			array( '', 'Kaufleute',     'Betriebs- und finanzwirtschaftliche Bewertung und Strukturierung.' ),
 		), 'warm', 'es-cards-grid--quads' );
 
 		// Mandantschaft – Liste als Shortcode, im Elementor-Editor anpassbar
