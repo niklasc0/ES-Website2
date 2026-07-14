@@ -1731,11 +1731,11 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-pullquote-panel-wrap > .elementor-container {
     max-width: 1080px; margin: 0 auto;
 }
+/* Kein Panel/Kasten: das Zitat sitzt direkt auf dem Sektionshintergrund */
 .es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-widget-wrap,
 .es-pullquote-panel-wrap > .elementor-container > .elementor-column > .elementor-element-populated {
-    background: var(--es-paper); border: 0;
-    border-radius: var(--es-radius-lg);
-    padding: 64px 48px !important; text-align: center;
+    background: transparent; border: 0;
+    padding: 0 !important; text-align: center;
 }
 .es-pullquote__quote .elementor-heading-title { font-size: clamp(26px, 3.2vw, 48px); font-weight: 300; letter-spacing: -0.025em; line-height: 1.25; color: var(--es-ink); margin: 0; }
 .es-pullquote__attr p { font-size: var(--es-fs-eyebrow); letter-spacing: 0.22em; text-transform: uppercase; color: var(--es-accent); font-weight: 500; margin-top: 40px !important; }
@@ -3649,10 +3649,8 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-stage--warm .es-card-pillar__title .elementor-heading-title,
 .es-stage--warm .es-service-card__title .elementor-heading-title,
 .es-stage--warm .es-pullquote-panel .elementor-heading-title { color: var(--es-ink); }
-/* Native Pullquote (es-pullquote-panel-wrap): weißes Panel ⇒ Text ink,
-   auch wenn die Sektion warm/dunkel ist */
-.es-stage--warm .es-pullquote__quote .elementor-heading-title,
-.es-stage--warm .elementor-widget.es-pullquote__quote .elementor-heading-title { color: var(--es-ink); }
+/* Native Pullquote ohne Panel: auf dunklen (warm) Sektionen heller Text,
+   Attribution bleibt Akzentgrün */
 .es-stage--warm .es-pullquote__attr p { color: var(--es-accent); }
 .es-stage--warm .es-card-pillar__desc p,
 .es-stage--warm .es-service-card__body p { color: var(--es-text-mute); }
