@@ -1418,8 +1418,8 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 
 /* Sicherstellen, dass Elementor-Button-Widget unsere Custom-Klassen greift */
 .elementor-widget-button .elementor-button {
-    border-radius: var(--es-radius-xs); font-family: var(--es-font-sans);
-    font-weight: var(--es-fw-medium); letter-spacing: -0.01em; padding: 14px 22px;
+    border-radius: var(--es-radius-pill); font-family: var(--es-font-sans);
+    font-weight: var(--es-fw-medium); letter-spacing: 0; padding: 15px 30px;
 }
 
 /* Eyebrow als p-Tag mit Klasse auf WIDGET – Elementor hängt Klasse an <p> */
@@ -1936,18 +1936,20 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     transition: border-color 240ms var(--es-easing), transform 240ms var(--es-easing), background-color 500ms ease-in-out;
 }
 
-/* D) Native Elementor Button-Widget – sieht 1:1 aus wie unsere .es-btn.
-   Elementor-Buttons landen als .elementor-widget-button .elementor-button */
+/* D) Native Elementor Button-Widget – sieht 1:1 aus wie unsere .es-btn
+   (grüne Akzent-Pill). !important, damit auch Elementors Kit-/Global-
+   Farben (nach erster CSS-Generierung) sicher übersteuert werden. */
 .elementor-widget-button .elementor-button {
-    background: transparent; color: var(--es-ink); border: 1px solid var(--es-ink) !important;
-    border-radius: var(--es-radius-xs) !important;
+    background: var(--es-accent) !important; color: var(--es-ink) !important;
+    border: 1px solid var(--es-accent) !important;
+    border-radius: var(--es-radius-pill) !important;
     font-family: var(--es-font-sans) !important;
-    font-size: 14px !important; font-weight: var(--es-fw-medium) !important; letter-spacing: -0.01em !important;
-    padding: 14px 22px !important;
+    font-size: 14px !important; font-weight: var(--es-fw-medium) !important; letter-spacing: 0 !important;
+    padding: 15px 30px !important;
     transition: all var(--es-duration-fast) var(--es-easing);
     line-height: 1 !important;
 }
-.elementor-widget-button .elementor-button:hover { background: var(--es-ink) !important; color: var(--es-paper) !important; }
+.elementor-widget-button .elementor-button:hover { background: var(--es-ink) !important; color: var(--es-paper) !important; border-color: var(--es-ink) !important; }
 
 /* --paper (auf dunklem Grund) */
 .elementor-widget-button.es-btn--paper .elementor-button,
