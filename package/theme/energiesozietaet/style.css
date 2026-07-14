@@ -874,7 +874,8 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-article__byline-meta { font-size: var(--es-fs-meta); color: var(--es-text-mute); }
 
 .es-article__hero { max-width: 1040px; margin: 0 auto var(--es-space-14); padding: 0 var(--es-space-12); }
-.es-article__hero img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; display: block; }
+.es-article__hero img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; display: block; border-radius: var(--es-radius-lg); }
+.es-article__body img { border-radius: var(--es-radius-lg); }
 .es-article__body { max-width: 720px; margin: 0 auto; padding: 0 var(--es-space-12); font-size: var(--es-fs-body); line-height: 1.7; color: var(--es-text); }
 .es-article__body h2 { font-size: 28px; font-weight: var(--es-fw-medium); letter-spacing: -0.02em; margin: 56px 0 20px; }
 .es-article__body h3 { font-size: var(--es-fs-heading-sub); font-weight: var(--es-fw-medium); margin: 40px 0 16px; }

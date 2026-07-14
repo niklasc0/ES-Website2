@@ -426,6 +426,7 @@ class ESC_Shortcodes {
 			'rechtsberatung'       => 'Rechtsberatung',
 			'steuerberatung'       => 'Steuerberatung',
 			'unternehmensberatung' => 'Unternehmensberatung',
+			'kanzlei'              => 'Kanzlei',
 			'management'           => 'Büroleitung',
 		);
 		ob_start(); ?>

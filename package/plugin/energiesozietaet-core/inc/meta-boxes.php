@@ -12,6 +12,7 @@ class ESC_MetaBoxes {
 		'rechtsberatung'       => 'Rechtsberatung',
 		'steuerberatung'       => 'Steuerberatung',
 		'unternehmensberatung' => 'Unternehmensberatung',
+		'kanzlei'              => 'Kanzlei',
 		'management'           => 'Management / Büroleitung',
 	);
 

@@ -14,6 +14,7 @@ function es_karriere_field_label( $slug ) {
 		'rechtsberatung'       => 'Rechtsberatung',
 		'steuerberatung'       => 'Steuerberatung',
 		'unternehmensberatung' => 'Unternehmensberatung',
+		'kanzlei'              => 'Kanzlei',
 		'management'           => 'Büroleitung',
 	);
 	return $map[ $slug ] ?? '';

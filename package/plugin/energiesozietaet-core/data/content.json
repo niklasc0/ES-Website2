@@ -1036,7 +1036,7 @@
  "karriere": [
   {
    "id": 9001,
-   "title": "Manager (m/w/d) – Consulting",
+   "title": "Manager (m/w/d)",
    "slug": "manager-m-w-d-consulting",
    "department": "Unternehmensberatung",
    "description": "<p>Wir suchen zum nächstmöglichen Eintrittstermin einen Manager (m/w/d) für die Consulting-Abteilung unserer Sozietät.</p><p>Wir sind ein junges, innovatives Beratungsunternehmen, dessen langjährig erfahrene Rechtsanwälte und (Steuer-)Berater sich der Transformation der öffentlichen Hand und der Energiewirtschaft verschrieben haben. Wir arbeiten hoch spezialisiert, fachübergreifend und fokussiert an den Themen unserer Zeit.</p><p>Als Manager (m/w/d) Consulting in unserem Expertenteam berätst Du kommunale Energieversorger bei komplexen strategischen, wirtschaftlichen und regulatorischen Fragestellungen. Gemeinsam mit Deinen Kolleginnen und Kollegen aus den Bereichen Consulting, Rechts- und Steuerberatung entwickelst Du interdisziplinär innovative Lösungen für unsere Mandanten entlang der gesamten Wertschöpfungskette der Energieversorgung – mit Schwerpunkt auf Energie- und Wärmewende, Kooperationsmodellen, Transaktionen, Netztransformation und regulatorischer Compliance.</p><p>Die Energiesozietät verstärkt den Bereich Consulting.</p>",
@@ -1067,7 +1067,8 @@
     "Attraktive Rahmenbedingungen: 30 Tage Urlaub, Deutschlandticket, Unterstützung bei beruflicher Weiterbildung oder Promotion etc."
    ],
    "closing": "Wir freuen uns auf Deine Bewerbung mit Lebenslauf, Zeugnissen und möglichem Eintrittstermin an info@energiesozietaet.de. Bei Rückfragen steht Dir Elke Beermann gerne zur Verfügung.",
-   "image_file": "karriere/manager-m-w-d-consulting.jpg"
+   "image_file": "karriere/manager-m-w-d-consulting.jpg",
+   "field": "unternehmensberatung"
   },
   {
    "id": 9002,
@@ -1103,13 +1104,14 @@
     "Attraktive Rahmenbedingungen: 30 Tage Urlaub, Deutschlandticket, Unterstützung bei beruflicher Weiterbildung oder Promotion etc."
    ],
    "closing": "Wir freuen uns auf Deine Bewerbung mit Lebenslauf, Zeugnissen und möglichem Eintrittstermin an info@energiesozietaet.de. Bei Rückfragen steht Dir Elke Beermann gerne zur Verfügung.",
-   "image_file": "karriere/consultant-m-w-d.jpg"
+   "image_file": "karriere/consultant-m-w-d.jpg",
+   "field": "unternehmensberatung"
   },
   {
    "id": 9003,
    "title": "Werkstudent / Wissenschaftlicher Mitarbeiter (m/w/d)",
    "slug": "werkstudent-wissenschaftlicher-mitarbeiter-m-w-d",
-   "department": "Unternehmensberatung",
+   "department": "Kanzlei",
    "description": "<p>Consulting – Utilities & Regulation (Energie, Netze, Wärmewende)</p><p>Wir sind ein junges, innovatives Beratungsunternehmen, dessen langjährig erfahrene Rechtsanwälte und (Steuer-)Berater sich der Transformation der öffentlichen Hand und der Energiewirtschaft verschrieben haben. Wir arbeiten hoch spezialisiert, fachübergreifend und fokussiert an den Themen unserer Zeit.</p><p>Du willst Controlling, Business Cases und Excel-Modelle nicht nur im Hörsaal machen, sondern an echten Projekten? Du interessierst dich für Energie- und Wärmewende , findest Regulierung spannend (weil sie die Spielregeln setzt) und bist technisch affin (Netze, Speicher, Infrastruktur)? Dann passt du zu uns.</p><p>Deine Rolle bei uns</p><p>Als Werkstudent:in / wissenschaftliche:r Mitarbeiter:in unterstützt du unser Expertenteam bei der Beratung kommunaler Energieversorger (Stadtwerke) und öffentlicher Unternehmen. Du arbeitest an Projekten rund um Strategie, Wirtschaftlichkeit, Regulierung und Technik – oft mit direktem Bezug zu realen Investitionsentscheidungen.</p><p>Umfang: ca. 10–20 Wochenstunden (flexibel, passend zum Semester)</p>",
    "bullets": [],
    "employment_type": "Werkstudent",
@@ -1142,7 +1144,8 @@
     "Offene Kultur : flache Hierarchien, kurze Wege, regelmäßige Teamevents, wertschätzende Zusammenarbeit"
    ],
    "closing": "Wir freuen uns auf Deine Bewerbung mit Lebenslauf, Zeugnissen und möglichem Eintrittstermin an info@energiesozietaet.de. Bei Rückfragen steht Dir Elke Beermann gerne zur Verfügung.",
-   "image_file": "karriere/werkstudent-wissenschaftlicher-mitarbeiter-m-w-d.jpg"
+   "image_file": "karriere/werkstudent-wissenschaftlicher-mitarbeiter-m-w-d.jpg",
+   "field": "kanzlei"
   },
   {
    "id": 9004,
@@ -1186,7 +1189,8 @@
     "Attraktive Rahmenbedingungen, u.a. 30 Tage Urlaub, Deutschlandticket, Unterstützung bei beruflicher Weiterbildung (z.B. Fachanwaltslehrgang, Promotion oder LL.M.) sowie regelmäßige Teamevents."
    ],
    "closing": "Wir freuen uns auf Deine Bewerbung mit Lebenslauf, Zeugnissen und möglichem Eintrittstermin. Bitte sende sie an info@energiesozietaet.de. Bei Rückfragen steht Dir Vanessa Wolfschaffner gerne zur Verfügung (vanessa.wolfschaffner@energiesozietaet.de)",
-   "image_file": "karriere/rechtsanwalt-associate-m-w-d-vergaberecht.jpg"
+   "image_file": "karriere/rechtsanwalt-associate-m-w-d-vergaberecht.jpg",
+   "field": "rechtsberatung"
   }
  ],
  "veranstaltungen": [
