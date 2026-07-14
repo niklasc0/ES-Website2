@@ -100,7 +100,7 @@ while ( have_posts() ) : the_post();
 
 			<?php if ( $closing ) : ?>
 				<div class="es-stelle-single__section-title">Interesse geweckt?</div>
-				<div class="es-stelle-single__body"><?php echo wp_kses_post( wpautop( $closing ) ); ?></div>
+				<div class="es-stelle-single__body"><?php $closing_html = wp_kses_post( wpautop( $closing ) ); echo function_exists( 'esc_link_team_names' ) ? esc_link_team_names( $closing_html ) : $closing_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 			<?php endif; ?>
 
 			<?php if ( empty( $offer ) ) : ?>

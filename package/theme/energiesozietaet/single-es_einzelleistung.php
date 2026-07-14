@@ -51,7 +51,7 @@ while ( have_posts() ) : the_post();
 						<?php endif; ?>
 
 						<?php if ( $closing ) : ?>
-							<blockquote><?php echo wp_kses_post( wpautop( $closing ) ); ?></blockquote>
+							<blockquote><?php $closing_html = wp_kses_post( wpautop( $closing ) ); echo function_exists( 'esc_link_team_names' ) ? esc_link_team_names( $closing_html ) : $closing_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></blockquote>
 						<?php endif; ?>
 					</div>
 				</div>

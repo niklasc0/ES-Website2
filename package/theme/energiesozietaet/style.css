@@ -3943,6 +3943,17 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
     .es-hero--karriere .elementor-column:last-child > .elementor-widget-wrap { padding-top: 55px; }
 }
 
+/* ─── Automatisch verlinkte Team-Namen in Fließtexten ─── */
+a.es-team-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--es-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+}
+a.es-team-link:hover { color: var(--es-accent-ink, #4a6b00); text-decoration-color: currentColor; }
+
 /* ─── Quad-Cards direkt nach einem Split (z. B. Philosophie
    Einflussfaktoren): Abstand zum Text darüber verringern.
    Elementor legt das Section-Padding auf das Section-Element selbst. ─── */

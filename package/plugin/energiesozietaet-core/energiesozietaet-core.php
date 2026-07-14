@@ -37,6 +37,7 @@ require_once ESC_DIR . 'inc/elementor-globals.php';
 require_once ESC_DIR . 'inc/layout-settings.php';
 require_once ESC_DIR . 'inc/contact-form.php';
 require_once ESC_DIR . 'inc/linkedin.php';
+require_once ESC_DIR . 'inc/team-links.php';
 
 /**
  * Activation: flush rewrite rules after CPTs registered.
