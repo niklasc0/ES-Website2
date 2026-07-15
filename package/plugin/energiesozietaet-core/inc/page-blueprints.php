@@ -371,9 +371,9 @@ class ESC_Page_Blueprints {
 		// Beitragsbild der Beratungsfeld-Seite, Einzelleistungen dynamisch)
 		$bf = self::beratungsfelder();
 		$titles_html = array(
-			'rechtsberatung'       => 'Rechts-<br>beratung',
-			'steuerberatung'       => 'Steuer-<br>beratung',
-			'unternehmensberatung' => 'Unternehmens-<br>beratung',
+			'rechtsberatung'       => 'Rechtsberatung',
+			'steuerberatung'       => 'Steuerberatung',
+			'unternehmensberatung' => 'Unternehmensberatung',
 		);
 		$order = array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' );
 		foreach ( $order as $i => $slug ) {
