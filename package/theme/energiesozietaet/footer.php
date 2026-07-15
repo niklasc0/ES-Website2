@@ -22,7 +22,12 @@ if ( class_exists( 'ESC_Footer_Settings' ) ) {
 		foreach ( preg_split( '/\r?\n/', (string) $s ) as $ln ) {
 			$ln = trim( $ln ); if ( '' === $ln ) continue;
 			$parts = array_map( 'trim', explode( '|', $ln, 2 ) );
-			$out[] = array( 'label' => $parts[0], 'url' => $parts[1] ?? '' );
+			$url   = $parts[1] ?? '';
+			if ( $url && ! preg_match( '#^(https?://|/|\#|mailto:|tel:)#i', $url ) ) {
+				$out[] = array( 'label' => $parts[0] . ' · ' . $url, 'url' => '' );
+				continue;
+			}
+			$out[] = array( 'label' => $parts[0], 'url' => $url );
 		}
 		return $out;
 	};

@@ -68,7 +68,14 @@ class ESC_Footer_Settings {
 			$ln = trim( $ln );
 			if ( '' === $ln ) { continue; }
 			$parts = array_map( 'trim', explode( '|', $ln, 2 ) );
-			$out[] = array( 'label' => $parts[0], 'url' => $parts[1] ?? '' );
+			$url   = $parts[1] ?? '';
+			// Nur echte Ziele verlinken – bei Adresszeilen wie
+			// "Caffamacherreihe 8 | 20355 Hamburg" ist die Pipe nur Texttrenner.
+			if ( $url && ! preg_match( '#^(https?://|/|\#|mailto:|tel:)#i', $url ) ) {
+				$out[] = array( 'label' => $parts[0] . ' · ' . $url, 'url' => '' );
+				continue;
+			}
+			$out[] = array( 'label' => $parts[0], 'url' => $url );
 		}
 		return $out;
 	}
