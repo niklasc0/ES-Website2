@@ -283,7 +283,7 @@ class ESC_Page_Blueprints {
 				$b::wid_heading( 'Was uns besonders macht', 'p', 'es-eyebrow' ),
 				$b::wid_heading( 'Langjährige interdisziplinäre Beratungserfahrung, vielfach erprobt.', 'h2', 'es-split__title' ),
 				$b::wid_text( '<p>Die Teammitglieder der Energiesozietät haben in unzähligen Projekten Erfahrungen gesammelt. Jeder zeichnet sich durch besondere Fähigkeiten aus. Was uns in der Energiesozietät gemeinsam besonders macht:</p>' ),
-				$b::wid_shortcode( '[es_mandanten items="Was wir tun, tun wir mit Leidenschaft.|Als Energiesozietät vereinen wir jahrzehntelange Großkanzleierfahrung mit den Vorteilen einer schlagkräftigen, kleinen Einheit („Boutique“).|Wir sind klein, schnell und unkompliziert.|Wir sind Experten, in dem was wir tun.|Jeder Experte in unserem Team ist ein Stück weit ein Generalist, denn wir arbeiten interdisziplinär. Dies erlaubt es uns, den Blick zu weiten auf der Suche nach der besten Lösung.|Wir haben einen hohen Qualitätsanspruch an die Ergebnisse unserer Arbeit.|Wir sind vertrauenswürdig und zuverlässig."]' ),
+				$b::wid_shortcode( '[es_mandanten items="Was wir tun, tun wir mit Leidenschaft.|Als Energiesozietät vereinen wir jahrzehntelange Großkanzleierfahrung mit den Vorteilen einer schlagkräftigen, kleinen Einheit („Boutique“).|Wir sind klein, schnell und unkompliziert.|Wir sind Experten, in dem was wir tun.|Jeder Experte in unserem Team ist ein Stück weit ein Generalist, denn wir arbeiten interdisziplinär. Dies erlaubt es uns, den Blick zu weiten auf der Suche nach der besten Lösung.|Wir haben einen hohen Qualitätsanspruch an die Ergebnisse unserer Arbeit."]' ),
 			) ),
 		) );
 
