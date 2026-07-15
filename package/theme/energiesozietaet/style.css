@@ -339,7 +339,7 @@ html.js .esc-card.es-reveal {
 
 @media (max-width: 1024px) {
     .es-nav, .es-header__actions { display: none; }
-    .es-nav-toggle { display: inline-flex; }
+    .es-nav-toggle { display: inline-flex; grid-column: 3; justify-self: end; }
     .es-header.is-nav-open .es-nav {
         display: flex; position: absolute; top: 100%; left: 0; right: 0;
         flex-direction: column; gap: 0;
