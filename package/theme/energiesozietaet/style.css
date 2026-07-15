@@ -4016,6 +4016,7 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
     margin-bottom: 0 !important;
 }
 .es-gf-quote .elementor-widget.es-gf-quote__photo-w { margin-right: 16px; margin-top: 24px !important; }
+.es-gf-quote .elementor-widget.es-gf-quote__author-w { align-self: center; margin-top: 24px !important; }
 .es-gf-quote .elementor-widget.es-gf-quote__author-w .es-gf-quote__role { margin-top: 2px; }
 
 /* ─── Mobile-Feinschliff Bereichs-Blöcke + Karten + E-Mails ─── */
