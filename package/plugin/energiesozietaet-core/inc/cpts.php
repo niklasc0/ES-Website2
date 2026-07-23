@@ -19,12 +19,19 @@ class ESC_CPTs {
 	}
 
 	protected static function cpt( $slug, $labels_singular, $labels_plural, $args = array() ) {
+		// Korrektes Genus für "Neues Teammitglied" / "Neuer News-Beitrag" / "Neue Veranstaltung"
+		$neu_map = array(
+			'Teammitglied'   => 'Neues Teammitglied',
+			'Stellenangebot' => 'Neues Stellenangebot',
+			'News-Beitrag'   => 'Neuer News-Beitrag',
+		);
+		$add_new_item = $neu_map[ $labels_singular ] ?? sprintf( __( 'Neue %s', 'energiesozietaet-core' ), $labels_singular );
 		$labels = array(
 			'name'               => $labels_plural,
 			'singular_name'      => $labels_singular,
 			'menu_name'          => $labels_plural,
 			'add_new'            => __( 'Neu hinzufügen', 'energiesozietaet-core' ),
-			'add_new_item'       => sprintf( __( 'Neue(r) %s', 'energiesozietaet-core' ), $labels_singular ),
+			'add_new_item'       => $add_new_item,
 			'edit_item'          => sprintf( __( '%s bearbeiten', 'energiesozietaet-core' ), $labels_singular ),
 			'view_item'          => sprintf( __( '%s ansehen', 'energiesozietaet-core' ), $labels_singular ),
 			'all_items'          => sprintf( __( 'Alle %s', 'energiesozietaet-core' ), $labels_plural ),

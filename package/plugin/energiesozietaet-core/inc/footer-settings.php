@@ -118,7 +118,7 @@ class ESC_Footer_Settings {
 		$val = self::get( $name );
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
 		echo '<input type="text" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" style="width:100%;max-width:640px;" />';
-		if ( $hint ) { echo '<p class="description">' . wp_kses_post( $hint ) . '</p>'; }
+		if ( $hint ) { echo '<p class="description" style="font-style:normal;">' . wp_kses_post( $hint ) . '</p>'; }
 		echo '</td></tr>';
 	}
 
@@ -126,7 +126,7 @@ class ESC_Footer_Settings {
 		$val = self::get( $name );
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
 		echo '<textarea name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" rows="' . (int) $rows . '" style="width:100%;max-width:640px;">' . esc_textarea( $val ) . '</textarea>';
-		if ( $hint ) { echo '<p class="description">' . wp_kses_post( $hint ) . '</p>'; }
+		if ( $hint ) { echo '<p class="description" style="font-style:normal;">' . wp_kses_post( $hint ) . '</p>'; }
 		echo '</td></tr>';
 	}
 
