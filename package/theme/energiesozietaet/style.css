@@ -632,7 +632,8 @@ html.js .esc-card.es-reveal {
    kein Vorschautext. Vier nebeneinander (responsiv 3 / 2 / 1). */
 .esc-team-card {
     display: flex; flex-direction: column;
-    color: var(--es-ink); background: var(--es-paper-cool);
+    color: var(--es-ink); background: var(--es-paper);
+    border: var(--es-border);
     border-radius: var(--es-radius-card); overflow: hidden;
     transition: transform var(--es-duration-fast) var(--es-easing), box-shadow var(--es-duration-fast) var(--es-easing);
 }
