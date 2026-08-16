@@ -37,15 +37,15 @@ while ( have_posts() ) : the_post();
 					</div>
 				<?php endif; ?>
 				<div style="padding-top:18px;flex:1;min-width:220px;">
-					<div class="es-article__eyebrow" style="margin-bottom:0;"><?php echo esc_html( $kind ); ?><?php if ( $upcoming ) : ?> · <span style="color:#95D708;">Anmeldung möglich</span><?php endif; ?></div>
+					<div class="es-article__eyebrow" style="margin-bottom:0;"><?php echo esc_html( $kind ); ?><?php if ( $upcoming ) : ?> · <span style="color:#95D708;"><?php echo esc_html( es_t( 'Anmeldung möglich', 'Registration open' ) ); ?></span><?php endif; ?></div>
 				</div>
 			</div>
 
 			<h1 class="es-article__title"><?php the_title(); ?></h1>
 
 			<div class="es-stelle-single__meta-row">
-				<?php if ( $location ) : ?><div><strong>Ort:</strong> <?php echo esc_html( $location ); ?></div><?php endif; ?>
-				<?php if ( $ts ) : ?><div><strong>Datum:</strong> <?php echo esc_html( date_i18n( 'j. F Y', $ts ) ); ?><?php if ( $ts2 && $ts2 !== $ts ) echo ' – ' . esc_html( date_i18n( 'j. F Y', $ts2 ) ); ?></div><?php endif; ?>
+				<?php if ( $location ) : ?><div><strong><?php echo esc_html( es_t( 'Ort:', 'Location:' ) ); ?></strong> <?php echo esc_html( $location ); ?></div><?php endif; ?>
+				<?php if ( $ts ) : ?><div><strong><?php echo esc_html( es_t( 'Datum:', 'Date:' ) ); ?></strong> <?php echo esc_html( date_i18n( 'j. F Y', $ts ) ); ?><?php if ( $ts2 && $ts2 !== $ts ) echo ' – ' . esc_html( date_i18n( 'j. F Y', $ts2 ) ); ?></div><?php endif; ?>
 			</div>
 		</div>
 
@@ -63,8 +63,8 @@ while ( have_posts() ) : the_post();
 			<?php if ( $reg_url && $upcoming ) : ?>
 				<div style="padding:32px;background:#122023;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;border-radius:var(--es-radius-card);">
 					<div>
-						<div style="color:#95D708;font-size:var(--es-fs-eyebrow);letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;">Anmeldung</div>
-						<div style="font-size:var(--es-fs-heading-sub);font-weight:500;letter-spacing:-0.015em;">Sichern Sie sich Ihren Platz.</div>
+						<div style="color:#95D708;font-size:var(--es-fs-eyebrow);letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;"><?php echo esc_html( es_t( 'Anmeldung', 'Register' ) ); ?></div>
+						<div style="font-size:var(--es-fs-heading-sub);font-weight:500;letter-spacing:-0.015em;"><?php echo esc_html( es_t( 'Sichern Sie sich Ihren Platz.', 'Secure your place.' ) ); ?></div>
 					</div>
 					<a class="es-btn es-btn--paper" href="<?php echo esc_url( $reg_url ); ?>" target="_blank" rel="noopener">Jetzt anmelden →</a>
 				</div>

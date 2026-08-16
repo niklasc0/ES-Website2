@@ -27,27 +27,91 @@ class ESC_MetaBoxes {
 		add_meta_box( 'esc_karriere',      'Karriere-Details',        array( __CLASS__, 'box_karriere' ),     'es_karriere',       'normal', 'default' );
 		add_meta_box( 'esc_veranstaltung', 'Veranstaltungs-Details',  array( __CLASS__, 'box_veranst' ),      'es_veranstaltung',  'normal', 'default' );
 		add_meta_box( 'esc_publikation',   'Publikations-Details',    array( __CLASS__, 'box_publikation' ),  'es_publikation',    'normal', 'default' );
-		// Englische Fassung – Phase 1: News (weitere Inhaltstypen folgen)
-		add_meta_box( 'esc_lang_en', 'Englische Fassung (EN)', array( __CLASS__, 'box_lang_en' ), 'es_news', 'normal', 'default' );
+		// Englische Fassung – für alle Inhaltstypen
+		foreach ( array( 'es_news', 'es_team', 'es_einzelleistung', 'es_karriere', 'es_veranstaltung', 'es_publikation' ) as $pt ) {
+			add_meta_box( 'esc_lang_en', 'Englische Fassung (EN)', array( __CLASS__, 'box_lang_en' ), $pt, 'normal', 'default' );
+		}
+	}
+
+	/** Textarea, die zeilenweise in ein Array-Meta gespeichert wird (EN-Varianten). */
+	protected static function lines_field( $label, $name, $post_id, $meta_key, $rows = 5 ) {
+		$val = get_post_meta( $post_id, $meta_key, true );
+		$txt = is_array( $val ) ? implode( "\n", $val ) : (string) $val;
+		echo '<p><label><strong>' . esc_html( $label ) . '</strong></label>';
+		echo '<textarea name="' . esc_attr( $name ) . '" rows="' . (int) $rows . '" style="width:100%;">' . esc_textarea( $txt ) . '</textarea></p>';
 	}
 
 	/**
-	 * Generische EN-Felder: Titel, Text, Teaser, URL-Kürzel.
-	 * Leere Felder = deutsche Fassung wird angezeigt (Fallback); ohne EN-Titel
-	 * erscheint der Beitrag nicht in den englischen Listen.
+	 * EN-Felder je Inhaltstyp. Leere Felder = deutsche Fassung wird angezeigt
+	 * (Fallback); News ohne „Titel (EN)" erscheinen nicht in den englischen Listen.
 	 */
 	public static function box_lang_en( $post ) {
 		self::nonce();
-		echo '<p class="description" style="font-style:normal;margin-top:0;">Leere Felder fallen im englischen Bereich auf die deutsche Fassung zurück. Ohne „Titel (EN)" erscheint der Beitrag nicht in den englischen Übersichten.</p>';
-		self::field( 'Titel (EN)', 'es_title_en', get_post_meta( $post->ID, 'es_title_en', true ) );
-		echo '<p style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"><label for="esc_es_content_en"><strong>Beitragstext (EN)</strong></label></p>';
-		wp_editor( (string) get_post_meta( $post->ID, 'es_content_en', true ), 'esc_es_content_en', array(
-			'textarea_name' => 'es_content_en',
-			'textarea_rows' => 12,
-			'media_buttons' => false,
-		) );
-		echo '<div style="height:14px;"></div>';
-		self::field( 'Teaser / Auszug (EN, optional)', 'es_excerpt_en', get_post_meta( $post->ID, 'es_excerpt_en', true ), 'textarea' );
+		$pt = $post->post_type;
+		echo '<p class="description" style="font-style:normal;margin-top:0;">Leere Felder fallen im englischen Bereich (<code>/en/…</code>) auf die deutsche Fassung zurück.</p>';
+
+		if ( 'es_team' === $pt ) {
+			echo '<p class="description" style="font-style:normal;">Name und Kontaktdaten bleiben in beiden Sprachen gleich.</p>';
+			self::field( 'Rolle / Position (EN)', 'es_role_en', get_post_meta( $post->ID, 'es_role_en', true ) );
+		} else {
+			self::field( 'Titel (EN)', 'es_title_en', get_post_meta( $post->ID, 'es_title_en', true ) );
+		}
+
+		if ( in_array( $pt, array( 'es_news', 'es_team', 'es_einzelleistung', 'es_karriere' ), true ) ) {
+			$content_label = array(
+				'es_news'           => 'Beitragstext (EN)',
+				'es_team'           => 'Kurzvita (EN)',
+				'es_einzelleistung' => 'Beschreibung (EN)',
+				'es_karriere'       => 'Über die Rolle (EN)',
+			);
+			echo '<p style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"><label for="esc_es_content_en"><strong>' . esc_html( $content_label[ $pt ] ) . '</strong></label></p>';
+			wp_editor( (string) get_post_meta( $post->ID, 'es_content_en', true ), 'esc_es_content_en', array(
+				'textarea_name' => 'es_content_en',
+				'textarea_rows' => 10,
+				'media_buttons' => false,
+			) );
+			echo '<div style="height:14px;"></div>';
+		}
+
+		switch ( $pt ) {
+			case 'es_news':
+				self::field( 'Teaser / Auszug (EN, optional)', 'es_excerpt_en', get_post_meta( $post->ID, 'es_excerpt_en', true ), 'textarea' );
+				break;
+			case 'es_team':
+				self::field( 'Erweiterte Vita (EN)', 'es_more_bio_en', get_post_meta( $post->ID, 'es_more_bio_en', true ), 'textarea' );
+				self::lines_field( 'Ausgewählte Schwerpunkte (EN) – ein Schwerpunkt pro Zeile', 'es_focus_areas_en_raw', $post->ID, 'es_focus_areas_en', 6 );
+				$career_en = get_post_meta( $post->ID, 'es_career_en', true );
+				$career_en_lines = array();
+				if ( is_array( $career_en ) ) {
+					foreach ( $career_en as $c ) {
+						$career_en_lines[] = trim( ( is_array( $c ) ? (string) ( $c['when'] ?? '' ) : '' ) . ' ||| ' . ( is_array( $c ) ? (string) ( $c['what'] ?? '' ) : (string) $c ) );
+					}
+				}
+				echo '<p><label><strong>Werdegang (EN) – eine Station pro Zeile, Format <code>Zeit ||| Beschreibung</code></strong></label>';
+				echo '<textarea name="es_career_en_raw" rows="6" style="width:100%;">' . esc_textarea( implode( "\n", $career_en_lines ) ) . '</textarea></p>';
+				break;
+			case 'es_einzelleistung':
+				self::field( 'Untertitel / Hero (EN)', 'es_subtitle_en', get_post_meta( $post->ID, 'es_subtitle_en', true ), 'textarea' );
+				self::lines_field( 'Kernpunkte (EN) – eine Zeile = ein Bullet', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 6 );
+				self::field( 'Abschluss-Absatz (EN)', 'es_closing_en', get_post_meta( $post->ID, 'es_closing_en', true ), 'textarea' );
+				break;
+			case 'es_karriere':
+				self::field( 'Rolle / Titel-Kürzel (EN)', 'es_department_en', get_post_meta( $post->ID, 'es_department_en', true ) );
+				self::field( 'Anstellungsart (EN, z. B. Full-time)', 'es_employment_type_en', get_post_meta( $post->ID, 'es_employment_type_en', true ) );
+				self::lines_field( 'Aufgaben (EN) – eine pro Zeile', 'es_tasks_en_raw', $post->ID, 'es_tasks_en', 5 );
+				self::lines_field( 'Profil (EN) – eine Anforderung pro Zeile', 'es_profile_en_raw', $post->ID, 'es_profile_en', 5 );
+				self::lines_field( 'Wir bieten (EN) – eine pro Zeile', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 5 );
+				self::field( 'Abschlusstext (EN)', 'es_closing_en', get_post_meta( $post->ID, 'es_closing_en', true ), 'textarea' );
+				break;
+			case 'es_veranstaltung':
+				self::field( 'Ort (EN, z. B. Online)', 'es_location_en', get_post_meta( $post->ID, 'es_location_en', true ) );
+				self::field( 'Art (EN, z. B. Seminar)', 'es_kind_en', get_post_meta( $post->ID, 'es_kind_en', true ) );
+				break;
+			case 'es_publikation':
+				self::field( 'Kategorie (EN, z. B. Article, Book)', 'es_cat_en', get_post_meta( $post->ID, 'es_cat_en', true ) );
+				break;
+		}
+
 		self::field( 'URL-Kürzel (EN, optional – nur Kleinbuchstaben und Bindestriche)', 'es_slug_en', get_post_meta( $post->ID, 'es_slug_en', true ) );
 	}
 
@@ -241,13 +305,15 @@ class ESC_MetaBoxes {
 			'es_end_date','es_kind','es_registration_url',
 			'es_cat','es_source','es_publication_date','es_link','es_author',
 			'es_title_en','es_content_en','es_excerpt_en','es_slug_en',
+			'es_role_en','es_more_bio_en','es_subtitle_en','es_closing_en',
+			'es_department_en','es_employment_type_en','es_location_en','es_kind_en','es_cat_en',
 		);
 		foreach ( $scalars as $k ) {
 			if ( array_key_exists( $k, $_POST ) ) {
 				$v = wp_unslash( $_POST[ $k ] );
 				if ( in_array( $k, array( 'es_link', 'es_linkedin', 'es_registration_url' ), true ) ) {
 					$v = esc_url_raw( $v );
-				} elseif ( in_array( $k, array( 'es_more_bio', 'es_closing', 'es_subtitle', 'es_content_en', 'es_excerpt_en' ), true ) ) {
+				} elseif ( in_array( $k, array( 'es_more_bio', 'es_closing', 'es_subtitle', 'es_content_en', 'es_excerpt_en', 'es_more_bio_en', 'es_closing_en', 'es_subtitle_en' ), true ) ) {
 					$v = wp_kses_post( $v );
 				} elseif ( 'es_slug_en' === $k ) {
 					$v = sanitize_title( $v );
@@ -302,6 +368,28 @@ class ESC_MetaBoxes {
 				$career[] = array( 'when' => sanitize_text_field( $parts[0] ), 'what' => isset( $parts[1] ) ? sanitize_text_field( $parts[1] ) : '' );
 			}
 			update_post_meta( $post_id, 'es_career', $career );
+		}
+
+		// EN-Zeilenfelder: einfache String-Arrays
+		foreach ( array( 'es_focus_areas_en', 'es_bullets_en', 'es_tasks_en', 'es_profile_en' ) as $arr_key ) {
+			if ( isset( $_POST[ $arr_key . '_raw' ] ) ) {
+				$lines = preg_split( '/\r?\n/', wp_unslash( $_POST[ $arr_key . '_raw' ] ) );
+				$arr = array();
+				foreach ( $lines as $l ) { $l = trim( $l ); if ( $l ) { $arr[] = wp_kses_post( $l ); } }
+				update_post_meta( $post_id, $arr_key, $arr );
+			}
+		}
+		// EN-Werdegang im selben Format wie die deutsche Fassung ({when, what})
+		if ( isset( $_POST['es_career_en_raw'] ) ) {
+			$lines = preg_split( '/\r?\n/', wp_unslash( $_POST['es_career_en_raw'] ) );
+			$career = array();
+			foreach ( $lines as $l ) {
+				$l = trim( $l );
+				if ( ! $l ) { continue; }
+				$parts = array_map( 'trim', explode( '|||', $l, 2 ) );
+				$career[] = array( 'when' => sanitize_text_field( $parts[0] ), 'what' => isset( $parts[1] ) ? sanitize_text_field( $parts[1] ) : '' );
+			}
+			update_post_meta( $post_id, 'es_career_en', $career );
 		}
 
 		if ( isset( $_POST['es_author_ids'] ) && is_array( $_POST['es_author_ids'] ) ) {

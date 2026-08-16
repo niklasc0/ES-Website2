@@ -56,23 +56,23 @@ while ( have_posts() ) : the_post();
 						<?php endif; ?>
 						<?php if ( $phone ) : ?>
 							<div class="es-team-single__contact-row">
-								<small>Telefon</small>
+								<small><?php echo esc_html( es_t( 'Telefon', 'Phone' ) ); ?></small>
 								<a href="tel:<?php echo esc_attr( str_replace( array( ' ', '-' ), '', $phone ) ); ?>" style="color:inherit;"><?php echo esc_html( $phone ); ?></a>
 							</div>
 						<?php endif; ?>
 						<div class="es-team-single__contact-row">
-							<small>Standort</small>
+							<small><?php echo esc_html( es_t( 'Standort', 'Location' ) ); ?></small>
 							<?php echo esc_html( $location ); ?>
 						</div>
 						<?php if ( $linkedin ) : ?>
 							<div class="es-team-single__contact-row">
 								<small>LinkedIn</small>
-								<a href="<?php echo esc_url( $linkedin ); ?>" target="_blank" rel="noopener" style="color:inherit;">Profil ansehen ↗︎</a>
+								<a href="<?php echo esc_url( $linkedin ); ?>" target="_blank" rel="noopener" style="color:inherit;"><?php echo esc_html( es_t( 'Profil ansehen ↗︎', 'View profile ↗︎' ) ); ?></a>
 							</div>
 						<?php endif; ?>
 						<div class="es-team-single__contact-actions">
 							<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $email ? $email : 'info@energiesozietaet.de' ); ?>?subject=<?php echo esc_attr( 'Terminanfrage – ' . get_the_title() ); ?>">Termin vereinbaren →</a>
-							<a class="es-btn es-btn--ghost-paper" href="<?php echo esc_url( $vcard ); ?>">Visitenkarte (vCard)</a>
+							<a class="es-btn es-btn--ghost-paper" href="<?php echo esc_url( $vcard ); ?>"><?php echo esc_html( es_t( 'Visitenkarte (vCard)', 'Business card (vCard)' ) ); ?></a>
 						</div>
 					</div>
 				</div>
@@ -94,7 +94,7 @@ while ( have_posts() ) : the_post();
 
 					<?php if ( is_array( $focus ) && ! empty( $focus ) ) : ?>
 						<div class="es-team-single__section">
-							<h3>Ausgewählte Schwerpunkte</h3>
+							<h3><?php echo esc_html( es_t( 'Ausgewählte Schwerpunkte', 'Selected focus areas' ) ); ?></h3>
 							<div class="es-team-single__focus">
 								<?php foreach ( $focus as $item ) :
 									$t = is_array( $item ) ? ( $item['title'] ?? '' ) : $item;
@@ -107,7 +107,7 @@ while ( have_posts() ) : the_post();
 
 					<?php if ( is_array( $career ) && ! empty( $career ) ) : ?>
 						<div class="es-team-single__section">
-							<h3>Werdegang</h3>
+							<h3><?php echo esc_html( es_t( 'Werdegang', 'Career' ) ); ?></h3>
 							<div class="es-team-single__career">
 								<?php foreach ( $career as $row ) :
 									$w = is_array( $row ) ? ( $row['when'] ?? '' ) : '';
@@ -123,7 +123,7 @@ while ( have_posts() ) : the_post();
 
 					<?php if ( $related_pubs->have_posts() ) : ?>
 						<div class="es-team-single__section">
-							<h3>Publikationen (Auswahl)</h3>
+							<h3><?php echo esc_html( es_t( 'Publikationen (Auswahl)', 'Publications (selection)' ) ); ?></h3>
 							<div class="es-team-single__pubs">
 								<?php while ( $related_pubs->have_posts() ) : $related_pubs->the_post();
 									$link = es_meta( 'es_link' );
@@ -137,7 +137,7 @@ while ( have_posts() ) : the_post();
 						</div>
 					<?php endif; ?>
 
-					<a class="es-team-single__back" href="<?php echo esc_url( home_url( '/team/' ) ); ?>">← Zurück zum Team</a>
+					<a class="es-team-single__back" href="<?php echo esc_url( home_url( es_t( '/team/', '/en/team/' ) ) ); ?>">← <?php echo esc_html( es_t( 'Zurück zum Team', 'Back to the team' ) ); ?></a>
 				</div>
 			</div>
 		</div>

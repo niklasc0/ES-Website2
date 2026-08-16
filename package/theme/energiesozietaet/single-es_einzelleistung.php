@@ -61,7 +61,7 @@ while ( have_posts() ) : the_post();
 						<?php if ( $ap_ok ) :
 							$ap_role   = get_post_meta( $ap->ID, 'es_role', true );
 							$ap_gender = get_post_meta( $ap->ID, 'es_gender', true );
-							$ap_label  = ( 'w' === $ap_gender ) ? 'Ihre Ansprechpartnerin' : ( ( 'd' === $ap_gender ) ? 'Ihr:e Ansprechpartner:in' : 'Ihr Ansprechpartner' );
+							$ap_label  = es_is_en() ? 'Your contact' : ( ( 'w' === $ap_gender ) ? 'Ihre Ansprechpartnerin' : ( ( 'd' === $ap_gender ) ? 'Ihr:e Ansprechpartner:in' : 'Ihr Ansprechpartner' ) );
 							$ap_photo  = get_the_post_thumbnail( $ap->ID, 'es-team', array( 'style' => 'width:100%;height:100%;object-fit:cover;', 'alt' => esc_attr( $ap->post_title ) ) );
 							?>
 							<div class="es-eyebrow"><?php echo esc_html( $ap_label ); ?></div>
@@ -73,13 +73,13 @@ while ( have_posts() ) : the_post();
 								</div>
 							</div>
 						<?php else : ?>
-							<div class="es-eyebrow">Kontakt</div>
-							<p class="es-leistung__card-title">Persönliche Beratung.</p>
+							<div class="es-eyebrow"><?php echo esc_html( es_t( 'Kontakt', 'Contact' ) ); ?></div>
+							<p class="es-leistung__card-title"><?php echo esc_html( es_t( 'Persönliche Beratung.', 'Personal advice.' ) ); ?></p>
 						<?php endif; ?>
-						<p class="es-leistung__card-text">Bitte zögern Sie nicht, uns anzusprechen. Wir freuen uns auf Ihre Kontaktaufnahme.</p>
-						<a class="es-btn es-btn--paper" href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">Termin anfragen →</a>
+						<p class="es-leistung__card-text"><?php echo esc_html( es_t( 'Bitte zögern Sie nicht, uns anzusprechen. Wir freuen uns auf Ihre Kontaktaufnahme.', 'Please do not hesitate to get in touch. We look forward to hearing from you.' ) ); ?></p>
+						<a class="es-btn es-btn--paper" href="<?php echo esc_url( home_url( es_t( '/kontakt/', '/en/kontakt/' ) ) ); ?>"><?php echo esc_html( es_t( 'Termin anfragen', 'Request a meeting' ) ); ?> →</a>
 					</div>
-					<a class="es-leistung__back" href="<?php echo esc_url( $bf_url ); ?>">← Alle Leistungen: <?php echo esc_html( $bf_name ); ?></a>
+					<a class="es-leistung__back" href="<?php echo esc_url( $bf_url ); ?>">← <?php echo esc_html( es_t( 'Alle Leistungen:', 'All services:' ) ); ?> <?php echo esc_html( $bf_name ); ?></a>
 				</aside>
 			</div>
 		</div>

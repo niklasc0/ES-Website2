@@ -52,9 +52,17 @@ function es_page_head( $args = array() ) {
 
 /**
  * Return the ACF-like meta helper.
+ * Sprachbewusst: Im EN-Kontext wird {$key}_en geliefert, wenn gefüllt –
+ * sonst automatisch die deutsche Fassung (Felder ohne EN-Variante, z. B.
+ * E-Mail, URLs oder IDs, bleiben dadurch unberührt).
  */
 function es_meta( $key, $post_id = null ) {
-	return get_post_meta( $post_id ? $post_id : get_the_ID(), $key, true );
+	$post_id = $post_id ? $post_id : get_the_ID();
+	if ( function_exists( 'es_is_en' ) && es_is_en() ) {
+		$en = get_post_meta( $post_id, $key . '_en', true );
+		if ( is_string( $en ) ? ( '' !== trim( $en ) ) : ! empty( $en ) ) { return $en; }
+	}
+	return get_post_meta( $post_id, $key, true );
 }
 
 /**

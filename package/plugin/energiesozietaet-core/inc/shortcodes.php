@@ -100,7 +100,7 @@ class ESC_Shortcodes {
 				<?php foreach ( $slugs as $slug ) :
 					$p = get_page_by_path( $slug, OBJECT, 'es_team' );
 					if ( ! $p ) { continue; }
-					$role = (string) get_post_meta( $p->ID, 'es_role', true ); ?>
+					$role = (string) es_meta_ml( 'es_role', $p->ID ); ?>
 					<a href="<?php echo esc_url( get_permalink( $p ) ); ?>">
 						<div class="es-ansprech__photo"><?php echo do_shortcode( '[es_team_photo slug="' . esc_attr( $slug ) . '" size=52]' ); ?></div>
 						<div>
@@ -279,7 +279,7 @@ class ESC_Shortcodes {
 		?>
 		<div class="es-bereich__topics" style="grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);">
 			<?php while ( $q->have_posts() ) : $q->the_post();
-				$sub_raw  = trim( wp_strip_all_tags( (string) get_post_meta( get_the_ID(), 'es_subtitle', true ) ) );
+				$sub_raw  = trim( wp_strip_all_tags( (string) es_meta_ml( 'es_subtitle', get_the_ID() ) ) );
 				$body_raw = $sub_raw ? $sub_raw : trim( wp_strip_all_tags( get_the_content() ) );
 				// Trunc nach dem ersten Satzpunkt – maximal 160 Zeichen Fallback
 				if ( preg_match( '/^(.{20,160}?[\.!\?])\s/u', $body_raw, $m ) ) {
@@ -393,7 +393,7 @@ class ESC_Shortcodes {
 		?>
 		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid">
 			<?php foreach ( $members as $mp ) : $GLOBALS['post'] = $mp; setup_postdata( $mp );
-				$role      = get_post_meta( get_the_ID(), 'es_role', true );
+				$role      = es_meta_ml( 'es_role', get_the_ID() );
 				$thumb_id  = get_post_thumbnail_id();
 				$linkedin  = (string) get_post_meta( get_the_ID(), 'es_linkedin', true );
 				$mem_field = isset( $field_of[ get_the_ID() ] ) ? $field_of[ get_the_ID() ] : '';
@@ -440,7 +440,7 @@ class ESC_Shortcodes {
 		<div class="esc-grid esc-grid--cols-<?php echo (int) $atts['columns']; ?> esc-job-list">
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$thumb_id   = get_post_thumbnail_id();
-				$department = (string) get_post_meta( get_the_ID(), 'es_department', true );
+				$department = (string) es_meta_ml( 'es_department', get_the_ID() );
 				$field_slug = (string) get_post_meta( get_the_ID(), 'es_field', true );
 				$field_label = ( $field_slug && isset( $field_map[ $field_slug ] ) ) ? $field_map[ $field_slug ] : '';
 				if ( ! $field_label ) {
@@ -450,9 +450,9 @@ class ESC_Shortcodes {
 					elseif ( strpos( $lower, 'consulting' ) !== false || strpos( $lower, 'unternehmen' ) !== false ) { $field_label = 'Unternehmensberatung'; }
 					else { $field_label = 'Kanzlei'; }
 				}
-				$location = (string) get_post_meta( get_the_ID(), 'es_location', true );
+				$location = (string) es_meta_ml( 'es_location', get_the_ID() );
 				if ( ! $location ) { $location = 'Düsseldorf'; }
-				$emp_type = (string) get_post_meta( get_the_ID(), 'es_employment_type', true );
+				$emp_type = (string) es_meta_ml( 'es_employment_type', get_the_ID() );
 				if ( ! $emp_type ) { $emp_type = 'Vollzeit'; }
 				$start_date = (string) get_post_meta( get_the_ID(), 'es_start_date', true );
 				$entry_str  = $start_date ? date_i18n( 'j. F Y', strtotime( $start_date ) ) : 'ab sofort';
@@ -473,7 +473,7 @@ class ESC_Shortcodes {
 							<div><dt>Anstellung</dt><dd><?php echo esc_html( $emp_type ); ?></dd></div>
 							<div><dt>Eintritt</dt><dd><?php echo esc_html( $entry_str ); ?></dd></div>
 						</dl>
-						<span class="esc-card__link">Zur Stellenbeschreibung →</span>
+						<span class="esc-card__link"><?php echo esc_html( es_t( 'Zur Stellenbeschreibung', 'View position' ) ); ?> →</span>
 					</div>
 				</a>
 			<?php endwhile; wp_reset_postdata(); ?>
@@ -497,8 +497,8 @@ class ESC_Shortcodes {
 				<?php while ( $q->have_posts() ) : $q->the_post();
 					$start = get_post_meta( get_the_ID(), 'es_start_date', true );
 					$ts    = $start ? strtotime( $start ) : false;
-					$loc   = get_post_meta( get_the_ID(), 'es_location', true );
-					$kind  = get_post_meta( get_the_ID(), 'es_kind', true ); ?>
+					$loc   = es_meta_ml( 'es_location', get_the_ID() );
+					$kind  = es_meta_ml( 'es_kind', get_the_ID() ); ?>
 					<a class="esc-event-row" href="<?php the_permalink(); ?>">
 						<div>
 							<div class="esc-event-row__day"><?php echo esc_html( $ts ? date_i18n( 'd', $ts ) : '–' ); ?></div>
@@ -519,7 +519,7 @@ class ESC_Shortcodes {
 					$start = get_post_meta( get_the_ID(), 'es_start_date', true );
 					$ts    = $start ? strtotime( $start ) : false;
 					$thumb_id = get_post_thumbnail_id();
-					$loc   = get_post_meta( get_the_ID(), 'es_location', true ); ?>
+					$loc   = es_meta_ml( 'es_location', get_the_ID() ); ?>
 					<a class="esc-card es-reveal" href="<?php the_permalink(); ?>">
 						<div class="esc-card__media" style="aspect-ratio:3/2;">
 							<?php if ( $thumb_id ) {
@@ -584,7 +584,7 @@ class ESC_Shortcodes {
 			$q_args['meta_query'] = array( array( 'key' => 'es_fields', 'value' => sanitize_text_field( $atts['field'] ), 'compare' => 'LIKE' ) );
 		}
 		$q = new WP_Query( $q_args );
-		if ( ! $q->have_posts() ) { return '<p style="color:#899092;">Keine Publikationen gefunden.</p>'; }
+		if ( ! $q->have_posts() ) { return '<p style="color:#899092;">' . esc_html( es_t( 'Keine Publikationen gefunden.', 'No publications found.' ) ) . '</p>'; }
 
 		// Gruppierung nach Jahr
 		$years = array();
@@ -601,14 +601,14 @@ class ESC_Shortcodes {
 				<div class="esc-pub-year">
 					<aside class="esc-pub-year__label">
 						<div class="esc-pub-year__num"><?php echo esc_html( $year ); ?></div>
-						<div class="esc-pub-year__count"><?php echo (int) count( $ids ); ?> Einträge</div>
+						<div class="esc-pub-year__count"><?php echo (int) count( $ids ); ?> <?php echo esc_html( es_t( 'Einträge', 'entries' ) ); ?></div>
 					</aside>
 					<div class="esc-pub-year__items">
 						<?php foreach ( $ids as $pid ) :
 							$link = (string) get_post_meta( $pid, 'es_link', true );
 							$src  = (string) get_post_meta( $pid, 'es_source', true );
 							$auth = (string) get_post_meta( $pid, 'es_author', true );
-							$cat  = (string) get_post_meta( $pid, 'es_cat', true );
+							$cat  = (string) es_meta_ml( 'es_cat', $pid );
 							if ( ! $cat ) { $cat = 'Fachbeitrag'; }
 							if ( $link ) : ?>
 								<a class="esc-pub-row" href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
@@ -625,7 +625,7 @@ class ESC_Shortcodes {
 									<?php endif; ?>
 								</div>
 								<?php if ( $link ) : ?>
-									<span class="esc-pub-row__cta">Zur Publikation <span class="esc-pub-row__arrow">→</span></span>
+									<span class="esc-pub-row__cta"><?php echo esc_html( es_t( 'Zur Publikation', 'View publication' ) ); ?> <span class="esc-pub-row__arrow">→</span></span>
 								<?php else : ?>
 									<span></span>
 								<?php endif; ?>
@@ -651,7 +651,7 @@ class ESC_Shortcodes {
 		<div class="esc-grid esc-grid--cols-3">
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$link = (string) get_post_meta( get_the_ID(), 'es_link', true );
-				$cat  = (string) get_post_meta( get_the_ID(), 'es_cat', true ); if ( ! $cat ) { $cat = 'Fachbeitrag'; }
+				$cat  = (string) es_meta_ml( 'es_cat', get_the_ID() ); if ( ! $cat ) { $cat = 'Fachbeitrag'; }
 				$src  = (string) get_post_meta( get_the_ID(), 'es_source', true );
 				$tag  = $link ? 'a' : 'article';
 				$href = $link ? ' href="' . esc_url( $link ) . '" target="_blank" rel="noopener"' : ''; ?>
@@ -659,7 +659,7 @@ class ESC_Shortcodes {
 					<div class="esc-card__meta"><?php echo esc_html( $cat ); ?></div>
 					<h3 style="font-size:var(--es-fs-heading-sub);font-weight:500;line-height:1.3;letter-spacing:-0.01em;margin:16px 0 20px;overflow-wrap:break-word;word-break:break-word;hyphens:auto;"><?php the_title(); ?></h3>
 					<?php if ( $src ) : ?><div style="font-size:var(--es-fs-meta);color:#B6BAAF;font-family:var(--es-font-mono);margin-bottom:20px;"><?php echo esc_html( $src ); ?></div><?php endif; ?>
-					<span class="esc-card__link"><?php echo $link ? 'Zur Publikation ↗︎' : 'Lesen'; ?></span>
+					<span class="esc-card__link"><?php echo esc_html( $link ? es_t( 'Zur Publikation', 'View publication' ) . ' ↗︎' : es_t( 'Lesen', 'Read' ) ); ?></span>
 				</<?php echo $tag; ?>>
 			<?php endwhile; wp_reset_postdata(); ?>
 		</div>

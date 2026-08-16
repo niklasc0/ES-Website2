@@ -69,38 +69,38 @@ while ( have_posts() ) : the_post();
 			<h1 class="es-article__title"><?php the_title(); ?></h1>
 
 			<div class="es-stelle-single__meta-row">
-				<div><strong>Bereich:</strong> <?php echo esc_html( $field_label ); ?></div>
-				<div><strong>Standort:</strong> <?php echo esc_html( $location ); ?></div>
-				<div><strong>Anstellung:</strong> <?php echo esc_html( $emp_type ); ?></div>
-				<div><strong>Eintritt:</strong> <?php echo esc_html( $entry_str ); ?></div>
+				<div><strong><?php echo esc_html( es_t( 'Bereich:', 'Area:' ) ); ?></strong> <?php echo esc_html( $field_label ); ?></div>
+				<div><strong><?php echo esc_html( es_t( 'Standort:', 'Location:' ) ); ?></strong> <?php echo esc_html( $location ); ?></div>
+				<div><strong><?php echo esc_html( es_t( 'Anstellung:', 'Employment:' ) ); ?></strong> <?php echo esc_html( $emp_type ); ?></div>
+				<div><strong><?php echo esc_html( es_t( 'Eintritt:', 'Start date:' ) ); ?></strong> <?php echo esc_html( $entry_str ); ?></div>
 			</div>
 
-			<div class="es-stelle-single__section-title">Über die Rolle</div>
+			<div class="es-stelle-single__section-title"><?php echo esc_html( es_t( 'Über die Rolle', 'About the role' ) ); ?></div>
 			<div class="es-stelle-single__body"><?php the_content(); ?></div>
 
 			<?php if ( is_array( $tasks ) && ! empty( $tasks ) ) : ?>
-				<div class="es-stelle-single__section-title">Was erwarten Dich für Aufgaben?</div>
+				<div class="es-stelle-single__section-title"><?php echo esc_html( es_t( 'Was erwarten Dich für Aufgaben?', 'What to expect' ) ); ?></div>
 				<ul class="es-stelle-single__list">
 					<?php foreach ( $tasks as $t ) : ?><li><?php echo wp_kses_post( $t ); ?></li><?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
 
 			<?php if ( is_array( $profile ) && ! empty( $profile ) ) : ?>
-				<div class="es-stelle-single__section-title">Dein Profil</div>
+				<div class="es-stelle-single__section-title"><?php echo esc_html( es_t( 'Dein Profil', 'Your profile' ) ); ?></div>
 				<ul class="es-stelle-single__list">
 					<?php foreach ( $profile as $p ) : ?><li><?php echo wp_kses_post( $p ); ?></li><?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
 
 			<?php if ( is_array( $offer ) && ! empty( $offer ) ) : ?>
-				<div class="es-stelle-single__section-title">Was wir Dir bieten</div>
+				<div class="es-stelle-single__section-title"><?php echo esc_html( es_t( 'Was wir Dir bieten', 'What we offer' ) ); ?></div>
 				<ul class="es-stelle-single__list">
 					<?php foreach ( $offer as $o ) : ?><li><?php echo wp_kses_post( $o ); ?></li><?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
 
 			<?php if ( $closing ) : ?>
-				<div class="es-stelle-single__section-title">Interesse geweckt?</div>
+				<div class="es-stelle-single__section-title"><?php echo esc_html( es_t( 'Interesse geweckt?', 'Interested?' ) ); ?></div>
 				<div class="es-stelle-single__body"><?php $closing_html = wp_kses_post( wpautop( $closing ) ); echo function_exists( 'esc_link_team_names' ) ? esc_link_team_names( $closing_html ) : $closing_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 			<?php endif; ?>
 
@@ -124,7 +124,7 @@ while ( have_posts() ) : the_post();
 					<div style="font-size:var(--es-fs-heading-sub);font-weight:500;letter-spacing:-0.015em;"><?php echo esc_html( $kget( 'cta_title', 'Bereit, gemeinsam durchzustarten?' ) ); ?></div>
 					<div style="font-size:var(--es-fs-body);color:rgba(255,255,255,0.6);margin-top:6px;"><?php echo esc_html( $kget( 'cta_subtitle', '' ) ); ?></div>
 				</div>
-				<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $kget( 'cta_recipient', 'karriere@energiesozietaet.de' ) ); ?>?subject=<?php echo esc_attr( 'Bewerbung – ' . get_the_title() ); ?>"><?php echo esc_html( $kget( 'cta_button_label', 'Jetzt bewerben' ) ); ?> →</a>
+				<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $kget( 'cta_recipient', 'karriere@energiesozietaet.de' ) ); ?>?subject=<?php echo esc_attr( es_t( 'Bewerbung – ', 'Application – ' ) . get_the_title() ); ?>"><?php echo esc_html( $kget( 'cta_button_label', 'Jetzt bewerben' ) ); ?> →</a>
 			</div>
 
 			<div style="margin-top:56px;">
