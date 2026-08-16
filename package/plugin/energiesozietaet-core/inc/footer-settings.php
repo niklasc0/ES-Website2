@@ -137,18 +137,44 @@ class ESC_Footer_Settings {
 		add_submenu_page( 'es-theme-options', 'Footer', 'Footer', 'manage_options', 'esc-footer', array( __CLASS__, 'render' ), 40 );
 	}
 
+	protected static function raw_val( $name ) {
+		$opts = (array) get_option( self::OPT, array() );
+		$opts = array_merge( self::defaults(), $opts );
+		return isset( $opts[ $name ] ) ? $opts[ $name ] : '';
+	}
+
 	protected static function input( $name, $label, $hint = '' ) {
-		$val = self::get( $name );
+		$val = self::raw_val( $name );
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
-		echo '<input type="text" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" style="width:100%;max-width:640px;" />';
+		if ( in_array( $name, self::en_keys(), true ) ) {
+			$val_en = self::raw_val( $name . '_en' );
+			echo '<div style="display:flex;gap:16px;flex-wrap:wrap;max-width:980px;">';
+			echo '<div style="flex:1;min-width:280px;"><input type="text" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" style="width:100%;" />';
+			echo '<p class="description" style="font-style:normal;margin:2px 0 0;">Deutsch</p></div>';
+			echo '<div style="flex:1;min-width:280px;"><input type="text" name="' . esc_attr( self::OPT . '[' . $name . '_en]' ) . '" value="' . esc_attr( $val_en ) . '" style="width:100%;" placeholder="EN" />';
+			echo '<p class="description" style="font-style:normal;margin:2px 0 0;">Englisch – leer = deutsche Fassung</p></div>';
+			echo '</div>';
+		} else {
+			echo '<input type="text" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" style="width:100%;max-width:640px;" />';
+		}
 		if ( $hint ) { echo '<p class="description" style="font-style:normal;">' . wp_kses_post( $hint ) . '</p>'; }
 		echo '</td></tr>';
 	}
 
 	protected static function textarea( $name, $label, $hint = '', $rows = 4 ) {
-		$val = self::get( $name );
+		$val = self::raw_val( $name );
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
-		echo '<textarea name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" rows="' . (int) $rows . '" style="width:100%;max-width:640px;">' . esc_textarea( $val ) . '</textarea>';
+		if ( in_array( $name, self::en_keys(), true ) ) {
+			$val_en = self::raw_val( $name . '_en' );
+			echo '<div style="display:flex;gap:16px;flex-wrap:wrap;max-width:980px;">';
+			echo '<div style="flex:1;min-width:280px;"><textarea name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" rows="' . (int) $rows . '" style="width:100%;">' . esc_textarea( $val ) . '</textarea>';
+			echo '<p class="description" style="font-style:normal;margin:2px 0 0;">Deutsch</p></div>';
+			echo '<div style="flex:1;min-width:280px;"><textarea name="' . esc_attr( self::OPT . '[' . $name . '_en]' ) . '" rows="' . (int) $rows . '" style="width:100%;" placeholder="EN">' . esc_textarea( $val_en ) . '</textarea>';
+			echo '<p class="description" style="font-style:normal;margin:2px 0 0;">Englisch – leer = deutsche Fassung</p></div>';
+			echo '</div>';
+		} else {
+			echo '<textarea name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" rows="' . (int) $rows . '" style="width:100%;max-width:640px;">' . esc_textarea( $val ) . '</textarea>';
+		}
 		if ( $hint ) { echo '<p class="description" style="font-style:normal;">' . wp_kses_post( $hint ) . '</p>'; }
 		echo '</td></tr>';
 	}
@@ -199,25 +225,6 @@ class ESC_Footer_Settings {
 				<h2>Copyright-Zeile</h2>
 				<table class="form-table"><tbody>
 					<?php self::input( 'copyright', 'Text', 'Platzhalter <code>{year}</code> wird automatisch ersetzt.' ); ?>
-				</tbody></table>
-
-				<h2>Englische Fassung (EN)</h2>
-				<p class="description" style="font-style:normal;">Leere Felder fallen im englischen Bereich auf die deutsche Fassung zurück. In den Spalten-Zeilen bitte englische Beschriftungen und <code>/en/…</code>-Ziele verwenden (z. B. <code>Home | /en/</code>).</p>
-				<table class="form-table"><tbody>
-					<?php
-					self::input(    'cta_eyebrow_en',    'CTA Eyebrow (EN)' );
-					self::input(    'cta_title_en',      'CTA Überschrift (EN)' );
-					self::input(    'cta_subtitle_en',   'CTA Untertitel (EN)' );
-					self::input(    'cta_btn1_label_en', 'Button 1 · Text (EN)' );
-					self::input(    'cta_btn2_label_en', 'Button 2 · Text (EN)' );
-					self::input(    'brand_sub_en',      'Brand-Untertitel (EN)' );
-					self::textarea( 'brand_claim_en',    'Brand-Claim (EN)', '', 2 );
-					for ( $i = 1; $i <= 3; $i++ ) {
-						self::input(    "col{$i}_heading_en", "Spalte {$i} · Überschrift (EN)" );
-						self::textarea( "col{$i}_lines_en",   "Spalte {$i} · Zeilen (EN)", 'Format wie deutsch: <code>Text | URL</code>.', 5 );
-					}
-					self::input( 'copyright_en', 'Copyright-Zeile (EN)' );
-					?>
 				</tbody></table>
 
 				<?php submit_button(); ?>

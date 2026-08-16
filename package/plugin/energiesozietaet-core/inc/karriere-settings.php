@@ -92,9 +92,20 @@ class ESC_Karriere_Settings {
 	}
 
 	protected static function input( $name, $label ) {
-		$val = self::get( $name );
+		$val = self::raw( $name );
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
-		echo '<input type="text" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" style="width:100%;max-width:640px;" />';
+		if ( in_array( $name, self::en_keys(), true ) ) {
+			// Deutsch + Englisch nebeneinander
+			$val_en = self::raw( $name . '_en' );
+			echo '<div style="display:flex;gap:16px;flex-wrap:wrap;max-width:980px;">';
+			echo '<div style="flex:1;min-width:280px;"><input type="text" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" style="width:100%;" />';
+			echo '<p class="description" style="font-style:normal;margin:2px 0 0;">Deutsch</p></div>';
+			echo '<div style="flex:1;min-width:280px;"><input type="text" name="' . esc_attr( self::OPT . '[' . $name . '_en]' ) . '" value="' . esc_attr( $val_en ) . '" style="width:100%;" placeholder="EN" />';
+			echo '<p class="description" style="font-style:normal;margin:2px 0 0;">Englisch – leer = deutsche Fassung</p></div>';
+			echo '</div>';
+		} else {
+			echo '<input type="text" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" style="width:100%;max-width:640px;" />';
+		}
 		echo '</td></tr>';
 	}
 
@@ -127,19 +138,7 @@ class ESC_Karriere_Settings {
 					self::input( 'cta_subtitle',     'Untertitel' );
 					self::input( 'cta_button_label', 'Button-Text' );
 					self::input( 'cta_recipient',    'Empfänger-E-Mail' );
-					?>
-					<h2>Englische Fassung (EN)</h2>
-					<p class="description" style="font-style:normal;">Leere Felder fallen im englischen Bereich auf die deutsche Fassung zurück.</p>
-					<?php
-					self::input( 'benefits_title_en', 'Benefits-Überschrift (EN)' );
-					for ( $i = 1; $i <= 4; $i++ ) {
-						self::input( 'benefit' . $i . '_title_en', 'Benefit ' . $i . ' Titel (EN)' );
-						self::input( 'benefit' . $i . '_desc_en',  'Benefit ' . $i . ' Beschreibung (EN)' );
-					}
-					self::input( 'cta_eyebrow_en',      'CTA Eyebrow (EN)' );
-					self::input( 'cta_title_en',        'CTA Hauptüberschrift (EN)' );
-					self::input( 'cta_subtitle_en',     'CTA Untertitel (EN)' );
-					self::input( 'cta_button_label_en', 'CTA Button-Text (EN)' );
+
 					?>
 				</tbody></table>
 
