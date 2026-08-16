@@ -69,12 +69,17 @@ $es_is_dark = false;
 		</nav>
 
 		<div class="es-header__actions">
-			<a class="es-btn es-btn--ghost es-header__cta es-header__cta--jobs" href="<?php echo esc_url( home_url( '/karriere/' ) ); ?>">
-				<?php esc_html_e( 'Stellenangebote', 'energiesozietaet' ); ?>
+			<a class="es-btn es-btn--ghost es-header__cta es-header__cta--jobs" href="<?php echo esc_url( home_url( es_t( '/karriere/', '/en/karriere/' ) ) ); ?>">
+				<?php echo esc_html( es_t( 'Stellenangebote', 'Careers' ) ); ?>
 			</a>
-			<a class="es-btn es-btn--accent es-header__cta" href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">
-				<?php esc_html_e( 'Kontakt', 'energiesozietaet' ); ?>
+			<a class="es-btn es-btn--accent es-header__cta" href="<?php echo esc_url( home_url( es_t( '/kontakt/', '/en/kontakt/' ) ) ); ?>">
+				<?php echo esc_html( es_t( 'Kontakt', 'Contact' ) ); ?>
 			</a>
+			<?php if ( class_exists( 'ES_Lang' ) ) : ?>
+				<a class="es-header__lang" href="<?php echo esc_url( ES_Lang::switch_url() ); ?>" aria-label="<?php echo esc_attr( es_t( 'Switch to English', 'Zur deutschen Fassung wechseln' ) ); ?>">
+					<span class="<?php echo es_is_en() ? '' : 'is-active'; ?>">DE</span><span aria-hidden="true">/</span><span class="<?php echo es_is_en() ? 'is-active' : ''; ?>">EN</span>
+				</a>
+			<?php endif; ?>
 		</div>
 
 		<button class="es-nav-toggle" aria-controls="es-nav" aria-expanded="false" aria-label="<?php esc_attr_e( 'Menü', 'energiesozietaet' ); ?>">

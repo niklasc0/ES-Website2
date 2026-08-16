@@ -310,6 +310,9 @@ function es_fallback_menu() {
  * Bewusstes) gestellt, greift der Filter nicht ein.
  */
 add_filter( 'language_attributes', function ( $output ) {
+	if ( function_exists( 'es_is_en' ) && es_is_en() ) {
+		return 'lang="en"';
+	}
 	if ( 'en_US' === get_locale() ) {
 		return 'lang="de-DE"';
 	}
@@ -336,4 +339,18 @@ function es_accordionize( $html ) {
 		$out .= '<details class="es-acc"><summary>' . esc_html( $heading ) . '</summary><div class="es-acc__body">' . $body . '</div></details>';
 	}
 	return $out;
+}
+
+/**
+ * Fallbacks der Sprach-Helper, falls das Core-Plugin (inc/lang.php) nicht
+ * aktiv ist – die Website rendert dann einsprachig deutsch.
+ */
+if ( ! function_exists( 'es_lang' ) )   { function es_lang() { return 'de'; } }
+if ( ! function_exists( 'es_is_en' ) )  { function es_is_en() { return false; } }
+if ( ! function_exists( 'es_t' ) )      { function es_t( $de, $en ) { return $de; } }
+if ( ! function_exists( 'es_has_en' ) ) { function es_has_en( $post_id = 0 ) { return false; } }
+if ( ! function_exists( 'es_meta_ml' ) ) {
+	function es_meta_ml( $key, $post_id = 0 ) {
+		return get_post_meta( $post_id ? $post_id : get_the_ID(), $key, true );
+	}
 }

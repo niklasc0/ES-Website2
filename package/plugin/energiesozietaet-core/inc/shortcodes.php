@@ -138,8 +138,13 @@ class ESC_Shortcodes {
 		if ( ! in_array( $pp, $allowed_pp, true ) ) { $pp = 8; }
 		$page = isset( $_GET['npage'] ) ? max( 1, (int) $_GET['npage'] ) : 1;
 
+		// Im EN-Kontext nur übersetzte Beiträge (Titel EN vorhanden)
+		$lang_meta = es_is_en() ? array( array( 'key' => 'es_title_en', 'compare' => 'EXISTS' ), array( 'key' => 'es_title_en', 'value' => '', 'compare' => '!=' ) ) : null;
+
 		// Featured-Artikel = neuester
-		$fq = new WP_Query( array( 'post_type' => 'es_news', 'posts_per_page' => 1, 'orderby' => 'date', 'order' => 'DESC' ) );
+		$fq_args = array( 'post_type' => 'es_news', 'posts_per_page' => 1, 'orderby' => 'date', 'order' => 'DESC' );
+		if ( $lang_meta ) { $fq_args['meta_query'] = $lang_meta; }
+		$fq = new WP_Query( $fq_args );
 		if ( ! $fq->have_posts() ) { return ''; }
 		$fq->the_post();
 		$f_id    = get_the_ID();
@@ -147,19 +152,21 @@ class ESC_Shortcodes {
 		$f_img   = $f_thumb ? wp_get_attachment_image( $f_thumb, 'es-wide', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>';
 		$f_title   = get_the_title();
 		$f_link    = get_permalink();
-		$f_date    = get_the_date( 'j. F Y' );
-		$f_excerpt = self::excerpt( get_post(), 36 );
+		$f_date    = get_the_date( es_t( 'j. F Y', 'j F Y' ) );
+		$f_excerpt = es_is_en() ? get_the_excerpt() : self::excerpt( get_post(), 36 );
 		wp_reset_postdata();
 
 		// Rest paginiert, ohne Featured
-		$rq = new WP_Query( array(
+		$rq_args = array(
 			'post_type'      => 'es_news',
 			'posts_per_page' => $pp,
 			'paged'          => $page,
 			'post__not_in'   => array( $f_id ),
 			'orderby'        => 'date',
 			'order'          => 'DESC',
-		) );
+		);
+		if ( $lang_meta ) { $rq_args['meta_query'] = $lang_meta; }
+		$rq = new WP_Query( $rq_args );
 		$total_pages = (int) $rq->max_num_pages;
 		$base = remove_query_arg( array( 'pp', 'npage' ) );
 
@@ -171,14 +178,14 @@ class ESC_Shortcodes {
 					<div style="font-size:var(--es-fs-eyebrow);color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;font-family:var(--es-font-mono);">Featured &middot; <?php echo esc_html( $f_date ); ?></div>
 					<h2 style="font-size:clamp(28px,3.4vw,48px);line-height:1.1;font-weight:400;letter-spacing:-0.03em;margin:0 0 24px;"><?php echo esc_html( $f_title ); ?></h2>
 					<p style="font-size:var(--es-fs-body);color:#899092;line-height:1.6;margin:0 0 32px;"><?php echo esc_html( $f_excerpt ); ?></p>
-					<span class="es-link">Weiterlesen &rarr;</span>
+					<span class="es-link"><?php echo esc_html( es_t( 'Weiterlesen', 'Read more' ) ); ?> &rarr;</span>
 				</div>
 			</a>
 
 			<?php if ( $rq->have_posts() ) : ?>
 			<div class="es-news-toolbar">
 				<div class="es-news-toolbar__pp">
-					<span class="es-news-toolbar__label">Pro Seite</span>
+					<span class="es-news-toolbar__label"><?php echo esc_html( es_t( 'Pro Seite', 'Per page' ) ); ?></span>
 					<?php foreach ( $allowed_pp as $opt ) :
 						$url = esc_url( add_query_arg( array( 'pp' => $opt, 'npage' => 1 ), $base ) ); ?>
 						<a class="es-news-toolbar__pill<?php echo $opt === $pp ? ' is-active' : ''; ?>" href="<?php echo $url; ?>"><?php echo (int) $opt; ?></a>
@@ -188,9 +195,9 @@ class ESC_Shortcodes {
 					$prev = $page > 1 ? $page - 1 : 0;
 					$next = $page < $total_pages ? $page + 1 : 0; ?>
 				<div class="es-news-toolbar__pager">
-					<a class="es-news-toolbar__pill<?php echo $prev ? '' : ' is-disabled'; ?>" href="<?php echo $prev ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $prev ), $base ) ) : '#'; ?>"<?php echo $prev ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>&larr; Vorherige</a>
-					<span class="es-news-toolbar__status">Seite <?php echo (int) $page; ?> / <?php echo (int) $total_pages; ?></span>
-					<a class="es-news-toolbar__pill<?php echo $next ? '' : ' is-disabled'; ?>" href="<?php echo $next ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $next ), $base ) ) : '#'; ?>"<?php echo $next ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>Nächste &rarr;</a>
+					<a class="es-news-toolbar__pill<?php echo $prev ? '' : ' is-disabled'; ?>" href="<?php echo $prev ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $prev ), $base ) ) : '#'; ?>"<?php echo $prev ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>&larr; <?php echo esc_html( es_t( 'Vorherige', 'Previous' ) ); ?></a>
+					<span class="es-news-toolbar__status"><?php echo esc_html( es_t( 'Seite', 'Page' ) ); ?> <?php echo (int) $page; ?> / <?php echo (int) $total_pages; ?></span>
+					<a class="es-news-toolbar__pill<?php echo $next ? '' : ' is-disabled'; ?>" href="<?php echo $next ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $next ), $base ) ) : '#'; ?>"<?php echo $next ? '' : ' aria-disabled="true" onclick="return false;"'; ?>><?php echo esc_html( es_t( 'Nächste', 'Next' ) ); ?> &rarr;</a>
 				</div>
 				<?php endif; ?>
 			</div>
@@ -202,7 +209,7 @@ class ESC_Shortcodes {
 					<a class="es-news-row" href="<?php the_permalink(); ?>">
 						<div class="es-news-row__media"><?php echo $img; ?></div>
 						<div class="es-news-row__body">
-							<div class="es-news-row__date"><?php echo esc_html( get_the_date( 'j. F Y' ) ); ?></div>
+							<div class="es-news-row__date"><?php echo esc_html( get_the_date( es_t( 'j. F Y', 'j F Y' ) ) ); ?></div>
 							<h3 class="es-news-row__title"><?php the_title(); ?></h3>
 							<p class="es-news-row__text"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
 						</div>
@@ -215,9 +222,9 @@ class ESC_Shortcodes {
 				$next = $page < $total_pages ? $page + 1 : 0; ?>
 			<div class="es-news-toolbar es-news-toolbar--bottom">
 				<div class="es-news-toolbar__pager">
-					<a class="es-news-toolbar__pill<?php echo $prev ? '' : ' is-disabled'; ?>" href="<?php echo $prev ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $prev ), $base ) ) : '#'; ?>"<?php echo $prev ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>&larr; Vorherige</a>
-					<span class="es-news-toolbar__status">Seite <?php echo (int) $page; ?> / <?php echo (int) $total_pages; ?></span>
-					<a class="es-news-toolbar__pill<?php echo $next ? '' : ' is-disabled'; ?>" href="<?php echo $next ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $next ), $base ) ) : '#'; ?>"<?php echo $next ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>Nächste &rarr;</a>
+					<a class="es-news-toolbar__pill<?php echo $prev ? '' : ' is-disabled'; ?>" href="<?php echo $prev ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $prev ), $base ) ) : '#'; ?>"<?php echo $prev ? '' : ' aria-disabled="true" onclick="return false;"'; ?>>&larr; <?php echo esc_html( es_t( 'Vorherige', 'Previous' ) ); ?></a>
+					<span class="es-news-toolbar__status"><?php echo esc_html( es_t( 'Seite', 'Page' ) ); ?> <?php echo (int) $page; ?> / <?php echo (int) $total_pages; ?></span>
+					<a class="es-news-toolbar__pill<?php echo $next ? '' : ' is-disabled'; ?>" href="<?php echo $next ? esc_url( add_query_arg( array( 'pp' => $pp, 'npage' => $next ), $base ) ) : '#'; ?>"<?php echo $next ? '' : ' aria-disabled="true" onclick="return false;"'; ?>><?php echo esc_html( es_t( 'Nächste', 'Next' ) ); ?> &rarr;</a>
 				</div>
 			</div>
 			<?php endif; ?>
@@ -560,7 +567,7 @@ class ESC_Shortcodes {
 						<h3 class="esc-card__title"><?php the_title(); ?></h3>
 						<div class="esc-card__date">
 							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
-							<?php echo esc_html( get_the_date( 'j. F Y' ) ); ?>
+							<?php echo esc_html( get_the_date( es_t( 'j. F Y', 'j F Y' ) ) ); ?>
 						</div>
 					</div>
 				</a>

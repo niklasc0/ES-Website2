@@ -27,6 +27,28 @@ class ESC_MetaBoxes {
 		add_meta_box( 'esc_karriere',      'Karriere-Details',        array( __CLASS__, 'box_karriere' ),     'es_karriere',       'normal', 'default' );
 		add_meta_box( 'esc_veranstaltung', 'Veranstaltungs-Details',  array( __CLASS__, 'box_veranst' ),      'es_veranstaltung',  'normal', 'default' );
 		add_meta_box( 'esc_publikation',   'Publikations-Details',    array( __CLASS__, 'box_publikation' ),  'es_publikation',    'normal', 'default' );
+		// Englische Fassung – Phase 1: News (weitere Inhaltstypen folgen)
+		add_meta_box( 'esc_lang_en', 'Englische Fassung (EN)', array( __CLASS__, 'box_lang_en' ), 'es_news', 'normal', 'default' );
+	}
+
+	/**
+	 * Generische EN-Felder: Titel, Text, Teaser, URL-Kürzel.
+	 * Leere Felder = deutsche Fassung wird angezeigt (Fallback); ohne EN-Titel
+	 * erscheint der Beitrag nicht in den englischen Listen.
+	 */
+	public static function box_lang_en( $post ) {
+		self::nonce();
+		echo '<p class="description" style="font-style:normal;margin-top:0;">Leere Felder fallen im englischen Bereich auf die deutsche Fassung zurück. Ohne „Titel (EN)" erscheint der Beitrag nicht in den englischen Übersichten.</p>';
+		self::field( 'Titel (EN)', 'es_title_en', get_post_meta( $post->ID, 'es_title_en', true ) );
+		echo '<p style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"><label for="esc_es_content_en"><strong>Beitragstext (EN)</strong></label></p>';
+		wp_editor( (string) get_post_meta( $post->ID, 'es_content_en', true ), 'esc_es_content_en', array(
+			'textarea_name' => 'es_content_en',
+			'textarea_rows' => 12,
+			'media_buttons' => false,
+		) );
+		echo '<div style="height:14px;"></div>';
+		self::field( 'Teaser / Auszug (EN, optional)', 'es_excerpt_en', get_post_meta( $post->ID, 'es_excerpt_en', true ), 'textarea' );
+		self::field( 'URL-Kürzel (EN, optional – nur Kleinbuchstaben und Bindestriche)', 'es_slug_en', get_post_meta( $post->ID, 'es_slug_en', true ) );
 	}
 
 	protected static function nonce() {
@@ -218,14 +240,17 @@ class ESC_MetaBoxes {
 			'es_department','es_employment_type','es_start_date',
 			'es_end_date','es_kind','es_registration_url',
 			'es_cat','es_source','es_publication_date','es_link','es_author',
+			'es_title_en','es_content_en','es_excerpt_en','es_slug_en',
 		);
 		foreach ( $scalars as $k ) {
 			if ( array_key_exists( $k, $_POST ) ) {
 				$v = wp_unslash( $_POST[ $k ] );
 				if ( in_array( $k, array( 'es_link', 'es_linkedin', 'es_registration_url' ), true ) ) {
 					$v = esc_url_raw( $v );
-				} elseif ( in_array( $k, array( 'es_more_bio', 'es_closing', 'es_subtitle' ), true ) ) {
+				} elseif ( in_array( $k, array( 'es_more_bio', 'es_closing', 'es_subtitle', 'es_content_en', 'es_excerpt_en' ), true ) ) {
 					$v = wp_kses_post( $v );
+				} elseif ( 'es_slug_en' === $k ) {
+					$v = sanitize_title( $v );
 				} else {
 					$v = sanitize_text_field( $v );
 				}
