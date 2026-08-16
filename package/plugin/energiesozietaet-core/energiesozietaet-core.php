@@ -3,7 +3,7 @@
  * Plugin Name:       Energiesozietät Core
  * Plugin URI:        https://energiesozietaet.de/
  * Description:       Custom Post Types (Team, Einzelleistungen, Karriere, Veranstaltungen, News, Publikationen), Taxonomie Beratungsfeld, Grid-Shortcodes, Meta-Felder und Demo-Content-Importer für die Energiesozietät-Website.
- * Version:           1.5.1
+ * Version:           1.5.2
  * Author:            Energiesozietät
  * License:           GPL v2 or later
  * Text Domain:       energiesozietaet-core

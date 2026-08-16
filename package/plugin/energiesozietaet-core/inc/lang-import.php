@@ -294,12 +294,20 @@ class ES_Lang_Import {
 	/** Hochgeladene XLSX-Zeilen (Spalten 0-4) in {ref, en}-Zeilen wandeln. */
 	public static function rows_from_sheet( $sheet_rows ) {
 		$out = array();
-		foreach ( $sheet_rows as $i => $cells ) {
-			if ( 0 === $i ) { continue; } // Kopfzeile
+		$known_ref = 0;
+		foreach ( $sheet_rows as $cells ) {
 			$ref = isset( $cells[4] ) ? trim( (string) $cells[4] ) : '';
 			$en  = isset( $cells[3] ) ? trim( (string) $cells[3] ) : '';
-			if ( '' === $ref || '' === $en ) { continue; }
+			// Kopf-/Leer-/Fremdzeilen anhand des Inhalts erkennen – die Position
+			// im Blatt ist egal (eingefügte Zeilen, Sortierungen etc. schaden nicht)
+			if ( ! preg_match( '/^(live:|settings\.|url:|einzelleistung\.|team\.|karriere\.)/', $ref ) ) { continue; }
+			$known_ref++;
+			if ( '' === $en ) { continue; }
 			$out[] = array( 'ref' => $ref, 'en' => $en );
+		}
+		// Keine einzige bekannte Referenz → vermutlich falsche/umgebaute Datei
+		if ( 0 === $known_ref ) {
+			return new WP_Error( 'wrong_file', 'Keine gültigen Referenzen gefunden – bitte die über „Übersetzungsdatei herunterladen" erzeugte Datei verwenden (Spalte „Referenz" darf nicht verändert werden).' );
 		}
 		return $out;
 	}
@@ -333,7 +341,12 @@ add_action( 'admin_menu', function () {
 			if ( ! empty( $_FILES['esc_lang_file']['tmp_name'] ) ) {
 				require_once ESC_DIR . 'inc/lang-xlsx.php';
 				$sheet = ES_Lang_Xlsx::read( $_FILES['esc_lang_file']['tmp_name'] );
-				$result = is_wp_error( $sheet ) ? $sheet : ES_Lang_Import::apply_rows( ES_Lang_Import::rows_from_sheet( $sheet ) );
+				if ( is_wp_error( $sheet ) ) {
+					$result = $sheet;
+				} else {
+					$rows = ES_Lang_Import::rows_from_sheet( $sheet );
+					$result = is_wp_error( $rows ) ? $rows : ES_Lang_Import::apply_rows( $rows );
+				}
 			} else {
 				$result = new WP_Error( 'no_upload', 'Bitte eine XLSX-Datei auswählen.' );
 			}
