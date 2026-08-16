@@ -521,9 +521,9 @@ class ESC_Shortcodes {
 					$thumb_id = get_post_thumbnail_id();
 					$loc   = es_meta_ml( 'es_location', get_the_ID() ); ?>
 					<a class="esc-card es-reveal" href="<?php the_permalink(); ?>">
-						<div class="esc-card__media" style="aspect-ratio:3/2;">
+						<div class="esc-card__media">
 							<?php if ( $thumb_id ) {
-								echo wp_get_attachment_image( $thumb_id, 'es-wide', false, array( 'loading' => 'lazy' ) );
+								echo wp_get_attachment_image( $thumb_id, 'large', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) );
 							} else { ?>
 								<div class="es-ph-cat" style="aspect-ratio:auto;height:100%;"><span>Veranstaltung</span></div>
 							<?php } ?>

@@ -51,7 +51,7 @@ while ( have_posts() ) : the_post();
 
 		<?php if ( $thumb_id ) : ?>
 			<div class="es-article__hero" style="max-width:1160px;margin:40px auto;padding:0 24px;">
-				<?php echo wp_get_attachment_image( $thumb_id, 'es-wide', false, array( 'loading' => 'eager', 'style' => 'width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;' ) ); ?>
+				<?php echo wp_get_attachment_image( $thumb_id, 'large', false, array( 'loading' => 'eager', 'style' => 'width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;' ) ); ?>
 			</div>
 		<?php endif; ?>
 
