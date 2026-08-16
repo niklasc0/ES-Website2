@@ -77,7 +77,7 @@ es_page_head( array(
 						$ts    = $start ? strtotime( $start ) : false;
 						?>
 						<article class="es-card es-reveal">
-							<div class="es-card__meta"><?php echo $ts ? esc_html( date_i18n( 'j. F Y', $ts ) ) : ''; ?></div>
+							<div class="es-card__meta"><?php echo $ts ? esc_html( date_i18n( es_t( 'j. F Y', 'j F Y' ), $ts ) ) : ''; ?></div>
 							<h3 class="es-card__title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 							<p class="es-card__text"><?php echo esc_html( es_excerpt( get_post(), 28 ) ); ?></p>
 							<a class="es-card__link" href="<?php the_permalink(); ?>">Details</a>

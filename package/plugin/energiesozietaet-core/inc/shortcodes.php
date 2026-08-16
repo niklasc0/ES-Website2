@@ -455,7 +455,7 @@ class ESC_Shortcodes {
 				$emp_type = (string) es_meta_ml( 'es_employment_type', get_the_ID() );
 				if ( ! $emp_type ) { $emp_type = 'Vollzeit'; }
 				$start_date = (string) get_post_meta( get_the_ID(), 'es_start_date', true );
-				$entry_str  = $start_date ? date_i18n( 'j. F Y', strtotime( $start_date ) ) : 'ab sofort';
+				$entry_str  = $start_date ? date_i18n( es_t( 'j. F Y', 'j F Y' ), strtotime( $start_date ) ) : 'ab sofort';
 				?>
 				<a class="esc-job es-reveal" href="<?php the_permalink(); ?>">
 					<div class="esc-job__media">

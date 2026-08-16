@@ -62,6 +62,58 @@ class ES_Lang {
 		add_filter( 'post_type_link', array( __CLASS__, 'localize_permalink' ), 10, 2 );
 		add_filter( 'page_link', array( __CLASS__, 'localize_page_link' ), 10, 2 );
 		add_action( 'wp_head', array( __CLASS__, 'head_tags' ), 1 );
+		add_action( 'template_redirect', array( __CLASS__, 'canonical_redirects' ) );
+		add_filter( 'wp_sitemaps_posts_query_args', array( __CLASS__, 'sitemap_exclude_untranslated' ), 10, 2 );
+	}
+
+	/** Kanonische Weiterleitungen zwischen den Sprachfassungen. */
+	public static function canonical_redirects() {
+		if ( is_admin() || ! is_singular() ) { return; }
+		$id = get_queried_object_id();
+		// EN-Seitenkopie ohne /en/-Präfix aufgerufen → auf die EN-URL umleiten
+		if ( 'de' === self::$lang && 'page' === get_post_type( $id ) && 'en' === get_post_meta( $id, 'es_lang', true ) ) {
+			wp_safe_redirect( self::en_page_url( $id ), 301 );
+			exit;
+		}
+		// /en/<deutscher Slug>/ obwohl eine EN-Fassung existiert → EN-URL
+		if ( 'en' === self::$lang ) {
+			$req = isset( $_SERVER['REQUEST_URI'] ) ? (string) strtok( (string) $_SERVER['REQUEST_URI'], '?' ) : '';
+			if ( in_array( get_post_type( $id ), self::CPTS, true ) ) {
+				$canonical = wp_parse_url( self::to_en_url( $id ), PHP_URL_PATH );
+				// REQUEST_URI wurde von detect() bereits entpräfixt/gemappt –
+				// vergleichbar machen (DE-Basis + DE-Slug)
+				$current = wp_parse_url( self::to_de_url( $id ), PHP_URL_PATH );
+				$slug_en = get_post_meta( $id, 'es_slug_en', true );
+				if ( $slug_en && $req === $current ) {
+					wp_safe_redirect( $canonical, 301 );
+					exit;
+				}
+			} elseif ( 'page' === get_post_type( $id ) && 'en' === get_post_meta( $id, 'es_lang', true ) ) {
+				$public = (string) get_post_meta( $id, 'es_public_slug', true );
+				$de_id  = (int) get_post_meta( $id, 'es_translation_of', true );
+				if ( $public && $de_id ) {
+					$de_slug = get_post( $de_id ) ? get_post( $de_id )->post_name : '';
+					if ( $de_slug && '/' . $de_slug . '/' === $req && $de_slug !== $public ) {
+						wp_safe_redirect( self::en_page_url( $id ), 301 );
+						exit;
+					}
+				}
+			}
+		}
+	}
+
+	/** Unübersetzte EN-Seitenkopien aus der XML-Sitemap halten. */
+	public static function sitemap_exclude_untranslated( $args, $post_type ) {
+		if ( 'page' !== $post_type ) { return $args; }
+		$mq = isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ? $args['meta_query'] : array();
+		$mq[] = array(
+			'relation' => 'OR',
+			array( 'key' => 'es_lang', 'compare' => 'NOT EXISTS' ),
+			array( 'key' => 'es_lang', 'value' => 'en', 'compare' => '!=' ),
+			array( 'key' => 'es_translated', 'value' => '1' ),
+		);
+		$args['meta_query'] = $mq;
+		return $args;
 	}
 
 	/** /en/-Präfix erkennen und Request auf die DE-Routen zurückschreiben. */
@@ -262,11 +314,19 @@ class ES_Lang {
 				$en_first = ( 'en' === get_post_meta( $id, 'es_lang', true ) );
 				$en_id = $en_first ? $id : $partner;
 				$de_id = $en_first ? $partner : $id;
-				$de_url = self::strip_en( get_permalink( $de_id ) );
+				$de_url = ( (int) get_option( 'page_on_front' ) === (int) $de_id ) ? home_url( '/' ) : home_url( '/' . get_post( $de_id )->post_name . '/' );
 				$en_url = self::en_page_url( $en_id );
-				echo '<link rel="alternate" hreflang="de" href="' . esc_url( $de_url ) . '" />' . "\n";
-				echo '<link rel="alternate" hreflang="en" href="' . esc_url( $en_url ) . '" />' . "\n";
-				echo '<link rel="alternate" hreflang="x-default" href="' . esc_url( $de_url ) . '" />' . "\n";
+				// SEO-Gate: solange die EN-Kopie nicht als übersetzt markiert ist,
+				// keine hreflangs und die EN-Fassung nicht indexieren.
+				$translated = (bool) get_post_meta( $en_id, 'es_translated', true );
+				if ( $translated ) {
+					echo '<link rel="alternate" hreflang="de" href="' . esc_url( $de_url ) . '" />' . "\n";
+					echo '<link rel="alternate" hreflang="en" href="' . esc_url( $en_url ) . '" />' . "\n";
+					echo '<link rel="alternate" hreflang="x-default" href="' . esc_url( $de_url ) . '" />' . "\n";
+				} elseif ( 'en' === self::$lang ) {
+					echo '<meta name="robots" content="noindex,follow" />' . "\n";
+					echo '<link rel="canonical" href="' . esc_url( $de_url ) . '" />' . "\n";
+				}
 			} elseif ( 'en' === self::$lang ) {
 				echo '<meta name="robots" content="noindex,follow" />' . "\n";
 			}
@@ -353,18 +413,36 @@ class ES_Lang {
 	 * Fehlende EN-Seitenkopien anlegen (Struktur + Inhalte = deutsche Live-Seite,
 	 * bis Übersetzungen eingepflegt sind). Bestehende Kopien werden nie überschrieben.
 	 */
+	/** Englische Seitentitel der Kopien (für <title>/Backend-Liste). */
+	const PAGE_TITLES_EN = array(
+		'home' => 'Home', 'philosophie' => 'Philosophy', 'leistungen' => 'Services',
+		'rechtsberatung' => 'Legal Advice', 'steuerberatung' => 'Tax Advice',
+		'unternehmensberatung' => 'Management Consulting', 'team' => 'Team',
+		'karriere' => 'Careers', 'kontakt' => 'Contact', 'news' => 'News',
+		'veranstaltungen' => 'Events', 'publikationen' => 'Publications',
+		'impressum' => 'Legal Notice', 'datenschutzerklaerung' => 'Privacy Policy',
+	);
+
 	public static function create_page_copies() {
 		$made = array();
 		foreach ( self::PAGE_SLUGS_EN as $de_slug => $public ) {
 			$de = get_page_by_path( $de_slug );
 			if ( ! $de ) { continue; }
-			if ( self::translation_of( $de->ID ) ) { continue; } // Kopie existiert
+			$existing = self::translation_of( $de->ID );
+			if ( $existing ) {
+				// Nachziehen: englischer Titel, falls die Kopie noch den deutschen trägt
+				$copy = get_post( $existing );
+				if ( $copy && isset( self::PAGE_TITLES_EN[ $de_slug ] ) && $copy->post_title === $de->post_title && $de->post_title !== self::PAGE_TITLES_EN[ $de_slug ] ) {
+					wp_update_post( array( 'ID' => $existing, 'post_title' => self::PAGE_TITLES_EN[ $de_slug ] ) );
+				}
+				continue;
+			}
 			$en_name = 'en-' . $de_slug;
 			$id = wp_insert_post( array(
 				'post_type'    => 'page',
 				'post_status'  => 'publish',
 				'post_name'    => $en_name,
-				'post_title'   => $de->post_title,
+				'post_title'   => isset( self::PAGE_TITLES_EN[ $de_slug ] ) ? self::PAGE_TITLES_EN[ $de_slug ] : $de->post_title,
 				'post_content' => $de->post_content,
 				'post_author'  => $de->post_author,
 			), true );

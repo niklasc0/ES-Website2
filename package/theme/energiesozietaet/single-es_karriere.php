@@ -37,7 +37,7 @@ while ( have_posts() ) : the_post();
 	$emp_type   = es_meta( 'es_employment_type' );
 	if ( ! $emp_type ) { $emp_type = 'Vollzeit'; }
 	$start_date = es_meta( 'es_start_date' );
-	$entry_str  = $start_date ? date_i18n( 'j. F Y', strtotime( $start_date ) ) : 'ab sofort';
+	$entry_str  = $start_date ? date_i18n( es_t( 'j. F Y', 'j F Y' ), strtotime( $start_date ) ) : 'ab sofort';
 
 	// Neue Felder: es_tasks (Aufgaben) + es_profile (Profil). Legacy-Fallback: es_bullets.
 	$tasks    = es_meta( 'es_tasks' );

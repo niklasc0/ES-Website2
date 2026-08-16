@@ -251,7 +251,7 @@ class ESC_LinkedIn {
 					<h2 class="es-linkedin-feed__title"><?php echo esc_html( $atts['title'] ); ?></h2>
 				</div>
 				<?php if ( $atts['profile_url'] ) : ?>
-					<a class="es-link" href="<?php echo esc_url( $atts['profile_url'] ); ?>" target="_blank" rel="noopener">Alle Posts ansehen &uarr;</a>
+					<a class="es-link" href="<?php echo esc_url( $atts['profile_url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( es_t( 'Alle Posts ansehen', 'View all posts' ) ); ?> &uarr;</a>
 				<?php endif; ?>
 			</div>
 			<?php if ( empty( $items ) ) : ?>
