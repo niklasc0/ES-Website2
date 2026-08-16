@@ -425,7 +425,16 @@ class ES_Lang {
 
 	public static function create_page_copies() {
 		$made = array();
-		foreach ( self::PAGE_SLUGS_EN as $de_slug => $public ) {
+		// Bekannte Kernseiten + alle weiteren veröffentlichten Elementor-Seiten
+		$slugs = array_keys( self::PAGE_SLUGS_EN );
+		$all = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => -1 ) );
+		foreach ( $all as $pg ) {
+			if ( 'en' === get_post_meta( $pg->ID, 'es_lang', true ) ) { continue; }
+			if ( in_array( $pg->post_name, $slugs, true ) ) { continue; }
+			if ( get_post_meta( $pg->ID, '_elementor_data', true ) ) { $slugs[] = $pg->post_name; }
+		}
+		foreach ( $slugs as $de_slug ) {
+			$public = isset( self::PAGE_SLUGS_EN[ $de_slug ] ) ? self::PAGE_SLUGS_EN[ $de_slug ] : $de_slug;
 			$de = get_page_by_path( $de_slug );
 			if ( ! $de ) { continue; }
 			$existing = self::translation_of( $de->ID );
