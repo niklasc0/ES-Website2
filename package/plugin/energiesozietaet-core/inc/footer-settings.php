@@ -15,6 +15,26 @@ class ESC_Footer_Settings {
 	public static function init() {
 		add_action( 'admin_init', array( __CLASS__, 'register' ) );
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
+		add_action( 'init', array( __CLASS__, 'maybe_relativize_urls' ) );
+	}
+
+	/**
+	 * Einmalig: intern gespeicherte absolute Button-URLs (eigene Domain) in
+	 * relative Pfade umschreiben – macht die Einstellungen umzugssicher.
+	 */
+	public static function maybe_relativize_urls() {
+		if ( get_option( 'esc_footer_relative_urls_v1' ) ) { return; }
+		$opts = (array) get_option( self::OPT, array() );
+		$home = untrailingslashit( home_url() );
+		$changed = false;
+		foreach ( array( 'cta_btn1_url', 'cta_btn2_url' ) as $k ) {
+			if ( ! empty( $opts[ $k ] ) && 0 === strpos( $opts[ $k ], $home . '/' ) ) {
+				$opts[ $k ] = substr( $opts[ $k ], strlen( $home ) );
+				$changed = true;
+			}
+		}
+		if ( $changed ) { update_option( self::OPT, $opts ); }
+		update_option( 'esc_footer_relative_urls_v1', 1 );
 	}
 
 	public static function defaults() {
@@ -23,7 +43,7 @@ class ESC_Footer_Settings {
 			'cta_title'       => 'Haben wir Ihr Interesse geweckt?',
 			'cta_subtitle'    => 'Möchten Sie uns kennenlernen?',
 			'cta_btn1_label'  => 'Kontakt aufnehmen',
-			'cta_btn1_url'    => home_url( '/kontakt/' ),
+			'cta_btn1_url'    => '/kontakt/',
 			'cta_btn2_label'  => 'info@energiesozietaet.de',
 			'cta_btn2_url'    => 'mailto:info@energiesozietaet.de',
 
