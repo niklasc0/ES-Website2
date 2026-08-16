@@ -394,18 +394,47 @@ class ESC_Importer {
 		}
 	}
 
+	/**
+	 * Live-Snapshot einer Seite (data/pages/<slug>.json), falls vorhanden.
+	 * Snapshots werden aus dem veröffentlichten Live-Stand exportiert und haben
+	 * Vorrang vor den PHP-Blueprints – so überschreibt "Import erzwingen" keine
+	 * redaktionellen Änderungen an den Elementor-Seiten mehr.
+	 */
+	protected static function page_snapshot( $slug ) {
+		$file = ESC_DIR . 'data/pages/' . $slug . '.json';
+		if ( ! file_exists( $file ) ) { return null; }
+		$snap = json_decode( (string) file_get_contents( $file ), true );
+		return is_array( $snap ) ? $snap : null;
+	}
+
 	protected static function import_pages( &$map, $data ) {
 		$pages = ESC_Page_Blueprints::all( $data );
 		foreach ( $pages as $slug => $page ) {
+			$snap = self::page_snapshot( $slug );
 			$id = self::upsert_post( array(
 				'post_type'    => 'page',
 				'post_name'    => $slug,
-				'post_title'   => $page['title'],
-				'post_content' => isset( $page['post_content'] ) ? $page['post_content'] : '',
+				'post_title'   => $snap ? $snap['title'] : $page['title'],
+				'post_content' => $snap ? (string) $snap['post_content'] : ( isset( $page['post_content'] ) ? $page['post_content'] : '' ),
 				'menu_order'   => isset( $page['menu_order'] ) ? $page['menu_order'] : 0,
 			) );
 			if ( ! $id ) { continue; }
 			$map[ 'page:' . $slug ] = $id;
+			if ( $snap && ! empty( $snap['elementor'] ) ) {
+				$json = str_replace(
+					array( '{{ES_HOME_JSON}}', '{{ES_HOME}}' ),
+					array( str_replace( '/', '\\/', home_url() ), home_url() ),
+					(string) $snap['elementor']
+				);
+				update_post_meta( $id, '_elementor_data', wp_slash( $json ) );
+				update_post_meta( $id, '_elementor_edit_mode', 'builder' );
+				update_post_meta( $id, '_elementor_template_type', 'wp-page' );
+				update_post_meta( $id, '_elementor_version', '3.20.0' );
+				if ( ! empty( $snap['page_settings'] ) ) {
+					update_post_meta( $id, '_elementor_page_settings', $snap['page_settings'] );
+				}
+				continue;
+			}
 			if ( isset( $page['elementor'] ) ) {
 				update_post_meta( $id, '_elementor_data', wp_slash( wp_json_encode( $page['elementor'] ) ) );
 				update_post_meta( $id, '_elementor_edit_mode', 'builder' );
