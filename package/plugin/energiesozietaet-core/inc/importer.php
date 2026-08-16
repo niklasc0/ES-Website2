@@ -462,7 +462,7 @@ class ESC_Importer {
 
 		// Kontakt + Karriere leben in den Header-Buttons rechts – nicht im Hauptmenü.
 		$order = array(
-			'philosophie', 'leistungen', 'team', 'publikationen', 'news', 'veranstaltungen',
+			'philosophie', 'leistungen', 'team', 'publikationen', 'news', 'veranstaltungen', 'karriere',
 		);
 		$leistungen_children = array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' );
 
@@ -502,7 +502,7 @@ class ESC_Importer {
 		$map = array(
 			'home' => 'Home', 'philosophie' => 'Philosophie', 'leistungen' => 'Leistungen',
 			'rechtsberatung' => 'Rechtsberatung', 'steuerberatung' => 'Steuerberatung', 'unternehmensberatung' => 'Unternehmensberatung',
-			'team' => 'Team', 'publikationen' => 'Publikationen', 'karriere' => 'Karriere',
+			'team' => 'Team', 'publikationen' => 'Publikationen', 'karriere' => 'Stellenangebote',
 			'news' => 'News', 'veranstaltungen' => 'Veranstaltungen', 'kontakt' => 'Kontakt',
 			'impressum' => 'Impressum', 'datenschutzerklaerung' => 'Datenschutzerklärung',
 		);

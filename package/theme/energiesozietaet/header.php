@@ -69,10 +69,7 @@ $es_is_dark = false;
 		</nav>
 
 		<div class="es-header__actions">
-			<a class="es-btn es-btn--ghost es-header__cta es-header__cta--jobs" href="<?php echo esc_url( home_url( es_t( '/karriere/', '/en/karriere/' ) ) ); ?>">
-				<?php echo esc_html( es_t( 'Stellenangebote', 'Careers' ) ); ?>
-			</a>
-			<a class="es-btn es-btn--accent es-header__cta" href="<?php echo esc_url( home_url( es_t( '/kontakt/', '/en/kontakt/' ) ) ); ?>">
+			<a class="es-btn es-btn--ghost es-header__cta" href="<?php echo esc_url( home_url( es_t( '/kontakt/', '/en/contact/' ) ) ); ?>">
 				<?php echo esc_html( es_t( 'Kontakt', 'Contact' ) ); ?>
 			</a>
 			<?php if ( class_exists( 'ES_Lang' ) ) : ?>

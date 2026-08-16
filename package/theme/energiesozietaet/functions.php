@@ -294,6 +294,7 @@ function es_fallback_menu() {
 			home_url( '/en/publications/' )  => 'Publications',
 			home_url( '/en/news/' )          => 'News',
 			home_url( '/en/events/' )        => 'Events',
+			home_url( '/en/careers/' )       => 'Careers',
 		);
 		echo '<ul class="es-nav__list">';
 		foreach ( $items as $url => $label ) {
@@ -310,6 +311,7 @@ function es_fallback_menu() {
 		home_url( '/publikationen/' )   => __( 'Publikationen', 'energiesozietaet' ),
 		home_url( '/news/' )            => __( 'News', 'energiesozietaet' ),
 		home_url( '/veranstaltungen/' ) => __( 'Veranstaltungen', 'energiesozietaet' ),
+		home_url( '/karriere/' )        => __( 'Stellenangebote', 'energiesozietaet' ),
 	);
 	echo '<ul class="es-nav__list">';
 	foreach ( $items as $url => $label ) {
