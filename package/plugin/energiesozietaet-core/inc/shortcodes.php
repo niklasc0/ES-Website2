@@ -149,7 +149,7 @@ class ESC_Shortcodes {
 		$fq->the_post();
 		$f_id    = get_the_ID();
 		$f_thumb = get_post_thumbnail_id();
-		$f_img   = $f_thumb ? wp_get_attachment_image( $f_thumb, 'es-wide', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>';
+		$f_img   = $f_thumb ? wp_get_attachment_image( $f_thumb, 'large', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>';
 		$f_title   = get_the_title();
 		$f_link    = get_permalink();
 		$f_date    = get_the_date( es_t( 'j. F Y', 'j F Y' ) );
@@ -173,7 +173,7 @@ class ESC_Shortcodes {
 		ob_start(); ?>
 		<div class="es-news-archive">
 			<a class="es-news-archive__featured" href="<?php echo esc_url( $f_link ); ?>" style="display:grid;grid-template-columns:1.3fr 1fr;gap:56px;margin-bottom:56px;color:#122023;">
-				<div style="aspect-ratio:3/2;overflow:hidden;background:#1D2D2D;"><?php echo $f_img; ?></div>
+				<div style="aspect-ratio:16/9;overflow:hidden;background:#1D2D2D;"><?php echo $f_img; ?></div>
 				<div style="align-self:center;">
 					<div style="font-size:var(--es-fs-eyebrow);color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;font-family:var(--es-font-mono);">Featured &middot; <?php echo esc_html( $f_date ); ?></div>
 					<h2 style="font-size:clamp(28px,3.4vw,48px);line-height:1.1;font-weight:400;letter-spacing:-0.03em;margin:0 0 24px;"><?php echo esc_html( $f_title ); ?></h2>
@@ -205,7 +205,7 @@ class ESC_Shortcodes {
 			<div class="es-news-archive__grid">
 				<?php while ( $rq->have_posts() ) : $rq->the_post();
 					$thumb_id = get_post_thumbnail_id();
-					$img = $thumb_id ? wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>'; ?>
+					$img = $thumb_id ? wp_get_attachment_image( $thumb_id, 'large', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>'; ?>
 					<a class="es-news-row" href="<?php the_permalink(); ?>">
 						<div class="es-news-row__media"><?php echo $img; ?></div>
 						<div class="es-news-row__body">
@@ -558,7 +558,7 @@ class ESC_Shortcodes {
 				<a class="esc-card esc-card--news es-reveal" href="<?php the_permalink(); ?>">
 					<div class="esc-card__media">
 						<?php if ( $thumb_id ) {
-							echo wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy' ) );
+							echo wp_get_attachment_image( $thumb_id, 'large', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) );
 						} else { ?>
 							<div class="es-ph-cat"><span><?php echo esc_html( $cat_name ); ?></span></div>
 						<?php } ?>
