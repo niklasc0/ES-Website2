@@ -317,7 +317,7 @@ html.js .esc-card.es-reveal {
     transition: border-color var(--es-duration-fast) var(--es-easing);
 }
 .es-header__lang span { display: inline-flex; align-items: center; padding: 0 14px; }
-/* Testweise: Umschalter und Kontakt-Pill auf gleiche Höhe (40px) */
+/* Umschalter und Kontakt-Pill: einheitliche Höhe */
 .es-header__lang { height: 30px; }
 .es-header__cta.es-btn { height: 30px; display: inline-flex; align-items: center; padding-top: 0; padding-bottom: 0; }
 .es-header__lang .is-active { background: var(--es-accent); color: var(--es-ink); font-weight: 600; }
