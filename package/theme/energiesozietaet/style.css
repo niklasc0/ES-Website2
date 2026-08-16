@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.5.3
+Version: 2.5.4
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -309,14 +309,16 @@ html.js .esc-card.es-reveal {
 
 .es-header__actions { display: inline-flex; align-items: center; gap: 10px; justify-self: end; }
 .es-header__lang {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 12px; letter-spacing: 0.06em; font-family: var(--es-font-mono);
-    color: var(--es-muted); text-decoration: none; padding: 6px 4px;
+    display: inline-flex; align-items: stretch;
+    font-size: 11px; letter-spacing: 0.08em; font-family: var(--es-font-mono);
+    color: var(--es-muted); text-decoration: none;
+    border: 1px solid var(--es-border-strong, #C9CDCF); border-radius: 999px;
+    overflow: hidden; line-height: 1;
+    transition: border-color var(--es-duration-fast) var(--es-easing);
 }
-.es-header__lang span[aria-hidden] { opacity: 0.45; }
-.es-header__lang .is-active { color: var(--es-ink); font-weight: 600; }
-.es-header--dark .es-header__lang .is-active, .es-stage .es-header__lang .is-active { color: inherit; }
-.es-header__lang:hover { color: var(--es-ink); }
+.es-header__lang span { display: inline-flex; align-items: center; padding: 7px 11px; }
+.es-header__lang .is-active { background: var(--es-ink); color: var(--es-paper); font-weight: 600; }
+.es-header__lang:hover { border-color: var(--es-ink); color: var(--es-ink); }
 .es-header__cta { padding: 11px 24px; font-size: 14px; }
 .es-btn-jobs {
     display: inline-flex; align-items: center; gap: 8px;

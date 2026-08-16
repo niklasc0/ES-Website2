@@ -77,7 +77,7 @@ $es_is_dark = false;
 			</a>
 			<?php if ( class_exists( 'ES_Lang' ) ) : ?>
 				<a class="es-header__lang" href="<?php echo esc_url( ES_Lang::switch_url() ); ?>" aria-label="<?php echo esc_attr( es_t( 'Switch to English', 'Zur deutschen Fassung wechseln' ) ); ?>">
-					<span class="<?php echo es_is_en() ? '' : 'is-active'; ?>">DE</span><span aria-hidden="true">/</span><span class="<?php echo es_is_en() ? 'is-active' : ''; ?>">EN</span>
+					<span class="<?php echo es_is_en() ? '' : 'is-active'; ?>">DE</span><span class="<?php echo es_is_en() ? 'is-active' : ''; ?>">EN</span>
 				</a>
 			<?php endif; ?>
 		</div>
