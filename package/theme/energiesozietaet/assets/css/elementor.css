@@ -15,7 +15,7 @@
 /* Accent spans */
 .elementor .text-bg-green { color: var(--es-accent-deep, #7bbc02); font-weight: 600; }
 
-/* Cards built with Elementor — give them our shadow + lift if they have the "es-card" class */
+/* Cards built with Elementor – give them our shadow + lift if they have the "es-card" class */
 .elementor .es-card-like {
 	border: 1px solid var(--es-line, rgba(15,23,32,.08));
 	border-radius: var(--es-radius, 10px);

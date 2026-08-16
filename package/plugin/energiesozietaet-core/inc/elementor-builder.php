@@ -26,10 +26,17 @@ class ESC_Elementor_Builder {
 		foreach ( $columns as $cfg ) {
 			$col_widgets = isset( $cfg['widgets'] ) ? $cfg['widgets'] : $cfg;
 			$col_settings = isset( $cfg['settings'] ) ? $cfg['settings'] : array();
+			$settings = array_merge( array( '_column_size' => $size, '_inline_size' => null ), $col_settings );
+			// Elementor liefert nur für Preset-Größen (25/33/50/66/…) CSS-Klassen
+			// mit Breite aus. Für krumme Werte (46, 52, 58, …) MUSS _inline_size
+			// gesetzt sein, sonst kollabiert die Column auf Inhaltsbreite.
+			if ( null === $settings['_inline_size'] && isset( $settings['_column_size'] ) ) {
+				$settings['_inline_size'] = (int) $settings['_column_size'];
+			}
 			$out_cols[] = array(
 				'id'       => self::id(),
 				'elType'   => 'column',
-				'settings' => array_merge( array( '_column_size' => $size, '_inline_size' => null ), $col_settings ),
+				'settings' => $settings,
 				'elements' => array_values( array_filter( $col_widgets ) ),
 				'isInner'  => false,
 			);
@@ -43,35 +50,32 @@ class ESC_Elementor_Builder {
 		);
 	}
 
-	/** Raw HTML block — most layout work happens here, styled by theme CSS classes. */
-	public static function html( $html ) {
+	/** Raw HTML block – most layout work happens here, styled by theme CSS classes.
+	 *  $settings: zusätzliche Elementor-Widget-Settings (z. B. hide_desktop). */
+	public static function html( $html, $settings = array() ) {
 		return array(
 			'id'         => self::id(),
 			'elType'     => 'widget',
 			'widgetType' => 'html',
-			'settings'   => array( 'html' => $html ),
+			'settings'   => array_merge( array( 'html' => $html ), $settings ),
 		);
 	}
 
 	/** Full-width container holding an HTML widget; optional background variant. */
 	public static function section_html( $html, $variant = '' ) {
+		// Overlap-Mechanik (siehe section_native): eigene Farbe via ::before
+		// (es-own-*) + gerundete Unterkante; Untergrund (= nächste Sektion) via CSS.
+		$own     = $variant ? $variant : 'paper';
+		$overlap = 'es-stage-sec es-own-' . $own . ' es-round-bottom';
 		$settings = array(
 			'layout'        => 'full_width',
 			'content_width' => array( 'unit' => 'px', 'size' => 1280 ),
 			'padding'       => array( 'unit' => 'px', 'top' => '0', 'right' => '0', 'bottom' => '0', 'left' => '0', 'isLinked' => false ),
 			'gap'           => 'no',
+			'css_classes'   => $overlap,
+			'_css_classes'  => $overlap,
 		);
-		if ( 'ink' === $variant ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#0E1A2B';
-		} elseif ( 'warm' === $variant ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#303030';
-		} elseif ( 'cool' === $variant ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#F3F5F8';
-		}
-		// Stage-Wrapper damit CSS-Selektoren wie .es-stage--ink h1 greifen
+		// Stage-Wrapper (innen) damit CSS-Selektoren wie .es-stage--ink h1 greifen
 		$stage_class = $variant ? 'es-stage es-stage--' . $variant : 'es-stage';
 		$wrapped = '<div class="' . esc_attr( $stage_class ) . '">' . $html . '</div>';
 		return self::section( array( array( 'widgets' => array( self::html( $wrapped ) ) ) ), $settings );
@@ -149,14 +153,14 @@ class ESC_Elementor_Builder {
 				'tabs'                          => $tabs,
 				'title_html_tag'                => 'h4',
 				'border_width'                  => array( 'unit' => 'px', 'size' => 0 ),
-				'title_color'                   => '#0E1A2B',
-				'tab_content_color'             => '#5A6577',
+				'title_color'                   => '#122023',
+				'tab_content_color'             => '#899092',
 			),
 		);
 	}
 
 	/* =========================================================================
-	 * Compound builders — whole sections returned as HTML blocks.
+	 * Compound builders – whole sections returned as HTML blocks.
 	 * These use the theme's CSS classes (es-*) for layout.
 	 * ========================================================================= */
 
@@ -192,7 +196,7 @@ class ESC_Elementor_Builder {
 			$html .= '<h1 style="max-width:1100px;margin:0 0 28px;">' . $args['headline_html'] . '</h1>';
 		}
 		if ( $args['lead'] ) {
-			$html .= '<p style="max-width:780px;font-size:20px;line-height:1.55;color:rgba(255,255,255,0.78);font-weight:300;margin:0 0 36px;">' . $args['lead'] . '</p>';
+			$html .= '<p style="max-width:780px;font-size:var(--es-fs-body);line-height:1.55;color:rgba(255,255,255,0.78);font-weight:300;margin:0 0 36px;">' . $args['lead'] . '</p>';
 		}
 		if ( ! empty( $args['buttons'] ) ) {
 			$html .= '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;">';
@@ -231,7 +235,7 @@ class ESC_Elementor_Builder {
 		$right_html = '';
 		foreach ( (array) $args['paragraphs'] as $i => $p ) {
 			$size  = 0 === $i ? '20px' : '17px';
-			$color = 'ink' === $args['variant'] ? ( 0 === $i ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.6)' ) : ( 0 === $i ? '#0E1A2B' : '#5A6577' );
+			$color = 'ink' === $args['variant'] ? ( 0 === $i ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.6)' ) : ( 0 === $i ? '#122023' : '#899092' );
 			$right_html .= '<p style="font-size:' . $size . ';line-height:1.65;color:' . $color . ';margin:0 0 24px;">' . $p . '</p>';
 		}
 
@@ -261,8 +265,10 @@ class ESC_Elementor_Builder {
 			'n' => '01', 'title' => '', 'title_html' => '', 'sub' => '', 'lede' => '', 'link' => '',
 			'field' => '',                 // Wenn gesetzt, zieht bereich() die Einzelleistungen dynamisch
 			'topics' => array(), 'stripe' => 'odd', 'image_html' => '',
+			'next_bg' => 'ink',            // Farbe der FOLGENDEN Sektion (paper|warm|ink) → Ecken-Überlappung
 		), $args );
 		$warm = 'even' === $args['stripe'] ? ' es-bereich--warm' : '';
+		$next = in_array( $args['next_bg'], array( 'paper', 'warm', 'ink' ), true ) ? ' es-bereich--next-' . $args['next_bg'] : '';
 		$h2_content = $args['title_html'] ? $args['title_html'] : esc_html( $args['title'] );
 
 		// Dynamik: wenn $field gesetzt und keine Topics vorgegeben, ruft der
@@ -284,7 +290,7 @@ class ESC_Elementor_Builder {
 			$img_html = '<div class="es-bereich__img"><div class="es-ph-cat"><span>' . esc_html( $args['title'] ) . '</span></div></div>';
 		}
 
-		$html  = '<section class="es-bereich' . $warm . '"><div class="es-wrap"><div class="es-bereich__inner">';
+		$html  = '<section class="es-bereich' . $warm . $next . '"><div class="es-wrap"><div class="es-bereich__inner">';
 		$html .= '<div class="es-bereich__top">';
 		$html .= '<div>';
 		$html .= '<div class="es-bereich__meta"><span class="es-bereich__num">' . esc_html( $args['n'] ) . ' / 03</span><span class="es-bereich__sep"></span><span class="es-bereich__sub">' . esc_html( $args['sub'] ) . '</span></div>';
@@ -293,7 +299,7 @@ class ESC_Elementor_Builder {
 		if ( $args['link'] ) {
 			// Button als es-btn-Klasse, aber via CSS wirkt visuell wie ein
 			// Primary-Button. (Native Button-Widgets passen hier schlecht, da
-			// die ganze Section HTML-basiert ist — Umbau auf section_native
+			// die ganze Section HTML-basiert ist – Umbau auf section_native
 			// wäre ein grösserer Umbau, den der User explizit bewahren will.)
 			$html .= '<a class="es-btn es-btn--primary" href="' . esc_url( $args['link'] ) . '">Zur ' . esc_html( $args['title'] ) . ' →</a>';
 		}
@@ -313,15 +319,70 @@ class ESC_Elementor_Builder {
 	}
 
 	/**
+	 * Bereichs-Block NATIV (Leistungen): zwei gestapelte section_native
+	 * gleicher Farbe. Alle Texte sind echte Elementor-Widgets (Heading/
+	 * Text/Button), das Bild kommt dynamisch aus dem Beitragsbild der
+	 * Beratungsfeld-Seite ([es_field_image]), die Einzelleistungs-Kacheln
+	 * aus [es_einzelleistungen]. Gibt ein ARRAY von Sektionen zurück.
+	 */
+	public static function bereich_native( $args ) {
+		$args = array_merge( array(
+			'n' => '01', 'title' => '', 'title_html' => '', 'sub' => '', 'lede' => '',
+			'link' => '', 'field' => '', 'stripe' => 'odd',
+		), $args );
+		$variant = ( 'even' === $args['stripe'] ) ? 'warm' : '';
+		$h2      = $args['title_html'] ? $args['title_html'] : esc_html( $args['title'] );
+
+		$meta_html = '<span class="es-bereich__num">' . esc_html( $args['n'] ) . ' / 03</span>'
+			. '<span class="es-bereich__sep"></span>'
+			. '<span class="es-bereich__sub">' . esc_html( $args['sub'] ) . '</span>';
+
+		$top = self::section_native( array(
+			'variant'     => $variant,
+			'css_classes' => 'es-bereich-nat',
+			'padding'     => array( '90', '0', '24', '0' ),
+			'gap'         => 'wider',
+			'column_settings' => array(
+				array( '_column_size' => 55, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+				array( '_column_size' => 45, '_inline_size_tablet' => 100, '_inline_size_mobile' => 100 ),
+			),
+			'cols' => array(
+				array(
+					self::wid_heading( $meta_html, 'p', 'es-bereich__meta-nat' ),
+					self::wid_heading( $h2, 'h2', 'es-bereich__title-nat' ),
+					self::wid_text( '<p>' . esc_html( $args['lede'] ) . '</p>', 'es-bereich__lede-nat' ),
+					self::button( 'Zur ' . $args['title'] . ' →', $args['link'], 'primary' ),
+				),
+				array(
+					self::wid_shortcode( '[es_field_image field="' . esc_attr( $args['field'] ) . '"]' ),
+				),
+			),
+		) );
+
+		$topics = self::section_native( array(
+			'variant'     => $variant,
+			'css_classes' => 'es-bereich-nat-topics',
+			'padding'     => array( '0', '0', '90', '0' ),
+			'gap'         => 'wider', // gleiche Einrückung wie die Sektion darüber
+			'cols' => array( array(
+				self::wid_heading( 'Beratungsfelder', 'p', 'es-bereich__topics-label-nat' ),
+				self::wid_shortcode( '[es_einzelleistungen beratungsfeld="' . esc_attr( $args['field'] ) . '" columns="3" link="1"]' ),
+			) ),
+		) );
+
+		return array( $top, $topics );
+	}
+
+	/**
 	 * Dark CTA band (G3).
 	 */
 	public static function cta_dark( $args = array() ) {
 		$args = array_merge( array(
 			'eyebrow' => 'Kontakt',
-			'title_html' => 'Sprechen Sie mit uns.',
-			'sub' => 'Unaufgeregt, direkt, fachlich.',
+			'title_html' => 'Haben wir Ihr Interesse geweckt?',
+			'sub' => 'Möchten Sie uns kennenlernen?',
 			'buttons' => array(
-				array( 'Termin vereinbaren', '/kontakt/', 'paper' ),
+				array( 'Kontakt aufnehmen', '/kontakt/', 'paper' ),
 				array( 'Unser Team', '/team/', 'ghost-paper' ),
 			),
 		), $args );
@@ -346,12 +407,13 @@ class ESC_Elementor_Builder {
 	}
 
 	/**
-	 * Pullquote section — huge centered quote on warm background.
+	 * Pullquote section – huge centered quote on warm background.
 	 */
-	public static function pullquote( $quote_html, $attribution = '' ) {
+	public static function pullquote( $quote_html, $attribution = '', $variant = '' ) {
 		// Native Version: Wrapper-Section mit Klasse es-pullquote-panel, Inhalt
 		// aus Heading-Widget (quote) + Text-Widget (attribution). Komplett im
-		// Elementor-Editor klickbar.
+		// Elementor-Editor klickbar. Das innere Panel ist immer weiß – auf
+		// dunklen Varianten (warm) wirkt es als schwebende Karte.
 		$widgets = array(
 			self::wid_heading( $quote_html, 'h2', 'es-pullquote__quote' ),
 		);
@@ -360,6 +422,7 @@ class ESC_Elementor_Builder {
 		}
 		return self::section_native( array(
 			'cols' => array( $widgets ),
+			'variant' => $variant,
 			'css_classes' => 'es-pullquote-panel-wrap',
 			'padding' => array( '120', '0', '120', '0' ),
 		) );
@@ -370,7 +433,7 @@ class ESC_Elementor_Builder {
 	 */
 	public static function gf_quote( $args ) {
 		// Native Version: 2-Col Section, Photo-HTML links (nicht editierbarer
-		// Decor), Eyebrow + Zitat (Heading) + Name/Rolle (Text) rechts —
+		// Decor), Eyebrow + Zitat (Heading) + Name/Rolle (Text) rechts –
 		// alle textlichen Inhalte via Elementor-Widget editierbar.
 		$args = array_merge( array(
 			'quote'           => '',
@@ -379,17 +442,13 @@ class ESC_Elementor_Builder {
 			'photo_slug'      => 'prof-dr-sven-joachim-otto',
 			'eyebrow'         => 'Unser Anspruch',
 		), $args );
-		// Layout: Eyebrow + Zitat oben (volle Breite) — darunter Portrait links
+		// Layout: Eyebrow + Zitat oben (volle Breite) – darunter Portrait links
 		// neben Name/Rolle. Portrait via HTML-Widget (rundes Bild), Name/Rolle
 		// als native Text-Widgets editierbar.
+		// Foto als (dekoratives) HTML-Widget, Name/Rolle als natives
+		// Text-Widget – per CSS nebeneinander gelegt und damit im
+		// Elementor-Editor direkt editierbar.
 		$photo_html = '<div class="es-gf-quote__photo">' . do_shortcode( '[es_team_photo slug="' . esc_attr( $args['photo_slug'] ) . '" size=88]' ) . '</div>';
-		$author_html = '<div class="es-gf-quote__author">'
-			. $photo_html
-			. '<div class="es-gf-quote__author-text">'
-			. '<p class="es-gf-quote__name">' . esc_html( $args['name'] ) . '</p>'
-			. '<p class="es-gf-quote__role">' . esc_html( $args['role'] ) . '</p>'
-			. '</div>'
-			. '</div>';
 		return self::section_native( array(
 			'variant' => 'warm',
 			'css_classes' => 'es-gf-quote',
@@ -397,7 +456,12 @@ class ESC_Elementor_Builder {
 			'cols' => array( array(
 				self::wid_heading( $args['eyebrow'], 'p', 'es-eyebrow' ),
 				self::wid_heading( '„' . $args['quote'] . '"', 'h2', 'es-gf-quote__text' ),
-				self::wid_html( $author_html ),
+				self::wid_html( $photo_html, 'es-gf-quote__photo-w' ),
+				self::wid_text(
+					'<p class="es-gf-quote__name">' . esc_html( $args['name'] ) . '</p>'
+					. '<p class="es-gf-quote__role">' . esc_html( $args['role'] ) . '</p>',
+					'es-gf-quote__author-w'
+				),
 			) ),
 		) );
 	}
@@ -406,15 +470,15 @@ class ESC_Elementor_Builder {
 	public static function section_head( $eyebrow, $title_html, $lede = '', $align = 'left', $variant = '' ) {
 		$text_align = 'center' === $align ? 'text-align:center;' : '';
 		$eyebrow_class = 'ink' === $variant ? 'es-eyebrow es-eyebrow--paper' : 'es-eyebrow';
-		$title_color = 'ink' === $variant ? '#FFFFFF' : '#0E1A2B';
-		$lede_color  = 'ink' === $variant ? 'rgba(255,255,255,0.7)' : '#5A6577';
+		$title_color = 'ink' === $variant ? '#E1FCAD' : '#122023';
+		$lede_color  = 'ink' === $variant ? '#CAD0BE' : '#899092';
 		$max = 'center' === $align ? 'margin-inline:auto;' : '';
 
 		$html  = '<div class="es-wrap" style="padding-top:120px;padding-bottom:48px;' . $text_align . '">';
 		$html .= '<div class="' . esc_attr( $eyebrow_class ) . '" style="margin-bottom:20px;">' . esc_html( $eyebrow ) . '</div>';
 		$html .= '<h2 style="font-size:clamp(32px,4.2vw,52px);line-height:1.05;font-weight:400;letter-spacing:-0.03em;max-width:720px;' . $max . 'color:' . $title_color . ';margin:0;">' . $title_html . '</h2>';
 		if ( $lede ) {
-			$html .= '<p style="font-size:17px;line-height:1.55;margin-top:24px;color:' . $lede_color . ';max-width:620px;' . $max . '">' . $lede . '</p>';
+			$html .= '<p style="font-size:var(--es-fs-body);line-height:1.55;margin-top:24px;color:' . $lede_color . ';max-width:620px;' . $max . '">' . $lede . '</p>';
 		}
 		$html .= '</div>';
 		return self::section_html( $html, $variant );
@@ -423,7 +487,7 @@ class ESC_Elementor_Builder {
 	/** Shortcode inside a boxed wrap with optional background. */
 	public static function wrap_shortcode( $shortcode, $variant = '', $padding = '0 0 120px 0' ) {
 		$html = '<div class="es-wrap" style="padding:' . $padding . ';">' . do_shortcode( $shortcode ) . '</div>';
-		// Do not expand shortcode at build-time — let the page evaluate it on render.
+		// Do not expand shortcode at build-time – let the page evaluate it on render.
 		$html = '<div class="es-wrap" style="padding:' . $padding . ';">' . $shortcode . '</div>';
 		return self::section_html( $html, $variant );
 	}
@@ -542,7 +606,11 @@ class ESC_Elementor_Builder {
 			'column_classes' => '',
 		), $args );
 
-		$classes = 'es-stage ' . ( $args['variant'] ? 'es-stage--' . $args['variant'] . ' ' : '' ) . $args['css_classes'];
+		// Overlap-Mechanik: eigene Farbe (es-own-*) + gerundete Unterkante.
+		// Der Untergrund (= Farbe der nächsten Sektion) kommt per CSS :has().
+		$own     = $args['variant'] ? $args['variant'] : 'paper';
+		$overlap = 'es-stage-sec es-own-' . $own . ' es-round-bottom';
+		$classes = 'es-stage ' . ( $args['variant'] ? 'es-stage--' . $args['variant'] . ' ' : '' ) . $overlap . ' ' . $args['css_classes'];
 		$classes = trim( $classes );
 
 		$settings = array(
@@ -551,21 +619,14 @@ class ESC_Elementor_Builder {
 			'padding'       => array( 'unit' => 'px', 'top' => (string) $args['padding'][0], 'right' => (string) $args['padding'][1], 'bottom' => (string) $args['padding'][2], 'left' => (string) $args['padding'][3], 'isLinked' => false ),
 			'gap'           => $args['gap'],
 			// Elementor's Advanced tab: "CSS Classes" field. Elementor rendert
-			// beide Schlüssel — _css_classes wird zuverlässig an die section
+			// beide Schlüssel – _css_classes wird zuverlässig an die section
 			// weitergereicht, css_classes ist für ältere Versionen.
 			'css_classes'  => $classes,
 			'_css_classes' => $classes,
 		);
-		if ( 'ink' === $args['variant'] ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#0E1A2B';
-		} elseif ( 'warm' === $args['variant'] ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#303030';
-		} elseif ( 'cool' === $args['variant'] ) {
-			$settings['background_background'] = 'classic';
-			$settings['background_color']      = '#F3F5F8';
-		}
+		// Kein Inline-Hintergrund: Füllung via ::before (es-own-*), Untergrund
+		// (= nächste Sektion) via CSS :has(). Sonst würde Inline-BG das :has-CSS
+		// überschreiben und die Ecken-Überlappung ginge verloren.
 
 		$col_cfgs = array();
 		foreach ( $args['cols'] as $i => $widgets ) {
@@ -582,7 +643,7 @@ class ESC_Elementor_Builder {
 	}
 
 	/**
-	 * Native editorial hero — heading + lead + buttons (+ optional html claims grid)
+	 * Native editorial hero – heading + lead + buttons (+ optional html claims grid)
 	 * $args = [
 	 *   eyebrow, headline_html (mit <br>, <em>, <span class=text-bg-green>),
 	 *   lead, buttons [[label, url, style]], claims [[wert, label]], padding
@@ -592,6 +653,9 @@ class ESC_Elementor_Builder {
 		$args = array_merge( array(
 			'eyebrow' => '', 'headline_html' => '', 'lead' => '',
 			'buttons' => array(), 'claims' => array(), 'padding' => 'default',
+			'claims_settings' => array(),
+			'side_html' => '',
+			'side_settings' => array(),
 		), $args );
 
 		$pad = ( 'tall' === $args['padding'] ) ? array( '140', '0', '140', '0' ) : ( ( 'short' === $args['padding'] ) ? array( '100', '0', '100', '0' ) : array( '120', '0', '120', '0' ) );
@@ -612,7 +676,7 @@ class ESC_Elementor_Builder {
 				$widgets[] = self::wid_button( $b[0] . ' →', $b[1], 'es-hero__button es-btn--' . $style );
 			}
 		}
-		// Claims-Grid als native widgets pro Spalte — editierbar im Elementor.
+		// Claims-Grid als native widgets pro Spalte – editierbar im Elementor.
 		if ( ! empty( $args['claims'] ) ) {
 			$claim_cols = array();
 			foreach ( $args['claims'] as $c ) {
@@ -621,17 +685,32 @@ class ESC_Elementor_Builder {
 					self::wid_heading( $c[1], 'div', 'es-hero-claims__label' ),
 				);
 			}
-			$widgets[] = self::section( array_map( function( $cw ) { return array( 'widgets' => $cw ); }, $claim_cols ), array(
+			$widgets[] = self::section( array_map( function( $cw ) { return array( 'widgets' => $cw ); }, $claim_cols ), array_merge( array(
 				'structure'     => '40',
 				'layout'        => 'boxed',
 				'gap'           => 'default',
 				'css_classes'   => 'es-hero-claims-inner',
 				'_css_classes'  => 'es-hero-claims-inner',
 				'padding'       => array( 'unit' => 'px', 'top' => '40', 'right' => '0', 'bottom' => '0', 'left' => '0', 'isLinked' => false ),
-			) );
+			), $args['claims_settings'] ) );
 			// Mark it as inner section
 			$last_idx = count( $widgets ) - 1;
 			$widgets[ $last_idx ]['isInner'] = true;
+		}
+		// Mit rechter Spalte (z.B. Stat-Cards) → 2-Spalten-Hero; sonst einspaltig.
+		if ( $args['side_html'] ) {
+			return self::section_native( array(
+				'cols' => array( $widgets, array( self::html( $args['side_html'], $args['side_settings'] ) ) ),
+				'variant' => 'ink',
+				'css_classes' => 'es-hero es-hero--split',
+				'padding' => $pad,
+				'content_width' => 1280,
+				'gap' => 'wider',
+				'column_settings' => array(
+					array( '_column_size' => 42, 'css_classes' => 'es-hero__main',  '_css_classes' => 'es-hero__main' ),
+					array( '_column_size' => 58, 'css_classes' => 'es-hero__side',  '_css_classes' => 'es-hero__side' ),
+				),
+			) );
 		}
 
 		return self::section_native( array(
@@ -682,22 +761,22 @@ class ESC_Elementor_Builder {
 			'padding' => $pad,
 			'gap' => 'wider',
 			'column_settings' => array(
-				array( '_column_size' => 45 ),
-				array( '_column_size' => 55 ),
+				array( '_column_size' => 52 ),
+				array( '_column_size' => 48 ),
 			),
 		) );
 	}
 
 	/**
-	 * Native dark CTA (G3) — 2 cols, col1 eyebrow+H2, col2 buttons.
+	 * Native dark CTA (G3) – 2 cols, col1 eyebrow+H2, col2 buttons.
 	 */
 	public static function cta_dark_native( $args = array() ) {
 		$args = array_merge( array(
 			'eyebrow' => 'Kontakt',
-			'title_html' => 'Sprechen Sie mit uns.',
-			'sub' => 'Unaufgeregt, direkt, fachlich.',
+			'title_html' => 'Haben wir Ihr Interesse geweckt?',
+			'sub' => 'Möchten Sie uns kennenlernen?',
 			'buttons' => array(
-				array( 'Termin vereinbaren', '/kontakt/', 'paper' ),
+				array( 'Kontakt aufnehmen', '/kontakt/', 'paper' ),
 				array( 'Unser Team', '/team/', 'ghost-paper' ),
 			),
 		), $args );
@@ -745,7 +824,7 @@ class ESC_Elementor_Builder {
 			$desc  = isset( $it[2] ) ? $it[2] : '';
 			$widgets = array();
 			if ( $num ) {
-				$widgets[] = self::wid_html( '<div class="es-card-pillar__num">' . esc_html( $num ) . ' —</div>' );
+				$widgets[] = self::wid_html( '<div class="es-card-pillar__num">' . esc_html( $num ) . ' –</div>' );
 			}
 			$widgets[] = self::wid_heading( $title, 'h3', 'es-card-pillar__title' );
 			$widgets[] = self::wid_text( $desc, 'es-card-pillar__desc' );

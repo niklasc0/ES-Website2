@@ -126,7 +126,7 @@ class ESC_Shortcodes {
 		$p = get_page_by_path( $atts['slug'], OBJECT, 'es_team' );
 		if ( ! $p ) { return ''; }
 		$thumb = get_the_post_thumbnail( $p->ID, 'es-team', array( 'style' => 'width:100%;height:100%;object-fit:cover;display:block;', 'loading' => 'lazy' ) );
-		return $thumb ? $thumb : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#8591A3;font-size:48px;">' . esc_html( mb_substr( $p->post_title, 0, 1 ) ) . '</div>';
+		return $thumb ? $thumb : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#B6BAAF;font-size:48px;">' . esc_html( mb_substr( $p->post_title, 0, 1 ) ) . '</div>';
 	}
 
 	/** News archive: Featured-Post + paginiertes Grid. Unterstützt Per-Page
@@ -147,7 +147,7 @@ class ESC_Shortcodes {
 		$f_img   = $f_thumb ? wp_get_attachment_image( $f_thumb, 'es-wide', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>';
 		$f_title   = get_the_title();
 		$f_link    = get_permalink();
-		$f_date    = get_the_date();
+		$f_date    = get_the_date( 'j. F Y' );
 		$f_excerpt = self::excerpt( get_post(), 36 );
 		wp_reset_postdata();
 
@@ -165,12 +165,12 @@ class ESC_Shortcodes {
 
 		ob_start(); ?>
 		<div class="es-news-archive">
-			<a class="es-news-archive__featured" href="<?php echo esc_url( $f_link ); ?>" style="display:grid;grid-template-columns:1.3fr 1fr;gap:56px;margin-bottom:56px;color:#0E1A2B;">
-				<div style="aspect-ratio:16/10;overflow:hidden;background:#303030;"><?php echo $f_img; ?></div>
+			<a class="es-news-archive__featured" href="<?php echo esc_url( $f_link ); ?>" style="display:grid;grid-template-columns:1.3fr 1fr;gap:56px;margin-bottom:56px;color:#122023;">
+				<div style="aspect-ratio:16/10;overflow:hidden;background:#1D2D2D;"><?php echo $f_img; ?></div>
 				<div style="align-self:center;">
-					<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;font-family:var(--es-font-mono);">Featured &middot; <?php echo esc_html( $f_date ); ?></div>
+					<div style="font-size:var(--es-fs-eyebrow);color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;font-family:var(--es-font-mono);">Featured &middot; <?php echo esc_html( $f_date ); ?></div>
 					<h2 style="font-size:clamp(28px,3.4vw,48px);line-height:1.1;font-weight:400;letter-spacing:-0.03em;margin:0 0 24px;"><?php echo esc_html( $f_title ); ?></h2>
-					<p style="font-size:16px;color:#5A6577;line-height:1.6;margin:0 0 32px;"><?php echo esc_html( $f_excerpt ); ?></p>
+					<p style="font-size:var(--es-fs-body);color:#899092;line-height:1.6;margin:0 0 32px;"><?php echo esc_html( $f_excerpt ); ?></p>
 					<span class="es-link">Weiterlesen &rarr;</span>
 				</div>
 			</a>
@@ -199,12 +199,12 @@ class ESC_Shortcodes {
 				<?php while ( $rq->have_posts() ) : $rq->the_post();
 					$thumb_id = get_post_thumbnail_id();
 					$img = $thumb_id ? wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ) : '<div class="es-ph-cat" style="height:100%;"><span>' . esc_html( get_the_title() ) . '</span></div>'; ?>
-					<a href="<?php the_permalink(); ?>" style="display:grid;grid-template-columns:200px 1fr;gap:28px;color:#0E1A2B;">
-						<div style="width:200px;height:160px;overflow:hidden;background:#303030;"><?php echo $img; ?></div>
-						<div>
-							<div style="font-size:11px;color:#95D708;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;font-family:var(--es-font-mono);"><?php echo esc_html( get_the_date() ); ?></div>
-							<h3 style="font-size:20px;font-weight:500;line-height:1.25;letter-spacing:-0.015em;margin:0 0 10px;"><?php the_title(); ?></h3>
-							<p style="font-size:14px;color:#5A6577;line-height:1.5;margin:0;"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
+					<a class="es-news-row" href="<?php the_permalink(); ?>">
+						<div class="es-news-row__media"><?php echo $img; ?></div>
+						<div class="es-news-row__body">
+							<div class="es-news-row__date"><?php echo esc_html( get_the_date( 'j. F Y' ) ); ?></div>
+							<h3 class="es-news-row__title"><?php the_title(); ?></h3>
+							<p class="es-news-row__text"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
 						</div>
 					</a>
 				<?php endwhile; wp_reset_postdata(); ?>
@@ -261,7 +261,7 @@ class ESC_Shortcodes {
 		}
 		$q = new WP_Query( $args );
 		if ( ! $q->have_posts() ) {
-			return '<div class="es-bereich__topics-empty" style="padding:24px 0;color:#5A6577;font-size:14px;">In diesem Bereich sind noch keine Einzelleistungen angelegt.</div>';
+			return '<div class="es-bereich__topics-empty" style="padding:24px 0;color:#899092;font-size:var(--es-fs-body);">In diesem Bereich sind noch keine Einzelleistungen angelegt.</div>';
 		}
 
 		$cols = max( 1, min( 3, (int) ( $atts['columns'] ?? 3 ) ) );
@@ -274,7 +274,7 @@ class ESC_Shortcodes {
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$sub_raw  = trim( wp_strip_all_tags( (string) get_post_meta( get_the_ID(), 'es_subtitle', true ) ) );
 				$body_raw = $sub_raw ? $sub_raw : trim( wp_strip_all_tags( get_the_content() ) );
-				// Trunc nach dem ersten Satzpunkt — maximal 160 Zeichen Fallback
+				// Trunc nach dem ersten Satzpunkt – maximal 160 Zeichen Fallback
 				if ( preg_match( '/^(.{20,160}?[\.!\?])\s/u', $body_raw, $m ) ) {
 					$short = $m[1];
 				} else {
@@ -293,30 +293,63 @@ class ESC_Shortcodes {
 		return ob_get_clean();
 	}
 
+	/** Normalisiert einen Namen für alphabetische Sortierung (Umlaute → ASCII,
+	 *  Kleinschreibung). „Bürgermeister" → „burgermeister". */
+	public static function norm_name( $s ) {
+		return strtolower( trim( remove_accents( (string) $s ) ) );
+	}
+
+	/** Sortier-Schlüssel eines Teammitglieds = Nachname. Nutzt das optionale
+	 *  Feld es_sort_name; sonst automatisch das letzte Wort des Namens. */
+	public static function team_sortkey( $post ) {
+		$override = trim( (string) get_post_meta( $post->ID, 'es_sort_name', true ) );
+		if ( '' !== $override ) { return self::norm_name( $override ); }
+		$parts = preg_split( '/\s+/', trim( (string) $post->post_title ) );
+		return self::norm_name( end( $parts ) );
+	}
+
 	public static function team( $atts ) {
 		$atts = shortcode_atts( array(
 			'columns' => 4,
 			'limit'   => -1,
 			'field'   => '', // rechtsberatung|steuerberatung|unternehmensberatung|management
-			'filter'  => '0', // "1" → rendert Filter-Pills oben
-			'orderby' => 'menu_order title',
+			'filter'  => '0', // "1" → erzwingt Filter-Pills (sonst steuert die Backend-Option)
+			'orderby' => 'title', // alphabetisch nach Name
 			'order'   => 'ASC',
 		), $atts, 'es_team' );
+		// Filter ist standardmäßig aus und wird allein über die Backend-Option
+		// (Design → Layout → Team-Filter) gesteuert – unabhängig davon, was im
+		// Seiten-Blueprint als filter="…" steht.
+		$filter_on = class_exists( 'ESC_Layout_Settings' ) && ESC_Layout_Settings::get( 'team_filter' );
 		$active_field = isset( $_GET['feld'] ) ? sanitize_text_field( wp_unslash( $_GET['feld'] ) ) : (string) $atts['field'];
-		$q_args = array(
+		$q = new WP_Query( array(
 			'post_type'      => 'es_team',
-			'posts_per_page' => (int) $atts['limit'],
-			'orderby'        => $atts['orderby'],
-			'order'          => $atts['order'],
-		);
-		if ( $active_field ) {
-			$q_args['meta_query'] = array( array( 'key' => 'es_field', 'value' => $active_field ) );
+			'posts_per_page' => -1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+		) );
+		$members = $q->posts;
+		// Alphabetisch nach Nachname sortieren. Nachname = optionales Feld
+		// es_sort_name; sonst automatisch das letzte Wort des Namens (Titel).
+		// Vollständiger Name als Tiebreaker (z. B. gleicher Nachname).
+		usort( $members, function ( $a, $b ) {
+			$c = strcmp( self::team_sortkey( $a ), self::team_sortkey( $b ) );
+			if ( 0 !== $c ) { return $c; }
+			return strcmp( self::norm_name( $a->post_title ), self::norm_name( $b->post_title ) );
+		} );
+		if ( 'DESC' === strtoupper( (string) $atts['order'] ) ) { $members = array_reverse( $members ); }
+		if ( (int) $atts['limit'] > 0 ) { $members = array_slice( $members, 0, (int) $atts['limit'] ); }
+		// Feld je Mitglied vorab (für data-field am Card + korrekten Startzähler).
+		$field_of = array();
+		foreach ( $members as $mp ) { $field_of[ $mp->ID ] = (string) get_post_meta( $mp->ID, 'es_field', true ); }
+		$initial_count = 0;
+		foreach ( $members as $mp ) {
+			if ( '' === $active_field || $field_of[ $mp->ID ] === $active_field ) { $initial_count++; }
 		}
-		$q = new WP_Query( $q_args );
 		$cols = max( 2, min( 4, (int) $atts['columns'] ) );
 
 		$filter_html = '';
-		if ( '1' === (string) $atts['filter'] ) {
+		if ( $filter_on ) {
 			$fields = array(
 				''                     => 'Alle',
 				'rechtsberatung'       => 'Rechtsberatung',
@@ -325,18 +358,19 @@ class ESC_Shortcodes {
 				'management'           => 'Büroleitung',
 			);
 			$base = remove_query_arg( 'feld' );
-			$filter_html = '<div class="es-team-filter">';
+			// Gefiltert wird clientseitig (ui.js) anhand von data-field am Card.
+			$filter_html .= '<div class="es-team-filter">';
 			$filter_html .= '<div class="es-eyebrow" style="margin:0 28px 0 0;">Filter</div><div class="es-team-filter__pills">';
 			foreach ( $fields as $slug => $label ) {
 				$url = $slug ? esc_url( add_query_arg( 'feld', $slug ) ) : esc_url( $base );
 				$active = ( (string) $active_field === (string) $slug ) ? ' is-active' : '';
 				$filter_html .= '<a class="es-team-filter__pill' . $active . '" href="' . $url . '">' . esc_html( $label ) . '</a>';
 			}
-			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $q->found_posts . ' Teammitglieder</div></div>';
+			$filter_html .= '</div><div class="es-team-filter__count">' . (int) $initial_count . ' Teammitglieder</div></div>';
 		}
 
-		if ( ! $q->have_posts() ) {
-			$empty = '<p style="color:#5A6577;font-size:15px;">Aktuell keine Teammitglieder in diesem Bereich.</p>';
+		if ( empty( $members ) ) {
+			$empty = '<p style="color:#899092;font-size:var(--es-fs-body);">Aktuell keine Teammitglieder.</p>';
 			return $filter_html . $empty;
 		}
 
@@ -350,24 +384,29 @@ class ESC_Shortcodes {
 		ob_start();
 		echo $filter_html;
 		?>
-		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?>">
-			<?php while ( $q->have_posts() ) : $q->the_post();
-				$role     = get_post_meta( get_the_ID(), 'es_role', true );
-				$thumb_id = get_post_thumbnail_id();
-				$field    = (string) get_post_meta( get_the_ID(), 'es_field', true );
-				$feld_lbl = $labels[ $field ] ?? ( $field ? ucfirst( $field ) : '' ); ?>
-				<a class="esc-team-card es-reveal" href="<?php the_permalink(); ?>">
-					<div class="esc-team-card__photo">
-						<?php if ( $thumb_id ) { echo wp_get_attachment_image( $thumb_id, 'es-team', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); }
+		<div class="esc-grid esc-grid--cols-<?php echo (int) $cols; ?> esc-team-grid">
+			<?php foreach ( $members as $mp ) : $GLOBALS['post'] = $mp; setup_postdata( $mp );
+				$role      = get_post_meta( get_the_ID(), 'es_role', true );
+				$thumb_id  = get_post_thumbnail_id();
+				$linkedin  = (string) get_post_meta( get_the_ID(), 'es_linkedin', true );
+				$mem_field = isset( $field_of[ get_the_ID() ] ) ? $field_of[ get_the_ID() ] : '';
+				$hidden    = ( $active_field && $mem_field !== $active_field ) ? ' is-hidden' : ''; ?>
+				<div class="esc-team-card es-reveal<?php echo $hidden; ?>" data-field="<?php echo esc_attr( $mem_field ); ?>">
+					<a class="esc-team-card__photo" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
+						<?php if ( $thumb_id ) { echo wp_get_attachment_image( $thumb_id, 'es-team', false, array( 'loading' => 'lazy', 'style' => 'width:100%;height:100%;object-fit:cover;', 'sizes' => '(max-width: 520px) 90vw, (max-width: 820px) 45vw, (max-width: 1100px) 31vw, 320px' ) ); }
 						else { echo '<span class="esc-team-card__initial">' . esc_html( mb_substr( get_the_title(), 0, 1 ) ) . '</span>'; } ?>
-					</div>
+					</a>
 					<div class="esc-team-card__body">
-						<?php if ( $feld_lbl ) : ?><div class="esc-team-card__feld"><?php echo esc_html( $feld_lbl ); ?></div><?php endif; ?>
-						<h3 class="esc-team-card__name"><?php the_title(); ?></h3>
-						<p class="esc-team-card__role"><?php echo esc_html( $role ); ?></p>
+						<h3 class="esc-team-card__name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+						<?php if ( $role ) : ?><p class="esc-team-card__role"><?php echo esc_html( $role ); ?></p><?php endif; ?>
+						<?php if ( $linkedin ) : ?>
+							<a class="esc-team-card__li" href="<?php echo esc_url( $linkedin ); ?>" target="_blank" rel="noopener" aria-label="LinkedIn-Profil">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5 2.5 2.5 0 0 0 4.98 3.5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21H20.6v-5.6c0-1.34-.02-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21H12.7z"/></svg>
+							</a>
+						<?php endif; ?>
 					</div>
-				</a>
-			<?php endwhile; wp_reset_postdata(); ?>
+				</div>
+			<?php endforeach; wp_reset_postdata(); ?>
 		</div>
 		<?php return ob_get_clean();
 	}
@@ -387,10 +426,11 @@ class ESC_Shortcodes {
 			'rechtsberatung'       => 'Rechtsberatung',
 			'steuerberatung'       => 'Steuerberatung',
 			'unternehmensberatung' => 'Unternehmensberatung',
+			'kanzlei'              => 'Kanzlei',
 			'management'           => 'Büroleitung',
 		);
 		ob_start(); ?>
-		<div class="esc-grid esc-grid--cols-<?php echo (int) $atts['columns']; ?>">
+		<div class="esc-grid esc-grid--cols-<?php echo (int) $atts['columns']; ?> esc-job-list">
 			<?php while ( $q->have_posts() ) : $q->the_post();
 				$thumb_id   = get_post_thumbnail_id();
 				$department = (string) get_post_meta( get_the_ID(), 'es_department', true );
@@ -410,18 +450,18 @@ class ESC_Shortcodes {
 				$start_date = (string) get_post_meta( get_the_ID(), 'es_start_date', true );
 				$entry_str  = $start_date ? date_i18n( 'j. F Y', strtotime( $start_date ) ) : 'ab sofort';
 				?>
-				<a class="esc-card es-reveal" href="<?php the_permalink(); ?>">
-					<div class="esc-card__media">
+				<a class="esc-job es-reveal" href="<?php the_permalink(); ?>">
+					<div class="esc-job__media">
 						<?php if ( $thumb_id ) {
 							echo wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy' ) );
 						} else { ?>
 							<div class="es-ph-cat"><span><?php echo esc_html( $field_label ); ?></span></div>
 						<?php } ?>
 					</div>
-					<div class="esc-card__body">
-						<h3 class="esc-card__title"><?php the_title(); ?></h3>
+					<div class="esc-job__body">
+						<div class="es-eyebrow es-eyebrow--accent"><?php echo esc_html( $field_label ); ?></div>
+						<h3 class="esc-job__title"><?php the_title(); ?></h3>
 						<dl class="esc-card__facts">
-							<div><dt>Bereich</dt><dd><?php echo esc_html( $field_label ); ?></dd></div>
 							<div><dt>Standort</dt><dd><?php echo esc_html( $location ); ?></dd></div>
 							<div><dt>Anstellung</dt><dd><?php echo esc_html( $emp_type ); ?></dd></div>
 							<div><dt>Eintritt</dt><dd><?php echo esc_html( $entry_str ); ?></dd></div>
@@ -446,7 +486,7 @@ class ESC_Shortcodes {
 		if ( ! $q->have_posts() ) { return ''; }
 		ob_start();
 		if ( 'row' === $atts['layout'] ) : ?>
-			<div class="esc-event-list" style="border-top:1px solid #E4E7EC;">
+			<div class="esc-event-list" style="border-top:1px solid #DADEC5;">
 				<?php while ( $q->have_posts() ) : $q->the_post();
 					$start = get_post_meta( get_the_ID(), 'es_start_date', true );
 					$ts    = $start ? strtotime( $start ) : false;
@@ -454,13 +494,13 @@ class ESC_Shortcodes {
 					$kind  = get_post_meta( get_the_ID(), 'es_kind', true ); ?>
 					<a class="esc-event-row" href="<?php the_permalink(); ?>">
 						<div>
-							<div class="esc-event-row__day"><?php echo esc_html( $ts ? date_i18n( 'd', $ts ) : '—' ); ?></div>
+							<div class="esc-event-row__day"><?php echo esc_html( $ts ? date_i18n( 'd', $ts ) : '–' ); ?></div>
 							<div class="esc-event-row__month"><?php echo esc_html( $ts ? date_i18n( 'M Y', $ts ) : '' ); ?></div>
 						</div>
 						<h3 class="esc-event-row__title"><?php the_title(); ?></h3>
 						<div class="esc-event-row__kind"><?php echo esc_html( $kind ? $kind : 'Veranstaltung' ); ?></div>
 						<div class="esc-event-row__loc"><?php echo esc_html( $loc ? $loc : 'Düsseldorf' ); ?></div>
-						<div class="esc-event-row__arrow">→</div>
+						<div class="esc-event-row__arrow"><span class="esc-event-row__pill">Details</span></div>
 					</a>
 				<?php endwhile; wp_reset_postdata(); ?>
 			</div>
@@ -508,7 +548,7 @@ class ESC_Shortcodes {
 				$felder   = get_the_terms( get_the_ID(), 'es_beratungsfeld' );
 				$cats     = get_the_terms( get_the_ID(), 'es_news_kategorie' );
 				$cat_name = ( $felder && ! is_wp_error( $felder ) ) ? $felder[0]->name : ( ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : 'Aktuelles' ); ?>
-				<a class="esc-card es-reveal" href="<?php the_permalink(); ?>">
+				<a class="esc-card esc-card--news es-reveal" href="<?php the_permalink(); ?>">
 					<div class="esc-card__media">
 						<?php if ( $thumb_id ) {
 							echo wp_get_attachment_image( $thumb_id, 'es-card', false, array( 'loading' => 'lazy' ) );
@@ -517,10 +557,11 @@ class ESC_Shortcodes {
 						<?php } ?>
 					</div>
 					<div class="esc-card__body">
-						<div class="esc-card__meta"><?php echo esc_html( $cat_name ); ?> · <?php echo esc_html( get_the_date() ); ?></div>
 						<h3 class="esc-card__title"><?php the_title(); ?></h3>
-						<p class="esc-card__text"><?php echo esc_html( self::excerpt( get_post(), 22 ) ); ?></p>
-						<span class="esc-card__link">Weiterlesen →</span>
+						<div class="esc-card__date">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
+							<?php echo esc_html( get_the_date( 'j. F Y' ) ); ?>
+						</div>
 					</div>
 				</a>
 			<?php endwhile; wp_reset_postdata(); ?>
@@ -529,14 +570,14 @@ class ESC_Shortcodes {
 	}
 
 	public static function publikationen( $atts ) {
-		// Jahres-gruppierte Liste nach Datum sortiert. Kein Detail — externer Link führt direkt zur Quelle.
+		// Jahres-gruppierte Liste nach Datum sortiert. Kein Detail – externer Link führt direkt zur Quelle.
 		$atts = shortcode_atts( array( 'layout' => 'years', 'limit' => -1, 'field' => '' ), $atts, 'es_publikationen' );
 		$q_args = array( 'post_type' => 'es_publikation', 'posts_per_page' => (int) $atts['limit'], 'orderby' => 'date', 'order' => 'DESC' );
 		if ( $atts['field'] ) {
 			$q_args['meta_query'] = array( array( 'key' => 'es_fields', 'value' => sanitize_text_field( $atts['field'] ), 'compare' => 'LIKE' ) );
 		}
 		$q = new WP_Query( $q_args );
-		if ( ! $q->have_posts() ) { return '<p style="color:#5A6577;">Keine Publikationen gefunden.</p>'; }
+		if ( ! $q->have_posts() ) { return '<p style="color:#899092;">Keine Publikationen gefunden.</p>'; }
 
 		// Gruppierung nach Jahr
 		$years = array();
@@ -590,7 +631,7 @@ class ESC_Shortcodes {
 		<?php return ob_get_clean();
 	}
 
-	/** Fachbeiträge im Beratungsfeld — 3 neueste mit Card-Layout. */
+	/** Fachbeiträge im Beratungsfeld – 3 neueste mit Card-Layout. */
 	public static function pub_teaser( $atts ) {
 		$atts = shortcode_atts( array( 'field' => '', 'limit' => 3 ), $atts, 'es_pub_teaser' );
 		$q_args = array( 'post_type' => 'es_publikation', 'posts_per_page' => (int) $atts['limit'], 'orderby' => 'date', 'order' => 'DESC' );
@@ -609,8 +650,8 @@ class ESC_Shortcodes {
 				$href = $link ? ' href="' . esc_url( $link ) . '" target="_blank" rel="noopener"' : ''; ?>
 				<<?php echo $tag; ?> class="esc-card"<?php echo $href; ?> style="padding:32px;">
 					<div class="esc-card__meta"><?php echo esc_html( $cat ); ?></div>
-					<h3 style="font-size:19px;font-weight:500;line-height:1.3;letter-spacing:-0.01em;margin:16px 0 20px;"><?php the_title(); ?></h3>
-					<?php if ( $src ) : ?><div style="font-size:12px;color:#8591A3;font-family:var(--es-font-mono);margin-bottom:20px;"><?php echo esc_html( $src ); ?></div><?php endif; ?>
+					<h3 style="font-size:var(--es-fs-heading-sub);font-weight:500;line-height:1.3;letter-spacing:-0.01em;margin:16px 0 20px;overflow-wrap:break-word;word-break:break-word;hyphens:auto;"><?php the_title(); ?></h3>
+					<?php if ( $src ) : ?><div style="font-size:var(--es-fs-meta);color:#B6BAAF;font-family:var(--es-font-mono);margin-bottom:20px;"><?php echo esc_html( $src ); ?></div><?php endif; ?>
 					<span class="esc-card__link"><?php echo $link ? 'Zur Publikation ↗︎' : 'Lesen'; ?></span>
 				</<?php echo $tag; ?>>
 			<?php endwhile; wp_reset_postdata(); ?>

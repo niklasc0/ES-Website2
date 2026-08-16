@@ -1,6 +1,6 @@
 <?php
 /**
- * Typografie-Einstellungen — globale Font-Family + optionaler Font-Upload
+ * Typografie-Einstellungen – globale Font-Family + optionaler Font-Upload
  * (woff/woff2). Generiert @font-face + CSS-Variable-Override im Front-End.
  *
  * @package Energiesozietaet_Core
@@ -16,7 +16,9 @@ class ESC_Typography_Settings {
 		add_action( 'admin_menu',  array( __CLASS__, 'menu' ) );
 		// @font-face früh in den Head, damit der Font sofort vorgeladen wird
 		add_action( 'wp_head',     array( __CLASS__, 'print_font_face' ), 5 );
-		// Overrides im FOOTER nach Elementor — so gewinnen sie in der CSS-
+		// Globale Schriftgrößen-Overrides (drei Standardgrößen) – nach dem Theme-CSS
+		add_action( 'wp_head',     array( __CLASS__, 'print_size_vars' ), 100 );
+		// Overrides im FOOTER nach Elementor – so gewinnen sie in der CSS-
 		// Cascade immer, egal wie spät Elementor nachlädt
 		add_action( 'wp_footer',   array( __CLASS__, 'print_overrides' ), 99999 );
 		// Uploads: woff/woff2 erlauben
@@ -31,6 +33,12 @@ class ESC_Typography_Settings {
 			'font_woff'    => 0,
 			'font_weight'  => '400',
 			'font_style'   => 'normal',
+			// Die Standard-Schriftgrößen (global). Werte in px.
+			'fs_heading_feature' => 30, // Feature-/Pillar-Karten (Home-Beratungsfelder, Benefits)
+			'fs_heading'   => 20, // Karten-/Unterüberschriften
+			'fs_body'      => 16, // Inhaltstext
+			'fs_meta'      => 13, // Hairline / Datum / Meta
+			'fs_eyebrow'   => 11, // Eyebrow / Label (uppercase)
 		);
 	}
 
@@ -67,7 +75,37 @@ class ESC_Typography_Settings {
 			'font_woff'   => (int) ( $input['font_woff'] ?? 0 ),
 			'font_weight' => sanitize_text_field( $input['font_weight'] ?? $d['font_weight'] ),
 			'font_style'  => in_array( $input['font_style'] ?? '', array( 'normal', 'italic' ), true ) ? $input['font_style'] : 'normal',
+			'fs_heading_feature' => max( 16, min( 72, (int) ( $input['fs_heading_feature'] ?? $d['fs_heading_feature'] ) ) ),
+			'fs_heading'  => max( 12, min( 60, (int) ( $input['fs_heading'] ?? $d['fs_heading'] ) ) ),
+			'fs_body'     => max( 10, min( 32, (int) ( $input['fs_body']    ?? $d['fs_body'] ) ) ),
+			'fs_meta'     => max( 8,  min( 24, (int) ( $input['fs_meta']    ?? $d['fs_meta'] ) ) ),
+			'fs_eyebrow'  => max( 8,  min( 20, (int) ( $input['fs_eyebrow'] ?? $d['fs_eyebrow'] ) ) ),
 		);
+	}
+
+	/** Gibt die globalen Schriftgrößen als :root-Override aus (nur was vom
+	 *  Theme-Default abweicht). Läuft im wp_head nach dem Theme-Stylesheet;
+	 *  überschreibt nur die CSS-Variablen – pro Widget in Elementor gesetzte
+	 *  Größen (explizite px am Element) gewinnen weiterhin. */
+	public static function print_size_vars() {
+		$o    = self::get();
+		$map  = array(
+			'--es-fs-heading-feature' => array( 'fs_heading_feature', 30 ),
+			'--es-fs-heading-sub' => array( 'fs_heading', 20 ),
+			'--es-fs-body'        => array( 'fs_body',    16 ),
+			'--es-fs-meta'        => array( 'fs_meta',    13 ),
+			'--es-fs-eyebrow'     => array( 'fs_eyebrow', 11 ),
+		);
+		$decl = '';
+		foreach ( $map as $var => $info ) {
+			$val = (int) $o[ $info[0] ];
+			if ( $val && $val !== (int) $info[1] ) {
+				$decl .= $var . ':' . $val . 'px;';
+			}
+		}
+		if ( $decl ) {
+			echo '<style id="esc-typo-sizes">:root{' . $decl . '}</style>';
+		}
 	}
 
 	public static function menu() {
@@ -87,7 +125,7 @@ class ESC_Typography_Settings {
 		return '"' . esc_html( $family ) . '",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
 	}
 
-	/** Wird im wp_head bei Priorität 5 ausgegeben — Font-Face möglichst früh. */
+	/** Wird im wp_head bei Priorität 5 ausgegeben – Font-Face möglichst früh. */
 	public static function print_font_face() {
 		$opts = self::get();
 		if ( empty( $opts['font_family'] ) ) { return; }
@@ -104,7 +142,7 @@ class ESC_Typography_Settings {
 		echo '<style id="esc-typography-face">';
 		if ( $src ) {
 			echo '@font-face{font-family:"' . esc_html( $family ) . '";font-style:' . esc_html( $opts['font_style'] ) . ';font-weight:' . esc_html( $opts['font_weight'] ) . ';font-display:swap;src:' . implode( ',', $src ) . ';}';
-			// Preload-Hint für WOFF2 — lädt Font parallel zum ersten Paint
+			// Preload-Hint für WOFF2 – lädt Font parallel zum ersten Paint
 			$p_url = wp_get_attachment_url( (int) $opts['font_woff2'] );
 			if ( $p_url ) {
 				echo '</style>';
@@ -121,7 +159,7 @@ class ESC_Typography_Settings {
 		echo '</style>';
 	}
 
-	/** Wird im wp_footer mit Priorität 99999 ausgegeben — nach Elementor's
+	/** Wird im wp_footer mit Priorität 99999 ausgegeben – nach Elementor's
 	 *  Post-CSS-Ladephase und allen per JS nachgeladenen Stylesheets. */
 	public static function print_overrides() {
 		$opts = self::get();
@@ -141,7 +179,7 @@ class ESC_Typography_Settings {
 		$fn  = $val ? basename( wp_get_attachment_url( $val ) ) : '';
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
 		echo '<input type="hidden" id="esc_typo_' . esc_attr( $name ) . '" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" />';
-		echo '<span id="esc_typo_' . esc_attr( $name ) . '_preview" style="font-family:monospace;font-size:13px;color:#5A6577;margin-right:12px;">' . esc_html( $fn ? $fn : '— noch keine Datei —' ) . '</span>';
+		echo '<span id="esc_typo_' . esc_attr( $name ) . '_preview" style="font-family:monospace;font-size:13px;color:#5A6577;margin-right:12px;">' . esc_html( $fn ? $fn : '– noch keine Datei –' ) . '</span>';
 		echo '<button type="button" class="button esc-typo-upload" data-target="esc_typo_' . esc_attr( $name ) . '" data-preview="esc_typo_' . esc_attr( $name ) . '_preview" data-accept="' . esc_attr( $accept ) . '">Datei wählen</button> ';
 		echo '<button type="button" class="button esc-typo-clear" data-target="esc_typo_' . esc_attr( $name ) . '" data-preview="esc_typo_' . esc_attr( $name ) . '_preview">Entfernen</button>';
 		echo '</td></tr>';
@@ -153,7 +191,7 @@ class ESC_Typography_Settings {
 		// Reset-Action
 		if ( isset( $_POST['esc_typo_reset'] ) && check_admin_referer( 'esc_typo_reset' ) ) {
 			delete_option( self::OPT );
-			echo '<div class="notice notice-success is-dismissible"><p>Typografie zurückgesetzt — Theme-Default (Inter) ist wieder aktiv.</p></div>';
+			echo '<div class="notice notice-success is-dismissible"><p>Typografie zurückgesetzt – Theme-Default (Inter) ist wieder aktiv.</p></div>';
 		}
 		?>
 		<div class="wrap">
@@ -166,8 +204,8 @@ class ESC_Typography_Settings {
 						<input type="text" name="<?php echo esc_attr( self::OPT . '[font_family]' ); ?>" value="<?php echo esc_attr( self::get( 'font_family' ) ); ?>" placeholder="z.B. „Söhne" oder „Inter"" style="width:100%;max-width:420px;" />
 						<p class="description">Name wie Du ihn in CSS als <code>font-family</code> verwendest. Wenn der Name zu einer Web-Safe-Schrift (<em>Arial</em>, <em>Georgia</em>) passt, reicht das. Für eigene Fonts bitte zusätzlich die Dateien unten hochladen.</p>
 					</td></tr>
-					<?php self::media_upload_field( 'font_woff2', 'Font-Datei (.woff2) — empfohlen' ); ?>
-					<?php self::media_upload_field( 'font_woff',  'Font-Datei (.woff) — Fallback' ); ?>
+					<?php self::media_upload_field( 'font_woff2', 'Font-Datei (.woff2) – empfohlen' ); ?>
+					<?php self::media_upload_field( 'font_woff',  'Font-Datei (.woff) – Fallback' ); ?>
 					<tr><th scope="row"><label>Schriftstärke</label></th><td>
 						<input type="text" name="<?php echo esc_attr( self::OPT . '[font_weight]' ); ?>" value="<?php echo esc_attr( self::get( 'font_weight' ) ); ?>" style="max-width:180px;" placeholder="400 / 500 / 700" />
 						<p class="description">Bei Variable-Fonts <code>100 900</code>, bei einzelnen Schnitten die Zahl (400 = Regular, 500 = Medium, 700 = Bold).</p>
@@ -177,6 +215,31 @@ class ESC_Typography_Settings {
 							<option value="normal" <?php selected( self::get( 'font_style' ), 'normal' ); ?>>Normal</option>
 							<option value="italic" <?php selected( self::get( 'font_style' ), 'italic' ); ?>>Kursiv</option>
 						</select>
+					</td></tr>
+				</tbody></table>
+
+				<h2 style="margin-top:32px;">Standard-Schriftgrößen</h2>
+				<p>Die Standardgrößen der Website. Änderungen hier werden überall automatisch übernommen (Inhaltstexte, Metazeilen, Karten-/Unterüberschriften). Große Hero-/Sektions-Titel skalieren eigenständig und lassen sich pro Widget in Elementor anpassen.</p>
+				<table class="form-table"><tbody>
+					<tr><th scope="row"><label>Feature-Überschrift <span style="color:#787c82;font-weight:400;">(große Feld-/Pillar-Karten)</span></label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_heading_feature]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_heading_feature' ) ); ?>" min="16" max="72" step="1" style="width:90px;"> px
+						<p class="description">Standard: 30 px. Home-Beratungsfeld-Karten, „Warum wir"-Benefits, Philosophie-Pillars.</p>
+					</td></tr>
+					<tr><th scope="row"><label>Überschrift <span style="color:#787c82;font-weight:400;">(Karten &amp; Unterüberschriften)</span></label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_heading]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_heading' ) ); ?>" min="12" max="60" step="1" style="width:90px;"> px
+						<p class="description">Standard: 20 px.</p>
+					</td></tr>
+					<tr><th scope="row"><label>Inhaltstext</label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_body]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_body' ) ); ?>" min="10" max="32" step="1" style="width:90px;"> px
+						<p class="description">Standard: 16 px. Fließtext, Listen, Beschreibungen, Kontaktangaben.</p>
+					</td></tr>
+					<tr><th scope="row"><label>Hairline / Meta <span style="color:#787c82;font-weight:400;">(Datum, Breadcrumb …)</span></label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_meta]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_meta' ) ); ?>" min="8" max="24" step="1" style="width:90px;"> px
+						<p class="description">Standard: 13 px.</p>
+					</td></tr>
+					<tr><th scope="row"><label>Eyebrow / Label <span style="color:#787c82;font-weight:400;">(kleine Großbuchstaben-Labels)</span></label></th><td>
+						<input type="number" name="<?php echo esc_attr( self::OPT . '[fs_eyebrow]' ); ?>" value="<?php echo esc_attr( self::get( 'fs_eyebrow' ) ); ?>" min="8" max="20" step="1" style="width:90px;"> px
+						<p class="description">Standard: 11 px.</p>
 					</td></tr>
 				</tbody></table>
 				<?php submit_button(); ?>
@@ -212,7 +275,7 @@ class ESC_Typography_Settings {
 				btn.addEventListener('click', function(e){
 					e.preventDefault();
 					document.getElementById(btn.getAttribute('data-target')).value = '0';
-					document.getElementById(btn.getAttribute('data-preview')).textContent = '— noch keine Datei —';
+					document.getElementById(btn.getAttribute('data-preview')).textContent = '– noch keine Datei –';
 				});
 			});
 		})();

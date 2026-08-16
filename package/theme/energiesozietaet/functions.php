@@ -1,6 +1,6 @@
 <?php
 /**
- * Energiesozietät — theme bootstrap.
+ * Energiesozietät – theme bootstrap.
  *
  * @package Energiesozietaet
  */
@@ -39,14 +39,14 @@ function es_theme_setup() {
 	) );
 
 	add_theme_support( 'editor-color-palette', array(
-		array( 'name' => __( 'Tinte', 'energiesozietaet' ),        'slug' => 'ink',        'color' => '#0E1A2B' ),
-		array( 'name' => __( 'Tinte weich', 'energiesozietaet' ),  'slug' => 'ink-soft',   'color' => '#1A2740' ),
+		array( 'name' => __( 'Tinte', 'energiesozietaet' ),        'slug' => 'ink',        'color' => '#122023' ),
+		array( 'name' => __( 'Tinte weich', 'energiesozietaet' ),  'slug' => 'ink-soft',   'color' => '#1D2D2D' ),
 		array( 'name' => __( 'Papier', 'energiesozietaet' ),       'slug' => 'paper',      'color' => '#FFFFFF' ),
-		array( 'name' => __( 'Papier warm', 'energiesozietaet' ),  'slug' => 'paper-warm', 'color' => '#303030' ),
-		array( 'name' => __( 'Papier kühl', 'energiesozietaet' ),  'slug' => 'paper-cool', 'color' => '#F3F5F8' ),
+		array( 'name' => __( 'Papier warm (dunkel)', 'energiesozietaet' ), 'slug' => 'paper-warm', 'color' => '#1D2D2D' ),
+		array( 'name' => __( 'Papier kühl', 'energiesozietaet' ),  'slug' => 'paper-cool', 'color' => '#F5F5F5' ),
 		array( 'name' => __( 'Akzent', 'energiesozietaet' ),       'slug' => 'accent',     'color' => '#95D708' ),
-		array( 'name' => __( 'Text', 'energiesozietaet' ),         'slug' => 'text',       'color' => '#0E1A2B' ),
-		array( 'name' => __( 'Muted', 'energiesozietaet' ),        'slug' => 'muted',      'color' => '#5A6577' ),
+		array( 'name' => __( 'Text', 'energiesozietaet' ),         'slug' => 'text',       'color' => '#151E20' ),
+		array( 'name' => __( 'Muted', 'energiesozietaet' ),        'slug' => 'muted',      'color' => '#899092' ),
 	) );
 
 	add_image_size( 'es-team', 900, 900, true );
@@ -55,14 +55,20 @@ function es_theme_setup() {
 }
 add_action( 'after_setup_theme', 'es_theme_setup' );
 
+// WordPress 6.7 hängt bei Lazy-Bildern automatisch `sizes="auto, …"` an. In
+// Grids (z. B. Team-Übersicht) wählt der Browser dadurch einen zu kleinen
+// srcset-Kandidaten → sichtbar unscharfe Bilder. Feature deaktivieren, damit
+// die korrekten (bzw. explizit gesetzten) sizes greifen.
+add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );
+
 /**
  * Enqueue styles & scripts.
  */
 function es_theme_enqueue_assets() {
-	// Inter + JetBrains Mono — sans-only system per Mockup.
+	// Manrope (Text/UI) + Sora (Display/Headlines) – Design-Sprache des ah5/Elementra-Templates.
 	wp_enqueue_style(
 		'es-fonts',
-		'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap',
+		'https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap',
 		array(),
 		null
 	);
@@ -89,7 +95,7 @@ function es_resource_hints( $urls, $relation_type ) {
 add_filter( 'wp_resource_hints', 'es_resource_hints', 10, 2 );
 
 /**
- * Elementor global colors + fonts — makes every Elementor page pick up our design tokens.
+ * Elementor global colors + fonts – makes every Elementor page pick up our design tokens.
  */
 function es_elementor_globals() {
 	if ( ! did_action( 'elementor/loaded' ) ) { return; }
@@ -118,7 +124,7 @@ function es_body_classes( $classes ) {
 add_filter( 'body_class', 'es_body_classes' );
 
 /**
- * Elementor compat — expose text-bg-green class to Elementor's rich text editors.
+ * Elementor compat – expose text-bg-green class to Elementor's rich text editors.
  */
 function es_elementor_editor_stylesheets( $post_css ) {
 	if ( ! is_admin() ) { return $post_css; }
@@ -279,7 +285,7 @@ function es_excerpt( $post, $length = 28 ) {
  * Light-weight fallback header menu if no menu assigned.
  */
 function es_fallback_menu() {
-	// Kontakt + Karriere leben in den Header-Buttons rechts — nicht im Hauptmenü.
+	// Kontakt + Karriere leben in den Header-Buttons rechts – nicht im Hauptmenü.
 	$items = array(
 		home_url( '/philosophie/' )     => __( 'Philosophie', 'energiesozietaet' ),
 		home_url( '/leistungen/' )      => __( 'Leistungen', 'energiesozietaet' ),
@@ -293,4 +299,41 @@ function es_fallback_menu() {
 		printf( '<li><a href="%s">%s</a></li>', esc_url( $url ), esc_html( $label ) );
 	}
 	echo '</ul>';
+}
+
+/**
+ * Sprach-Attribut absichern: Die Website ist durchgehend deutschsprachig.
+ * Steht WordPress noch auf der unkonfigurierten Standard-Locale (en_US),
+ * würde `hyphens: auto` mit englischen Trennmustern deutsche Wörter falsch
+ * bzw. gar nicht trennen (und Screenreader läsen Deutsch mit englischer
+ * Aussprache). Ist die Site-Sprache bereits auf Deutsch (oder etwas anderes
+ * Bewusstes) gestellt, greift der Filter nicht ein.
+ */
+add_filter( 'language_attributes', function ( $output ) {
+	if ( 'en_US' === get_locale() ) {
+		return 'lang="de-DE"';
+	}
+	return $output;
+} );
+
+
+/**
+ * h3-Abschnitte langer Leistungsbeschreibungen in Akkordeons (details/summary)
+ * umwandeln. Greift nur bei 3+ h3-Überschriften; Übersichts-Abschnitte
+ * ("Kernkompetenzen") bleiben offen stehen.
+ */
+function es_accordionize( $html ) {
+	if ( substr_count( $html, '<h3' ) < 3 ) { return $html; }
+	$parts = preg_split( '/(<h3[^>]*>.*?<\/h3>)/s', $html, -1, PREG_SPLIT_DELIM_CAPTURE );
+	$out = $parts[0];
+	for ( $i = 1; $i < count( $parts ); $i += 2 ) {
+		$heading = wp_strip_all_tags( $parts[ $i ] );
+		$body    = isset( $parts[ $i + 1 ] ) ? $parts[ $i + 1 ] : '';
+		if ( false !== stripos( $heading, 'Kernkompetenz' ) ) {
+			$out .= $parts[ $i ] . $body;
+			continue;
+		}
+		$out .= '<details class="es-acc"><summary>' . esc_html( $heading ) . '</summary><div class="es-acc__body">' . $body . '</div></details>';
+	}
+	return $out;
 }

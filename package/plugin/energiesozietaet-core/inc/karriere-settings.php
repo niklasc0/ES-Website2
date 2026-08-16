@@ -1,6 +1,6 @@
 <?php
 /**
- * Karriere-Einstellungen — globale Textbausteine für Stellen-Detailseiten.
+ * Karriere-Einstellungen – globale Textbausteine für Stellen-Detailseiten.
  * Konfiguriert den Section-Titel "Was Dich bei uns erwartet" inkl. 4 Kacheln
  * sowie den "Deine Bewerbung"-Call-Out unten. Die Mailto-URL im Button wird
  * automatisch pro Stelle generiert (unverändert gelassen).
@@ -28,11 +28,11 @@ class ESC_Karriere_Settings {
 			'benefit3_title'   => 'Persönliche Entwicklung',
 			'benefit3_desc'    => 'Fortbildung, Promotion, Fachanwaltschaften.',
 			'benefit4_title'   => 'Modernes Büro',
-			'benefit4_desc'    => 'Im Herzen Düsseldorfs — mit flexiblen Arbeitsmodellen.',
+			'benefit4_desc'    => 'Im Herzen Düsseldorfs – mit flexiblen Arbeitsmodellen.',
 
 			'cta_eyebrow'      => 'Deine Bewerbung',
 			'cta_title'        => 'Bereit, gemeinsam durchzustarten?',
-			'cta_subtitle'     => 'Schicke uns Deine Unterlagen — wir melden uns binnen eines Werktags.',
+			'cta_subtitle'     => 'Wir freuen uns auf Deine Bewerbung.',
 			'cta_button_label' => 'Jetzt bewerben',
 			'cta_recipient'    => 'karriere@energiesozietaet.de',
 		);

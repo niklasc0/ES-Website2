@@ -40,9 +40,15 @@ class ESC_Importer {
 		// 2. Create CPT entries
 		self::import_team( $data['team'], $media_map, $map );
 		self::import_einzelleistungen( $data['einzelleistungen'], $map );
-		self::import_karriere( $data['karriere'], $map );
+		self::import_karriere( $data['karriere'], $map, $media_map );
+		// Nicht mehr in den Quelldaten enthaltene Einträge in den Papierkorb
+		// (z.B. ausgeschiedene Teammitglieder, geschlossene Stellen).
+		self::cleanup_stale( 'es_team',           wp_list_pluck( $data['team'], 'slug' ) );
+		self::cleanup_stale( 'es_einzelleistung', wp_list_pluck( $data['einzelleistungen'], 'slug' ) );
+		self::cleanup_stale( 'es_karriere',       wp_list_pluck( $data['karriere'], 'slug' ) );
+		self::cleanup_stale( 'es_news',           wp_list_pluck( $data['news'], 'slug' ) );
 		self::import_veranstaltungen( $data['veranstaltungen'], $map );
-		self::import_news( $data['news'], $map );
+		self::import_news( $data['news'], $map, $media_map );
 		self::import_publikationen( $data['publikationen'], $map );
 		self::import_linkedin( isset( $data['linkedin'] ) ? $data['linkedin'] : array(), $map );
 
@@ -65,7 +71,7 @@ class ESC_Importer {
 
 	public static function reset() {
 		delete_option( self::OPT_DONE );
-		// Do not delete the actual content — users may have edited it.
+		// Do not delete the actual content – users may have edited it.
 	}
 
 	protected static function load_data() {
@@ -100,24 +106,58 @@ class ESC_Importer {
 	/** Import bundled media into the WP media library. */
 	protected static function import_media( $data ) {
 		$map = array();
-		$dir = ESC_DIR . 'data/media/team/';
 		foreach ( (array) ( $data['team'] ?? array() ) as $t ) {
 			if ( empty( $t['image_file'] ) ) { continue; }
 			$src = ESC_DIR . 'data/media/' . $t['image_file'];
 			if ( ! file_exists( $src ) ) { continue; }
-			$attach_id = self::sideload( $src, $t['name'] . ' Portrait' );
+			$attach_id = self::sideload( $src, $t['name'] . ' Portrait', $t['image_file'] . ':' . md5_file( $src ) );
 			if ( $attach_id && ! is_wp_error( $attach_id ) ) {
 				$map[ 'team:' . $t['slug'] ] = $attach_id;
+			}
+		}
+		// News-Artikelbilder (data/media/news/<slug>.jpg)
+		foreach ( (array) ( $data['news'] ?? array() ) as $n ) {
+			if ( empty( $n['image_file'] ) ) { continue; }
+			$src = ESC_DIR . 'data/media/' . $n['image_file'];
+			if ( ! file_exists( $src ) ) { continue; }
+			$attach_id = self::sideload( $src, $n['title'], $n['image_file'] . ':' . md5_file( $src ) );
+			if ( $attach_id && ! is_wp_error( $attach_id ) ) {
+				$map[ 'newsimg:' . $n['slug'] ] = $attach_id;
+			}
+		}
+		// Stellenbilder (data/media/karriere/<slug>.jpg)
+		foreach ( (array) ( $data['karriere'] ?? array() ) as $k ) {
+			if ( empty( $k['image_file'] ) ) { continue; }
+			$src = ESC_DIR . 'data/media/' . $k['image_file'];
+			if ( ! file_exists( $src ) ) { continue; }
+			$attach_id = self::sideload( $src, $k['title'], $k['image_file'] . ':' . md5_file( $src ) );
+			if ( $attach_id && ! is_wp_error( $attach_id ) ) {
+				$map[ 'karriereimg:' . $k['slug'] ] = $attach_id;
 			}
 		}
 		return $map;
 	}
 
-	/** Sideload a file that already exists on disk into the media library. */
-	protected static function sideload( $src, $title = '' ) {
+	/** Sideload a file that already exists on disk into the media library.
+	 *  $source_key macht den Import idempotent: existiert bereits ein
+	 *  Attachment mit diesem Quell-Schlüssel, wird es wiederverwendet
+	 *  (kein Duplikat bei "Import erzwingen"). */
+	protected static function sideload( $src, $title = '', $source_key = '' ) {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/image.php';
+
+		if ( $source_key ) {
+			$existing = get_posts( array(
+				'post_type'      => 'attachment',
+				'post_status'    => 'inherit',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				'meta_key'       => '_esc_source_file',
+				'meta_value'     => $source_key,
+			) );
+			if ( ! empty( $existing ) ) { return (int) $existing[0]; }
+		}
 
 		$filename = wp_unique_filename( wp_upload_dir()['path'], basename( $src ) );
 		$dest = wp_upload_dir()['path'] . '/' . $filename;
@@ -136,11 +176,29 @@ class ESC_Importer {
 		if ( ! is_wp_error( $attach_id ) ) {
 			$meta = wp_generate_attachment_metadata( $attach_id, $dest );
 			wp_update_attachment_metadata( $attach_id, $meta );
+			if ( $source_key ) { update_post_meta( $attach_id, '_esc_source_file', $source_key ); }
 		}
 		return $attach_id;
 	}
 
 	/** Get or create a post. Returns post ID. */
+	/**
+	 * Posts eines Typs in den Papierkorb verschieben, die nicht (mehr) in den
+	 * Importdaten vorkommen – hält Team/Karriere/Leistungen synchron zur Quelle.
+	 */
+	protected static function cleanup_stale( $post_type, array $keep_slugs ) {
+		$posts = get_posts( array(
+			'post_type'   => $post_type,
+			'numberposts' => -1,
+			'post_status' => array( 'publish', 'draft', 'pending' ),
+		) );
+		foreach ( $posts as $p ) {
+			if ( ! in_array( $p->post_name, $keep_slugs, true ) ) {
+				wp_trash_post( $p->ID );
+			}
+		}
+	}
+
 	protected static function upsert_post( $args ) {
 		$defaults = array(
 			'post_status' => 'publish',
@@ -178,9 +236,13 @@ class ESC_Importer {
 			update_post_meta( $id, 'es_field',    (string) ( $t['field'] ?? 'rechtsberatung' ) );
 			if ( ! empty( $t['focus_areas'] ) ) {
 				update_post_meta( $id, 'es_focus_areas', $t['focus_areas'] );
+			} else {
+				delete_post_meta( $id, 'es_focus_areas' );
 			}
 			if ( ! empty( $t['career'] ) ) {
 				update_post_meta( $id, 'es_career', $t['career'] );
+			} else {
+				delete_post_meta( $id, 'es_career' );
 			}
 			if ( ! empty( $media_map[ 'team:' . $t['slug'] ] ) ) {
 				set_post_thumbnail( $id, $media_map[ 'team:' . $t['slug'] ] );
@@ -209,7 +271,8 @@ class ESC_Importer {
 		}
 	}
 
-	protected static function import_karriere( $items, &$map ) {
+	protected static function import_karriere( $items, &$map, $media_map = array() ) {
+		$order = 0;
 		foreach ( $items as $k ) {
 			$id = self::upsert_post( array(
 				'post_type'    => 'es_karriere',
@@ -217,19 +280,23 @@ class ESC_Importer {
 				'post_title'   => $k['title'],
 				'post_content' => wpautop_safe( (string) $k['description'] ),
 				'post_excerpt' => wp_trim_words( wp_strip_all_tags( (string) $k['description'] ), 26, '…' ),
+				'menu_order'   => $order++,
 			) );
 			if ( ! $id ) { continue; }
 			update_post_meta( $id, 'es_department',      (string) ( $k['department'] ?? 'Consulting' ) );
 			update_post_meta( $id, 'es_location',        (string) ( $k['location']  ?? 'Düsseldorf' ) );
 			update_post_meta( $id, 'es_employment_type', (string) ( $k['employment_type'] ?? 'Vollzeit' ) );
 			update_post_meta( $id, 'es_field',           (string) ( $k['field']     ?? 'unternehmensberatung' ) );
-			// Demo-Aufgaben + -Profil: übernehme bullets als Fallback nur falls nichts Eigenes da.
-			$tasks   = isset( $k['tasks'] )   ? $k['tasks']   : ( $k['bullets'] ?? array() );
-			$profile = isset( $k['profile'] ) ? $k['profile'] : array();
-			if ( $tasks )   { update_post_meta( $id, 'es_tasks',   $tasks ); }
-			if ( $profile ) { update_post_meta( $id, 'es_profile', $profile ); }
-			// Legacy-Kompatibilität für ältere Templates
-			if ( ! empty( $k['bullets'] ) ) { update_post_meta( $id, 'es_bullets', $k['bullets'] ); }
+			foreach ( array( 'tasks' => 'es_tasks', 'profile' => 'es_profile', 'offer' => 'es_offer' ) as $key => $meta ) {
+				if ( ! empty( $k[ $key ] ) ) { update_post_meta( $id, $meta, $k[ $key ] ); }
+				else { delete_post_meta( $id, $meta ); }
+			}
+			if ( ! empty( $k['closing'] ) ) { update_post_meta( $id, 'es_closing', (string) $k['closing'] ); }
+			else { delete_post_meta( $id, 'es_closing' ); }
+			delete_post_meta( $id, 'es_bullets' );
+			if ( ! empty( $media_map[ 'karriereimg:' . $k['slug'] ] ) ) {
+				set_post_thumbnail( $id, $media_map[ 'karriereimg:' . $k['slug'] ] );
+			}
 			$map[ 'karriere:' . $k['slug'] ] = $id;
 		}
 	}
@@ -255,7 +322,7 @@ class ESC_Importer {
 		}
 	}
 
-	protected static function import_news( $items, &$map ) {
+	protected static function import_news( $items, &$map, $media_map = array() ) {
 		foreach ( $items as $n ) {
 			$id = self::upsert_post( array(
 				'post_type'    => 'es_news',
@@ -263,9 +330,14 @@ class ESC_Importer {
 				'post_title'   => $n['title'],
 				'post_content' => (string) $n['body'],
 				'post_date'    => isset( $n['date'] ) ? $n['date'] : current_time( 'mysql' ),
-				'post_excerpt' => wp_trim_words( wp_strip_all_tags( (string) $n['body'] ), 28, '…' ),
+				'post_excerpt' => ! empty( $n['teaser'] )
+					? (string) $n['teaser']
+					: wp_trim_words( wp_strip_all_tags( (string) $n['body'] ), 28, '…' ),
 			) );
 			if ( ! $id ) { continue; }
+			if ( ! empty( $media_map[ 'newsimg:' . $n['slug'] ] ) ) {
+				set_post_thumbnail( $id, $media_map[ 'newsimg:' . $n['slug'] ] );
+			}
 			$map[ 'news:' . $n['slug'] ] = $id;
 		}
 	}
@@ -358,7 +430,7 @@ class ESC_Importer {
 			foreach ( $existing as $item ) { wp_delete_post( $item->ID, true ); }
 		}
 
-		// Kontakt + Karriere leben in den Header-Buttons rechts — nicht im Hauptmenü.
+		// Kontakt + Karriere leben in den Header-Buttons rechts – nicht im Hauptmenü.
 		$order = array(
 			'philosophie', 'leistungen', 'team', 'publikationen', 'news', 'veranstaltungen',
 		);
@@ -412,7 +484,7 @@ class ESC_Importer {
 			update_option( 'show_on_front', 'page' );
 			update_option( 'page_on_front', (int) $map['page:home'] );
 		}
-		// NOTE: Do NOT set page_for_posts to the "news" page — we want /news/ to render
+		// NOTE: Do NOT set page_for_posts to the "news" page – we want /news/ to render
 		// the Elementor-composed page (which itself embeds the es_news CPT grid).
 		update_option( 'page_for_posts', 0 );
 		// Pretty permalinks (for pages + CPTs)

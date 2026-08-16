@@ -1,5 +1,5 @@
 /*!
- * Energiesozietät UI — minimal JS for nav toggle + scroll reveal + header condense.
+ * Energiesozietät UI – minimal JS for nav toggle + scroll reveal + header condense.
  */
 (function () {
 	'use strict';
@@ -7,7 +7,7 @@
 	// 0. Mark html as JS-enabled so reveal CSS becomes active
 	document.documentElement.classList.add('js');
 
-	// 1. Mobile nav toggle — Klasse kommt auf den HEADER (passend zum CSS).
+	// 1. Mobile nav toggle – Klasse kommt auf den HEADER (passend zum CSS).
 	var toggle = document.querySelector('.es-nav-toggle');
 	var header = document.getElementById('es-header');
 	var nav    = document.getElementById('es-nav');
@@ -58,7 +58,7 @@
 		window.addEventListener('scroll', condense, { passive: true });
 	}
 
-	// 3. Scroll reveal via IntersectionObserver — auto-tag standard blocks.
+	// 3. Scroll reveal via IntersectionObserver – auto-tag standard blocks.
 	if ('IntersectionObserver' in window) {
 		// Auto-tag common targets that aren't already reveal
 		var autoTargets = document.querySelectorAll('.es-card, .es-team-card, .es-section h2, .es-section > .es-wrap > .es-grid, .es-prose > :first-child');
@@ -80,46 +80,59 @@
 		document.querySelectorAll('.es-reveal').forEach(function (el) { el.classList.add('is-in', 'is-visible'); });
 	}
 
-	// 3b. Client-side team filter (no page reload)
+	// 3b. Client-side team filter (kein Reload). Feld kommt aus data-field am
+	//     Card (vorher wurde ein nicht existierendes .esc-team-card__feld gelesen
+	//     → immer leer → alles ausgeblendet → „0 Teammitglieder").
 	var teamFilter = document.querySelector('.es-team-filter');
 	if (teamFilter) {
-		var teamGrid = teamFilter.parentElement.querySelector('.esc-grid') || document.querySelector('.esc-grid');
-		var countEl = teamFilter.querySelector('.es-team-filter__count');
-		var pills = teamFilter.querySelectorAll('.es-team-filter__pill');
-		pills.forEach(function (pill) {
+		var teamGrid = document.querySelector('.esc-team-grid') || document.querySelector('.esc-grid');
+		var teamCountEl = teamFilter.querySelector('.es-team-filter__count');
+		var teamPills = Array.prototype.slice.call(teamFilter.querySelectorAll('.es-team-filter__pill'));
+		var teamCards = teamGrid ? Array.prototype.slice.call(teamGrid.querySelectorAll('.esc-team-card')) : [];
+
+		function pillFeld(p) {
+			try { return new URL(p.href, window.location.origin).searchParams.get('feld') || ''; }
+			catch (err) { return ''; }
+		}
+
+		function applyTeamFilter(feld, animate) {
+			var visible = 0;
+			teamCards.forEach(function (c) {
+				var show = !feld || c.getAttribute('data-field') === feld;
+				c.classList.add('is-in', 'is-visible'); // Scroll-Reveal überspringen
+				c.classList.remove('is-hidden');
+				c.style.transition = animate ? 'opacity 240ms, transform 240ms' : 'none';
+				if (show) {
+					c.style.display = '';
+					if (animate) {
+						requestAnimationFrame(function () { c.style.opacity = '1'; c.style.transform = 'translateY(0)'; });
+					} else { c.style.opacity = '1'; c.style.transform = 'none'; }
+					visible++;
+				} else if (animate) {
+					c.style.opacity = '0'; c.style.transform = 'translateY(8px)';
+					setTimeout(function () { c.style.display = 'none'; }, 240);
+				} else {
+					c.style.display = 'none';
+				}
+			});
+			teamPills.forEach(function (p) { p.classList.toggle('is-active', pillFeld(p) === feld); });
+			if (teamCountEl) { teamCountEl.textContent = visible + ' Teammitglieder'; }
+		}
+
+		teamPills.forEach(function (pill) {
 			pill.addEventListener('click', function (e) {
 				e.preventDefault();
-				var url = new URL(pill.href, window.location.origin);
-				var feld = url.searchParams.get('feld') || '';
-				// Active-Pill-Wechsel
-				pills.forEach(function (p) { p.classList.remove('is-active'); });
-				pill.classList.add('is-active');
-				// URL ohne Reload updaten
+				var feld = pillFeld(pill);
 				var newUrl = new URL(window.location.href);
 				if (feld) { newUrl.searchParams.set('feld', feld); } else { newUrl.searchParams.delete('feld'); }
 				window.history.replaceState(null, '', newUrl.toString());
-				// Karten filtern
-				var cards = teamGrid ? teamGrid.querySelectorAll('.esc-team-card') : [];
-				var visible = 0;
-				cards.forEach(function (c) {
-					var feldOfCard = (c.querySelector('.esc-team-card__feld') || {}).textContent || '';
-					// Map Label → slug
-					var map = { 'Recht': 'rechtsberatung', 'Steuern': 'steuerberatung', 'Unternehmensberatung': 'unternehmensberatung', 'Büroleitung': 'management' };
-					var slugOfCard = map[feldOfCard.trim()] || '';
-					var show = !feld || slugOfCard === feld;
-					c.style.transition = 'opacity 240ms, transform 240ms';
-					if (show) {
-						c.style.display = '';
-						requestAnimationFrame(function () { c.style.opacity = '1'; c.style.transform = 'translateY(0)'; });
-						visible++;
-					} else {
-						c.style.opacity = '0'; c.style.transform = 'translateY(8px)';
-						setTimeout(function () { c.style.display = 'none'; }, 240);
-					}
-				});
-				if (countEl) { countEl.textContent = visible + ' Teammitglieder'; }
+				applyTeamFilter(feld, true);
 			});
 		});
+
+		// Direkt mit ?feld=… geladen → sofort anwenden (ohne Animation).
+		var teamInitFeld = new URL(window.location.href).searchParams.get('feld') || '';
+		if (teamInitFeld) { applyTeamFilter(teamInitFeld, false); }
 	}
 
 	// 3c. Back-to-top button (nur initialisieren, wenn Toggle im Backend an ist)
@@ -157,7 +170,7 @@
 		}
 	}
 
-	// 4. Smooth anchor scrolling — respects reduced motion
+	// 4. Smooth anchor scrolling – respects reduced motion
 	var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	if (!prefersReduced) {
 		document.addEventListener('click', function (e) {

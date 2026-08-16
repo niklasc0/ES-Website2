@@ -24,7 +24,7 @@ while ( have_posts() ) :
 			</div>
 		</section>
 		<section style="padding:40px 0 140px;">
-			<div class="es-wrap es-wrap--narrow" style="font-size:16px;line-height:1.7;">
+			<div class="es-wrap es-wrap--narrow" style="font-size:var(--es-fs-body);line-height:1.7;">
 				<?php the_content(); ?>
 			</div>
 		</section>

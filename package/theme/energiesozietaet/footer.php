@@ -2,11 +2,13 @@
 /**
  * Site footer.
  * Inhalte kommen aus den Footer-Einstellungen (Design → Footer). Spalten
- * mit leerer Überschrift werden ausgeblendet — die übrigen rücken zusammen.
+ * mit leerer Überschrift werden ausgeblendet – die übrigen rücken zusammen.
  *
  * @package Energiesozietaet
  */
-$es_no_cta = is_page( array( 'kontakt', 'impressum', 'datenschutzerklaerung' ) ) || is_404();
+// ah5: keine globale Footer-CTA – die Startseite bringt ihre eigene CTA-Sektion
+// aus der Blueprint mit; Unterseiten haben keine. Vermeidet Doppelung.
+$es_no_cta = true;
 
 if ( class_exists( 'ESC_Footer_Settings' ) ) {
 	$opts = ESC_Footer_Settings::get();
@@ -20,7 +22,12 @@ if ( class_exists( 'ESC_Footer_Settings' ) ) {
 		foreach ( preg_split( '/\r?\n/', (string) $s ) as $ln ) {
 			$ln = trim( $ln ); if ( '' === $ln ) continue;
 			$parts = array_map( 'trim', explode( '|', $ln, 2 ) );
-			$out[] = array( 'label' => $parts[0], 'url' => $parts[1] ?? '' );
+			$url   = $parts[1] ?? '';
+			if ( $url && ! preg_match( '#^(https?://|/|\#|mailto:|tel:)#i', $url ) ) {
+				$out[] = array( 'label' => $parts[0] . ' · ' . $url, 'url' => '' );
+				continue;
+			}
+			$out[] = array( 'label' => $parts[0], 'url' => $url );
 		}
 		return $out;
 	};
@@ -30,7 +37,7 @@ $copyright = str_replace( '{year}', date_i18n( 'Y' ), (string) $g( 'copyright', 
 
 // Aktive Spalten ermitteln (Heading nicht leer)
 $columns = array();
-for ( $i = 1; $i <= 3; $i++ ) {
+for ( $i = 1; $i <= 2; $i++ ) {
 	$h = trim( (string) $g( "col{$i}_heading" ) );
 	if ( $h === '' ) { continue; }
 	$columns[] = array(
@@ -39,6 +46,8 @@ for ( $i = 1; $i <= 3; $i++ ) {
 	);
 }
 $col_count = count( $columns );
+// Rechtliches (Spalte 3) speist ausschließlich die zentrierte Copyright-Leiste.
+$legal_links = call_user_func( $parse_links, $g( 'col3_lines' ) );
 ?>
 </main><!-- /#es-main -->
 
@@ -49,7 +58,7 @@ $col_count = count( $columns );
 			<div>
 				<div class="es-eyebrow es-eyebrow--accent"><?php echo esc_html( $g( 'cta_eyebrow', 'Kontakt' ) ); ?></div>
 				<h2>
-					<?php echo esc_html( $g( 'cta_title', 'Sprechen Sie mit uns.' ) ); ?>
+					<?php echo esc_html( $g( 'cta_title', 'Haben wir Ihr Interesse geweckt?' ) ); ?>
 					<?php if ( $g( 'cta_subtitle' ) ) : ?>
 						<br/><span class="es-footer__cta-sub"><?php echo wp_kses_post( $g( 'cta_subtitle' ) ); ?></span>
 					<?php endif; ?>
@@ -103,17 +112,16 @@ $col_count = count( $columns );
 				<span><?php echo esc_html( $copyright ); ?></span>
 				<ul>
 					<?php
-					// Copy: Legal-Links aus letzter Spalte für die untere Bar wiederverwenden.
-					$last_col = end( $columns );
-					if ( is_array( $last_col ) ) {
-						foreach ( $last_col['links'] as $link ) {
-							if ( $link['url'] ) {
-								echo '<li><a href="' . esc_url( $link['url'] ) . '">' . esc_html( $link['label'] ) . '</a></li>';
-							}
+					foreach ( $legal_links as $link ) {
+						if ( $link['url'] ) {
+							echo '<li><a href="' . esc_url( $link['url'] ) . '">' . esc_html( $link['label'] ) . '</a></li>';
+						} else {
+							echo '<li>' . esc_html( $link['label'] ) . '</li>';
 						}
 					}
 					?>
 				</ul>
+				<span aria-hidden="true"></span>
 			</div>
 		</div>
 	</div>

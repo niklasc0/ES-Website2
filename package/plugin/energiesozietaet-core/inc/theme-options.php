@@ -1,6 +1,6 @@
 <?php
 /**
- * Theme Options — zentraler Top-Level-Menuepunkt, der die verstreuten
+ * Theme Options – zentraler Top-Level-Menuepunkt, der die verstreuten
  * Design-Einstellungen (Typografie, Farben, Layout, Footer, Kontaktformular)
  * unter einem Dach buendelt. Die Unterseiten registrieren sich selbst mit
  * dem Slug 'es-theme-options' als Parent.
@@ -31,7 +31,7 @@ class ESC_Theme_Options {
 		// Erstes Untermenue umbenennen (sonst doppelt "Theme Options").
 		add_submenu_page(
 			self::SLUG,
-			'Theme Options — Uebersicht',
+			'Theme Options – Uebersicht',
 			'Uebersicht',
 			'manage_options',
 			self::SLUG,

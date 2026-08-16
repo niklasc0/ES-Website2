@@ -1,8 +1,8 @@
 <?php
 /**
- * Footer-Einstellungen — generische 3 Spalten + Brand + CTA + Copyright.
+ * Footer-Einstellungen – generische 3 Spalten + Brand + CTA + Copyright.
  * Spalten werden im Frontend nur gerendert, wenn ihre Überschrift gesetzt
- * ist — leere Spalten werden ausgeblendet und die übrigen rücken zusammen.
+ * ist – leere Spalten werden ausgeblendet und die übrigen rücken zusammen.
  *
  * @package Energiesozietaet_Core
  */
@@ -20,23 +20,24 @@ class ESC_Footer_Settings {
 	public static function defaults() {
 		return array(
 			'cta_eyebrow'     => 'Kontakt',
-			'cta_title'       => 'Sprechen Sie mit uns.',
-			'cta_subtitle'    => 'Unaufgeregt, direkt, fachlich.',
-			'cta_btn1_label'  => 'Termin vereinbaren',
+			'cta_title'       => 'Haben wir Ihr Interesse geweckt?',
+			'cta_subtitle'    => 'Möchten Sie uns kennenlernen?',
+			'cta_btn1_label'  => 'Kontakt aufnehmen',
 			'cta_btn1_url'    => home_url( '/kontakt/' ),
 			'cta_btn2_label'  => 'info@energiesozietaet.de',
 			'cta_btn2_url'    => 'mailto:info@energiesozietaet.de',
 
 			'brand_name'    => 'Energiesozietät GmbH',
 			'brand_sub'     => 'Recht · Steuern · Beratung',
-			'brand_claim'   => 'Beratung mit Leidenschaft — Ergebnisse, die weitertragen.',
+			'brand_claim'   => 'Ergebnisse, die weitertragen.',
 			'badges'        => "BVÖD\nForum Contracting\nVKU",
 
-			// Drei generische Spalten — nur gerendert wenn Heading nicht leer.
-			'col1_heading' => 'Anschrift',
-			'col1_lines'   => "Energiesozietät GmbH\nRoßstraße 92 / Kennedyhaus\n40476 Düsseldorf",
-			'col2_heading' => 'Kontakt',
-			'col2_lines'   => "+49 211 159232-0 | tel:+492111592320\ninfo@energiesozietaet.de | mailto:info@energiesozietaet.de\nLinkedIn ↗︎ | https://www.linkedin.com/company/energiesozietaet/",
+			// Spalte 1 (Adresse) + Spalte 2 (Navigation) erscheinen im Grid;
+			// Spalte 3 (Rechtliches) speist nur die zentrierte Copyright-Leiste.
+			'col1_heading' => 'Energiesozietät GmbH',
+			'col1_lines'   => "Recht Steuern Beratung\nRoßstraße 92 | Kennedyhaus\n40476 Düsseldorf\ninfo@energiesozietaet.de\nCaffamacherreihe 8 | 20355 Hamburg\nJungbuschstraße 6 | 68159 Mannheim",
+			'col2_heading' => 'Navigation',
+			'col2_lines'   => "Home | /\nPhilosophie | /philosophie/\nLeistungen | /leistungen/\nTeam | /team/\nPublikationen | /publikationen/\nKarriere | /karriere/\nNews | /news/\nVeranstaltungen | /veranstaltungen/\nKontakt | /kontakt/",
 			'col3_heading' => 'Rechtliches',
 			'col3_lines'   => "Impressum | /impressum/\nDatenschutz | /datenschutzerklaerung/",
 
@@ -67,7 +68,14 @@ class ESC_Footer_Settings {
 			$ln = trim( $ln );
 			if ( '' === $ln ) { continue; }
 			$parts = array_map( 'trim', explode( '|', $ln, 2 ) );
-			$out[] = array( 'label' => $parts[0], 'url' => $parts[1] ?? '' );
+			$url   = $parts[1] ?? '';
+			// Nur echte Ziele verlinken – bei Adresszeilen wie
+			// "Caffamacherreihe 8 | 20355 Hamburg" ist die Pipe nur Texttrenner.
+			if ( $url && ! preg_match( '#^(https?://|/|\#|mailto:|tel:)#i', $url ) ) {
+				$out[] = array( 'label' => $parts[0] . ' · ' . $url, 'url' => '' );
+				continue;
+			}
+			$out[] = array( 'label' => $parts[0], 'url' => $url );
 		}
 		return $out;
 	}
@@ -110,7 +118,7 @@ class ESC_Footer_Settings {
 		$val = self::get( $name );
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
 		echo '<input type="text" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" style="width:100%;max-width:640px;" />';
-		if ( $hint ) { echo '<p class="description">' . wp_kses_post( $hint ) . '</p>'; }
+		if ( $hint ) { echo '<p class="description" style="font-style:normal;">' . wp_kses_post( $hint ) . '</p>'; }
 		echo '</td></tr>';
 	}
 
@@ -118,7 +126,7 @@ class ESC_Footer_Settings {
 		$val = self::get( $name );
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
 		echo '<textarea name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" rows="' . (int) $rows . '" style="width:100%;max-width:640px;">' . esc_textarea( $val ) . '</textarea>';
-		if ( $hint ) { echo '<p class="description">' . wp_kses_post( $hint ) . '</p>'; }
+		if ( $hint ) { echo '<p class="description" style="font-style:normal;">' . wp_kses_post( $hint ) . '</p>'; }
 		echo '</td></tr>';
 	}
 
@@ -127,7 +135,7 @@ class ESC_Footer_Settings {
 		?>
 		<div class="wrap">
 			<h1>Footer</h1>
-			<p>Alle Inhalte des Seiten-Footers zentral pflegen. <strong>Spalten ohne Überschrift werden ausgeblendet</strong> — die übrigen rücken automatisch zusammen.</p>
+			<p>Alle Inhalte des Seiten-Footers zentral pflegen. <strong>Spalten ohne Überschrift werden ausgeblendet</strong> – die übrigen rücken automatisch zusammen.</p>
 			<form method="post" action="options.php">
 				<?php settings_fields( 'esc_footer_group' ); ?>
 
@@ -160,7 +168,7 @@ class ESC_Footer_Settings {
 					<table class="form-table"><tbody>
 						<?php
 						self::input(    "col{$i}_heading", 'Überschrift' );
-						self::textarea( "col{$i}_lines",   'Zeilen · Format „Label | URL"', 'Eine Zeile pro Eintrag — Format <code>Text | URL</code>. URL optional.', 5 );
+						self::textarea( "col{$i}_lines",   'Zeilen · Format „Label | URL"', 'Eine Zeile pro Eintrag – Format <code>Text | URL</code>. URL optional.', 5 );
 						?>
 					</tbody></table>
 				<?php endfor; ?>

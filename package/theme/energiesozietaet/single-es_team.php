@@ -1,6 +1,6 @@
 <?php
 /**
- * Single Team-Mitglied — nach Mockup S3.
+ * Single Team-Mitglied – nach Mockup S3.
  * Position über dem Namen (groß), keine Duplicate-Rolle, Kontakt-Box mit
  * E-Mail + Telefon, vCard-Download automatisch, Sections Schwerpunkte,
  * Werdegang, Publikationen (Reverse-Lookup via es_author_ids).
@@ -42,7 +42,7 @@ while ( have_posts() ) : the_post();
 						<?php if ( $thumb_id ) : ?>
 							<?php echo wp_get_attachment_image( $thumb_id, 'es-team', false, array( 'loading' => 'eager', 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); ?>
 						<?php else : ?>
-							<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#8591A3;font-size:64px;"><?php echo esc_html( mb_substr( get_the_title(), 0, 1 ) ); ?></div>
+							<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#B6BAAF;font-size:64px;"><?php echo esc_html( mb_substr( get_the_title(), 0, 1 ) ); ?></div>
 						<?php endif; ?>
 					</div>
 
@@ -71,7 +71,7 @@ while ( have_posts() ) : the_post();
 							</div>
 						<?php endif; ?>
 						<div class="es-team-single__contact-actions">
-							<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $email ? $email : 'info@energiesozietaet.de' ); ?>?subject=<?php echo esc_attr( 'Terminanfrage — ' . get_the_title() ); ?>">Termin vereinbaren →</a>
+							<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $email ? $email : 'info@energiesozietaet.de' ); ?>?subject=<?php echo esc_attr( 'Terminanfrage – ' . get_the_title() ); ?>">Termin vereinbaren →</a>
 							<a class="es-btn es-btn--ghost-paper" href="<?php echo esc_url( $vcard ); ?>">Visitenkarte (vCard)</a>
 						</div>
 					</div>
@@ -88,7 +88,7 @@ while ( have_posts() ) : the_post();
 					<?php if ( $more_bio ) : ?>
 						<div class="es-team-single__section">
 							<h3>Profil</h3>
-							<div style="font-size:17px;line-height:1.7;color:#5A6577;"><?php echo wp_kses_post( wpautop( $more_bio ) ); ?></div>
+							<div style="font-size:var(--es-fs-body);line-height:1.7;color:#899092;"><?php echo wp_kses_post( wpautop( $more_bio ) ); ?></div>
 						</div>
 					<?php endif; ?>
 

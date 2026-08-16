@@ -1,6 +1,6 @@
 <?php
 /**
- * Single Publikation — keine eigene Detailseite. Wir leiten auf die externe
+ * Single Publikation – keine eigene Detailseite. Wir leiten auf die externe
  * Quelle weiter (sofern hinterlegt) oder zurück auf die Übersicht.
  *
  * @package Energiesozietaet

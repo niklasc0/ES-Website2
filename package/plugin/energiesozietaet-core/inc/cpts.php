@@ -19,12 +19,19 @@ class ESC_CPTs {
 	}
 
 	protected static function cpt( $slug, $labels_singular, $labels_plural, $args = array() ) {
+		// Korrektes Genus für "Neues Teammitglied" / "Neuer News-Beitrag" / "Neue Veranstaltung"
+		$neu_map = array(
+			'Teammitglied'   => 'Neues Teammitglied',
+			'Stellenangebot' => 'Neues Stellenangebot',
+			'News-Beitrag'   => 'Neuer News-Beitrag',
+		);
+		$add_new_item = $neu_map[ $labels_singular ] ?? sprintf( __( 'Neue %s', 'energiesozietaet-core' ), $labels_singular );
 		$labels = array(
 			'name'               => $labels_plural,
 			'singular_name'      => $labels_singular,
 			'menu_name'          => $labels_plural,
 			'add_new'            => __( 'Neu hinzufügen', 'energiesozietaet-core' ),
-			'add_new_item'       => sprintf( __( 'Neue(r) %s', 'energiesozietaet-core' ), $labels_singular ),
+			'add_new_item'       => $add_new_item,
 			'edit_item'          => sprintf( __( '%s bearbeiten', 'energiesozietaet-core' ), $labels_singular ),
 			'view_item'          => sprintf( __( '%s ansehen', 'energiesozietaet-core' ), $labels_singular ),
 			'all_items'          => sprintf( __( 'Alle %s', 'energiesozietaet-core' ), $labels_plural ),
@@ -47,7 +54,7 @@ class ESC_CPTs {
 		// Individual-post rewrite slugs are namespaced so they never collide with the
 		// top-level static pages (team, karriere, news, veranstaltungen, publikationen
 		// and the leistungen/<beratungsfeld>/ pages). The static pages carry the grid
-		// shortcode and serve as the canonical overview — CPT archives are disabled.
+		// shortcode and serve as the canonical overview – CPT archives are disabled.
 		self::cpt( 'es_team', 'Teammitglied', 'Team', array(
 			'menu_icon'    => 'dashicons-groups',
 			'rewrite'      => array( 'slug' => 'teammitglied', 'with_front' => false ),

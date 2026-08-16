@@ -1,6 +1,6 @@
 <?php
 /**
- * Single Einzelleistung — redaktionelles Leistungs-Layout:
+ * Single Einzelleistung – redaktionelles Leistungs-Layout:
  * Header (Breadcrumb, Eyebrow, Titel, optionale Lede) + zweispaltig
  * (Artikeltext mit klarer Typo-Hierarchie + Sticky-Kontakt-Aside).
  *
@@ -42,7 +42,7 @@ while ( have_posts() ) : the_post();
 			<div class="es-leistung__grid">
 				<div class="es-leistung__main">
 					<div class="es-article__body es-leistung__body">
-						<?php the_content(); ?>
+						<?php echo es_accordionize( apply_filters( 'the_content', get_the_content() ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 
 						<?php if ( is_array( $bullets ) && ! empty( $bullets ) ) : ?>
 							<ul>
@@ -51,7 +51,7 @@ while ( have_posts() ) : the_post();
 						<?php endif; ?>
 
 						<?php if ( $closing ) : ?>
-							<blockquote><?php echo wp_kses_post( wpautop( $closing ) ); ?></blockquote>
+							<blockquote><?php $closing_html = wp_kses_post( wpautop( $closing ) ); echo function_exists( 'esc_link_team_names' ) ? esc_link_team_names( $closing_html ) : $closing_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></blockquote>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -76,7 +76,7 @@ while ( have_posts() ) : the_post();
 							<div class="es-eyebrow">Kontakt</div>
 							<p class="es-leistung__card-title">Persönliche Beratung.</p>
 						<?php endif; ?>
-						<p class="es-leistung__card-text">Sie haben ein konkretes Vorhaben zum Thema <?php echo esc_html( get_the_title() ); ?>? Wir beraten Sie gern!</p>
+						<p class="es-leistung__card-text">Bitte zögern Sie nicht, uns anzusprechen. Wir freuen uns auf Ihre Kontaktaufnahme.</p>
 						<a class="es-btn es-btn--paper" href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">Termin anfragen →</a>
 					</div>
 					<a class="es-leistung__back" href="<?php echo esc_url( $bf_url ); ?>">← Alle Leistungen: <?php echo esc_html( $bf_name ); ?></a>

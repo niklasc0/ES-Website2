@@ -3,7 +3,7 @@
  * Plugin Name:       Energiesozietät Core
  * Plugin URI:        https://energiesozietaet.de/
  * Description:       Custom Post Types (Team, Einzelleistungen, Karriere, Veranstaltungen, News, Publikationen), Taxonomie Beratungsfeld, Grid-Shortcodes, Meta-Felder und Demo-Content-Importer für die Energiesozietät-Website.
- * Version:           1.0.0
+ * Version:           1.1.2
  * Author:            Energiesozietät
  * License:           GPL v2 or later
  * Text Domain:       energiesozietaet-core
@@ -33,9 +33,11 @@ require_once ESC_DIR . 'inc/colors-settings.php';
 require_once ESC_DIR . 'inc/footer-settings.php';
 require_once ESC_DIR . 'inc/karriere-settings.php';
 require_once ESC_DIR . 'inc/typography-settings.php';
+require_once ESC_DIR . 'inc/elementor-globals.php';
 require_once ESC_DIR . 'inc/layout-settings.php';
 require_once ESC_DIR . 'inc/contact-form.php';
 require_once ESC_DIR . 'inc/linkedin.php';
+require_once ESC_DIR . 'inc/team-links.php';
 
 /**
  * Activation: flush rewrite rules after CPTs registered.
@@ -55,8 +57,10 @@ register_deactivation_hook( __FILE__, function () {
 } );
 
 /**
- * Load CSS for grid rendering on front-end.
+ * Grid-/Card-Styling kommt vollständig aus dem Theme (style.css) – die alte
+ * Plugin-CSS-Schicht assets/css/grid.css wird NICHT mehr geladen, da sie mit
+ * dem ah5-Re-Skin kollidierte (eigene .esc-grid/.esc-card/.esc-team-card-Regeln,
+ * z.B. aspect-ratio 1/1 + auto-fill-Spalten → Layout-Konflikte). Datei bleibt
+ * für ältere Installs/Referenz erhalten, wird aber nicht enqueued.
  */
-add_action( 'wp_enqueue_scripts', function () {
-	wp_enqueue_style( 'esc-grid', ESC_URL . 'assets/css/grid.css', array(), ESC_VERSION );
-} );
+

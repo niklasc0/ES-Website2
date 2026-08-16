@@ -23,7 +23,9 @@ elseif ( is_page() ) {
 	$es_page = get_queried_object();
 	$es_current_slug = $es_page ? (string) $es_page->post_name : '';
 }
-$es_is_dark = in_array( $es_current_slug, $es_dark_slugs, true );
+// ah5/Elementra: Header ist immer hell (weiß). Die dunklen Page-Hero-Bänder
+// sitzen als separater, gerundeter Block UNTER dem Header.
+$es_is_dark = false;
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -37,15 +39,14 @@ $es_is_dark = in_array( $es_current_slug, $es_dark_slugs, true );
 
 <header class="es-header<?php echo $es_is_dark ? ' es-header--dark' : ''; ?>" id="es-header" data-variant="<?php echo $es_is_dark ? 'dark' : 'light'; ?>">
 	<div class="es-wrap es-header__inner">
-		<a class="es-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Energiesozietät — Zur Startseite">
+		<a class="es-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Energiesozietät – Zur Startseite">
 			<?php $logo_src = function_exists( 'es_get_header_logo_url' ) ? es_get_header_logo_url( $es_is_dark ? 'dark' : 'light' ) : ''; ?>
 			<?php if ( $logo_src ) : ?>
 				<img class="es-brand__logo" src="<?php echo esc_url( $logo_src ); ?>" alt="<?php bloginfo( 'name' ); ?>" />
 			<?php else : ?>
-				<span class="es-brand__mark" aria-hidden="true">ES</span>
 				<span class="es-brand__wordmark">
-					<span class="es-brand__name">Energiesozietät</span>
-					<span class="es-brand__sub">Recht · Steuern · Beratung</span>
+					<span class="es-brand__name">Energie<span class="es-brand__flag" aria-hidden="true"></span></span>
+					<span class="es-brand__sub">sozietät</span>
 				</span>
 			<?php endif; ?>
 		</a>
@@ -68,12 +69,11 @@ $es_is_dark = in_array( $es_current_slug, $es_dark_slugs, true );
 		</nav>
 
 		<div class="es-header__actions">
-			<a class="es-btn-jobs" href="<?php echo esc_url( home_url( '/karriere/' ) ); ?>">
-				<span class="es-btn-jobs__dot" aria-hidden="true"></span>
-				<?php esc_html_e( 'Offene Stellen', 'energiesozietaet' ); ?>
+			<a class="es-btn es-btn--ghost es-header__cta es-header__cta--jobs" href="<?php echo esc_url( home_url( '/karriere/' ) ); ?>">
+				<?php esc_html_e( 'Stellenangebote', 'energiesozietaet' ); ?>
 			</a>
-			<a class="es-btn-kontakt" href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">
-				<?php esc_html_e( 'Kontakt', 'energiesozietaet' ); ?> →
+			<a class="es-btn es-btn--accent es-header__cta" href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">
+				<?php esc_html_e( 'Kontakt', 'energiesozietaet' ); ?>
 			</a>
 		</div>
 

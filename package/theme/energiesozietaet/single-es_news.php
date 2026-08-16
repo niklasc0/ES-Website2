@@ -1,6 +1,6 @@
 <?php
 /**
- * Single News-Beitrag — nach Mockup S1 News-Artikel.
+ * Single News-Beitrag – nach Mockup S1 News-Artikel.
  * Schmaler Header (780px), full-width Artikelbild, Fließtext in 720px.
  *
  * @package Energiesozietaet
@@ -20,7 +20,7 @@ while ( have_posts() ) : the_post();
 			<div class="es-article__crumb">
 				<a href="<?php echo esc_url( home_url( '/news/' ) ); ?>" style="color:inherit;">News</a>  /  <?php echo esc_html( $cat_name ); ?>
 			</div>
-			<div class="es-article__eyebrow"><?php echo esc_html( $cat_name ); ?> · <?php echo esc_html( get_the_date() ); ?></div>
+			<div class="es-article__eyebrow"><?php echo esc_html( $cat_name ); ?> · <?php echo esc_html( get_the_date( 'j. F Y' ) ); ?></div>
 			<h1 class="es-article__title"><?php the_title(); ?></h1>
 			<?php if ( has_excerpt() ) : ?>
 				<p class="es-article__lede"><?php echo esc_html( get_the_excerpt() ); ?></p>

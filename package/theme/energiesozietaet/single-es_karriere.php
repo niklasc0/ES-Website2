@@ -1,6 +1,6 @@
 <?php
 /**
- * Single Stellenangebot — nach Mockup S4.
+ * Single Stellenangebot – nach Mockup S4.
  * "Bereich" zeigt den Beratungsbereich (Meta es_field, Mapping zu Label) statt
  * der Rolle. Du-Form statt Sie-Form für Karriere-Kontext.
  *
@@ -14,6 +14,7 @@ function es_karriere_field_label( $slug ) {
 		'rechtsberatung'       => 'Rechtsberatung',
 		'steuerberatung'       => 'Steuerberatung',
 		'unternehmensberatung' => 'Unternehmensberatung',
+		'kanzlei'              => 'Kanzlei',
 		'management'           => 'Büroleitung',
 	);
 	return $map[ $slug ] ?? '';
@@ -45,6 +46,8 @@ while ( have_posts() ) : the_post();
 		if ( is_array( $legacy ) && ! empty( $legacy ) ) { $tasks = $legacy; }
 	}
 	$profile  = es_meta( 'es_profile' );
+	$offer    = es_meta( 'es_offer' );
+	$closing  = es_meta( 'es_closing' );
 
 	// Globale Einstellungen (Settings-API)
 	$kset = class_exists( 'ESC_Karriere_Settings' ) ? ESC_Karriere_Settings::get() : array();
@@ -89,25 +92,39 @@ while ( have_posts() ) : the_post();
 				</ul>
 			<?php endif; ?>
 
+			<?php if ( is_array( $offer ) && ! empty( $offer ) ) : ?>
+				<div class="es-stelle-single__section-title">Was wir Dir bieten</div>
+				<ul class="es-stelle-single__list">
+					<?php foreach ( $offer as $o ) : ?><li><?php echo wp_kses_post( $o ); ?></li><?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+
+			<?php if ( $closing ) : ?>
+				<div class="es-stelle-single__section-title">Interesse geweckt?</div>
+				<div class="es-stelle-single__body"><?php $closing_html = wp_kses_post( wpautop( $closing ) ); echo function_exists( 'esc_link_team_names' ) ? esc_link_team_names( $closing_html ) : $closing_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+			<?php endif; ?>
+
+			<?php if ( empty( $offer ) ) : ?>
 			<div class="es-stelle-single__section-title"><?php echo esc_html( $kget( 'benefits_title', 'Was Dich bei uns erwartet' ) ); ?></div>
 			<div class="esc-grid esc-grid--cols-2" style="gap:16px;margin-bottom:56px;">
 				<?php foreach ( $benefits_list as $bn ) :
 					if ( empty( $bn[0] ) ) continue; ?>
-					<div style="padding:24px;border:1px solid #E4E7EC;">
+					<div style="padding:24px;border:1px solid #DADEC5;border-radius:14px;">
 						<div style="width:4px;height:20px;background:#95D708;margin-bottom:14px;"></div>
-						<div style="font-size:17px;font-weight:500;letter-spacing:-0.015em;margin-bottom:6px;"><?php echo esc_html( $bn[0] ); ?></div>
-						<?php if ( ! empty( $bn[1] ) ) : ?><div style="font-size:14px;color:#5A6577;"><?php echo esc_html( $bn[1] ); ?></div><?php endif; ?>
+						<div style="font-size:var(--es-fs-heading-sub);font-weight:500;letter-spacing:-0.015em;margin-bottom:6px;"><?php echo esc_html( $bn[0] ); ?></div>
+						<?php if ( ! empty( $bn[1] ) ) : ?><div style="font-size:var(--es-fs-body);color:#899092;"><?php echo esc_html( $bn[1] ); ?></div><?php endif; ?>
 					</div>
 				<?php endforeach; ?>
 			</div>
+			<?php endif; ?>
 
-			<div style="padding:32px;background:#0E1A2B;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;">
+			<div style="margin-top:56px;padding:32px;background:#122023;color:#FFFFFF;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;border-radius:var(--es-radius-card);">
 				<div>
-					<div style="color:#95D708;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;"><?php echo esc_html( $kget( 'cta_eyebrow', 'Deine Bewerbung' ) ); ?></div>
-					<div style="font-size:22px;font-weight:500;letter-spacing:-0.015em;"><?php echo esc_html( $kget( 'cta_title', 'Bereit, gemeinsam durchzustarten?' ) ); ?></div>
-					<div style="font-size:14px;color:rgba(255,255,255,0.6);margin-top:6px;"><?php echo esc_html( $kget( 'cta_subtitle', '' ) ); ?></div>
+					<div style="color:#95D708;font-size:var(--es-fs-eyebrow);letter-spacing:0.2em;text-transform:uppercase;font-weight:500;margin-bottom:12px;"><?php echo esc_html( $kget( 'cta_eyebrow', 'Deine Bewerbung' ) ); ?></div>
+					<div style="font-size:var(--es-fs-heading-sub);font-weight:500;letter-spacing:-0.015em;"><?php echo esc_html( $kget( 'cta_title', 'Bereit, gemeinsam durchzustarten?' ) ); ?></div>
+					<div style="font-size:var(--es-fs-body);color:rgba(255,255,255,0.6);margin-top:6px;"><?php echo esc_html( $kget( 'cta_subtitle', '' ) ); ?></div>
 				</div>
-				<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $kget( 'cta_recipient', 'karriere@energiesozietaet.de' ) ); ?>?subject=<?php echo esc_attr( 'Bewerbung — ' . get_the_title() ); ?>"><?php echo esc_html( $kget( 'cta_button_label', 'Jetzt bewerben' ) ); ?> →</a>
+				<a class="es-btn es-btn--paper" href="mailto:<?php echo esc_attr( $kget( 'cta_recipient', 'karriere@energiesozietaet.de' ) ); ?>?subject=<?php echo esc_attr( 'Bewerbung – ' . get_the_title() ); ?>"><?php echo esc_html( $kget( 'cta_button_label', 'Jetzt bewerben' ) ); ?> →</a>
 			</div>
 
 			<div style="margin-top:56px;">
