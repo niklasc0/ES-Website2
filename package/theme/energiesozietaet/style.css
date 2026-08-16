@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.5.5
+Version: 2.5.6
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -1879,13 +1879,15 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 @media (max-width: 1024px) { .es-news-archive__grid { grid-template-columns: 1fr; } }
 .es-news-row {
     position: relative; display: grid; grid-template-columns: 320px minmax(0, 1fr);
-    align-items: start;
+    height: 180px; /* = 320px Bildspalte im 16:9-Format – Kachel nie höher als das Bild */
+    align-items: stretch;
     color: var(--es-ink); background: var(--es-paper-cool);
     border-radius: var(--es-radius-card); overflow: hidden;
     transition: transform var(--es-duration-fast) var(--es-easing);
 }
 @media (max-width: 640px) {
-    .es-news-row { grid-template-columns: 1fr; }
+    .es-news-row { grid-template-columns: 1fr; height: auto; }
+    .es-news-row__media { aspect-ratio: 16/9; height: auto; border-radius: var(--es-radius-card) var(--es-radius-card) 0 0; }
 }
 .es-news-row::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
@@ -1897,14 +1899,16 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 /* Bild füllt die ganze linke Seite (wie Team-Karte). Quadratisch wird es dadurch,
    dass die Kartenhöhe über die Zeilenbegrenzung von Titel/Auszug gedeckelt ist. */
 .es-news-row__media {
-    aspect-ratio: 16/9; width: 100%; align-self: start;
+    width: 100%; height: 100%;
     overflow: hidden; background: var(--es-paper-warm);
     border-radius: var(--es-radius-card) 0 0 var(--es-radius-card);
 }
 .es-news-row__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--es-easing); }
 .es-news-row:hover .es-news-row__media img { transform: scale(1.04); }
 .es-news-row__media .es-ph-cat { width: 100%; height: 100%; border-radius: 0; aspect-ratio: auto; }
-.es-news-row__body { padding: var(--es-space-8); display: flex; flex-direction: column; justify-content: center; }
+.es-news-row__body { padding: 20px 28px; display: flex; flex-direction: column; justify-content: center; overflow: hidden; min-height: 0; }
+.es-news-row__title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.es-news-row__text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .es-news-row__date { font-size: var(--es-fs-eyebrow); color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase; font-family: var(--es-font-mono); margin-bottom: 8px; }
 /* Höhere Spezifität (.es-news-row …) nötig, weil .es-stage h3 / .es-stage p die
    News-Beiträge sonst auf 32px/17px zwingen. */
