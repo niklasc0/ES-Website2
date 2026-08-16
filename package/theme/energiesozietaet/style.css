@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.4.0
+Version: 2.5.0
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -616,7 +616,7 @@ html.js .esc-card.es-reveal {
 .esc-card:hover { color: var(--es-ink); transform: translateY(-2px); border-color: var(--es-ink); }
 .esc-card:hover::before { transform: scaleX(1); }
 
-.esc-card__media { aspect-ratio: 16/10; overflow: hidden; background: var(--es-paper-warm); }
+.esc-card__media { aspect-ratio: 3/2; overflow: hidden; background: var(--es-paper-warm); }
 .esc-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--es-easing); }
 .esc-card:hover .esc-card__media img { transform: scale(1.04); }
 
@@ -1876,7 +1876,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
    Zweispaltig erst ab >1024px, sonst würden 200px-Bild + lange Titel überlaufen. */
 @media (max-width: 1024px) { .es-news-archive__grid { grid-template-columns: 1fr; } }
 .es-news-row {
-    position: relative; display: grid; grid-template-columns: 240px minmax(0, 1fr);
+    position: relative; display: flex; flex-direction: column;
     color: var(--es-ink); background: var(--es-paper-cool);
     border-radius: var(--es-radius-card); overflow: hidden;
     transition: transform var(--es-duration-fast) var(--es-easing);
@@ -1890,11 +1890,11 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-news-row:hover { transform: translateY(-2px); }
 /* Bild füllt die ganze linke Seite (wie Team-Karte). Quadratisch wird es dadurch,
    dass die Kartenhöhe über die Zeilenbegrenzung von Titel/Auszug gedeckelt ist. */
-.es-news-row__media { overflow: hidden; background: var(--es-paper-warm); }
+.es-news-row__media { aspect-ratio: 3/2; overflow: hidden; background: var(--es-paper-warm); }
 .es-news-row__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--es-easing); }
 .es-news-row:hover .es-news-row__media img { transform: scale(1.04); }
 .es-news-row__media .es-ph-cat { width: 100%; height: 100%; border-radius: 0; aspect-ratio: auto; }
-.es-news-row__body { padding: var(--es-space-8); display: flex; flex-direction: column; justify-content: center; }
+.es-news-row__body { padding: var(--es-space-8); display: flex; flex-direction: column; justify-content: flex-start; flex: 1; }
 .es-news-row__date { font-size: var(--es-fs-eyebrow); color: var(--es-accent); letter-spacing: 0.14em; text-transform: uppercase; font-family: var(--es-font-mono); margin-bottom: 8px; }
 /* Höhere Spezifität (.es-news-row …) nötig, weil .es-stage h3 / .es-stage p die
    News-Beiträge sonst auf 32px/17px zwingen. */
