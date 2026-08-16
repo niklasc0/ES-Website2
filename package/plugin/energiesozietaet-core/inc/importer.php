@@ -54,6 +54,7 @@ class ESC_Importer {
 
 		// 3. Create pages (so we have IDs for menu)
 		self::import_pages( $map, $data );
+		if ( class_exists( 'ES_Lang' ) ) { ES_Lang::create_page_copies(); }
 
 		// 4. Create main menu
 		self::build_menu( $map );

@@ -285,6 +285,23 @@ function es_excerpt( $post, $length = 28 ) {
  * Light-weight fallback header menu if no menu assigned.
  */
 function es_fallback_menu() {
+	// Englischer Bereich: eigenes Menü auf die EN-Seitenkopien.
+	if ( function_exists( 'es_is_en' ) && es_is_en() ) {
+		$items = array(
+			home_url( '/en/philosophy/' )    => 'Philosophy',
+			home_url( '/en/services/' )      => 'Services',
+			home_url( '/en/team/' )          => 'Team',
+			home_url( '/en/publications/' )  => 'Publications',
+			home_url( '/en/news/' )          => 'News',
+			home_url( '/en/events/' )        => 'Events',
+		);
+		echo '<ul class="es-nav__list">';
+		foreach ( $items as $url => $label ) {
+			printf( '<li><a href="%s">%s</a></li>', esc_url( $url ), esc_html( $label ) );
+		}
+		echo '</ul>';
+		return;
+	}
 	// Kontakt + Karriere leben in den Header-Buttons rechts – nicht im Hauptmenü.
 	$items = array(
 		home_url( '/philosophie/' )     => __( 'Philosophie', 'energiesozietaet' ),

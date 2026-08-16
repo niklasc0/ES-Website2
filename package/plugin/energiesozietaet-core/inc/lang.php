@@ -79,6 +79,12 @@ class ES_Lang {
 				break;
 			}
 		}
+		// Startseite: /en/ rendert die EN-Home-Kopie (Slug en-home), falls vorhanden
+		if ( '/' === strtok( $rest, '?' ) ) {
+			global $wpdb;
+			$has = $wpdb ? $wpdb->get_var( "SELECT ID FROM {$wpdb->posts} WHERE post_name = 'en-home' AND post_type = 'page' AND post_status = 'publish' LIMIT 1" ) : 0;
+			if ( $has ) { $rest = '/en-home' . substr( $rest, 1 ); if ( '/en-home' === $rest ) { $rest .= '/'; } }
+		}
 		$_SERVER['REQUEST_URI'] = $rest;
 		// Manche Server (u. a. PHP-Built-in) liefern den Pfad zusätzlich als
 		// PATH_INFO – WP bevorzugt diesen beim Routing.
@@ -96,6 +102,28 @@ class ES_Lang {
 
 	/** EN-Slug (es_slug_en) auf den DE-post_name auflösen. */
 	public static function resolve_en_slugs( $vars ) {
+		// Feste Seiten: /en/<slug>/ auf die EN-Kopie auflösen
+		if ( ! empty( $vars['pagename'] ) && empty( $vars['post_type'] ) ) {
+			$slug = $vars['pagename'];
+			global $wpdb;
+			// a) Öffentlicher EN-Slug einer Kopie (es_public_slug)
+			$en_name = $wpdb->get_var( $wpdb->prepare(
+				"SELECT p.post_name FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id
+				 WHERE m.meta_key = 'es_public_slug' AND m.meta_value = %s AND p.post_type = 'page' AND p.post_status = 'publish' LIMIT 1", $slug ) );
+			// b) Deutscher Slug mit verknüpfter EN-Kopie
+			if ( ! $en_name ) {
+				$de = get_page_by_path( $slug );
+				if ( $de ) {
+					$partner = self::translation_of( $de->ID );
+					if ( $partner && 'en' === get_post_meta( $partner, 'es_lang', true ) ) {
+						$pp = get_post( $partner );
+						if ( $pp && 'publish' === $pp->post_status ) { $en_name = $pp->post_name; }
+					}
+				}
+			}
+			if ( $en_name ) { $vars['pagename'] = $en_name; }
+			return $vars;
+		}
 		if ( empty( $vars['name'] ) ) { return $vars; }
 		$slug = $vars['name'];
 		$type = ! empty( $vars['post_type'] ) ? $vars['post_type'] : '';
@@ -109,6 +137,18 @@ class ES_Lang {
 			$vars['name'] = $row->post_name;
 			// CPT-Rewrites tragen den Slug zusätzlich in der eigenen Query-Var (z. B. es_news)
 			if ( $type && isset( $vars[ $type ] ) ) { $vars[ $type ] = $row->post_name; }
+			return $vars;
+		}
+		// Öffentlicher EN-Slug einer Seitenkopie kommt ohne verbose Page-Rule
+		// als generischer name-Query an (z. B. /en/philosophy/)
+		if ( ! $type ) {
+			$en_name = $wpdb->get_var( $wpdb->prepare(
+				"SELECT p.post_name FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id
+				 WHERE m.meta_key = 'es_public_slug' AND m.meta_value = %s AND p.post_type = 'page' AND p.post_status = 'publish' LIMIT 1", $slug ) );
+			if ( $en_name ) {
+				unset( $vars['name'] );
+				$vars['pagename'] = $en_name;
+			}
 		}
 		return $vars;
 	}
@@ -163,18 +203,27 @@ class ES_Lang {
 		if ( 'en' !== self::$lang || is_admin() ) { return $url; }
 		// Zeigt der Link auf eine DE-Seite mit EN-Partner? Dann Partner-URL.
 		$partner = self::translation_of( $page_id );
-		if ( $partner ) {
+		if ( $partner && 'en' === get_post_meta( $partner, 'es_lang', true ) ) {
 			$p = get_post( $partner );
 			if ( $p && 'publish' === $p->post_status ) {
-				return home_url( '/en/' . $p->post_name . '/' );
+				return self::en_page_url( $partner );
 			}
 		}
-		// EN-Seite selbst → /en/<slug>/
+		// EN-Seite selbst → /en/<öffentlicher Slug>/
 		if ( 'en' === get_post_meta( $page_id, 'es_lang', true ) ) {
-			$p = get_post( $page_id );
-			return home_url( '/en/' . $p->post_name . '/' );
+			return self::en_page_url( $page_id );
 		}
 		return $url;
+	}
+
+	/** Öffentliche URL einer EN-Seitenkopie. */
+	public static function en_page_url( $page_id ) {
+		$public = (string) get_post_meta( $page_id, 'es_public_slug', true );
+		if ( '' === $public ) {
+			$p = get_post( $page_id );
+			$public = ( 'en-home' === $p->post_name ) ? '' : $p->post_name;
+		}
+		return home_url( '/en/' . ( $public ? $public . '/' : '' ) );
 	}
 
 	/** Partner-Seite (DE→EN oder EN→DE) einer festen Seite. */
@@ -214,7 +263,7 @@ class ES_Lang {
 				$en_id = $en_first ? $id : $partner;
 				$de_id = $en_first ? $partner : $id;
 				$de_url = self::strip_en( get_permalink( $de_id ) );
-				$en_url = home_url( '/en/' . get_post( $en_id )->post_name . '/' );
+				$en_url = self::en_page_url( $en_id );
 				echo '<link rel="alternate" hreflang="de" href="' . esc_url( $de_url ) . '" />' . "\n";
 				echo '<link rel="alternate" hreflang="en" href="' . esc_url( $en_url ) . '" />' . "\n";
 				echo '<link rel="alternate" hreflang="x-default" href="' . esc_url( $de_url ) . '" />' . "\n";
@@ -257,10 +306,14 @@ class ES_Lang {
 			$id      = get_queried_object_id();
 			$partner = self::translation_of( $id );
 			if ( $partner ) {
-				$p = get_post( $partner );
-				return ( 'en' === get_post_meta( $partner, 'es_lang', true ) )
-					? home_url( '/en/' . $p->post_name . '/' )
-					: get_permalink( $partner );
+				if ( 'en' === get_post_meta( $partner, 'es_lang', true ) ) {
+					return self::en_page_url( $partner );
+				}
+				// Zurück zur deutschen Seite: URL ungefiltert bauen, sonst
+				// würde der EN-Kontext den Link wieder auf /en/ zurückbiegen.
+				if ( (int) get_option( 'page_on_front' ) === (int) $partner ) { return home_url( '/' ); }
+				$pp = get_post( $partner );
+				return home_url( '/' . $pp->post_name . '/' );
 			}
 		}
 		// Fallback: aktuelle URL präfixen/entpräfixen
@@ -276,6 +329,59 @@ class ES_Lang {
 			return home_url( '/en' . $uri );
 		}
 		return home_url( $uri );
+	}
+
+	/** Öffentliche EN-Slugs der Seitenkopien (Kunde kann später andere liefern). */
+	const PAGE_SLUGS_EN = array(
+		'home'                  => '',
+		'philosophie'           => 'philosophy',
+		'leistungen'            => 'services',
+		'rechtsberatung'        => 'legal-advice',
+		'steuerberatung'        => 'tax-advice',
+		'unternehmensberatung'  => 'management-consulting',
+		'team'                  => 'team',
+		'karriere'              => 'careers',
+		'kontakt'               => 'contact',
+		'news'                  => 'news',
+		'veranstaltungen'       => 'events',
+		'publikationen'         => 'publications',
+		'impressum'             => 'legal-notice',
+		'datenschutzerklaerung' => 'privacy-policy',
+	);
+
+	/**
+	 * Fehlende EN-Seitenkopien anlegen (Struktur + Inhalte = deutsche Live-Seite,
+	 * bis Übersetzungen eingepflegt sind). Bestehende Kopien werden nie überschrieben.
+	 */
+	public static function create_page_copies() {
+		$made = array();
+		foreach ( self::PAGE_SLUGS_EN as $de_slug => $public ) {
+			$de = get_page_by_path( $de_slug );
+			if ( ! $de ) { continue; }
+			if ( self::translation_of( $de->ID ) ) { continue; } // Kopie existiert
+			$en_name = 'en-' . $de_slug;
+			$id = wp_insert_post( array(
+				'post_type'    => 'page',
+				'post_status'  => 'publish',
+				'post_name'    => $en_name,
+				'post_title'   => $de->post_title,
+				'post_content' => $de->post_content,
+				'post_author'  => $de->post_author,
+			), true );
+			if ( is_wp_error( $id ) || ! $id ) { continue; }
+			foreach ( array( '_elementor_data', '_elementor_edit_mode', '_elementor_template_type', '_elementor_version', '_elementor_page_settings', '_wp_page_template' ) as $mk ) {
+				$mv = get_post_meta( $de->ID, $mk, true );
+				if ( '' !== $mv && null !== $mv && array() !== $mv ) {
+					update_post_meta( $id, $mk, is_string( $mv ) ? wp_slash( $mv ) : $mv );
+				}
+			}
+			update_post_meta( $id, 'es_lang', 'en' );
+			update_post_meta( $id, 'es_translation_of', $de->ID );
+			update_post_meta( $id, 'es_public_slug', ( '' === $public && 'home' !== $de_slug ) ? $de_slug : $public );
+			update_post_meta( $de->ID, 'es_translation_of', $id );
+			$made[] = $de_slug;
+		}
+		return $made;
 	}
 }
 

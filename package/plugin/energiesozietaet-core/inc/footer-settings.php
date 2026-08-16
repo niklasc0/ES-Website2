@@ -45,6 +45,16 @@ class ESC_Footer_Settings {
 		);
 	}
 
+	/** Keys mit englischer Fassung (Suffix _en). */
+	public static function en_keys() {
+		return array(
+			'cta_eyebrow', 'cta_title', 'cta_subtitle', 'cta_btn1_label', 'cta_btn2_label',
+			'brand_sub', 'brand_claim',
+			'col1_heading', 'col1_lines', 'col2_heading', 'col2_lines', 'col3_heading', 'col3_lines',
+			'copyright',
+		);
+	}
+
 	public static function get( $key = null ) {
 		$opts = (array) get_option( self::OPT, array() );
 		// Backward-Compat: alte Keys (col_anschrift_*, col_kontakt_*, col_legal_*) auf neue mappen
@@ -59,6 +69,11 @@ class ESC_Footer_Settings {
 			}
 		}
 		$opts = array_merge( self::defaults(), $opts );
+		if ( function_exists( 'es_is_en' ) && es_is_en() ) {
+			foreach ( self::en_keys() as $k ) {
+				if ( ! empty( $opts[ $k . '_en' ] ) ) { $opts[ $k ] = $opts[ $k . '_en' ]; }
+			}
+		}
 		return $key ? ( $opts[ $key ] ?? '' ) : $opts;
 	}
 
@@ -106,6 +121,14 @@ class ESC_Footer_Settings {
 			} else {
 				$out[ $k ] = sanitize_text_field( $val );
 			}
+		}
+		foreach ( self::en_keys() as $k ) {
+			$key_en = $k . '_en';
+			if ( ! isset( $input[ $key_en ] ) ) { $out[ $key_en ] = ''; continue; }
+			$val = wp_unslash( $input[ $key_en ] );
+			$out[ $key_en ] = ( false !== strpos( $k, '_lines' ) || in_array( $k, array( 'cta_subtitle', 'brand_claim' ), true ) )
+				? wp_kses_post( $val )
+				: sanitize_text_field( $val );
 		}
 		return $out;
 	}
@@ -176,6 +199,25 @@ class ESC_Footer_Settings {
 				<h2>Copyright-Zeile</h2>
 				<table class="form-table"><tbody>
 					<?php self::input( 'copyright', 'Text', 'Platzhalter <code>{year}</code> wird automatisch ersetzt.' ); ?>
+				</tbody></table>
+
+				<h2>Englische Fassung (EN)</h2>
+				<p class="description" style="font-style:normal;">Leere Felder fallen im englischen Bereich auf die deutsche Fassung zurück. In den Spalten-Zeilen bitte englische Beschriftungen und <code>/en/…</code>-Ziele verwenden (z. B. <code>Home | /en/</code>).</p>
+				<table class="form-table"><tbody>
+					<?php
+					self::input(    'cta_eyebrow_en',    'CTA Eyebrow (EN)' );
+					self::input(    'cta_title_en',      'CTA Überschrift (EN)' );
+					self::input(    'cta_subtitle_en',   'CTA Untertitel (EN)' );
+					self::input(    'cta_btn1_label_en', 'Button 1 · Text (EN)' );
+					self::input(    'cta_btn2_label_en', 'Button 2 · Text (EN)' );
+					self::input(    'brand_sub_en',      'Brand-Untertitel (EN)' );
+					self::textarea( 'brand_claim_en',    'Brand-Claim (EN)', '', 2 );
+					for ( $i = 1; $i <= 3; $i++ ) {
+						self::input(    "col{$i}_heading_en", "Spalte {$i} · Überschrift (EN)" );
+						self::textarea( "col{$i}_lines_en",   "Spalte {$i} · Zeilen (EN)", 'Format wie deutsch: <code>Text | URL</code>.', 5 );
+					}
+					self::input( 'copyright_en', 'Copyright-Zeile (EN)' );
+					?>
 				</tbody></table>
 
 				<?php submit_button(); ?>

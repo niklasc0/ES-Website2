@@ -38,7 +38,24 @@ class ESC_Karriere_Settings {
 		);
 	}
 
+	/** Keys, die eine englische Fassung haben können (Suffix _en). */
+	public static function en_keys() {
+		$keys = array( 'benefits_title', 'cta_eyebrow', 'cta_title', 'cta_subtitle', 'cta_button_label' );
+		for ( $i = 1; $i <= 4; $i++ ) { $keys[] = 'benefit' . $i . '_title'; $keys[] = 'benefit' . $i . '_desc'; }
+		return $keys;
+	}
+
 	public static function get( $key = null ) {
+		$opts = self::raw();
+		if ( function_exists( 'es_is_en' ) && es_is_en() ) {
+			foreach ( self::en_keys() as $k ) {
+				if ( ! empty( $opts[ $k . '_en' ] ) ) { $opts[ $k ] = $opts[ $k . '_en' ]; }
+			}
+		}
+		return $key ? ( $opts[ $key ] ?? '' ) : $opts;
+	}
+
+	protected static function raw( $key = null ) {
 		$opts = array_merge( self::defaults(), (array) get_option( self::OPT, array() ) );
 		return $key ? ( $opts[ $key ] ?? '' ) : $opts;
 	}
@@ -53,6 +70,9 @@ class ESC_Karriere_Settings {
 		foreach ( $defaults as $k => $v ) {
 			$val = isset( $input[ $k ] ) ? wp_unslash( $input[ $k ] ) : $v;
 			$out[ $k ] = sanitize_text_field( $val );
+		}
+		foreach ( self::en_keys() as $k ) {
+			$out[ $k . '_en' ] = isset( $input[ $k . '_en' ] ) ? sanitize_text_field( wp_unslash( $input[ $k . '_en' ] ) ) : '';
 		}
 		if ( empty( $out['cta_recipient'] ) || ! is_email( $out['cta_recipient'] ) ) {
 			$out['cta_recipient'] = $defaults['cta_recipient'];
@@ -107,6 +127,19 @@ class ESC_Karriere_Settings {
 					self::input( 'cta_subtitle',     'Untertitel' );
 					self::input( 'cta_button_label', 'Button-Text' );
 					self::input( 'cta_recipient',    'Empfänger-E-Mail' );
+					?>
+					<h2>Englische Fassung (EN)</h2>
+					<p class="description" style="font-style:normal;">Leere Felder fallen im englischen Bereich auf die deutsche Fassung zurück.</p>
+					<?php
+					self::input( 'benefits_title_en', 'Benefits-Überschrift (EN)' );
+					for ( $i = 1; $i <= 4; $i++ ) {
+						self::input( 'benefit' . $i . '_title_en', 'Benefit ' . $i . ' Titel (EN)' );
+						self::input( 'benefit' . $i . '_desc_en',  'Benefit ' . $i . ' Beschreibung (EN)' );
+					}
+					self::input( 'cta_eyebrow_en',      'CTA Eyebrow (EN)' );
+					self::input( 'cta_title_en',        'CTA Hauptüberschrift (EN)' );
+					self::input( 'cta_subtitle_en',     'CTA Untertitel (EN)' );
+					self::input( 'cta_button_label_en', 'CTA Button-Text (EN)' );
 					?>
 				</tbody></table>
 

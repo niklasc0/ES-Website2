@@ -53,7 +53,7 @@ $es_is_dark = false;
 
 		<nav class="es-nav" id="es-nav" aria-label="<?php esc_attr_e( 'Hauptnavigation', 'energiesozietaet' ); ?>">
 			<?php
-			if ( has_nav_menu( 'primary' ) ) {
+			if ( has_nav_menu( 'primary' ) && ! ( function_exists( 'es_is_en' ) && es_is_en() ) ) {
 				wp_nav_menu( array(
 					'theme_location' => 'primary',
 					'container'      => false,
