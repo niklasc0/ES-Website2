@@ -543,7 +543,7 @@ class ES_Lang {
 	const PAGE_TITLES_EN = array(
 		'home' => 'Home', 'philosophie' => 'Philosophy', 'leistungen' => 'Services',
 		'rechtsberatung' => 'Legal Advice', 'steuerberatung' => 'Tax Advice',
-		'unternehmensberatung' => 'Management Consulting', 'team' => 'Team',
+		'unternehmensberatung' => 'Consulting', 'team' => 'Team',
 		'karriere' => 'Careers', 'kontakt' => 'Contact', 'news' => 'News',
 		'veranstaltungen' => 'Events', 'publikationen' => 'Publications',
 		'impressum' => 'Legal Notice', 'datenschutzerklaerung' => 'Privacy Policy',
@@ -565,9 +565,10 @@ class ES_Lang {
 			if ( ! $de ) { continue; }
 			$existing = self::translation_of( $de->ID );
 			if ( $existing ) {
-				// Nachziehen: englischer Titel, falls die Kopie noch den deutschen trägt
+				// Nachziehen: englischer Standard-Titel, solange die Kopie nicht
+				// übersetzt ist (deckt auch spätere Umbenennungen im Code ab)
 				$copy = get_post( $existing );
-				if ( $copy && isset( self::PAGE_TITLES_EN[ $de_slug ] ) && $copy->post_title === $de->post_title && $de->post_title !== self::PAGE_TITLES_EN[ $de_slug ] ) {
+				if ( $copy && isset( self::PAGE_TITLES_EN[ $de_slug ] ) && $copy->post_title !== self::PAGE_TITLES_EN[ $de_slug ] && ! get_post_meta( $existing, 'es_translated', true ) ) {
 					wp_update_post( array( 'ID' => $existing, 'post_title' => self::PAGE_TITLES_EN[ $de_slug ] ) );
 				}
 				// Nachziehen: Kopie hängt in der Seiten-Liste als Kind unter der DE-Seite
@@ -643,7 +644,7 @@ function es_term_name_ml( $term ) {
 		$map = array(
 			'rechtsberatung'       => 'Legal Advice',
 			'steuerberatung'       => 'Tax Advice',
-			'unternehmensberatung' => 'Management Consulting',
+			'unternehmensberatung' => 'Consulting',
 		);
 		if ( isset( $map[ $term->slug ] ) ) { return $map[ $term->slug ]; }
 	}
