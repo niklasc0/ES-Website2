@@ -141,16 +141,27 @@ function esc_link_team_names( $html ) {
 			continue;
 		}
 		if ( $depth_a > 0 ) { continue; }
+		// Treffer zunächst durch Platzhalter ersetzen: Sonst würde die
+		// nächste (kürzere) Namensvariante INNERHALB des eben eingesetzten
+		// Links erneut treffen → verschachtelte <a>, die der Browser in
+		// mehrere nebeneinanderliegende Links aufbricht (Hover nur auf
+		// Teilen des Namens).
+		$tokens = array();
 		foreach ( $map as $name => $url ) {
 			if ( false === strpos( $part, $name ) ) { continue; }
 			// Ganzwort-Treffer (case-sensitiv – Slugs in URLs sind
 			// kleingeschrieben und werden so nie getroffen).
-			$part = preg_replace(
+			$part = preg_replace_callback(
 				'/(?<![\p{L}\p{N}\p{M}-])' . preg_quote( $name, '/' ) . '(?![\p{L}\p{N}\p{M}-])/u',
-				'<a class="es-team-link" href="' . esc_url( $url ) . '">' . $name . '</a>',
+				function () use ( &$tokens, $name, $url ) {
+					$key = "\x1A" . count( $tokens ) . "\x1A";
+					$tokens[ $key ] = '<a class="es-team-link" href="' . esc_url( $url ) . '">' . $name . '</a>';
+					return $key;
+				},
 				$part
 			);
 		}
+		if ( $tokens ) { $part = strtr( $part, $tokens ); }
 		$parts[ $i ] = $part;
 	}
 	return implode( '', $parts );
