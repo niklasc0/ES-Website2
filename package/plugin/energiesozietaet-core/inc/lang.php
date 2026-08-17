@@ -475,7 +475,7 @@ class ES_Lang {
 	public static function localize_html( $html ) {
 		if ( ! is_string( $html ) || '' === $html ) { return $html; }
 		$home = untrailingslashit( home_url() );
-		return preg_replace_callback(
+		$html = preg_replace_callback(
 			'#<a\b[^>]*>#',
 			function ( $tag ) use ( $home ) {
 				// Sprachumschalter zeigt absichtlich auf die DE-Fassung
@@ -490,6 +490,19 @@ class ES_Lang {
 			},
 			$html
 		);
+		// Navigations-Vokabular in Breadcrumbs/Kickern der (noch unübersetzten)
+		// Seitenkopien: nur ganze Textknoten bzw. Knoten-Enden nach ">", "/"
+		// oder "·" — Fließtexte („… der Unternehmensberatung ist …") bleiben
+		// unberührt. Sobald der Kunde übersetzt, greift nichts mehr davon.
+		foreach ( array(
+			'Leistungen'           => 'Services',
+			'Rechtsberatung'       => 'Legal',
+			'Steuerberatung'       => 'Tax',
+			'Unternehmensberatung' => 'Consulting',
+		) as $de => $en ) {
+			$html = preg_replace( '#([>/·]\s*)' . $de . '(\s*<)#u', '$1' . $en . '$2', $html );
+		}
+		return $html;
 	}
 
 	/** Einen internen Pfad in seine EN-Form bringen; Unbekanntes bleibt unverändert. */
