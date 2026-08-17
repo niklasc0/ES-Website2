@@ -275,16 +275,17 @@ class ESC_MetaBoxes {
 		// Team-Autoren (Relation, mehrere)
 		$selected = (array) get_post_meta( $post->ID, 'es_author_ids', true );
 		$options  = self::team_options();
-		echo '<p><label><strong>Autor:innen aus Team</strong><br /><span style="color:#667;font-weight:400;">Strg/Cmd-Klick für Mehrfachauswahl. Diese Zuordnung führt dazu, dass die Publikation auf der jeweiligen Team-Einzelseite und im Beratungsfeld erscheint.</span></label>';
-		echo '<select name="es_author_ids[]" multiple size="8" style="width:100%;max-width:480px;">';
+		echo '<p style="margin-bottom:4px;"><label for="es_author_ids"><strong>Autor:innen aus Team</strong></label><br /><span style="color:#667;font-weight:400;">Strg/Cmd-Klick für Mehrfachauswahl. Diese Zuordnung führt dazu, dass die Publikation auf der jeweiligen Team-Einzelseite und im Beratungsfeld erscheint.</span></p>';
+		echo '<select id="es_author_ids" name="es_author_ids[]" multiple size="8" style="display:block;width:100%;max-width:480px;margin:0 0 16px;">';
 		foreach ( $options as $id => $label ) {
 			echo '<option value="' . (int) $id . '"' . ( in_array( (string) $id, array_map( 'strval', $selected ), true ) ? ' selected' : '' ) . '>' . esc_html( $label ) . '</option>';
 		}
-		echo '</select></p>';
+		echo '</select>';
 
 		// Beratungsfelder (Mehrfach via es_beratungsfeld-Taxonomie existiert schon für Einzelleistung – hier nutzen wir zusätzlich ein Meta für Publikation, da Taxonomie auf es_einzelleistung limitiert ist)
 		$field_selected = (array) get_post_meta( $post->ID, 'es_fields', true );
-		echo '<p><label><strong>Beratungsfelder</strong><br /><span style="color:#667;font-weight:400;">Diese Zuordnung führt dazu, dass die Publikation auf der jeweiligen Beratungsfeld-Seite als Fachbeitrag erscheint.</span></label>';
+		echo '<p style="margin-bottom:4px;"><strong>Beratungsfelder</strong><br /><span style="color:#667;font-weight:400;">Diese Zuordnung führt dazu, dass die Publikation auf der jeweiligen Beratungsfeld-Seite als Fachbeitrag erscheint.</span></p>';
+		echo '<p style="margin-top:0;">';
 		foreach ( self::FIELDS as $k => $v ) {
 			echo '<label style="display:inline-flex;align-items:center;gap:6px;margin-right:20px;margin-top:6px;">';
 			echo '<input type="checkbox" name="es_fields[]" value="' . esc_attr( $k ) . '"' . ( in_array( $k, $field_selected, true ) ? ' checked' : '' ) . ' /> ' . esc_html( $v );

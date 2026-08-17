@@ -21,7 +21,7 @@ while ( have_posts() ) : the_post();
 	<section class="es-event-single">
 		<div style="max-width:960px;margin:0 auto;padding:0 24px;">
 			<div class="es-article__crumb">
-				<a href="<?php echo esc_url( home_url( '/veranstaltungen/' ) ); ?>" style="color:inherit;">Veranstaltungen</a>
+				<a href="<?php echo esc_url( home_url( '/veranstaltungen/' ) ); ?>" style="color:inherit;"><?php echo esc_html( es_t( 'Veranstaltungen', 'Events' ) ); ?></a>
 			</div>
 
 			<div style="display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap;margin-bottom:28px;">
