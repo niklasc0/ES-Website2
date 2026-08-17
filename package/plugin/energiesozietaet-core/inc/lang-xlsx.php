@@ -21,7 +21,23 @@ class ES_Lang_Xlsx {
 			. '<Default Extension="xml" ContentType="application/xml"/>'
 			. '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
 			. '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+			. '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
 			. '</Types>' );
+		// Stile: 0 = Standard, 1 = Zeilenumbruch + oben ausgerichtet, 2 = Kopfzeile (fett + Umbruch)
+		$zip->addFromString( 'xl/styles.xml',
+			'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+			. '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+			. '<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts>'
+			. '<fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills>'
+			. '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'
+			. '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
+			. '<cellXfs count="3">'
+			. '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
+			. '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf>'
+			. '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf>'
+			. '</cellXfs>'
+			. '<cellStyles count="1"><cellStyle name="Standard" xfId="0" builtinId="0"/></cellStyles>'
+			. '</styleSheet>' );
 		$zip->addFromString( '_rels/.rels',
 			'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
 			. '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
@@ -35,20 +51,39 @@ class ES_Lang_Xlsx {
 			'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
 			. '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
 			. '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'
+			. '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
 			. '</Relationships>' );
+		$widths = array( 1 => 20, 2 => 22, 3 => 60, 4 => 60, 5 => 30 );
 		$xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
 			. '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+			// Kopfzeile fixieren, damit die Spaltentitel beim Scrollen sichtbar bleiben
+			. '<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>'
 			. '<cols><col min="1" max="1" width="20" customWidth="1"/><col min="2" max="2" width="22" customWidth="1"/>'
 			. '<col min="3" max="4" width="60" customWidth="1"/><col min="5" max="5" width="30" customWidth="1"/></cols><sheetData>';
 		$r = 0;
 		foreach ( $rows as $row ) {
 			$r++;
-			$xml .= '<row r="' . $r . '">';
+			// Zeilenhöhe vorab schätzen: Excel passt gespeicherte Höhen beim Öffnen
+			// nicht automatisch an umbrochenen Text an.
+			$max_lines = 1;
+			$c = 0;
+			foreach ( $row as $val ) {
+				$c++;
+				$w = isset( $widths[ $c ] ) ? $widths[ $c ] : 20;
+				$lines = 0;
+				foreach ( explode( "\n", (string) $val ) as $seg ) {
+					$lines += max( 1, (int) ceil( mb_strlen( $seg ) / $w ) );
+				}
+				if ( $lines > $max_lines ) { $max_lines = $lines; }
+			}
+			$ht = min( 405, 4 + 14.4 * $max_lines );
+			$xml .= '<row r="' . $r . '" ht="' . $ht . '" customHeight="1">';
 			$c = 0;
 			foreach ( $row as $val ) {
 				$c++;
 				$cell = self::col_letter( $c ) . $r;
-				$xml .= '<c r="' . $cell . '" t="inlineStr"><is><t xml:space="preserve">'
+				$style = ( 1 === $r ) ? '2' : '1';
+				$xml .= '<c r="' . $cell . '" s="' . $style . '" t="inlineStr"><is><t xml:space="preserve">'
 					. htmlspecialchars( (string) $val, ENT_XML1 | ENT_COMPAT, 'UTF-8' )
 					. '</t></is></c>';
 			}
