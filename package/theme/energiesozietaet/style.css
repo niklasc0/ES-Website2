@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.14
+Version: 2.6.15
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -4175,7 +4175,7 @@ a.es-team-link:hover { color: var(--es-accent-ink, #4a6b00); text-decoration-col
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav a.es-header__cta {
         flex: 1 1 auto !important; width: auto !important; max-width: none !important;
         display: inline-flex !important; align-items: center !important; justify-content: center !important;
-        height: auto !important; padding: 12px 16px !important;
+        height: 48px !important; padding: 0 16px !important;
         font-size: 14px !important; font-weight: var(--es-fw-medium);
         border: 1px solid var(--es-ink) !important;
         border-radius: var(--es-radius-pill) !important;
@@ -4183,7 +4183,7 @@ a.es-team-link:hover { color: var(--es-accent-ink, #4a6b00); text-decoration-col
     }
     /* Umschalter: Kapsel wie im Desktop-Header, touch-freundlich 36px */
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang {
-        flex: 0 0 auto !important; height: 36px !important;
+        flex: 0 0 auto !important; height: 48px !important;
         display: inline-flex !important; align-items: stretch !important;
     }
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang a,
