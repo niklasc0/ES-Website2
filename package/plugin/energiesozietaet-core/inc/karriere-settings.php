@@ -37,8 +37,8 @@ class ESC_Karriere_Settings {
 			'cta_recipient'    => 'karriere@energiesozietaet.de',
 
 			// Standardtexte für alle Stellen (pro Stelle überschreibbar)
-			'offer_lines'      => '',
-			'offer_closing'    => '',
+			'offer_lines'      => "Anspruchsvolle Aufgaben in einem dynamischen und gesellschaftlich relevanten Zukunftsfeld\nGestaltungsfreiraum, Verantwortung und Weiterentwicklungsmöglichkeiten\nFlexibel Arbeitsgestaltung: moderne Büros sowie die Möglichkeit zu mobilem Arbeiten\nLebendige Unternehmenskultur: regelmäßige Teamevents, flache Hierarchien, offene Kommunikation und eine wertschätzende Atmosphäre\nAttraktive Rahmenbedingungen: 30 Tage Urlaub, Deutschlandticket, Unterstützung bei beruflicher Weiterbildung oder Promotion etc.",
+			'offer_closing'    => 'Wir freuen uns auf Deine Bewerbung mit Lebenslauf, Zeugnissen und möglichem Eintrittstermin an info@energiesozietaet.de. Bei Rückfragen steht Dir Elke Beermann gerne zur Verfügung.',
 		);
 	}
 
