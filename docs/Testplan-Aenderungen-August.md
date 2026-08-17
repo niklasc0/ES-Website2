@@ -1,6 +1,6 @@
-# Testplan — Änderungen August (Stand: Plugin 1.6.8 / Theme 2.6.13)
+# Testplan — Änderungen August (Stand: Plugin 1.6.10 / Theme 2.6.20)
 
-**Vorbereitung:** Beide ZIPs auf test2 einspielen → unter *Plugins* muss **Energiesozietät Core 1.6.8**, unter *Design → Themes* **2.6.13** stehen → einmal **Theme Options → Import erzwingen** ausführen (bringt u. a. neue EN-URLs, Seiten-Hierarchie, ausgeblendete LinkedIn-Section und Hero-Höhen). Browser-Cache umgehen: Seiten mit Strg+F5 laden.
+**Vorbereitung:** Beide ZIPs auf test2 einspielen → unter *Plugins* muss **Energiesozietät Core 1.6.10**, unter *Design → Themes* **2.6.20** stehen → einmal **Theme Options → Import erzwingen** ausführen (bringt u. a. neue EN-URLs, Seiten-Hierarchie, ausgeblendete LinkedIn-Section und Hero-Höhen). Browser-Cache umgehen: Seiten mit Strg+F5 laden.
 
 > ⚠️ Vorab wissen: „Import erzwingen" stellt die festen Seiten auf den eingefrorenen Live-Stand vom **16.08.** zurück — **jetzt auch die noch unübersetzten EN-Seitenkopien** (die ziehen Struktur und Inhalt der deutschen Seite nach). Falls seitdem live in Elementor etwas geändert wurde, vorher Bescheid geben — dann friere ich zuerst einen neuen Snapshot ein.
 
