@@ -71,6 +71,10 @@ class ES_Lang {
 		add_filter( 'post_type_link', array( __CLASS__, 'localize_permalink' ), 10, 2 );
 		add_filter( 'page_link', array( __CLASS__, 'localize_page_link' ), 10, 2 );
 		add_filter( 'request', array( __CLASS__, 'resolve_public_slug_de' ) );
+		// Unübersetzte EN-Kopien folgen der deutschen Seite sofort beim
+		// Speichern (Gutenberg/Klassisch + Elementor) – nicht erst beim Import.
+		add_action( 'save_post_page', array( __CLASS__, 'sync_copy_on_save' ), 20, 2 );
+		add_action( 'elementor/document/after_save', array( __CLASS__, 'sync_copy_after_elementor' ), 20, 1 );
 		add_action( 'wp_head', array( __CLASS__, 'head_tags' ), 1 );
 		// Priorität 9: vor WPs redirect_canonical, damit /philosophy/ in EINEM
 		// Sprung auf /en/philosophy/ landet (statt über die interne Kopie-URL).
@@ -84,6 +88,44 @@ class ES_Lang {
 		'legal-advice'          => 'legal',
 		'tax-advice'            => 'tax',
 	);
+
+	/**
+	 * Struktur/Inhalt der (unübersetzten) EN-Kopie von der DE-Seite übernehmen.
+	 * Als übersetzt markierte Kopien bleiben unangetastet.
+	 */
+	public static function sync_copy_from_de( $de_id ) {
+		$partner = (int) get_post_meta( $de_id, 'es_translation_of', true );
+		if ( ! $partner || 'en' !== get_post_meta( $partner, 'es_lang', true ) ) { return; }
+		if ( get_post_meta( $partner, 'es_translated', true ) ) { return; }
+		$de = get_post( $de_id );
+		if ( ! $de ) { return; }
+		wp_update_post( array( 'ID' => $partner, 'post_content' => $de->post_content ) );
+		foreach ( array( '_elementor_data', '_elementor_edit_mode', '_elementor_template_type', '_elementor_version', '_elementor_page_settings', '_wp_page_template' ) as $mk ) {
+			$mv = get_post_meta( $de_id, $mk, true );
+			if ( '' !== $mv && null !== $mv && array() !== $mv ) {
+				update_post_meta( $partner, $mk, is_string( $mv ) ? wp_slash( $mv ) : $mv );
+			}
+		}
+		delete_post_meta( $partner, '_elementor_css' );
+		delete_post_meta( $partner, '_elementor_element_cache' );
+	}
+
+	/** save_post-Hook: DE-Seite gespeichert → unübersetzte Kopie nachziehen. */
+	public static function sync_copy_on_save( $post_id, $post ) {
+		if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) { return; }
+		if ( ! $post || 'publish' !== $post->post_status ) { return; }
+		if ( 'en' === get_post_meta( $post_id, 'es_lang', true ) ) { return; }
+		self::sync_copy_from_de( $post_id );
+	}
+
+	/** Elementor speichert per AJAX – nach dem Schreiben der Daten nachziehen. */
+	public static function sync_copy_after_elementor( $document ) {
+		if ( ! is_object( $document ) || ! method_exists( $document, 'get_main_post' ) ) { return; }
+		$post = $document->get_main_post();
+		if ( $post && 'page' === $post->post_type && 'publish' === $post->post_status && 'en' !== get_post_meta( $post->ID, 'es_lang', true ) ) {
+			self::sync_copy_from_de( $post->ID );
+		}
+	}
 
 	/** Kanonische Weiterleitungen zwischen den Sprachfassungen. */
 	public static function canonical_redirects() {
@@ -615,17 +657,7 @@ class ES_Lang {
 				// Solange die Kopie nicht als übersetzt markiert ist, Struktur und
 				// Inhalt von der deutschen Seite nachziehen — Layout-Änderungen an
 				// DE-Seiten erreichen so auch die (noch deutsche) EN-Fassung.
-				if ( $copy && ! get_post_meta( $existing, 'es_translated', true ) ) {
-					wp_update_post( array( 'ID' => $existing, 'post_content' => $de->post_content ) );
-					foreach ( array( '_elementor_data', '_elementor_edit_mode', '_elementor_template_type', '_elementor_version', '_elementor_page_settings', '_wp_page_template' ) as $mk ) {
-						$mv = get_post_meta( $de->ID, $mk, true );
-						if ( '' !== $mv && null !== $mv && array() !== $mv ) {
-							update_post_meta( $existing, $mk, is_string( $mv ) ? wp_slash( $mv ) : $mv );
-						}
-					}
-					delete_post_meta( $existing, '_elementor_css' );
-					delete_post_meta( $existing, '_elementor_element_cache' );
-				}
+				if ( $copy ) { self::sync_copy_from_de( $de->ID ); }
 				continue;
 			}
 			$en_name = 'en-' . $de_slug;

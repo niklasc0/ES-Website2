@@ -49,9 +49,9 @@ Sprachweiche, Link-Übersetzer und Permalink-Filter laufen auf **jeder** Seite m
 | C3 | **Alle Seiten-Heroes gleich hoch (~450 px Desktop und Tablet)**: News, Veranstaltungen, Team, Publikationen, Leistungen, Philosophie, Karriere, Kontakt — mit wie ohne Subtext | Leistungs-Detailseiten (~508 px) bewusst etwas höher (Breadcrumb-Zeile); Home-Foto-Hero unverändert; Mobil inhaltsgetrieben wie bisher |
 | C4 | Hero-Werte **nativ in Elementor** sichtbar (Sektion → Layout: Mindesthöhe 370, Spalten Mitte, Padding 40) — Änderungen im Editor kommen im Frontend an | kein CSS-Override mehr |
 | C5 | /leistungen/ bei **Fensterbreite ~800–1250 px**: kein vollbreiter Bild-/Platzhalter-Klotz mehr in den Bereichs-Blöcken (Bild-Spalte auf Tablet ausgeblendet); ab ~1280 px Bild rechts neben Text | ✓ |
-| C6 | Startseite: **LinkedIn-Section ausgeblendet** (alle Bildschirmgrößen), News-Section geht direkt in den Footer über, **Ecken am Footer-Übergang in Footer-Farbe** (kein falscher Grünton) | im Backend über Section → Erweitert → Responsive reaktivierbar |
+| C6 | Startseite: „Aktuelles"-Teaser zeigt auf Tablet (601–1100px) **zwei** Karten (Desktop drei, Mobil alle gestapelt); **LinkedIn-Section ausgeblendet** (alle Bildschirmgrößen), News-Section geht direkt in den Footer über, **Ecken am Footer-Übergang in Footer-Farbe** (kein falscher Grünton) | im Backend über Section → Erweitert → Responsive reaktivierbar |
 | C7 | Veranstaltungs-Detailseite: Datum oben **ohne Kasten** (frei neben dem Kicker) | ✓ |
-| C8 | **Regression**: Veranstaltungs-Karten (Platzhalter unverzerrt), Team-Porträts 4:5, Stellen-Bilder, Beratungsfeld-Bilder auf Desktop | unverändert |
+| C8 | **Regression**: Veranstaltungs-Karten = Kacheln auf /veranstaltungen/ (dunkle „Veranstaltung"-Platzhalter, solange kein Beitragsbild gesetzt ist — die Bilder der alten Live-Seite sind nie in die neuen Daten migriert worden und müssen als Beitragsbild gepflegt werden); Team-Porträts 4:5, Stellen-Bilder, Beratungsfeld-Bilder Desktop | unverändert |
 
 ## D — Englischer Bereich (/en/…)
 
@@ -78,7 +78,7 @@ Sprachweiche, Link-Übersetzer und Permalink-Filter laufen auf **jeder** Seite m
 | E5 | Theme Options → EN-Import: Export lädt XLSX (alle Bereiche, EN-Werte vorbefüllt); Upload mit 1–2 gefüllten Zellen → Zähler + sichtbar unter /en/ | unverändert |
 | E6 | Robustheit: Leerzeilen/gelöschte Kopfzeile → funktioniert; fremde Excel → klare Fehlermeldung | unverändert |
 | E7 | **Regression Redaktion**: News-Beitrag anlegen (deutsch) wie im Handbuch → sofort auf /news/ und Startseite | unverändert |
-| E8 | **Regression Elementor**: deutsche Seite bearbeiten, speichern → Änderung deutsch sichtbar; EN-Kopie zeigt sie erst nach „Import erzwingen" (solange unübersetzt) | Verhalten NEU — siehe F |
+| E8 | **Regression Elementor**: deutsche Seite bearbeiten, speichern → Änderung deutsch sichtbar UND sofort auch auf der (unübersetzten) EN-Kopie — kein Import mehr nötig | ✓ (Auto-Sync beim Speichern) |
 
 ## F — „Import erzwingen"
 

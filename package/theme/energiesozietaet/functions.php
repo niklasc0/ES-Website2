@@ -277,6 +277,13 @@ add_action( 'init', 'es_vcard_handler' );
  */
 function es_excerpt( $post, $length = 28 ) {
 	if ( ! $post ) { return ''; }
+	// EN-Kontext: englischer Teaser bzw. englischer Text mit Deutsch-Fallback
+	if ( function_exists( 'es_is_en' ) && es_is_en() ) {
+		$en = (string) get_post_meta( $post->ID, 'es_excerpt_en', true );
+		if ( '' !== trim( $en ) ) { return wp_strip_all_tags( $en ); }
+		$cen = (string) get_post_meta( $post->ID, 'es_content_en', true );
+		if ( '' !== trim( $cen ) ) { return wp_trim_words( wp_strip_all_tags( $cen ), $length, '…' ); }
+	}
 	if ( ! empty( $post->post_excerpt ) ) { return wp_strip_all_tags( $post->post_excerpt ); }
 	return wp_trim_words( wp_strip_all_tags( $post->post_content ), $length, '…' );
 }
@@ -287,16 +294,25 @@ function es_excerpt( $post, $length = 28 ) {
 function es_fallback_menu() {
 	// Englischer Bereich: eigenes Menü auf die EN-Seitenkopien.
 	if ( function_exists( 'es_is_en' ) && es_is_en() ) {
+		echo '<ul class="es-nav__list">';
+		printf( '<li><a href="%s">Philosophy</a></li>', esc_url( home_url( '/en/philosophy/' ) ) );
+		// Services mit Unterpunkten – Struktur wie das deutsche Menü
+		printf( '<li class="menu-item-has-children"><a href="%s">Services</a><ul class="sub-menu">', esc_url( home_url( '/en/services/' ) ) );
+		foreach ( array(
+			'/en/legal/'      => 'Legal',
+			'/en/tax/'        => 'Tax',
+			'/en/consulting/' => 'Consulting',
+		) as $sub_path => $sub_label ) {
+			printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( $sub_path ) ), esc_html( $sub_label ) );
+		}
+		echo '</ul></li>';
 		$items = array(
-			home_url( '/en/philosophy/' )    => 'Philosophy',
-			home_url( '/en/services/' )      => 'Services',
 			home_url( '/en/team/' )          => 'Team',
 			home_url( '/en/publications/' )  => 'Publications',
 			home_url( '/en/news/' )          => 'News',
 			home_url( '/en/events/' )        => 'Events',
 			home_url( '/en/careers/' )       => 'Careers',
 		);
-		echo '<ul class="es-nav__list">';
 		foreach ( $items as $url => $label ) {
 			printf( '<li><a href="%s">%s</a></li>', esc_url( $url ), esc_html( $label ) );
 		}

@@ -108,6 +108,7 @@ class ESC_MetaBoxes {
 				self::field( 'Art (EN, z. B. Seminar)', 'es_kind_en', get_post_meta( $post->ID, 'es_kind_en', true ) );
 				break;
 			case 'es_publikation':
+				self::field( 'Beschreibung (EN) – Pendant zum Beschreibungstext im Editor oben', 'es_content_en', get_post_meta( $post->ID, 'es_content_en', true ), 'textarea' );
 				self::field( 'Kategorie (EN, z. B. Article, Book)', 'es_cat_en', get_post_meta( $post->ID, 'es_cat_en', true ) );
 				break;
 		}

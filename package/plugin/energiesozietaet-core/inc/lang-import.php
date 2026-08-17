@@ -98,16 +98,24 @@ class ES_Lang_Import {
 				list( , $typ, $de ) = array_pad( explode( ':', $ref, 3 ), 3, '' );
 				$r = array( 'typ' => $typ, 'de' => $de, 'en' => $en );
 			}
-			// URL-Kürzel (typ/de/en)
+			// URL-Kürzel (typ/de/en) – nur zählen/schreiben, wenn sich der Wert
+			// tatsächlich ändert (der Export befüllt die EN-Spalte vor, sonst
+			// meldet jeder Upload alle Kürzel als "eingespielt")
 			if ( isset( $r['typ'], $r['de'] ) ) {
 				$en_slug = sanitize_title( $en );
 				if ( 'Seite' === $r['typ'] ) {
 					$en_id = self::en_copy_id( (string) $r['de'] );
-					if ( $en_id ) { update_post_meta( $en_id, 'es_public_slug', $en_slug ); $stats['slugs']++; }
+					if ( $en_id && $en_slug !== (string) get_post_meta( $en_id, 'es_public_slug', true ) ) {
+						update_post_meta( $en_id, 'es_public_slug', $en_slug );
+						$stats['slugs']++;
+					}
 				} elseif ( 'Einzelleistung' === $r['typ'] || 'Stellenangebot' === $r['typ'] ) {
 					$pt = ( 'Einzelleistung' === $r['typ'] ) ? 'es_einzelleistung' : 'es_karriere';
 					$post = get_page_by_path( (string) $r['de'], OBJECT, $pt );
-					if ( $post ) { update_post_meta( $post->ID, 'es_slug_en', $en_slug ); $stats['slugs']++; }
+					if ( $post && $en_slug !== (string) get_post_meta( $post->ID, 'es_slug_en', true ) ) {
+						update_post_meta( $post->ID, 'es_slug_en', $en_slug );
+						$stats['slugs']++;
+					}
 				} else {
 					$stats['skipped'][] = 'URL-Basis ' . $r['de'] . ' (im Code zu ändern)';
 				}
