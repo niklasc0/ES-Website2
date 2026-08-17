@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.17
+Version: 2.6.18
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -4172,32 +4172,34 @@ a.es-team-link:hover { color: var(--es-accent-ink, #4a6b00); text-decoration-col
    ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav {
-        display: flex !important; flex-direction: row !important;
-        align-items: center !important; gap: 12px !important;
-        padding: 20px 0 24px !important; margin-top: auto !important;
+        display: flex !important; flex-direction: column !important;
+        align-items: stretch !important; gap: 0 !important;
+        padding: 0 0 24px !important; margin-top: 0 !important;
         width: 100% !important;
     }
-    /* Kontakt-Pill: nimmt die verfügbare Breite, echte Pill-Optik */
+    /* Kontakt: normaler Menüeintrag wie Philosophie & Co. (keine Pill) */
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav a.es-header__cta {
-        flex: 1 1 auto !important; width: auto !important; max-width: none !important;
-        display: inline-flex !important; align-items: center !important; justify-content: center !important;
-        height: 48px !important; padding: 0 16px !important;
-        font-size: 14px !important; font-weight: var(--es-fw-medium);
-        border: 1px solid var(--es-ink) !important;
-        border-radius: var(--es-radius-pill) !important;
+        flex: 0 0 auto !important; width: 100% !important; max-width: none !important;
+        display: block !important; text-align: left !important; justify-content: flex-start !important;
+        height: auto !important; padding: 14px 0 !important;
+        font-size: 16px !important; font-weight: 500 !important; letter-spacing: -0.01em;
+        border: 0 !important; border-radius: 0 !important;
         background: transparent !important; color: var(--es-ink) !important;
     }
-    /* Umschalter: Kapsel wie im Desktop-Header, touch-freundlich 36px */
+    /* Umschalter: Kapsel darunter, linksbündig */
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang {
-        flex: 0 0 auto !important; height: 48px !important;
+        flex: 0 0 auto !important; height: 44px !important;
         display: inline-flex !important; align-items: stretch !important;
+        align-self: flex-start !important; margin-top: 20px !important;
     }
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang a,
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang span {
         display: inline-flex !important; align-items: center !important;
         width: auto !important; flex: 0 0 auto !important;
         padding: 0 16px !important; height: auto !important;
-        font-size: 12px !important; font-weight: inherit;
+        /* DE und EN exakt gleich groß und gleich schwer — die aktive Sprache
+           unterscheidet sich nur durch die grüne Füllung */
+        font-size: 12px !important; font-weight: 600 !important; letter-spacing: 0.08em !important;
         border: 0 !important; border-radius: 0 !important;
     }
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang span:first-child,
@@ -4205,6 +4207,6 @@ a.es-team-link:hover { color: var(--es-accent-ink, #4a6b00); text-decoration-col
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang span:last-child,
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang a:last-child { border-radius: 0 999px 999px 0 !important; }
     .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang .is-active {
-        background: var(--es-accent) !important; color: var(--es-ink) !important; font-weight: 600;
+        background: var(--es-accent) !important; color: var(--es-ink) !important;
     }
 }
