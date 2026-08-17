@@ -1,97 +1,100 @@
-# Testplan — Änderungen der letzten Tage (Stand: Plugin 1.5.2 / Theme 2.6.2)
+# Testplan — Änderungen August (Stand: Plugin 1.6.8 / Theme 2.6.13)
 
-**Vorbereitung:** Beide ZIPs auf test2 einspielen → unter *Plugins* muss **Energiesozietät Core 1.5.2**, unter *Design → Themes* **2.6.2** stehen → einmal **Theme Options → Import erzwingen** ausführen. Browser-Cache umgehen: Seiten mit Strg+F5 laden.
+**Vorbereitung:** Beide ZIPs auf test2 einspielen → unter *Plugins* muss **Energiesozietät Core 1.6.8**, unter *Design → Themes* **2.6.13** stehen → einmal **Theme Options → Import erzwingen** ausführen (bringt u. a. neue EN-URLs, Seiten-Hierarchie, ausgeblendete LinkedIn-Section und Hero-Höhen). Browser-Cache umgehen: Seiten mit Strg+F5 laden.
 
-> ⚠️ Vorab wissen: „Import erzwingen" stellt die festen Seiten auf den eingefrorenen Live-Stand vom **16.08.** zurück. Falls seitdem live in Elementor etwas geändert wurde, vorher Bescheid geben — dann friere ich zuerst einen neuen Snapshot ein.
+> ⚠️ Vorab wissen: „Import erzwingen" stellt die festen Seiten auf den eingefrorenen Live-Stand vom **16.08.** zurück — **jetzt auch die noch unübersetzten EN-Seitenkopien** (die ziehen Struktur und Inhalt der deutschen Seite nach). Falls seitdem live in Elementor etwas geändert wurde, vorher Bescheid geben — dann friere ich zuerst einen neuen Snapshot ein.
 
 ---
 
 ## A — Deutsche Website: Regression (sollte überall unverändert korrekt sein)
 
-Die Sprachweiche, der sprachbewusste Meta-Helfer und die Permalink-Filter laufen auf **jeder** Seite mit — deshalb die deutsche Site einmal komplett durchsehen, obwohl sie inhaltlich nicht angefasst wurde:
+Sprachweiche, Link-Übersetzer und Permalink-Filter laufen auf **jeder** Seite mit — deshalb die deutsche Site einmal komplett durchsehen:
 
 | # | Test | Soll |
 |---|---|---|
 | A1 | Startseite: Hero-Foto (Drache), Texte, „20+/30+"-Karten, News-Teaser | wie vor den Änderungen |
-| A2 | Philosophie, Leistungen, Rechts-/Steuer-/Unternehmensberatung: Texte inkl. der jüngsten Live-Änderungen (z. B. „Unsere Stärke liegt in der Übersetzung strategischer Zielbilder …" auf Unternehmensberatung) | vorhanden — Import hat nichts Altes zurückgeholt |
+| A2 | Philosophie, Leistungen, Rechts-/Steuer-/Unternehmensberatung: Texte inkl. der jüngsten Live-Änderungen | vorhanden — Import hat nichts Altes zurückgeholt |
 | A3 | Team-Übersicht: weiße Karten, Rollen (Stockem „Diplom-Kaufmann \| Steuerberater", Wolfschaffner „… \| Fachanwältin für Vergaberecht") | unverändert |
-| A4 | Team-Profil (z. B. Stockem): Standort Hamburg, Werdegang, Schwerpunkte, vCard, automatische Namens-Verlinkung in News-Texten | unverändert |
-| A5 | Stellen-Detailseite: Info-Zeile, Listen, Benefits, dunkler Bewerbungs-Kasten „Jetzt bewerben" | unverändert deutsch |
-| A6 | Veranstaltungen, Publikationen (Jahres-Liste), Kontakt, Karriere-Übersicht | unverändert |
-| A7 | Footer auf mehreren Seiten: Adressen (Pipe als „·"), Navigation-Links klickbar, Kontakt-Button führt auf /kontakt/ | unverändert; Links funktionieren (Umstellung auf relative URLs) |
+| A4 | Team-Profil (z. B. Stockem): Standort Hamburg, Werdegang, Schwerpunkte, vCard, Namens-Verlinkung in News-Texten | unverändert |
+| A5 | Einzelleistung (z. B. Vergaberecht): Breadcrumb „Leistungen / Rechtsberatung / …", Eyebrow, Backlink — alles deutsch | unverändert |
+| A6 | Veranstaltungen, Publikationen (Jahres-Liste), Kontakt, Karriere-Übersicht, Stellen-Detailseite | unverändert |
+| A7 | Footer auf mehreren Seiten: Adressen, Navigation-Links klickbar, Kontakt-Button führt auf /kontakt/ | unverändert |
 | A8 | Alle internen Links bleiben ohne /en/-Präfix, solange man deutsch unterwegs ist | keine „versehentlich englischen" Links |
 
-## B — Neuer Header (Desktop + Mobil)
+## B — Header & Sprachumschalter
 
 | # | Test | Soll |
 |---|---|---|
-| B1 | Menü: Philosophie · Leistungen (mit Unterpunkten) · Team · Publikationen · News · Veranstaltungen · **Stellenangebote** | Stellenangebote als letzter Punkt, führt auf /karriere/ |
-| B2 | Rechts: nur noch **Kontakt** als helle Pill mit Kontur | kein grüner Kontakt-Button, kein separater Stellenangebote-Button mehr |
-| B3 | Sprachumschalter: Kapsel DE/EN, aktives Segment **grün** gefüllt, 30 px hoch — gleiche Höhe wie Kontakt-Pill | Klick wechselt auf die Schwesterseite (nicht auf die Startseite) |
-| B4 | **Mobil** (< 1024 px): Hamburger öffnen → Menüpunkte inkl. Stellenangebote, Kontakt-Button und Umschalter erreichbar und bedienbar | nichts abgeschnitten/überlappend |
+| B1 | Menü: Philosophie · Leistungen (mit Unterpunkten) · Team · Publikationen · News · Veranstaltungen · Stellenangebote; rechts nur Kontakt-Pill (30 px) | wie gehabt |
+| B2 | Umschalter: aktives Segment grün gefüllt, **kein Text-Cursor** auf dem aktiven Segment, Text nicht markierbar | ✓ |
+| B3 | **Nur das inaktive Segment ist klickbar**; beim Hover zeichnet sich eine **1px-akzentgrüne Linie sequenziell** von oben-mitte um den Außenrand nach unten-mitte (bei DE-Segment links herum) | keine Reste der Linie im Ruhezustand, kein fehlendes Stück im Hover |
+| B4 | Klick wechselt auf die direkte Schwesterseite (auch Startseite ↔ /en/) | ✓ |
+| B5 | Logo-Klick: im DE-Kontext → /, im EN-Kontext → /en/ | ✓ |
+| B6 | **Mobil** (< 1024 px): Hamburger → Menüpunkte, Kontakt, Umschalter erreichbar | nichts abgeschnitten |
 
-## C — News-Vorschaubilder (16:9, unbeschnitten)
+## C — Layout-Änderungen
 
 | # | Test | Soll |
 |---|---|---|
-| C1 | News-Übersicht: Kacheln mit Bild links, **Bild = volle Kachelhöhe**, linke Ecken abgerundet, kein Reststreifen | Bilder komplett sichtbar (Vergleich: Best-Lawyers-Grafik mit allen Rändern) |
-| C2 | Titel/Teaser in den Kacheln: auf je 2 Zeilen gekürzt mit „…" | kein Text läuft aus der Kachel |
-| C3 | Featured-Artikel oben auf /news/: Bild 16:9 unbeschnitten | ✓ |
-| C4 | Startseite „Aktuelles"-Karten: 16:9 unbeschnitten | ✓ |
-| C5 | News-Artikel (Detailseite): Headerbild vollständig | ✓ |
-| C6 | News-Übersicht **mobil**: Bild oberhalb des Texts, obere Ecken rund | ✓ |
-| C7 | Pro-Seite-Umschalter (8/16/32) und Blättern auf /news/ | funktioniert wie bisher |
-| C8 | **Regression Veranstaltungs-Karten**: Platzhalter-Kacheln („Veranstaltung") nicht verzerrt; falls Bilder gepflegt: unbeschnitten | ✓ |
-| C9 | **Regression andere Karten**: Team-Porträts (4:5), Stellen-Bilder auf Karriere-Karten, Beratungsfeld-Bilder auf Leistungsseiten | unverändert — bewusst NICHT auf 16:9 umgestellt |
+| C1 | News-Übersicht: Kacheln mit Bild links, Bild = volle Kachelhöhe (Kachel nie höher als Bild), linke Ecken rund; Titel/Teaser je 2 Zeilen | ✓ |
+| C2 | Featured-Artikel auf /news/, Startseiten-„Aktuelles"-Karten, News-Detail-Headerbild: **16:9 unbeschnitten** (Vergleich: Best-Lawyers-Grafik komplett) | ✓ — auch die 3 Karten auf der Startseite (war zuletzt 16:10) |
+| C3 | **Alle Seiten-Heroes gleich hoch (~450 px Desktop und Tablet)**: News, Veranstaltungen, Team, Publikationen, Leistungen, Philosophie, Karriere, Kontakt — mit wie ohne Subtext | Leistungs-Detailseiten (~508 px) bewusst etwas höher (Breadcrumb-Zeile); Home-Foto-Hero unverändert; Mobil inhaltsgetrieben wie bisher |
+| C4 | Hero-Werte **nativ in Elementor** sichtbar (Sektion → Layout: Mindesthöhe 370, Spalten Mitte, Padding 40) — Änderungen im Editor kommen im Frontend an | kein CSS-Override mehr |
+| C5 | /leistungen/ bei **Fensterbreite ~800–1250 px**: kein vollbreiter Bild-/Platzhalter-Klotz mehr in den Bereichs-Blöcken (Bild-Spalte auf Tablet ausgeblendet); ab ~1280 px Bild rechts neben Text | ✓ |
+| C6 | Startseite: **LinkedIn-Section ausgeblendet** (alle Bildschirmgrößen), News-Section geht direkt in den Footer über, **Ecken am Footer-Übergang in Footer-Farbe** (kein falscher Grünton) | im Backend über Section → Erweitert → Responsive reaktivierbar |
+| C7 | Veranstaltungs-Detailseite: Datum oben **ohne Kasten** (frei neben dem Kicker) | ✓ |
+| C8 | **Regression**: Veranstaltungs-Karten (Platzhalter unverzerrt), Team-Porträts 4:5, Stellen-Bilder, Beratungsfeld-Bilder auf Desktop | unverändert |
 
 ## D — Englischer Bereich (/en/…)
 
 | # | Test | Soll |
 |---|---|---|
-| D1 | /en/ → englische Home-Kopie: Foto-Hero, EN-Menü (Philosophy … Careers), Contact-Pill, Umschalter EN aktiv | Inhalte noch deutsch (Fallback) — das ist korrekt bis zur Übersetzung |
-| D2 | Alle EN-Seiten laden: /en/philosophy/, /en/services/, /en/legal-advice/, /en/tax-advice/, /en/management-consulting/, /en/team/, /en/careers/, /en/contact/, /en/news/, /en/events/, /en/publications/ | 200, EN-Menü, `<title>` englisch (Philosophy, Services, …) |
-| D3 | Umschalter auf beliebiger Seite: DE→EN und EN→DE | landet immer auf der direkten Schwesterseite, auch Startseite ↔ /en/ |
-| D4 | /en/team/: alle Mitglieder gelistet (Namen bleiben), Rolle deutsch (Fallback) außer Testdaten | ✓ |
-| D5 | EN-News-Liste /en/news/: **nur übersetzte Artikel** (aktuell der Best-Lawyers-Test) | deutsche News tauchen nicht auf |
-| D6 | Übersetzter EN-Artikel: /en/news-article/best-lawyers-2026-awards/ — Titel/Text/Teaser englisch, Datum „18 June 2026", „1 min read", „Back to news" | ✓ |
-| D7 | Detailseiten mit Fallback: /en/team-member/torsten-stockem/ (EN-Testdaten), /en/service/vergaberecht/ (deutsch mit engl. UI-Labels) | ✓ |
-| D8 | Direktaufruf einer EN-Seite ohne Präfix (z. B. /philosophy/) | 301 auf /en/philosophy/ |
-| D9 | 404 testen: /en/gibtsnicht/ und /gibtsnicht/ | neue zweisprachige 404-Seite (EN bzw. DE), Button zur jeweiligen Startseite |
+| D1 | /en/ → EN-Home: Foto-Hero, EN-Menü, Contact-Pill, Umschalter EN aktiv; LinkedIn-Section auch hier ausgeblendet | Inhalte deutsch (Fallback) — korrekt bis zur Übersetzung |
+| D2 | Alle EN-Seiten laden: /en/philosophy/, /en/services/, **/en/legal/, /en/tax/, /en/consulting/** (NEU — vorher legal-advice/tax-advice/management-consulting), /en/team/, /en/careers/, /en/contact/, /en/news/, /en/events/, /en/publications/, /en/legal-notice/, /en/privacy-policy/ | 200, `<title>` englisch (u. a. **Legal, Tax, Consulting**) |
+| D3 | Alte URLs /en/legal-advice/, /en/tax-advice/, /en/management-consulting/ | **301** auf die neuen |
+| D4 | **Alle internen Links auf EN-Seiten zeigen auf /en/-URLs** — Hero-Cards und Buttons der Startseite, Footer-Navigation, News-Cards | kein Link führt in den deutschen Bereich (außer dem DE-Umschalter) |
+| D5 | Bereichsseiten-Kopien: graue Zeile „**Services / Consulting**" (statt Leistungen / Unternehmensberatung), Kicker „**01 · Legal / 02 · Tax / 03 · Consulting**" | Fließtexte darunter bleiben deutsch (Fallback) |
+| D6 | Einzelleistung EN (z. B. /en/service/vergaberecht/): Breadcrumb „Services / Legal / …", Eyebrow „Legal", Backlink „← All services: Legal" | Titel/Slug deutsch bis „Titel (EN)"/„Slug (EN)" gepflegt sind |
+| D7 | EN-News-Liste /en/news/: nur übersetzte Artikel; übersetzter Artikel komplett englisch (Datum, „min read", „Back to news") | deutsche News tauchen nicht auf |
+| D8 | Direktaufruf ohne Präfix (z. B. /philosophy/, /contact/) | **301 in einem Sprung** auf /en/… |
+| D9 | Umschalter auf 404-Seite → jeweilige Startseite; /en/gibtsnicht/ → zweisprachige 404 | ✓ |
 
-## E — Backend: Redaktion & Zweisprachigkeit
-
-| # | Test | Soll |
-|---|---|---|
-| E1 | News/Team/Einzelleistung/Stelle/Veranstaltung/Publikation öffnen: Box **„Englische Fassung (EN)"** mit typgerechten Feldern | Werdegang-Hinweise aufrecht (nicht kursiv), Team-Button heißt „Neues Teammitglied" |
-| E2 | EN-Feld füllen, speichern → /en/-Ansicht zeigt es; DE-Ansicht unverändert; Feld leeren → Fallback deutsch | ✓ |
-| E3 | Theme Options → Footer/Karriere: DE- und EN-Feld **nebeneinander**, Speichern erhält beide | ✓ |
-| E4 | **Theme Options → EN-Import**: „Übersetzungsdatei herunterladen" → XLSX öffnet in Excel, enthält alle Bereiche, vorhandene EN-Werte vorbefüllt | ✓ |
-| E5 | In der Datei 1–2 Englisch-Zellen füllen → hochladen → Erfolgsmeldung mit Zählern; Texte erscheinen unter /en/ | ✓ |
-| E6 | Robustheit: Datei mit eingefügten Leerzeilen/gelöschter Kopfzeile hochladen → funktioniert; irgendeine fremde Excel hochladen → klare Fehlermeldung | kein stiller Null-Import |
-| E7 | **Regression Redaktion**: normalen News-Beitrag anlegen/ändern (deutsch) wie im Handbuch | unverändert; erscheint sofort auf /news/ und Startseite |
-| E8 | **Regression Elementor**: deutsche Seite „Mit Elementor bearbeiten", Textänderung, Aktualisieren | funktioniert; Änderung nur deutsch sichtbar (EN-Kopie unberührt) |
-
-## F — „Import erzwingen" (jetzt snapshot-basiert)
+## E — Backend
 
 | # | Test | Soll |
 |---|---|---|
-| F1 | Vor dem Import eine kleine Elementor-Textänderung auf einer DE-Seite machen → Import erzwingen | Seite steht wieder auf Snapshot-Stand (16.08.) — erwartetes Verhalten, deshalb Snapshots aktuell halten |
-| F2 | Nach Import: EN-Kopien vorhanden/verknüpft, Menü mit „Stellenangebote", CPT-Inhalte unverändert, manuell gesetzte EN-Übersetzungen **erhalten** | ✓ |
-| F3 | Import zweimal hintereinander | idempotent, keine Duplikate (Seiten, Menüpunkte, Medien) |
+| E1 | **Seiten-Liste: EN-Kopien hängen eingerückt als Kind unter ihrer DE-Seite** („Philosophie" → „— Philosophy" …); Consulting-Kopie heißt „Consulting" | ✓ |
+| E2 | CPTs öffnen: Box „Englische Fassung (EN)" mit typgerechten Feldern, Hinweise aufrecht (nicht kursiv), „Neues Teammitglied" | unverändert |
+| E3 | **Publikation bearbeiten: Autoren-Auswahlliste und Beratungsfeld-Checkboxen stehen UNTER ihrem Beschreibungstext** (nicht daneben) | ✓ |
+| E4 | EN-Feld füllen → /en/ zeigt es; leeren → Fallback; Theme Options → Footer/Karriere: DE/EN nebeneinander | unverändert |
+| E5 | Theme Options → EN-Import: Export lädt XLSX (alle Bereiche, EN-Werte vorbefüllt); Upload mit 1–2 gefüllten Zellen → Zähler + sichtbar unter /en/ | unverändert |
+| E6 | Robustheit: Leerzeilen/gelöschte Kopfzeile → funktioniert; fremde Excel → klare Fehlermeldung | unverändert |
+| E7 | **Regression Redaktion**: News-Beitrag anlegen (deutsch) wie im Handbuch → sofort auf /news/ und Startseite | unverändert |
+| E8 | **Regression Elementor**: deutsche Seite bearbeiten, speichern → Änderung deutsch sichtbar; EN-Kopie zeigt sie erst nach „Import erzwingen" (solange unübersetzt) | Verhalten NEU — siehe F |
 
-## G — SEO (Quelltext-Checks, solange test2 auf „Suchmaschinen abhalten" steht, kommt zusätzlich überall ein globales noindex — das ist korrekt)
+## F — „Import erzwingen"
 
 | # | Test | Soll |
 |---|---|---|
-| G1 | Übersetzter EN-Artikel: hreflang de/en/x-default im `<head>`, keine noindex-Zeile vom Sprachsystem | ✓ |
-| G2 | Unübersetzte EN-Seite (z. B. /en/philosophy/): noindex + canonical auf die deutsche Fassung, keine hreflangs | ✓ |
+| F1 | DE-Seiten stehen nach Import wieder auf Snapshot-Stand (16.08.) | erwartet — Snapshots aktuell halten |
+| F2 | **NEU: Unübersetzte EN-Kopien ziehen Struktur/Inhalt der DE-Seite nach** (z. B. ausgeblendete LinkedIn-Section, Hero-Höhen); als übersetzt markierte Kopien bleiben unangetastet | ✓ |
+| F3 | Nach Import: EN-Kopien verknüpft + als Kinder eingehängt, neue Public-Slugs (legal/tax/consulting), Menü korrekt, CPT-Inhalte und manuelle EN-Übersetzungen erhalten | ✓ |
+| F4 | Import zweimal hintereinander | idempotent, keine Duplikate |
+
+## G — SEO (Quelltext; solange test2 auf „Suchmaschinen abhalten" steht, kommt überall ein zusätzliches globales noindex — korrekt)
+
+| # | Test | Soll |
+|---|---|---|
+| G1 | Übersetzter EN-Artikel: hreflang de/en/x-default, keine noindex-Zeile vom Sprachsystem | ✓ |
+| G2 | Unübersetzte EN-Seite: noindex + **genau EIN** canonical (auf die deutsche Fassung — kein zweites WP-Canonical mehr) | ✓ |
 | G3 | /wp-sitemap.xml: unübersetzte EN-Kopien fehlen, deutsche Seiten vollständig | ✓ |
-| G4 | `<html lang="de">` auf deutschen, `lang="en"` auf englischen Seiten | ✓ |
+| G4 | `<html lang="de">` deutsch, `lang="en"` englisch; interne Kopie-URL (/philosophie/en-philosophie/) → 301 auf /en/philosophy/ | ✓ |
 
 ## H — Sonstiges / bewusst so
 
-- LinkedIn-Feed: Posts bleiben in Originalsprache; nur der Link „View all posts" ist im EN-Kontext englisch.
-- Karriere-Benefits/Bewerbungs-Kasten und Footer-CTA erscheinen englisch erst, wenn die EN-Settings-Felder gefüllt sind (Kundenübersetzung).
+- EN-Detailseiten unübersetzter Inhalte sind erreichbar (deutscher Inhalt, englische UI) — nur gelistet werden sie nicht.
+- LinkedIn-Feed bleibt ausgeblendet, bis er im Backend reaktiviert wird.
+- Karriere-Benefits/Bewerbungs-Kasten und Footer-CTA erscheinen englisch erst mit gefüllten EN-Settings-Feldern.
 - Das Redaktionshandbuch zeigt noch den alten Header/Backend-Stand — Update folgt nach Einspielen der Kundenübersetzungen.
 
-**Bei jedem Befund:** Seite + was erwartet vs. gesehen + ggf. Screenshot — dann fixe ich gezielt.
+**Bei jedem Befund:** Seite + erwartet vs. gesehen + ggf. Screenshot — dann fixe ich gezielt.
