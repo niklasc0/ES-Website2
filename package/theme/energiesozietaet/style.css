@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.10
+Version: 2.6.11
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -522,24 +522,6 @@ html.js .esc-card.es-reveal {
 .home .es-hero::after,
 .es-single-home .es-hero::after,
 .es-single-en-home .es-hero::after { display: none; }
-
-/* ═ Page-Hero-Höhen vereinheitlichen (Referenz: News) ═
-   Die Elementor-Sektionen bringen je Seite andere Paddings mit (Philosophie
-   140er, Karriere 140 unten, Rechtsberatung 80/110 …) — hier normalisiert.
-   Heroes MIT Subtext bekommen etwas weniger Padding + kompaktere Abstände,
-   damit sie trotz Zusatzzeile ungefähr auf News-Höhe landen.
-   Home-Foto-Hero bleibt bewusst unangetastet. */
-@media (min-width: 1025px) {
-    body:not(.home):not(.es-single-home):not(.es-single-en-home) .es-hero {
-        padding-top: 100px !important; padding-bottom: 100px !important;
-    }
-    body:not(.home):not(.es-single-home):not(.es-single-en-home) .es-hero:has(.elementor-widget-text-editor) {
-        padding-top: 80px !important; padding-bottom: 80px !important;
-    }
-}
-body:not(.home):not(.es-single-home):not(.es-single-en-home) .es-hero .elementor-widget-heading:has(+ .elementor-widget-text-editor) { margin-bottom: 16px !important; }
-body:not(.home):not(.es-single-home):not(.es-single-en-home) .es-hero .elementor-widget-text-editor:first-child { margin-bottom: 16px !important; }
-body:not(.home):not(.es-single-home):not(.es-single-en-home) .es-hero .elementor-widget-text-editor:last-child { margin-bottom: 0 !important; }
 
 /* Claim grid under hero (H1) */
 .es-hero-claims {
