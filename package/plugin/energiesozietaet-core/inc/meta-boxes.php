@@ -259,11 +259,12 @@ class ESC_MetaBoxes {
 		// aus Theme Options → Globale Informationen)
 		$offer = get_post_meta( $post->ID, 'es_offer', true );
 		$offer_txt = is_array( $offer ) ? implode( "\n", $offer ) : '';
-		echo '<p><label><strong>Was wir Dir bieten</strong><br /><span style="color:#667;font-weight:400;">Eine Zeile = ein Punkt der Liste „Was wir Dir bieten" dieser Stelle.</span></label>';
+		echo '<p><label><strong>Was wir Dir bieten</strong><br /><span style="color:#667;font-weight:400;">Eine Zeile = ein Punkt. Leer = globaler Standardtext aus Karriere → Globale Informationen; ein Eintrag hier überschreibt ihn für diese Stelle.</span></label>';
 		echo '<textarea name="es_offer_raw" rows="5" style="width:100%;">' . esc_textarea( $offer_txt ) . '</textarea></p>';
 
 		// Abschlusstext (pro Stelle, unter den Listen)
-		self::field( 'Abschlusstext', 'es_closing', get_post_meta( $post->ID, 'es_closing', true ), 'textarea' );
+		echo '<p><label><strong>Abschlusstext</strong><br /><span style="color:#667;font-weight:400;">Leer = globaler Standardtext aus Karriere → Globale Informationen; ein Eintrag hier überschreibt ihn für diese Stelle.</span></label>';
+		echo '<textarea name="es_closing" rows="4" style="width:100%;">' . esc_textarea( (string) get_post_meta( $post->ID, 'es_closing', true ) ) . '</textarea></p>';
 	}
 
 	public static function box_veranst( $post ) {

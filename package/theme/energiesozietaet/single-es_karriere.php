@@ -52,6 +52,16 @@ while ( have_posts() ) : the_post();
 	// Globale Einstellungen (Settings-API)
 	$kset = class_exists( 'ESC_Karriere_Settings' ) ? ESC_Karriere_Settings::get() : array();
 	$kget = function ( $k, $d = '' ) use ( $kset ) { return $kset[ $k ] ?? $d; };
+
+	// "Was wir Dir bieten" + Abschlusstext: Stellen-Wert überschreibt den
+	// globalen Standard (Karriere → Globale Informationen).
+	if ( ! is_array( $offer ) || empty( $offer ) ) {
+		$g = trim( (string) $kget( 'offer_lines' ) );
+		if ( '' !== $g ) {
+			$offer = array_values( array_filter( array_map( 'trim', preg_split( '/\r?\n/', $g ) ) ) );
+		}
+	}
+	if ( ! $closing ) { $closing = $kget( 'offer_closing' ); }
 	$benefits_list = array(
 		array( $kget( 'benefit1_title', 'Echte Verantwortung' ), $kget( 'benefit1_desc' ) ),
 		array( $kget( 'benefit2_title', 'Interdisziplinarität' ), $kget( 'benefit2_desc' ) ),

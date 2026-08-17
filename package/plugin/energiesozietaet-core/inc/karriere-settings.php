@@ -35,14 +35,23 @@ class ESC_Karriere_Settings {
 			'cta_subtitle'     => 'Wir freuen uns auf Deine Bewerbung.',
 			'cta_button_label' => 'Jetzt bewerben',
 			'cta_recipient'    => 'karriere@energiesozietaet.de',
+
+			// Standardtexte für alle Stellen (pro Stelle überschreibbar)
+			'offer_lines'      => '',
+			'offer_closing'    => '',
 		);
 	}
 
 	/** Keys, die eine englische Fassung haben können (Suffix _en). */
 	public static function en_keys() {
-		$keys = array( 'benefits_title', 'cta_eyebrow', 'cta_title', 'cta_subtitle', 'cta_button_label' );
+		$keys = array( 'benefits_title', 'cta_eyebrow', 'cta_title', 'cta_subtitle', 'cta_button_label', 'offer_lines', 'offer_closing' );
 		for ( $i = 1; $i <= 4; $i++ ) { $keys[] = 'benefit' . $i . '_title'; $keys[] = 'benefit' . $i . '_desc'; }
 		return $keys;
+	}
+
+	/** Keys mit mehrzeiligen Werten (Textarea statt Textfeld, Zeilen erhalten). */
+	public static function textarea_keys() {
+		return array( 'offer_lines', 'offer_closing' );
 	}
 
 	public static function get( $key = null ) {
@@ -69,10 +78,11 @@ class ESC_Karriere_Settings {
 		$out = array();
 		foreach ( $defaults as $k => $v ) {
 			$val = isset( $input[ $k ] ) ? wp_unslash( $input[ $k ] ) : $v;
-			$out[ $k ] = sanitize_text_field( $val );
+			$out[ $k ] = in_array( $k, self::textarea_keys(), true ) ? sanitize_textarea_field( $val ) : sanitize_text_field( $val );
 		}
 		foreach ( self::en_keys() as $k ) {
-			$out[ $k . '_en' ] = isset( $input[ $k . '_en' ] ) ? sanitize_text_field( wp_unslash( $input[ $k . '_en' ] ) ) : '';
+			$raw = isset( $input[ $k . '_en' ] ) ? wp_unslash( $input[ $k . '_en' ] ) : '';
+			$out[ $k . '_en' ] = in_array( $k, self::textarea_keys(), true ) ? sanitize_textarea_field( $raw ) : sanitize_text_field( $raw );
 		}
 		if ( empty( $out['cta_recipient'] ) || ! is_email( $out['cta_recipient'] ) ) {
 			$out['cta_recipient'] = $defaults['cta_recipient'];
@@ -93,14 +103,21 @@ class ESC_Karriere_Settings {
 
 	protected static function input( $name, $label ) {
 		$val = self::raw( $name );
+		$is_area = in_array( $name, self::textarea_keys(), true );
+		$field = function ( $field_name, $value ) use ( $is_area ) {
+			if ( $is_area ) {
+				return '<textarea name="' . esc_attr( self::OPT . '[' . $field_name . ']' ) . '" rows="5" style="width:100%;">' . esc_textarea( $value ) . '</textarea>';
+			}
+			return '<input type="text" name="' . esc_attr( self::OPT . '[' . $field_name . ']' ) . '" value="' . esc_attr( $value ) . '" style="width:100%;" />';
+		};
 		echo '<tr><th scope="row"><label>' . esc_html( $label ) . '</label></th><td>';
 		if ( in_array( $name, self::en_keys(), true ) ) {
 			// Deutsch + Englisch nebeneinander
 			$val_en = self::raw( $name . '_en' );
 			echo '<div style="display:flex;gap:16px;flex-wrap:wrap;max-width:980px;">';
-			echo '<div style="flex:1;min-width:280px;"><input type="text" name="' . esc_attr( self::OPT . '[' . $name . ']' ) . '" value="' . esc_attr( $val ) . '" style="width:100%;" />';
+			echo '<div style="flex:1;min-width:280px;">' . $field( $name, $val );
 			echo '<p class="description" style="font-style:normal;margin:2px 0 0;">Deutsch</p></div>';
-			echo '<div style="flex:1;min-width:280px;"><input type="text" name="' . esc_attr( self::OPT . '[' . $name . '_en]' ) . '" value="' . esc_attr( $val_en ) . '" style="width:100%;" placeholder="EN" />';
+			echo '<div style="flex:1;min-width:280px;">' . $field( $name . '_en', $val_en );
 			echo '<p class="description" style="font-style:normal;margin:2px 0 0;">Englisch – leer = deutsche Fassung</p></div>';
 			echo '</div>';
 		} else {
@@ -128,6 +145,15 @@ class ESC_Karriere_Settings {
 						self::input( 'benefit' . $i . '_desc',  'Beschreibung' );
 						?>
 					<?php endfor; ?>
+				</tbody></table>
+
+				<h2>Standardtexte „Was wir Dir bieten" + Abschlusstext</h2>
+				<p class="description" style="font-style:normal;">Gelten für alle Stellen, bei denen die entsprechenden Felder in den Karriere-Details leer sind. Ein Eintrag direkt an der Stelle überschreibt den Standard.</p>
+				<table class="form-table"><tbody>
+					<?php
+					self::input( 'offer_lines',   'Was wir Dir bieten (eine Zeile = ein Punkt)' );
+					self::input( 'offer_closing', 'Abschlusstext' );
+					?>
 				</tbody></table>
 
 				<h2>Abschnitt „Deine Bewerbung" (Call-Out unten)</h2>
