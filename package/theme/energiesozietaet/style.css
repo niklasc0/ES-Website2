@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.13
+Version: 2.6.14
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -4155,3 +4155,50 @@ a.es-team-link:hover { color: var(--es-accent-ink, #4a6b00); text-decoration-col
 .es-acc summary:hover::after { border-color: var(--es-ink); }
 .es-acc__body { padding: 0 0 24px; }
 .es-acc:last-of-type { border-bottom: var(--es-border); }
+
+/* ═══════════════════════════════════════════════════════════════
+   Mobile-Menü: Kontakt-Pill + Sprachumschalter (aktuelles Markup).
+   Die generische Menülink-Regel (.es-nav a: display:block, padding,
+   border-bottom) und die Desktop-Höhe (30px) zerlegen die beiden
+   Elemente, sobald JS die Actions ins Menü verschiebt — hier werden
+   sie im Menü-Kontext explizit gestylt. Steht am Dateiende und
+   überschreibt damit alle älteren Mobile-Blöcke.
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav {
+        display: flex !important; flex-direction: row !important;
+        align-items: center !important; gap: 12px !important;
+        padding: 20px 0 24px !important; margin-top: auto !important;
+        width: 100% !important;
+    }
+    /* Kontakt-Pill: nimmt die verfügbare Breite, echte Pill-Optik */
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav a.es-header__cta {
+        flex: 1 1 auto !important; width: auto !important; max-width: none !important;
+        display: inline-flex !important; align-items: center !important; justify-content: center !important;
+        height: auto !important; padding: 12px 16px !important;
+        font-size: 14px !important; font-weight: var(--es-fw-medium);
+        border: 1px solid var(--es-ink) !important;
+        border-radius: var(--es-radius-pill) !important;
+        background: transparent !important; color: var(--es-ink) !important;
+    }
+    /* Umschalter: Kapsel wie im Desktop-Header, touch-freundlich 36px */
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang {
+        flex: 0 0 auto !important; height: 36px !important;
+        display: inline-flex !important; align-items: stretch !important;
+    }
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang a,
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang span {
+        display: inline-flex !important; align-items: center !important;
+        width: auto !important; flex: 0 0 auto !important;
+        padding: 0 16px !important; height: auto !important;
+        font-size: 12px !important; font-weight: inherit;
+        border: 0 !important; border-radius: 0 !important;
+    }
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang span:first-child,
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang a:first-child { border-radius: 999px 0 0 999px !important; }
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang span:last-child,
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang a:last-child { border-radius: 0 999px 999px 0 !important; }
+    .es-header.is-nav-open .es-nav .es-header__actions--in-nav .es-header__lang .is-active {
+        background: var(--es-accent) !important; color: var(--es-ink) !important; font-weight: 600;
+    }
+}
