@@ -332,25 +332,49 @@ class ES_Lang_Import {
 		return $rows;
 	}
 
-	/** Hochgeladene XLSX-Zeilen (Spalten 0-4) in {ref, en}-Zeilen wandeln. */
+	/**
+	 * Hochgeladene XLSX-Zeilen (Spalten 0-4) in {ref, en}-Zeilen wandeln.
+	 * Liefert array( 'rows' => …, 'invalid' => …, 'duplicates' => … ):
+	 * "invalid" sind Zeilen mit eingetragener Übersetzung, aber fehlender/
+	 * veränderter Referenz (würden sonst stillschweigend verworfen),
+	 * "duplicates" doppelte Referenzen mit unterschiedlichen Übersetzungen.
+	 */
 	public static function rows_from_sheet( $sheet_rows ) {
 		$out = array();
 		$known_ref = 0;
+		$invalid = array();
+		$dupes = array();
+		$seen = array(); // ref => array( 'row' => Excel-Zeile, 'en' => Wert )
 		foreach ( $sheet_rows as $cells ) {
+			$rownum = isset( $cells['__r'] ) ? (int) $cells['__r'] : 0;
 			$ref = isset( $cells[4] ) ? trim( (string) $cells[4] ) : '';
 			$en  = isset( $cells[3] ) ? trim( (string) $cells[3] ) : '';
 			// Kopf-/Leer-/Fremdzeilen anhand des Inhalts erkennen – die Position
 			// im Blatt ist egal (eingefügte Zeilen, Sortierungen etc. schaden nicht)
-			if ( ! preg_match( '/^(live:|settings\.|url:|einzelleistung\.|team\.|karriere\.|news\.|veranstaltung\.|publikation\.)/', $ref ) ) { continue; }
+			if ( ! preg_match( '/^(live:|settings\.|url:|einzelleistung\.|team\.|karriere\.|news\.|veranstaltung\.|publikation\.)/', $ref ) ) {
+				// Gemeldet wird nur, wenn eine Übersetzung eingetragen wurde, die
+				// mangels verwertbarer Referenz verloren ginge. Kopf- und
+				// Abschnittszeilen sind normal und bleiben still.
+				if ( '' !== $en && 'Englisch (bitte ausfüllen/ändern)' !== $en ) {
+					$shown = ( mb_strlen( $ref ) > 60 ) ? mb_substr( $ref, 0, 57 ) . '…' : $ref;
+					$invalid[] = 'Zeile ' . $rownum . ( '' !== $ref ? ' (Referenz „' . $shown . '")' : ' (Referenz fehlt)' );
+				}
+				continue;
+			}
 			$known_ref++;
 			if ( '' === $en ) { continue; }
+			if ( isset( $seen[ $ref ] ) && $seen[ $ref ]['en'] !== $en ) {
+				// Beim Anwenden gewinnt die spätere Zeile (überschreibt die frühere)
+				$dupes[] = 'Referenz ' . $ref . ' mehrfach mit unterschiedlichem Text (Zeile ' . $seen[ $ref ]['row'] . ' und ' . $rownum . '), übernommen wurde Zeile ' . $rownum;
+			}
+			$seen[ $ref ] = array( 'row' => $rownum, 'en' => $en );
 			$out[] = array( 'ref' => $ref, 'en' => $en );
 		}
 		// Keine einzige bekannte Referenz → vermutlich falsche/umgebaute Datei
 		if ( 0 === $known_ref ) {
 			return new WP_Error( 'wrong_file', 'Keine gültigen Referenzen gefunden – bitte die über „Übersetzungsdatei herunterladen" erzeugte Datei verwenden (Spalte „Referenz" darf nicht verändert werden).' );
 		}
-		return $out;
+		return array( 'rows' => $out, 'invalid' => $invalid, 'duplicates' => $dupes );
 	}
 }
 
@@ -385,8 +409,16 @@ add_action( 'admin_menu', function () {
 				if ( is_wp_error( $sheet ) ) {
 					$result = $sheet;
 				} else {
-					$rows = ES_Lang_Import::rows_from_sheet( $sheet );
-					$result = is_wp_error( $rows ) ? $rows : ES_Lang_Import::apply_rows( $rows );
+					$parsed = ES_Lang_Import::rows_from_sheet( $sheet );
+					if ( is_wp_error( $parsed ) ) {
+						$result = $parsed;
+					} else {
+						$result = ES_Lang_Import::apply_rows( $parsed['rows'] );
+						if ( ! is_wp_error( $result ) ) {
+							$result['invalid']    = $parsed['invalid'];
+							$result['duplicates'] = $parsed['duplicates'];
+						}
+					}
 				}
 			} else {
 				$result = new WP_Error( 'no_upload', 'Bitte eine XLSX-Datei auswählen.' );
@@ -454,6 +486,22 @@ add_action( 'admin_menu', function () {
 					echo '<p><strong>Übersprungen:</strong><br>' . esc_html( implode( ' · ', array_slice( $result['skipped'], 0, 20 ) ) ) . '</p>';
 				}
 				echo '</div>';
+				// Warnungen aus der Datei-Prüfung: Übersetzungen ohne verwertbare
+				// Referenz sowie doppelte Referenzen mit abweichendem Text.
+				if ( ! empty( $result['invalid'] ) || ! empty( $result['duplicates'] ) ) {
+					echo '<div class="notice notice-warning">';
+					if ( ! empty( $result['invalid'] ) ) {
+						echo '<p><strong>Nicht zuordenbar</strong> (Übersetzung eingetragen, aber Referenz fehlt oder wurde verändert – diese Zeilen wurden NICHT übernommen):<br>'
+							. esc_html( implode( ' · ', array_slice( $result['invalid'], 0, 30 ) ) )
+							. ( count( $result['invalid'] ) > 30 ? '<br>… und ' . ( count( $result['invalid'] ) - 30 ) . ' weitere' : '' ) . '</p>';
+					}
+					if ( ! empty( $result['duplicates'] ) ) {
+						echo '<p><strong>Doppelte Referenzen:</strong><br>'
+							. esc_html( implode( ' · ', array_slice( $result['duplicates'], 0, 30 ) ) )
+							. ( count( $result['duplicates'] ) > 30 ? '<br>… und ' . ( count( $result['duplicates'] ) - 30 ) . ' weitere' : '' ) . '</p>';
+					}
+					echo '</div>';
+				}
 			}
 		}
 		if ( file_exists( $file ) ) {

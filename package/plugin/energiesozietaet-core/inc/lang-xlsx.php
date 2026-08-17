@@ -156,7 +156,13 @@ class ES_Lang_Xlsx {
 				else { $val = isset( $c->v ) ? (string) $c->v : ''; }
 				$cells[ $col - 1 ] = $val;
 			}
-			if ( $cells ) { ksort( $cells ); $rows[] = $cells; }
+			if ( $cells ) {
+				ksort( $cells );
+				// Original-Zeilennummer mitgeben, damit der Import Probleme
+				// ("Zeile 57 nicht zuordenbar") auf die Excel-Zeile beziehen kann.
+				$cells['__r'] = (int) $row['r'];
+				$rows[] = $cells;
+			}
 		}
 		return $rows;
 	}
