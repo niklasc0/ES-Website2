@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.8
+Version: 2.6.9
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -476,6 +476,17 @@ html.js .esc-card.es-reveal {
    wäre der Übergang unsichtbar (Philosophie-Problem). Dann warm
    hinterlegen – dezenter dunkler Bruch statt greller weißer Ecken. */
 .es-stage-sec.es-own-ink:not(:has(+ .es-stage-sec)) { background: var(--es-paper-warm); }
+/* Auf ALLEN Breakpoints ausgeblendete Sektionen (Elementor-Responsive-Hide,
+   z.B. LinkedIn) sind display:none, aber :has() sieht sie trotzdem — für die
+   Stapel-Mechanik überspringen: Farbe der übernächsten Sektion durchreichen … */
+.es-stage-sec:has(+ .elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile + .es-own-ink)   { background: var(--es-ink); }
+.es-stage-sec:has(+ .elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile + .es-own-warm)  { background: var(--es-paper-warm); }
+.es-stage-sec:has(+ .elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile + .es-own-cool)  { background: var(--es-paper-cool); }
+.es-stage-sec:has(+ .elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile + .es-own-paper) { background: var(--es-paper); }
+/* … und die letzte SICHTBARE Sektion (danach nur noch versteckte) rundet in
+   den Footer-Ink, inkl. Ink-Sonderfall wie oben. */
+.es-stage-sec:not(:has(~ .es-stage-sec:not(.elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile))) { background: var(--es-ink); }
+.es-stage-sec.es-own-ink:not(:has(~ .es-stage-sec:not(.elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile))) { background: var(--es-paper-warm); }
 .es-stage-sec:not(:has(+ .es-stage-sec)) > .elementor-container { position: relative; z-index: 1; }
 
 /* Hero: zusätzlich dezente Punkt-Textur mit grünen Flecken (auf ::after,
@@ -3987,7 +3998,7 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 /* Grünes Band über dem Bild halten: das gehoverte <img> bekommt ein
    transform (scale) und würde die Card-::before-Bande sonst überdecken. */
 .esc-card--news::before { z-index: 3; }
-.esc-card--news .esc-card__media { aspect-ratio: 16 / 10; }
+.esc-card--news .esc-card__media { aspect-ratio: 16 / 9; }
 .esc-card--news:hover .esc-card__media img { transform: scale(1.05); }
 /* Datum: auf dem dunklen Hover-Hintergrund hell halten (wie Titel/Text). */
 .esc-card--news:hover .esc-card__date { color: rgba(255, 255, 255, 0.72); }
