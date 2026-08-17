@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.6
+Version: 2.6.7
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -337,10 +337,13 @@ html.js .esc-card.es-reveal {
 }
 .es-header__lang .es-lang-draw path {
     fill: none; stroke: var(--es-accent); stroke-width: 1px;
-    stroke-dasharray: 102; stroke-dashoffset: 102;
-    transition: stroke-dashoffset var(--es-duration-normal) var(--es-easing);
+    /* Draw-on über die Dash-LÄNGE (0→110) statt dashoffset: kein Pattern-Wrap,
+       daher weder Rest-Sliver im Ruhezustand noch fehlendes Ende beim Hover
+       (pathLength-Rundung in Chrome). 110 > 100 = sicherer Überhang. */
+    stroke-dasharray: 0 110;
+    transition: stroke-dasharray var(--es-duration-normal) var(--es-easing);
 }
-.es-header__lang a:hover .es-lang-draw path { stroke-dashoffset: 0; }
+.es-header__lang a:hover .es-lang-draw path { stroke-dasharray: 110 0; }
 .es-header__cta { padding: 11px 24px; font-size: 14px; }
 .es-btn-jobs {
     display: inline-flex; align-items: center; gap: 8px;
