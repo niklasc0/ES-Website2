@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.18
+Version: 2.6.19
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -1919,6 +1919,11 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     color: var(--es-ink); background: var(--es-paper-cool);
     border-radius: var(--es-radius-card); overflow: hidden;
     transition: transform var(--es-duration-fast) var(--es-easing);
+    /* Eigene Compositing-Ebene: verhindert die grauen Kanten-Artefakte
+       (Re-Rasterisierung der gerundeten Clip-Kante) beim Hover-Lift und
+       den kurz stehenbleibenden Eckenrest nach dem Hover. */
+    will-change: transform;
+    transform: translateZ(0);
 }
 @media (max-width: 640px) {
     .es-news-row { grid-template-columns: 1fr; height: auto; }
@@ -1936,6 +1941,11 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     width: 100%; height: 100%;
     overflow: hidden; background: var(--es-paper-warm);
     border-radius: var(--es-radius-card) 0 0 var(--es-radius-card);
+    /* Clip-Kante während der Bild-Scale-Animation stabil halten: eigener
+       Layer + Mask-Trick, sonst blitzt an den runden Ecken kurz die
+       ungerundete Bildecke bzw. ein grauer Rest auf (WebKit/Blink). */
+    transform: translateZ(0);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 /* Gestapeltes Mobil-Layout (Bild oben): alle vier Bildecken rund — oben
    schließt das Bild mit der Kachelkante ab (Kachel clippt ohnehin rund),
