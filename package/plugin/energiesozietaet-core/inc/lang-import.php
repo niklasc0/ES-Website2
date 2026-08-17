@@ -364,7 +364,7 @@ add_action( 'admin_menu', function () {
 		submit_button( 'Fehlende EN-Seitenkopien anlegen', 'secondary', 'esc_lang_copies_run', false );
 		echo '</form><hr>';
 		echo '<h2>1 · Übersetzungsdatei exportieren</h2>';
-		echo '<p>Erzeugt eine Excel-Datei mit allen aktuellen deutschen Texten und den bereits vorhandenen englischen Fassungen – zum Befüllen durch den Kunden. Neue Seiten und Inhalte sind automatisch enthalten.</p>';
+		echo '<p>Erzeugt eine Excel-Datei mit allen aktuellen deutschen Texten und den bereits vorhandenen englischen Fassungen zum Ausfüllen. Neue Seiten und Inhalte sind automatisch enthalten.</p>';
 		echo '<p><a class="button button-secondary" href="' . esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=esc_lang_export' ), 'esc_lang_export' ) ) . '">Übersetzungsdatei herunterladen (XLSX)</a></p>';
 		echo '<h2>2 · Ausgefüllte Datei hochladen</h2>';
 		echo '<p>Nur die Spalte „Englisch" und die Spalte „Referenz" werden gelesen; leere Englisch-Zellen bleiben unverändert. Fehlende EN-Seitenkopien werden automatisch angelegt.</p>';
@@ -373,8 +373,10 @@ add_action( 'admin_menu', function () {
 		echo '<input type="file" name="esc_lang_file" accept=".xlsx" /> ';
 		submit_button( 'Hochladen und einspielen', 'primary', 'esc_lang_upload_run', false );
 		echo '</form><hr>';
-		echo '<h2>Alternativ: mitgelieferte Übersetzungsdatei</h2>';
-		echo '<p>Spielt <code>data/translations-en.json</code> aus dem Plugin ein (falls mit einem Update geliefert). Bereits eingespielte Werte werden aktualisiert; deutsche Inhalte bleiben unberührt.</p>';
+		if ( file_exists( $file ) ) {
+			echo '<h2>Alternativ: mitgelieferte Übersetzungsdatei</h2>';
+			echo '<p>Spielt die im Plugin enthaltene Übersetzungsdatei ein. Bereits eingespielte Werte werden aktualisiert; deutsche Inhalte bleiben unberührt.</p>';
+		}
 		if ( $result ) {
 			if ( is_wp_error( $result ) ) {
 				echo '<div class="notice notice-error"><p>' . esc_html( $result->get_error_message() ) . '</p></div>';
@@ -391,8 +393,6 @@ add_action( 'admin_menu', function () {
 			wp_nonce_field( 'esc_lang_import' );
 			submit_button( 'Übersetzungen jetzt einspielen', 'primary', 'esc_lang_import_run' );
 			echo '</form>';
-		} else {
-			echo '<p><em>Keine Übersetzungsdatei im Plugin enthalten – sie wird mit einem Plugin-Update geliefert, sobald die Kundenübersetzungen vorliegen.</em></p>';
 		}
 		echo '</div>';
 	}, 45 );
