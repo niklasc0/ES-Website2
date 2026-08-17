@@ -13,13 +13,21 @@ Sprachweiche, Link-Übersetzer und Permalink-Filter laufen auf **jeder** Seite m
 | # | Test | Soll |
 |---|---|---|
 | A1 | Startseite: Hero-Foto (Drache), Texte, „20+/30+"-Karten, News-Teaser | wie vor den Änderungen |
-| A2 | Philosophie, Leistungen, Rechts-/Steuer-/Unternehmensberatung: Texte inkl. der jüngsten Live-Änderungen | vorhanden — Import hat nichts Altes zurückgeholt |
+| A2 | Philosophie, Leistungen, Rechts-/Steuer-/Unternehmensberatung: Texte inkl. der jüngsten Live-Änderungen (Details unten) | vorhanden — Import hat nichts Altes zurückgeholt |
 | A3 | Team-Übersicht: weiße Karten, Rollen (Stockem „Diplom-Kaufmann \| Steuerberater", Wolfschaffner „… \| Fachanwältin für Vergaberecht") | unverändert |
 | A4 | Team-Profil (z. B. Stockem): Standort Hamburg, Werdegang, Schwerpunkte, vCard, Namens-Verlinkung in News-Texten | unverändert |
 | A5 | Einzelleistung (z. B. Vergaberecht): Breadcrumb „Leistungen / Rechtsberatung / …", Eyebrow, Backlink — alles deutsch | unverändert |
 | A6 | Veranstaltungen, Publikationen (Jahres-Liste), Kontakt, Karriere-Übersicht, Stellen-Detailseite | unverändert |
 | A7 | Footer auf mehreren Seiten: Adressen, Navigation-Links klickbar, Kontakt-Button führt auf /kontakt/ | unverändert |
 | A8 | Alle internen Links bleiben ohne /en/-Präfix, solange man deutsch unterwegs ist | keine „versehentlich englischen" Links |
+
+**Zu A2 — diese Texte wurden live geändert** (Stand-Vergleich alte Vorlagen ↔ Live-Snapshot 16.08.; alle drei auf der Seite **Unternehmensberatung**, die anderen Seiten waren textlich unverändert):
+
+1. **Intro-Absatz erweitert**: endet jetzt auf „… Mengen und Margen im Bestandsgeschäft sichern, neue Geschäftsmodelle entwickeln, die Unternehmensorganisationen für diese Aufgaben befähigen und die Finanzierungs- und damit die Investitionsfähigkeit erhalten." (vorher kürzer: „… um wegfallendes Bestandsgeschäft zu kompensieren und neue Wachstumsstrategien zu erschließen.")
+2. **Zweiter Absatz umformuliert**: beginnt jetzt „**Wir beraten Unternehmen, Kommunen und Investoren** bei diesen herausfordernden Fragestellungen …" (vorher „Unsere Experten unterstützen Sie …") und nennt zusätzlich „Modelloptionen", „regulatorische Optimierung" und „Optimierung der Kapitalstruktur".
+3. **Absatz ersetzt**: NEU ist „**Unsere Stärke liegt in der Übersetzung strategischer Zielbilder** in wirtschaftlich tragfähige Entscheidungen, Strukturen und Umsetzungsprogramme …"; ENTFERNT wurde der frühere Absatz „Investier- und Finanzierbarkeit von Transformation erreichen: …".
+
+→ Prüfkriterium nach „Import erzwingen": Punkte 1–3 in der neuen Fassung vorhanden, der alte „Investier- und Finanzierbarkeit"-Absatz taucht **nicht** wieder auf.
 
 ## B — Header & Sprachumschalter
 
