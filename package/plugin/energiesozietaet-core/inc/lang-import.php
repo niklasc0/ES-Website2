@@ -30,9 +30,27 @@ class ES_Lang_Import {
 			'Aufgaben' => 'lines:es_tasks_en', 'Profil' => 'lines:es_profile_en', 'Wir bieten' => 'lines:es_offer_en',
 			'Anstellungsart' => 'es_employment_type_en',
 		),
+		'news' => array(
+			'Titel' => 'es_title_en', 'Beitragstext' => 'content', 'Teaser' => 'es_excerpt_en',
+		),
+		'veranstaltung' => array(
+			'Titel' => 'es_title_en', 'Beschreibung' => 'content', 'Ort' => 'es_location_en', 'Art' => 'es_kind_en',
+		),
+		'publikation' => array(
+			'Titel' => 'es_title_en', 'Beschreibung' => 'content', 'Kategorie' => 'es_cat_en',
+		),
 	);
 
-	const CPT_OF_SHEET = array( 'einzelleistung' => 'es_einzelleistung', 'team' => 'es_team', 'karriere' => 'es_karriere' );
+	const CPT_OF_SHEET = array(
+		'einzelleistung' => 'es_einzelleistung', 'team' => 'es_team', 'karriere' => 'es_karriere',
+		'news' => 'es_news', 'veranstaltung' => 'es_veranstaltung', 'publikation' => 'es_publikation',
+	);
+
+	/** URL-Kürzel-Typen (Vorlage) => Post-Type. */
+	const URL_TYPES = array(
+		'Einzelleistung' => 'es_einzelleistung', 'Stellenangebot' => 'es_karriere',
+		'News-Artikel' => 'es_news', 'Veranstaltung' => 'es_veranstaltung', 'Publikation' => 'es_publikation',
+	);
 
 	public static function apply_file() {
 		$file = ESC_DIR . 'data/translations-en.json';
@@ -85,7 +103,7 @@ class ES_Lang_Import {
 			}
 
 			// CPT-Referenz: <blatt>.<slug>.<Feldlabel>
-			if ( preg_match( '/^(einzelleistung|team|karriere)\.([^.]+)\.(.+)$/u', $ref, $m ) ) {
+			if ( preg_match( '/^(einzelleistung|team|karriere|news|veranstaltung|publikation)\.([^.]+)\.(.+)$/u', $ref, $m ) ) {
 				$post = get_page_by_path( $m[2], OBJECT, self::CPT_OF_SHEET[ $m[1] ] );
 				$map  = self::FIELD_MAP[ $m[1] ];
 				if ( ! $post || ! isset( $map[ $m[3] ] ) ) { $stats['skipped'][] = $ref; continue; }
@@ -109,8 +127,8 @@ class ES_Lang_Import {
 						update_post_meta( $en_id, 'es_public_slug', $en_slug );
 						$stats['slugs']++;
 					}
-				} elseif ( 'Einzelleistung' === $r['typ'] || 'Stellenangebot' === $r['typ'] ) {
-					$pt = ( 'Einzelleistung' === $r['typ'] ) ? 'es_einzelleistung' : 'es_karriere';
+				} elseif ( isset( self::URL_TYPES[ $r['typ'] ] ) ) {
+					$pt = self::URL_TYPES[ $r['typ'] ];
 					$post = get_page_by_path( (string) $r['de'], OBJECT, $pt );
 					if ( $post && $en_slug !== (string) get_post_meta( $post->ID, 'es_slug_en', true ) ) {
 						update_post_meta( $post->ID, 'es_slug_en', $en_slug );
@@ -223,6 +241,7 @@ class ES_Lang_Import {
 		$rows = array( array( 'Bereich', 'Element / Feld', 'Deutsch (aktuell)', 'Englisch (bitte ausfüllen/ändern)', 'Referenz (nicht ändern)' ) );
 
 		// Feste Seiten: alle veröffentlichten DE-Seiten mit Elementor-Inhalt
+		$rows[] = array( '__section' => 'FESTE SEITEN' );
 		$pages = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => -1, 'orderby' => 'menu_order title', 'order' => 'ASC' ) );
 		foreach ( $pages as $pg ) {
 			if ( 'en' === get_post_meta( $pg->ID, 'es_lang', true ) ) { continue; }
@@ -242,20 +261,26 @@ class ES_Lang_Import {
 			}
 		}
 
-		// Inhaltstypen
+		// Inhaltstypen (News kommen als größter Block ganz ans Dateiende)
 		$cpt_sources = array(
 			'einzelleistung' => array( 'es_einzelleistung', array( 'Titel' => 'title', 'Untertitel' => 'meta:es_subtitle', 'Beschreibung' => 'content', 'Kernpunkte' => 'lines:es_bullets', 'Abschluss-Absatz' => 'meta:es_closing' ) ),
 			'team'           => array( 'es_team', array( 'Rolle/Position' => 'meta:es_role', 'Kurzvita' => 'content', 'Erweiterte Vita' => 'meta:es_more_bio', 'Schwerpunkte' => 'lines:es_focus_areas', 'Werdegang' => 'career:es_career' ) ),
 			'karriere'       => array( 'es_karriere', array( 'Titel' => 'title', 'Rollen-Kürzel' => 'meta:es_department', 'Über die Rolle' => 'content', 'Aufgaben' => 'lines:es_tasks', 'Profil' => 'lines:es_profile', 'Wir bieten' => 'lines:es_offer', 'Anstellungsart' => 'meta:es_employment_type' ) ),
+			'veranstaltung'  => array( 'es_veranstaltung', array( 'Titel' => 'title', 'Beschreibung' => 'content', 'Ort' => 'meta:es_location', 'Art' => 'meta:es_kind' ) ),
+			'publikation'    => array( 'es_publikation', array( 'Titel' => 'title', 'Beschreibung' => 'content', 'Kategorie' => 'meta:es_cat' ) ),
+			'news'           => array( 'es_news', array( 'Titel' => 'title', 'Beitragstext' => 'content', 'Teaser' => 'excerpt' ) ),
 		);
-		$area_names = array( 'einzelleistung' => 'Einzelleistung', 'team' => 'Team', 'karriere' => 'Stelle' );
-		foreach ( $cpt_sources as $sheet => $cfg ) {
-			list( $pt, $fields ) = $cfg;
-			$posts = get_posts( array( 'post_type' => $pt, 'post_status' => 'publish', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ) );
+		$area_names = array( 'einzelleistung' => 'Einzelleistung', 'team' => 'Team', 'karriere' => 'Stelle', 'veranstaltung' => 'Veranstaltung', 'publikation' => 'Publikation', 'news' => 'News' );
+		$section_names = array( 'einzelleistung' => 'EINZELLEISTUNGEN', 'team' => 'TEAM', 'karriere' => 'STELLENANGEBOTE', 'veranstaltung' => 'VERANSTALTUNGEN', 'publikation' => 'PUBLIKATIONEN', 'news' => 'NEWS-ARTIKEL' );
+		$emit_cpt = function ( $sheet ) use ( &$rows, $cpt_sources, $area_names, $section_names ) {
+			list( $pt, $fields ) = $cpt_sources[ $sheet ];
+			$posts = get_posts( array( 'post_type' => $pt, 'post_status' => 'publish', 'numberposts' => -1, 'orderby' => ( 'news' === $sheet ? 'date' : 'title' ), 'order' => ( 'news' === $sheet ? 'DESC' : 'ASC' ) ) );
+			$rows[] = array( '__section' => $section_names[ $sheet ] . ' (' . count( $posts ) . ')' );
 			foreach ( $posts as $po ) {
 				foreach ( $fields as $label => $src ) {
 					if ( 'title' === $src ) { $de = $po->post_title; }
 					elseif ( 'content' === $src ) { $de = trim( wp_strip_all_tags( $po->post_content ) ) ? $po->post_content : ''; }
+					elseif ( 'excerpt' === $src ) { $de = (string) $po->post_excerpt; }
 					elseif ( 0 === strpos( $src, 'meta:' ) ) { $de = (string) get_post_meta( $po->ID, substr( $src, 5 ), true ); }
 					elseif ( 0 === strpos( $src, 'lines:' ) ) { $de = self::join_lines( get_post_meta( $po->ID, substr( $src, 6 ), true ) ); }
 					else { $de = self::join_lines( get_post_meta( $po->ID, substr( $src, 7 ), true ), true ); }
@@ -269,9 +294,13 @@ class ES_Lang_Import {
 					$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, $label, $de, $en, $sheet . '.' . $po->post_name . '.' . $label );
 				}
 			}
+		};
+		foreach ( array( 'einzelleistung', 'team', 'karriere', 'veranstaltung', 'publikation' ) as $sheet ) {
+			$emit_cpt( $sheet );
 		}
 
 		// Zentrale Einstellungen
+		$rows[] = array( '__section' => 'ZENTRALE EINSTELLUNGEN' );
 		foreach ( array( 'Karriere-Seiten' => array( 'esc_karriere', 'ESC_Karriere_Settings' ), 'Footer' => array( 'esc_footer', 'ESC_Footer_Settings' ) ) as $area => $cfg ) {
 			list( $opt, $cls ) = $cfg;
 			if ( ! class_exists( $cls ) ) { continue; }
@@ -285,17 +314,21 @@ class ES_Lang_Import {
 		}
 
 		// URL-Kürzel
+		$rows[] = array( '__section' => 'URL-KÜRZEL' );
 		foreach ( $pages as $pg ) {
 			if ( 'en' === get_post_meta( $pg->ID, 'es_lang', true ) ) { continue; }
 			$en_id = self::en_copy_id( $pg->post_name );
 			if ( ! $en_id ) { continue; }
 			$rows[] = array( 'URL-Kürzel', 'Seite', $pg->post_name, (string) get_post_meta( $en_id, 'es_public_slug', true ), 'url:Seite:' . $pg->post_name );
 		}
-		foreach ( array( 'Einzelleistung' => 'es_einzelleistung', 'Stellenangebot' => 'es_karriere' ) as $typ => $pt ) {
+		foreach ( self::URL_TYPES as $typ => $pt ) {
 			foreach ( get_posts( array( 'post_type' => $pt, 'post_status' => 'publish', 'numberposts' => -1 ) ) as $po ) {
 				$rows[] = array( 'URL-Kürzel', $typ, $po->post_name, (string) get_post_meta( $po->ID, 'es_slug_en', true ), 'url:' . $typ . ':' . $po->post_name );
 			}
 		}
+
+		// News als größter Block ganz ans Ende
+		$emit_cpt( 'news' );
 		return $rows;
 	}
 
@@ -308,7 +341,7 @@ class ES_Lang_Import {
 			$en  = isset( $cells[3] ) ? trim( (string) $cells[3] ) : '';
 			// Kopf-/Leer-/Fremdzeilen anhand des Inhalts erkennen – die Position
 			// im Blatt ist egal (eingefügte Zeilen, Sortierungen etc. schaden nicht)
-			if ( ! preg_match( '/^(live:|settings\.|url:|einzelleistung\.|team\.|karriere\.)/', $ref ) ) { continue; }
+			if ( ! preg_match( '/^(live:|settings\.|url:|einzelleistung\.|team\.|karriere\.|news\.|veranstaltung\.|publikation\.)/', $ref ) ) { continue; }
 			$known_ref++;
 			if ( '' === $en ) { continue; }
 			$out[] = array( 'ref' => $ref, 'en' => $en );

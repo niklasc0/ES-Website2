@@ -56,13 +56,26 @@ class ES_Lang_Xlsx {
 		$widths = array( 1 => 20, 2 => 22, 3 => 60, 4 => 60, 5 => 30 );
 		$xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
 			. '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+			// Gliederung: +/- Schaltfläche an der Abschnittszeile ÜBER der Gruppe
+			. '<sheetPr><outlinePr summaryBelow="0"/></sheetPr>'
 			// Kopfzeile fixieren, damit die Spaltentitel beim Scrollen sichtbar bleiben
 			. '<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>'
+			. '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1"/>'
 			. '<cols><col min="1" max="1" width="20" customWidth="1"/><col min="2" max="2" width="22" customWidth="1"/>'
 			. '<col min="3" max="4" width="60" customWidth="1"/><col min="5" max="5" width="30" customWidth="1"/></cols><sheetData>';
 		$r = 0;
+		$level = 0; // 0 bis zur ersten Abschnittszeile, danach 1 (Zeilen zuklappbar)
 		foreach ( $rows as $row ) {
 			$r++;
+			// Abschnittszeile: fette Trennzeile, die die folgende Gruppe „besitzt"
+			if ( isset( $row['__section'] ) ) {
+				$level = 1;
+				$xml .= '<row r="' . $r . '" ht="24" customHeight="1">'
+					. '<c r="A' . $r . '" s="2" t="inlineStr"><is><t xml:space="preserve">'
+					. htmlspecialchars( (string) $row['__section'], ENT_XML1 | ENT_COMPAT, 'UTF-8' )
+					. '</t></is></c></row>';
+				continue;
+			}
 			// Zeilenhöhe vorab schätzen: Excel passt gespeicherte Höhen beim Öffnen
 			// nicht automatisch an umbrochenen Text an.
 			$max_lines = 1;
@@ -77,7 +90,7 @@ class ES_Lang_Xlsx {
 				if ( $lines > $max_lines ) { $max_lines = $lines; }
 			}
 			$ht = min( 405, 4 + 14.4 * $max_lines );
-			$xml .= '<row r="' . $r . '" ht="' . $ht . '" customHeight="1">';
+			$xml .= '<row r="' . $r . '" ht="' . $ht . '" customHeight="1"' . ( $level ? ' outlineLevel="1"' : '' ) . '>';
 			$c = 0;
 			foreach ( $row as $val ) {
 				$c++;

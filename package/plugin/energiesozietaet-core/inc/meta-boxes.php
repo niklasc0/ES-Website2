@@ -57,12 +57,13 @@ class ESC_MetaBoxes {
 			self::field( 'Titel (EN)', 'es_title_en', get_post_meta( $post->ID, 'es_title_en', true ) );
 		}
 
-		if ( in_array( $pt, array( 'es_news', 'es_team', 'es_einzelleistung', 'es_karriere' ), true ) ) {
+		if ( in_array( $pt, array( 'es_news', 'es_team', 'es_einzelleistung', 'es_karriere', 'es_veranstaltung' ), true ) ) {
 			$content_label = array(
 				'es_news'           => 'Beitragstext (EN)',
 				'es_team'           => 'Kurzvita (EN)',
 				'es_einzelleistung' => 'Beschreibung (EN)',
 				'es_karriere'       => 'Über die Rolle (EN)',
+				'es_veranstaltung'  => 'Beschreibung (EN)',
 			);
 			echo '<p style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"><label for="esc_es_content_en"><strong>' . esc_html( $content_label[ $pt ] ) . '</strong></label></p>';
 			wp_editor( (string) get_post_meta( $post->ID, 'es_content_en', true ), 'esc_es_content_en', array(
