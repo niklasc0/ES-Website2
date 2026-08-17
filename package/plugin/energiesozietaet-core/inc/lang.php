@@ -49,6 +49,10 @@ class ES_Lang {
 		if ( 'en' === self::$lang ) {
 			add_filter( 'locale', array( __CLASS__, 'frontend_locale' ) );
 			add_filter( 'request', array( __CLASS__, 'resolve_en_slugs' ) );
+			// WPs redirect_canonical vergleicht die intern umgeschriebene URI
+			// (z. B. /en-home/) mit dem gefilterten Permalink (/en/) und würde
+			// eine Redirect-Schleife bauen – canonical_redirects() übernimmt.
+			add_filter( 'redirect_canonical', '__return_false' );
 			add_filter( 'the_title', array( __CLASS__, 'filter_title' ), 10, 2 );
 			add_filter( 'single_post_title', function ( $title, $post ) {
 				return $post ? self::filter_title( $title, $post->ID ) : $title;
@@ -66,8 +70,11 @@ class ES_Lang {
 		// Permalink-Filter laufen immer – sie prüfen den Kontext selbst.
 		add_filter( 'post_type_link', array( __CLASS__, 'localize_permalink' ), 10, 2 );
 		add_filter( 'page_link', array( __CLASS__, 'localize_page_link' ), 10, 2 );
+		add_filter( 'request', array( __CLASS__, 'resolve_public_slug_de' ) );
 		add_action( 'wp_head', array( __CLASS__, 'head_tags' ), 1 );
-		add_action( 'template_redirect', array( __CLASS__, 'canonical_redirects' ) );
+		// Priorität 9: vor WPs redirect_canonical, damit /philosophy/ in EINEM
+		// Sprung auf /en/philosophy/ landet (statt über die interne Kopie-URL).
+		add_action( 'template_redirect', array( __CLASS__, 'canonical_redirects' ), 9 );
 		add_filter( 'wp_sitemaps_posts_query_args', array( __CLASS__, 'sitemap_exclude_untranslated' ), 10, 2 );
 	}
 
@@ -159,26 +166,37 @@ class ES_Lang {
 
 	/** EN-Slug (es_slug_en) auf den DE-post_name auflösen. */
 	public static function resolve_en_slugs( $vars ) {
-		// Feste Seiten: /en/<slug>/ auf die EN-Kopie auflösen
+		// Feste Seiten: /en/<slug>/ auf die EN-Kopie auflösen. Auflösung über
+		// page_id statt pagename – die Kopien hängen als Kind unter ihrer
+		// deutschen Seite, ihr pagename-Pfad wäre also hierarchisch.
 		if ( ! empty( $vars['pagename'] ) && empty( $vars['post_type'] ) ) {
 			$slug = $vars['pagename'];
 			global $wpdb;
 			// a) Öffentlicher EN-Slug einer Kopie (es_public_slug)
-			$en_name = $wpdb->get_var( $wpdb->prepare(
-				"SELECT p.post_name FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id
+			$en_id = (int) $wpdb->get_var( $wpdb->prepare(
+				"SELECT p.ID FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id
 				 WHERE m.meta_key = 'es_public_slug' AND m.meta_value = %s AND p.post_type = 'page' AND p.post_status = 'publish' LIMIT 1", $slug ) );
-			// b) Deutscher Slug mit verknüpfter EN-Kopie
-			if ( ! $en_name ) {
+			// b) Interner Kopie-Slug (en-<slug>, z. B. en-home nach detect())
+			if ( ! $en_id ) {
+				$en_id = (int) $wpdb->get_var( $wpdb->prepare(
+					"SELECT p.ID FROM {$wpdb->posts} p JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = 'es_lang' AND m.meta_value = 'en'
+					 WHERE p.post_name = %s AND p.post_type = 'page' AND p.post_status = 'publish' LIMIT 1", $slug ) );
+			}
+			// c) Deutscher Slug mit verknüpfter EN-Kopie
+			if ( ! $en_id ) {
 				$de = get_page_by_path( $slug );
 				if ( $de ) {
 					$partner = self::translation_of( $de->ID );
 					if ( $partner && 'en' === get_post_meta( $partner, 'es_lang', true ) ) {
 						$pp = get_post( $partner );
-						if ( $pp && 'publish' === $pp->post_status ) { $en_name = $pp->post_name; }
+						if ( $pp && 'publish' === $pp->post_status ) { $en_id = (int) $partner; }
 					}
 				}
 			}
-			if ( $en_name ) { $vars['pagename'] = $en_name; }
+			if ( $en_id ) {
+				unset( $vars['pagename'] );
+				$vars['page_id'] = $en_id;
+			}
 			return $vars;
 		}
 		if ( empty( $vars['name'] ) ) { return $vars; }
@@ -196,16 +214,46 @@ class ES_Lang {
 			if ( $type && isset( $vars[ $type ] ) ) { $vars[ $type ] = $row->post_name; }
 			return $vars;
 		}
-		// Öffentlicher EN-Slug einer Seitenkopie kommt ohne verbose Page-Rule
-		// als generischer name-Query an (z. B. /en/philosophy/)
+		// Seitenkopien kommen ohne passende Page-Rewrite-Rule als generischer
+		// name-Query an: öffentliche EN-Slugs (z. B. /en/philosophy/) und die
+		// internen Kopie-Slugs (z. B. en-home – als Kind von "home" matcht
+		// /en-home/ keine verbose Page-Rule mehr).
 		if ( ! $type ) {
-			$en_name = $wpdb->get_var( $wpdb->prepare(
-				"SELECT p.post_name FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id
+			$en_id = (int) $wpdb->get_var( $wpdb->prepare(
+				"SELECT p.ID FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id
 				 WHERE m.meta_key = 'es_public_slug' AND m.meta_value = %s AND p.post_type = 'page' AND p.post_status = 'publish' LIMIT 1", $slug ) );
-			if ( $en_name ) {
-				unset( $vars['name'] );
-				$vars['pagename'] = $en_name;
+			if ( ! $en_id ) {
+				$en_id = (int) $wpdb->get_var( $wpdb->prepare(
+					"SELECT p.ID FROM {$wpdb->posts} p JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = 'es_lang' AND m.meta_value = 'en'
+					 WHERE p.post_name = %s AND p.post_type = 'page' AND p.post_status = 'publish' LIMIT 1", $slug ) );
 			}
+			if ( $en_id ) {
+				unset( $vars['name'] );
+				$vars['page_id'] = $en_id;
+			}
+		}
+		return $vars;
+	}
+
+	/**
+	 * DE-Kontext: /<en-slug>/ ohne /en/-Präfix (z. B. /philosophy/) auf die
+	 * EN-Kopie auflösen – canonical_redirects() leitet dann per 301 auf die
+	 * kanonische /en/…-URL um. Greift nur, wenn der Slug keine deutsche
+	 * Seite trifft.
+	 */
+	public static function resolve_public_slug_de( $vars ) {
+		if ( 'en' === self::$lang || ! empty( $vars['post_type'] ) ) { return $vars; }
+		$slug = '';
+		if ( ! empty( $vars['pagename'] ) ) { $slug = $vars['pagename']; }
+		elseif ( ! empty( $vars['name'] ) ) { $slug = $vars['name']; }
+		if ( '' === $slug || false !== strpos( $slug, '/' ) || get_page_by_path( $slug ) ) { return $vars; }
+		global $wpdb;
+		$en_id = (int) $wpdb->get_var( $wpdb->prepare(
+			"SELECT p.ID FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id
+			 WHERE m.meta_key = 'es_public_slug' AND m.meta_value = %s AND p.post_type = 'page' AND p.post_status = 'publish' LIMIT 1", $slug ) );
+		if ( $en_id ) {
+			unset( $vars['pagename'], $vars['name'] );
+			$vars['page_id'] = $en_id;
 		}
 		return $vars;
 	}
@@ -522,6 +570,10 @@ class ES_Lang {
 				if ( $copy && isset( self::PAGE_TITLES_EN[ $de_slug ] ) && $copy->post_title === $de->post_title && $de->post_title !== self::PAGE_TITLES_EN[ $de_slug ] ) {
 					wp_update_post( array( 'ID' => $existing, 'post_title' => self::PAGE_TITLES_EN[ $de_slug ] ) );
 				}
+				// Nachziehen: Kopie hängt in der Seiten-Liste als Kind unter der DE-Seite
+				if ( $copy && (int) $copy->post_parent !== (int) $de->ID ) {
+					wp_update_post( array( 'ID' => $existing, 'post_parent' => $de->ID ) );
+				}
 				// Solange die Kopie nicht als übersetzt markiert ist, Struktur und
 				// Inhalt von der deutschen Seite nachziehen — Layout-Änderungen an
 				// DE-Seiten erreichen so auch die (noch deutsche) EN-Fassung.
@@ -546,6 +598,7 @@ class ES_Lang {
 				'post_title'   => isset( self::PAGE_TITLES_EN[ $de_slug ] ) ? self::PAGE_TITLES_EN[ $de_slug ] : $de->post_title,
 				'post_content' => $de->post_content,
 				'post_author'  => $de->post_author,
+				'post_parent'  => $de->ID, // Backend-Seitenliste: EN-Kopie als Kind der DE-Seite
 			), true );
 			if ( is_wp_error( $id ) || ! $id ) { continue; }
 			foreach ( array( '_elementor_data', '_elementor_edit_mode', '_elementor_template_type', '_elementor_version', '_elementor_page_settings', '_wp_page_template' ) as $mk ) {
