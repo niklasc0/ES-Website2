@@ -78,9 +78,26 @@ class ES_Lang {
 		add_filter( 'wp_sitemaps_posts_query_args', array( __CLASS__, 'sitemap_exclude_untranslated' ), 10, 2 );
 	}
 
+	/** Frühere öffentliche EN-Slugs => aktueller Slug (301 statt 404). */
+	const LEGACY_SLUGS_EN = array(
+		'management-consulting' => 'consulting',
+		'legal-advice'          => 'legal',
+		'tax-advice'            => 'tax',
+	);
+
 	/** Kanonische Weiterleitungen zwischen den Sprachfassungen. */
 	public static function canonical_redirects() {
-		if ( is_admin() || ! is_singular() ) { return; }
+		if ( is_admin() ) { return; }
+		// Umbenannte EN-Slugs: alte URL per 301 auf die neue
+		if ( 'en' === self::$lang && is_404() ) {
+			$req = isset( $_SERVER['REQUEST_URI'] ) ? (string) strtok( (string) $_SERVER['REQUEST_URI'], '?' ) : '';
+			$seg = trim( $req, '/' );
+			if ( isset( self::LEGACY_SLUGS_EN[ $seg ] ) ) {
+				wp_safe_redirect( home_url( '/en/' . self::LEGACY_SLUGS_EN[ $seg ] . '/' ), 301 );
+				exit;
+			}
+		}
+		if ( ! is_singular() ) { return; }
 		$id = get_queried_object_id();
 		// EN-Seitenkopie ohne /en/-Präfix aufgerufen → auf die EN-URL umleiten
 		if ( 'de' === self::$lang && 'page' === get_post_type( $id ) && 'en' === get_post_meta( $id, 'es_lang', true ) ) {
@@ -522,9 +539,9 @@ class ES_Lang {
 		'home'                  => '',
 		'philosophie'           => 'philosophy',
 		'leistungen'            => 'services',
-		'rechtsberatung'        => 'legal-advice',
-		'steuerberatung'        => 'tax-advice',
-		'unternehmensberatung'  => 'management-consulting',
+		'rechtsberatung'        => 'legal',
+		'steuerberatung'        => 'tax',
+		'unternehmensberatung'  => 'consulting',
 		'team'                  => 'team',
 		'karriere'              => 'careers',
 		'kontakt'               => 'contact',
@@ -542,7 +559,7 @@ class ES_Lang {
 	/** Englische Seitentitel der Kopien (für <title>/Backend-Liste). */
 	const PAGE_TITLES_EN = array(
 		'home' => 'Home', 'philosophie' => 'Philosophy', 'leistungen' => 'Services',
-		'rechtsberatung' => 'Legal Advice', 'steuerberatung' => 'Tax Advice',
+		'rechtsberatung' => 'Legal', 'steuerberatung' => 'Tax',
 		'unternehmensberatung' => 'Consulting', 'team' => 'Team',
 		'karriere' => 'Careers', 'kontakt' => 'Contact', 'news' => 'News',
 		'veranstaltungen' => 'Events', 'publikationen' => 'Publications',
@@ -574,6 +591,13 @@ class ES_Lang {
 				// Nachziehen: Kopie hängt in der Seiten-Liste als Kind unter der DE-Seite
 				if ( $copy && (int) $copy->post_parent !== (int) $de->ID ) {
 					wp_update_post( array( 'ID' => $existing, 'post_parent' => $de->ID ) );
+				}
+				// Nachziehen: öffentlicher EN-Slug aus der Karte, solange die Kopie
+				// nicht übersetzt ist (Kunden-Slugs aus dem Import bleiben erhalten)
+				$expected_public = ( '' === $public && 'home' !== $de_slug ) ? $de_slug : $public;
+				if ( $copy && ! get_post_meta( $existing, 'es_translated', true )
+					&& (string) get_post_meta( $existing, 'es_public_slug', true ) !== $expected_public ) {
+					update_post_meta( $existing, 'es_public_slug', $expected_public );
 				}
 				// Solange die Kopie nicht als übersetzt markiert ist, Struktur und
 				// Inhalt von der deutschen Seite nachziehen — Layout-Änderungen an
@@ -642,8 +666,8 @@ function es_term_name_ml( $term ) {
 	if ( ! $term || is_wp_error( $term ) ) { return ''; }
 	if ( es_is_en() ) {
 		$map = array(
-			'rechtsberatung'       => 'Legal Advice',
-			'steuerberatung'       => 'Tax Advice',
+			'rechtsberatung'       => 'Legal',
+			'steuerberatung'       => 'Tax',
 			'unternehmensberatung' => 'Consulting',
 		);
 		if ( isset( $map[ $term->slug ] ) ) { return $map[ $term->slug ]; }
