@@ -24,8 +24,8 @@ if ( is_post_type_archive( 'es_team' ) ) {
 	$eyebrow = 'Leistungen';
 	$lead    = 'Unsere fachlichen Schwerpunkte in Recht, Steuern und Beratung.';
 } elseif ( is_tax( 'es_beratungsfeld' ) ) {
-	$title   = $obj->name;
-	$eyebrow = 'Leistungen';
+	$title   = es_term_name_ml( $obj );
+	$eyebrow = es_t( 'Leistungen', 'Services' );
 	$lead    = $obj->description;
 } elseif ( is_post_type_archive( 'es_karriere' ) ) {
 	$title   = 'Karriere';
@@ -92,7 +92,7 @@ es_page_head( array(
 					<?php elseif ( get_post_type() === 'es_einzelleistung' ) :
 						$terms = wp_get_post_terms( get_the_ID(), 'es_beratungsfeld' ); ?>
 						<article class="es-card es-reveal">
-							<div class="es-card__meta"><?php echo $terms && ! is_wp_error( $terms ) ? esc_html( $terms[0]->name ) : 'Leistung'; ?></div>
+							<div class="es-card__meta"><?php echo $terms && ! is_wp_error( $terms ) ? esc_html( es_term_name_ml( $terms[0] ) ) : esc_html( es_t( 'Leistung', 'Service' ) ); ?></div>
 							<h3 class="es-card__title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 							<p class="es-card__text"><?php echo esc_html( es_excerpt( get_post(), 24 ) ); ?></p>
 							<a class="es-card__link" href="<?php the_permalink(); ?>">Mehr erfahren</a>

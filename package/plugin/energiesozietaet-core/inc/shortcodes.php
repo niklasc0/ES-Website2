@@ -554,7 +554,7 @@ class ESC_Shortcodes {
 				$thumb_id = get_post_thumbnail_id();
 				$felder   = get_the_terms( get_the_ID(), 'es_beratungsfeld' );
 				$cats     = get_the_terms( get_the_ID(), 'es_news_kategorie' );
-				$cat_name = ( $felder && ! is_wp_error( $felder ) ) ? $felder[0]->name : ( ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : 'Aktuelles' ); ?>
+				$cat_name = ( $felder && ! is_wp_error( $felder ) ) ? es_term_name_ml( $felder[0] ) : ( ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : es_t( 'Aktuelles', 'Latest' ) ); ?>
 				<a class="esc-card esc-card--news es-reveal" href="<?php the_permalink(); ?>">
 					<div class="esc-card__media">
 						<?php if ( $thumb_id ) {

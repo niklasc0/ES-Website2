@@ -10,7 +10,7 @@ while ( have_posts() ) : the_post();
 	$thumb_id = get_post_thumbnail_id();
 	$felder   = get_the_terms( get_the_ID(), 'es_beratungsfeld' );
 	$cats     = get_the_terms( get_the_ID(), 'es_news_kategorie' );
-	$cat_name = ( $felder && ! is_wp_error( $felder ) ) ? $felder[0]->name : ( ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : es_t( 'Aktuelles', 'Latest' ) );
+	$cat_name = ( $felder && ! is_wp_error( $felder ) ) ? es_term_name_ml( $felder[0] ) : ( ( $cats && ! is_wp_error( $cats ) ) ? $cats[0]->name : es_t( 'Aktuelles', 'Latest' ) );
 	$content  = trim( get_the_content() );
 	$words    = str_word_count( wp_strip_all_tags( $content ) );
 	$reading  = max( 1, (int) round( $words / 220 ) ); ?>

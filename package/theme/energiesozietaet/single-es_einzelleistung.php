@@ -14,7 +14,7 @@ while ( have_posts() ) : the_post();
 	$bullets = es_meta( 'es_bullets' );
 	$closing = es_meta( 'es_closing' );
 	$bf_url  = $bf ? home_url( '/' . $bf->slug . '/' ) : home_url( '/leistungen/' );
-	$bf_name = $bf ? $bf->name : 'Leistungen';
+	$bf_name = $bf ? es_term_name_ml( $bf ) : es_t( 'Leistungen', 'Services' );
 	$ap_id   = (int) es_meta( 'es_ansprechpartner' );
 	$ap      = $ap_id ? get_post( $ap_id ) : null;
 	$ap_ok   = ( $ap && 'es_team' === $ap->post_type && 'publish' === $ap->post_status );
@@ -24,14 +24,14 @@ while ( have_posts() ) : the_post();
 		<div class="es-wrap">
 			<header class="es-leistung__header">
 				<nav class="es-leistung__crumb" aria-label="Brotkrumen">
-					<a href="<?php echo esc_url( home_url( '/leistungen/' ) ); ?>">Leistungen</a>
+					<a href="<?php echo esc_url( home_url( '/leistungen/' ) ); ?>"><?php echo esc_html( es_t( 'Leistungen', 'Services' ) ); ?></a>
 					<span aria-hidden="true">/</span>
 					<a href="<?php echo esc_url( $bf_url ); ?>"><?php echo esc_html( $bf_name ); ?></a>
 					<span aria-hidden="true">/</span>
 					<span class="es-leistung__crumb-current"><?php echo esc_html( get_the_title() ); ?></span>
 				</nav>
 				<?php if ( $bf ) : ?>
-					<div class="es-eyebrow es-eyebrow--accent"><?php echo esc_html( $bf->name ); ?></div>
+					<div class="es-eyebrow es-eyebrow--accent"><?php echo esc_html( es_term_name_ml( $bf ) ); ?></div>
 				<?php endif; ?>
 				<h1 class="es-leistung__title"><?php the_title(); ?></h1>
 				<?php if ( $sub ) : ?>

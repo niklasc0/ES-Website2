@@ -636,6 +636,20 @@ function es_has_en( $post_id = 0 ) {
 	return '' !== trim( (string) get_post_meta( $post_id, 'es_title_en', true ) );
 }
 
+/** Beratungsfeld-Termname sprachbewusst (EN-Wortlaut wie die Bereichs-Seitentitel). */
+function es_term_name_ml( $term ) {
+	if ( ! $term || is_wp_error( $term ) ) { return ''; }
+	if ( es_is_en() ) {
+		$map = array(
+			'rechtsberatung'       => 'Legal Advice',
+			'steuerberatung'       => 'Tax Advice',
+			'unternehmensberatung' => 'Management Consulting',
+		);
+		if ( isset( $map[ $term->slug ] ) ) { return $map[ $term->slug ]; }
+	}
+	return $term->name;
+}
+
 /** Meta-Feld sprachbewusst: liefert {$key}_en im EN-Kontext, sonst {$key} (mit Fallback). */
 function es_meta_ml( $key, $post_id = 0 ) {
 	$post_id = $post_id ? $post_id : get_the_ID();

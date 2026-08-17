@@ -373,3 +373,8 @@ if ( ! function_exists( 'es_meta_ml' ) ) {
 		return get_post_meta( $post_id ? $post_id : get_the_ID(), $key, true );
 	}
 }
+if ( ! function_exists( 'es_term_name_ml' ) ) {
+	function es_term_name_ml( $term ) {
+		return ( $term && ! is_wp_error( $term ) ) ? $term->name : '';
+	}
+}
