@@ -31,10 +31,11 @@ class ES_Lang_Xlsx {
 			. '<fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills>'
 			. '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'
 			. '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
-			. '<cellXfs count="3">'
+			. '<cellXfs count="4">'
 			. '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
 			. '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf>'
 			. '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf>'
+			. '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf>'
 			. '</cellXfs>'
 			. '<cellStyles count="1"><cellStyle name="Standard" xfId="0" builtinId="0"/></cellStyles>'
 			. '</styleSheet>' );
@@ -71,7 +72,7 @@ class ES_Lang_Xlsx {
 			if ( isset( $row['__section'] ) ) {
 				$level = 1;
 				$xml .= '<row r="' . $r . '" ht="24" customHeight="1">'
-					. '<c r="A' . $r . '" s="2" t="inlineStr"><is><t xml:space="preserve">'
+					. '<c r="A' . $r . '" s="3" t="inlineStr"><is><t xml:space="preserve">'
 					. htmlspecialchars( (string) $row['__section'], ENT_XML1 | ENT_COMPAT, 'UTF-8' )
 					. '</t></is></c></row>';
 				continue;
