@@ -39,7 +39,7 @@ $es_is_dark = false;
 
 <header class="es-header<?php echo $es_is_dark ? ' es-header--dark' : ''; ?>" id="es-header" data-variant="<?php echo $es_is_dark ? 'dark' : 'light'; ?>">
 	<div class="es-wrap es-header__inner">
-		<a class="es-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Energiesozietät – Zur Startseite">
+		<a class="es-brand" href="<?php echo esc_url( home_url( es_t( '/', '/en/' ) ) ); ?>" aria-label="<?php echo esc_attr( es_t( 'Energiesozietät – Zur Startseite', 'Energiesozietät – Back to home' ) ); ?>">
 			<?php $logo_src = function_exists( 'es_get_header_logo_url' ) ? es_get_header_logo_url( $es_is_dark ? 'dark' : 'light' ) : ''; ?>
 			<?php if ( $logo_src ) : ?>
 				<img class="es-brand__logo" src="<?php echo esc_url( $logo_src ); ?>" alt="<?php bloginfo( 'name' ); ?>" />

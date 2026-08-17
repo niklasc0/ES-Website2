@@ -358,6 +358,7 @@ class ES_Lang {
 	/** URL der jeweils anderen Sprachfassung der aktuellen Ansicht (für den Umschalter). */
 	public static function switch_url() {
 		$to_en = ( 'de' === self::$lang );
+		if ( is_404() ) { return home_url( $to_en ? '/en/' : '/' ); }
 		if ( is_singular( self::CPTS ) ) {
 			$id = get_queried_object_id();
 			return $to_en ? self::to_en_url( $id ) : self::to_de_url( $id );

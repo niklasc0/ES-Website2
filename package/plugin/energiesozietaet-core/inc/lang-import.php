@@ -351,8 +351,18 @@ add_action( 'admin_menu', function () {
 				$result = new WP_Error( 'no_upload', 'Bitte eine XLSX-Datei auswählen.' );
 			}
 		}
+		if ( isset( $_POST['esc_lang_copies_run'] ) && check_admin_referer( 'esc_lang_import' ) ) {
+			$made = ES_Lang::create_page_copies();
+			echo '<div class="notice notice-success"><p>Neu angelegte EN-Seitenkopien: ' . ( $made ? esc_html( implode( ', ', $made ) ) : 'keine (alle vorhanden)' ) . '</p></div>';
+		}
 		$file = ESC_DIR . 'data/translations-en.json';
 		echo '<div class="wrap"><h1>Englische Übersetzungen</h1>';
+		$copies = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => -1, 'meta_key' => 'es_lang', 'meta_value' => 'en', 'fields' => 'ids' ) );
+		echo '<p><strong>Status:</strong> ' . count( $copies ) . ' englische Seitenkopien vorhanden. Zeigen englische Unterseiten „Page not found", fehlen Kopien – hier nachziehen:</p>';
+		echo '<form method="post" style="margin-bottom:20px;">';
+		wp_nonce_field( 'esc_lang_import' );
+		submit_button( 'Fehlende EN-Seitenkopien anlegen', 'secondary', 'esc_lang_copies_run', false );
+		echo '</form><hr>';
 		echo '<h2>1 · Übersetzungsdatei exportieren</h2>';
 		echo '<p>Erzeugt eine Excel-Datei mit allen aktuellen deutschen Texten und den bereits vorhandenen englischen Fassungen – zum Befüllen durch den Kunden. Neue Seiten und Inhalte sind automatisch enthalten.</p>';
 		echo '<p><a class="button button-secondary" href="' . esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=esc_lang_export' ), 'esc_lang_export' ) ) . '">Übersetzungsdatei herunterladen (XLSX)</a></p>';
