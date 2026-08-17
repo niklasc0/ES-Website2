@@ -100,7 +100,7 @@ class ESC_MetaBoxes {
 				self::field( 'Anstellungsart (EN, z. B. Full-time)', 'es_employment_type_en', get_post_meta( $post->ID, 'es_employment_type_en', true ) );
 				self::lines_field( 'Aufgaben (EN) – eine pro Zeile', 'es_tasks_en_raw', $post->ID, 'es_tasks_en', 5 );
 				self::lines_field( 'Profil (EN) – eine Anforderung pro Zeile', 'es_profile_en_raw', $post->ID, 'es_profile_en', 5 );
-				self::lines_field( 'Wir bieten (EN) – eine pro Zeile', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 5 );
+				self::lines_field( 'Was wir Dir bieten (EN) – eine pro Zeile', 'es_offer_en_raw', $post->ID, 'es_offer_en', 5 );
 				self::field( 'Abschlusstext (EN)', 'es_closing_en', get_post_meta( $post->ID, 'es_closing_en', true ), 'textarea' );
 				break;
 			case 'es_veranstaltung':
@@ -254,6 +254,16 @@ class ESC_MetaBoxes {
 		$profile_txt = is_array( $profile ) ? implode( "\n", $profile ) : '';
 		echo '<p><label><strong>Dein Profil</strong><br /><span style="color:#667;font-weight:400;">Eine Anforderung pro Zeile – wird als Bullet-Liste ausgegeben.</span></label>';
 		echo '<textarea name="es_profile_raw" rows="6" style="width:100%;">' . esc_textarea( $profile_txt ) . '</textarea></p>';
+
+		// Was wir Dir bieten (pro Stelle; die Benefits-Kacheln darunter kommen
+		// aus Theme Options → Globale Informationen)
+		$offer = get_post_meta( $post->ID, 'es_offer', true );
+		$offer_txt = is_array( $offer ) ? implode( "\n", $offer ) : '';
+		echo '<p><label><strong>Was wir Dir bieten</strong><br /><span style="color:#667;font-weight:400;">Eine Zeile = ein Punkt der Liste „Was wir Dir bieten" dieser Stelle.</span></label>';
+		echo '<textarea name="es_offer_raw" rows="5" style="width:100%;">' . esc_textarea( $offer_txt ) . '</textarea></p>';
+
+		// Abschlusstext (pro Stelle, unter den Listen)
+		self::field( 'Abschlusstext', 'es_closing', get_post_meta( $post->ID, 'es_closing', true ), 'textarea' );
 	}
 
 	public static function box_veranst( $post ) {
@@ -372,8 +382,16 @@ class ESC_MetaBoxes {
 			update_post_meta( $post_id, 'es_career', $career );
 		}
 
+		// DE: "Was wir Dir bieten" pro Stelle
+		if ( isset( $_POST['es_offer_raw'] ) ) {
+			$lines = preg_split( '/\r?\n/', wp_unslash( $_POST['es_offer_raw'] ) );
+			$arr = array();
+			foreach ( $lines as $l ) { $l = trim( $l ); if ( $l ) { $arr[] = wp_kses_post( $l ); } }
+			update_post_meta( $post_id, 'es_offer', $arr );
+		}
+
 		// EN-Zeilenfelder: einfache String-Arrays
-		foreach ( array( 'es_focus_areas_en', 'es_bullets_en', 'es_tasks_en', 'es_profile_en' ) as $arr_key ) {
+		foreach ( array( 'es_focus_areas_en', 'es_bullets_en', 'es_tasks_en', 'es_profile_en', 'es_offer_en' ) as $arr_key ) {
 			if ( isset( $_POST[ $arr_key . '_raw' ] ) ) {
 				$lines = preg_split( '/\r?\n/', wp_unslash( $_POST[ $arr_key . '_raw' ] ) );
 				$arr = array();

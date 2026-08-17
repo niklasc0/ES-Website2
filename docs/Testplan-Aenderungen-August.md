@@ -51,7 +51,7 @@ Sprachweiche, Link-Übersetzer und Permalink-Filter laufen auf **jeder** Seite m
 | C5 | /leistungen/ bei **Fensterbreite ~800–1250 px**: kein vollbreiter Bild-/Platzhalter-Klotz mehr in den Bereichs-Blöcken (Bild-Spalte auf Tablet ausgeblendet); ab ~1280 px Bild rechts neben Text | ✓ |
 | C6 | Startseite: „Aktuelles"-Teaser zeigt auf Tablet (601–1100px) **zwei** Karten (Desktop drei, Mobil alle gestapelt); **LinkedIn-Section ausgeblendet** (alle Bildschirmgrößen), News-Section geht direkt in den Footer über, **Ecken am Footer-Übergang in Footer-Farbe** (kein falscher Grünton) | im Backend über Section → Erweitert → Responsive reaktivierbar |
 | C7 | Veranstaltungs-Detailseite: Datum oben **ohne Kasten** (frei neben dem Kicker) | ✓ |
-| C8 | **Regression**: Veranstaltungs-Karten = Kacheln auf /veranstaltungen/ (dunkle „Veranstaltung"-Platzhalter, solange kein Beitragsbild gesetzt ist — die Bilder der alten Live-Seite sind nie in die neuen Daten migriert worden und müssen als Beitragsbild gepflegt werden); Team-Porträts 4:5, Stellen-Bilder, Beratungsfeld-Bilder Desktop | unverändert |
+| C8 | **Regression**: Team-Porträts 4:5, Stellen-Bilder auf Karriere-Karten, Beratungsfeld-Bilder auf Desktop | unverändert. (Frühere „Veranstaltungs-Karten" gestrichen — die Veranstaltungs-Übersicht ist eine Zeilen-Liste ohne Bilder. Detailseiten zeigen ein Bild, sobald ein **Beitragsbild** gesetzt wird; die Bilder der alten Live-Seite wurden nie in die neuen Daten migriert.) |
 
 ## D — Englischer Bereich (/en/…)
 

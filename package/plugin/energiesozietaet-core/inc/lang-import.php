@@ -27,7 +27,7 @@ class ES_Lang_Import {
 		),
 		'karriere' => array(
 			'Titel' => 'es_title_en', 'Rollen-Kürzel' => 'es_department_en', 'Über die Rolle' => 'content',
-			'Aufgaben' => 'lines:es_tasks_en', 'Profil' => 'lines:es_profile_en', 'Wir bieten' => 'lines:es_bullets_en',
+			'Aufgaben' => 'lines:es_tasks_en', 'Profil' => 'lines:es_profile_en', 'Wir bieten' => 'lines:es_offer_en',
 			'Anstellungsart' => 'es_employment_type_en',
 		),
 	);
@@ -246,7 +246,7 @@ class ES_Lang_Import {
 		$cpt_sources = array(
 			'einzelleistung' => array( 'es_einzelleistung', array( 'Titel' => 'title', 'Untertitel' => 'meta:es_subtitle', 'Beschreibung' => 'content', 'Kernpunkte' => 'lines:es_bullets', 'Abschluss-Absatz' => 'meta:es_closing' ) ),
 			'team'           => array( 'es_team', array( 'Rolle/Position' => 'meta:es_role', 'Kurzvita' => 'content', 'Erweiterte Vita' => 'meta:es_more_bio', 'Schwerpunkte' => 'lines:es_focus_areas', 'Werdegang' => 'career:es_career' ) ),
-			'karriere'       => array( 'es_karriere', array( 'Titel' => 'title', 'Rollen-Kürzel' => 'meta:es_department', 'Über die Rolle' => 'content', 'Aufgaben' => 'lines:es_tasks', 'Profil' => 'lines:es_profile', 'Wir bieten' => 'lines:es_bullets', 'Anstellungsart' => 'meta:es_employment_type' ) ),
+			'karriere'       => array( 'es_karriere', array( 'Titel' => 'title', 'Rollen-Kürzel' => 'meta:es_department', 'Über die Rolle' => 'content', 'Aufgaben' => 'lines:es_tasks', 'Profil' => 'lines:es_profile', 'Wir bieten' => 'lines:es_offer', 'Anstellungsart' => 'meta:es_employment_type' ) ),
 		);
 		$area_names = array( 'einzelleistung' => 'Einzelleistung', 'team' => 'Team', 'karriere' => 'Stelle' );
 		foreach ( $cpt_sources as $sheet => $cfg ) {
@@ -363,6 +363,15 @@ add_action( 'admin_menu', function () {
 			$made = ES_Lang::create_page_copies();
 			echo '<div class="notice notice-success"><p>Neu angelegte EN-Seitenkopien: ' . ( $made ? esc_html( implode( ', ', $made ) ) : 'keine (alle vorhanden)' ) . '</p></div>';
 		}
+		if ( isset( $_POST['esc_lang_unprotect'], $_POST['esc_lang_unprotect_id'] ) && check_admin_referer( 'esc_lang_import' ) ) {
+			$uid = (int) $_POST['esc_lang_unprotect_id'];
+			if ( $uid && 'en' === get_post_meta( $uid, 'es_lang', true ) ) {
+				delete_post_meta( $uid, 'es_translated' );
+				$de_id = (int) get_post_meta( $uid, 'es_translation_of', true );
+				if ( $de_id ) { ES_Lang::sync_copy_from_de( $de_id ); }
+				echo '<div class="notice notice-success"><p>Übersetzungsschutz aufgehoben — die Kopie folgt wieder der deutschen Seite (und wurde soeben von ihr übernommen). Eingespielte Übersetzungen dieser Seite wurden dabei durch den deutschen Stand ersetzt.</p></div>';
+			}
+		}
 		$file = ESC_DIR . 'data/translations-en.json';
 		echo '<div class="wrap"><h1>Englische Übersetzungen</h1>';
 		$copies = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => -1, 'meta_key' => 'es_lang', 'meta_value' => 'en', 'fields' => 'ids' ) );
@@ -370,7 +379,25 @@ add_action( 'admin_menu', function () {
 		echo '<form method="post" style="margin-bottom:20px;">';
 		wp_nonce_field( 'esc_lang_import' );
 		submit_button( 'Fehlende EN-Seitenkopien anlegen', 'secondary', 'esc_lang_copies_run', false );
-		echo '</form><hr>';
+		echo '</form>';
+		// Übersetzungsschutz: übersetzte Kopien folgen der DE-Seite nicht mehr —
+		// hier lässt sich das pro Seite zurücksetzen.
+		$protected = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => -1, 'meta_key' => 'es_translated', 'meta_value' => '1' ) );
+		if ( $protected ) {
+			echo '<h2>Übersetzungsschutz</h2>';
+			echo '<p>Diese EN-Seiten enthalten eingespielte Übersetzungen und übernehmen deshalb keine Struktur-/Inhaltsänderungen der deutschen Seite mehr. „Schutz aufheben" setzt die Seite auf den aktuellen deutschen Stand zurück (die Übersetzungen dieser Seite gehen dabei verloren — die Übersetzungsdatei kann danach erneut hochgeladen werden).</p>';
+			echo '<table class="widefat striped" style="max-width:640px;"><tbody>';
+			foreach ( $protected as $pp ) {
+				echo '<tr><td>' . esc_html( $pp->post_title ) . ' <code>/' . esc_html( (string) get_post_meta( $pp->ID, 'es_public_slug', true ) ) . '/</code></td><td style="text-align:right;">';
+				echo '<form method="post" style="display:inline;" onsubmit="return confirm(\'Übersetzungen dieser Seite werden durch den deutschen Stand ersetzt. Fortfahren?\');">';
+				wp_nonce_field( 'esc_lang_import' );
+				echo '<input type="hidden" name="esc_lang_unprotect_id" value="' . (int) $pp->ID . '" />';
+				submit_button( 'Schutz aufheben', 'small', 'esc_lang_unprotect', false );
+				echo '</form></td></tr>';
+			}
+			echo '</tbody></table>';
+		}
+		echo '<hr>';
 		echo '<h2>1 · Übersetzungsdatei exportieren</h2>';
 		echo '<p>Erzeugt eine Excel-Datei mit allen aktuellen deutschen Texten und den bereits vorhandenen englischen Fassungen zum Ausfüllen. Neue Seiten und Inhalte sind automatisch enthalten.</p>';
 		echo '<p><a class="button button-secondary" href="' . esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=esc_lang_export' ), 'esc_lang_export' ) ) . '">Übersetzungsdatei herunterladen (XLSX)</a></p>';
