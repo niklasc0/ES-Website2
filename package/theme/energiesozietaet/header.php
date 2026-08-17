@@ -72,10 +72,15 @@ $es_is_dark = false;
 			<a class="es-btn es-btn--ghost es-header__cta" href="<?php echo esc_url( home_url( es_t( '/kontakt/', '/en/contact/' ) ) ); ?>">
 				<?php echo esc_html( es_t( 'Kontakt', 'Contact' ) ); ?>
 			</a>
-			<?php if ( class_exists( 'ES_Lang' ) ) : ?>
-				<a class="es-header__lang" href="<?php echo esc_url( ES_Lang::switch_url() ); ?>" aria-label="<?php echo esc_attr( es_t( 'Switch to English', 'Zur deutschen Fassung wechseln' ) ); ?>">
-					<span class="<?php echo es_is_en() ? '' : 'is-active'; ?>">DE</span><span class="<?php echo es_is_en() ? 'is-active' : ''; ?>">EN</span>
-				</a>
+			<?php if ( class_exists( 'ES_Lang' ) ) :
+				$es_switch = esc_url( ES_Lang::switch_url() ); ?>
+				<span class="es-header__lang">
+					<?php if ( es_is_en() ) : ?>
+						<a href="<?php echo $es_switch; ?>" aria-label="Zur deutschen Fassung wechseln">DE</a><span class="is-active">EN</span>
+					<?php else : ?>
+						<span class="is-active">DE</span><a href="<?php echo $es_switch; ?>" aria-label="Switch to English">EN</a>
+					<?php endif; ?>
+				</span>
 			<?php endif; ?>
 		</div>
 

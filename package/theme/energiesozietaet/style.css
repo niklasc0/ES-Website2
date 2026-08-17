@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.4
+Version: 2.6.5
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -316,20 +316,22 @@ html.js .esc-card.es-reveal {
     overflow: hidden; line-height: 1;
     transition: border-color var(--es-duration-fast) var(--es-easing);
 }
-.es-header__lang span { display: inline-flex; align-items: center; padding: 0 14px; }
+.es-header__lang span, .es-header__lang a { display: inline-flex; align-items: center; padding: 0 14px; color: inherit; text-decoration: none; }
 /* Umschalter und Kontakt-Pill: einheitliche Höhe */
 .es-header__lang { height: 30px; }
 .es-header__cta.es-btn { height: 30px; display: inline-flex; align-items: center; padding-top: 0; padding-bottom: 0; }
 .es-header__lang .is-active { background: var(--es-accent); color: var(--es-ink); font-weight: 600; }
 /* Segmentform: außen rund (Kapsel-Ende), zur Mitte hin gerade Trennlinie */
-.es-header__lang span:first-child { border-radius: 999px 0 0 999px; }
-.es-header__lang span:last-child { border-radius: 0 999px 999px 0; }
-.es-header__lang span:not(.is-active) {
-    box-shadow: inset 0 0 0 0 transparent;
-    transition: box-shadow 180ms var(--es-easing), color 180ms var(--es-easing);
+.es-header__lang span:first-child, .es-header__lang a:first-child { border-radius: 999px 0 0 999px; }
+.es-header__lang span:last-child, .es-header__lang a:last-child { border-radius: 0 999px 999px 0; }
+/* Nur das inaktive (verlinkte) Segment reagiert: akzentgrüne Kontur baut sich auf */
+.es-header__lang a {
+    border: 2px solid transparent;
+    padding: 0 12px;
+    transition: border-color 260ms var(--es-easing), color 200ms var(--es-easing);
 }
-.es-header__lang:hover span:not(.is-active) {
-    box-shadow: inset 0 0 0 1.5px var(--es-ink);
+.es-header__lang a:hover {
+    border-color: var(--es-accent);
     color: var(--es-ink);
 }
 .es-header__cta { padding: 11px 24px; font-size: 14px; }
