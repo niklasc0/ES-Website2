@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.16
+Version: 2.6.17
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -1937,10 +1937,12 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
     overflow: hidden; background: var(--es-paper-warm);
     border-radius: var(--es-radius-card) 0 0 var(--es-radius-card);
 }
-/* Gestapeltes Mobil-Layout (Bild oben): obere Ecken rund statt der linken.
+/* Gestapeltes Mobil-Layout (Bild oben): alle vier Bildecken rund — oben
+   schließt das Bild mit der Kachelkante ab (Kachel clippt ohnehin rund),
+   unten sitzt es als gerundetes Foto auf der Textfläche.
    Muss NACH der Basis-Regel stehen, sonst gewinnt deren Links-Rundung. */
 @media (max-width: 640px) {
-    .es-news-row__media { aspect-ratio: 16/9; height: auto; border-radius: var(--es-radius-card) var(--es-radius-card) 0 0; }
+    .es-news-row__media { aspect-ratio: 16/9; height: auto; border-radius: var(--es-radius-card); }
 }
 .es-news-row__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--es-easing); }
 .es-news-row:hover .es-news-row__media img { transform: scale(1.04); }
