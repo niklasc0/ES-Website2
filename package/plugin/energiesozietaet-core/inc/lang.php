@@ -57,6 +57,11 @@ class ES_Lang {
 			add_filter( 'get_the_excerpt', array( __CLASS__, 'filter_excerpt' ), 10, 2 );
 			add_filter( 'body_class', function ( $c ) { $c[] = 'lang-en'; return $c; } );
 			add_filter( 'language_attributes', function () { return 'lang="en"'; } );
+			// Interne DE-Links (aus Elementor-Inhalten, Footer-Einstellungen …)
+			// im fertigen HTML auf ihre EN-Entsprechung mappen.
+			add_action( 'template_redirect', function () {
+				if ( ! is_admin() && ! is_feed() ) { ob_start( array( __CLASS__, 'localize_html' ) ); }
+			}, 0 );
 		}
 		// Permalink-Filter laufen immer – sie prüfen den Kontext selbst.
 		add_filter( 'post_type_link', array( __CLASS__, 'localize_permalink' ), 10, 2 );
@@ -307,6 +312,7 @@ class ES_Lang {
 				// Unübersetzt unter /en/ → nicht indexieren, Canonical auf DE
 				echo '<meta name="robots" content="noindex,follow" />' . "\n";
 				echo '<link rel="canonical" href="' . esc_url( $de_url ) . '" />' . "\n";
+				remove_action( 'wp_head', 'rel_canonical' ); // kein zweites (widersprüchliches) WP-Canonical
 			}
 		} elseif ( 'page' === $type ) {
 			$partner = self::translation_of( $id );
@@ -326,6 +332,7 @@ class ES_Lang {
 				} elseif ( 'en' === self::$lang ) {
 					echo '<meta name="robots" content="noindex,follow" />' . "\n";
 					echo '<link rel="canonical" href="' . esc_url( $de_url ) . '" />' . "\n";
+					remove_action( 'wp_head', 'rel_canonical' );
 				}
 			} elseif ( 'en' === self::$lang ) {
 				echo '<meta name="robots" content="noindex,follow" />' . "\n";
@@ -392,6 +399,76 @@ class ES_Lang {
 		return home_url( $uri );
 	}
 
+	/**
+	 * Interne DE-Links im fertigen EN-HTML auf ihre EN-Entsprechung mappen.
+	 *
+	 * Elementor-Inhalte der EN-Seitenkopien (und z.B. Footer-Link-Felder) tragen
+	 * die deutschen Ziel-URLs 1:1 in sich — hier werden sie beim Ausliefern
+	 * übersetzt. Bewusst NUR <a href>-Attribute: <link rel=canonical/hreflang>
+	 * im <head> zeigt teils absichtlich auf die deutsche Fassung.
+	 */
+	public static function localize_html( $html ) {
+		if ( ! is_string( $html ) || '' === $html ) { return $html; }
+		$home = untrailingslashit( home_url() );
+		return preg_replace_callback(
+			'#<a\b[^>]*>#',
+			function ( $tag ) use ( $home ) {
+				// Sprachumschalter zeigt absichtlich auf die DE-Fassung
+				if ( false !== strpos( $tag[0], 'data-es-lang-switch' ) ) { return $tag[0]; }
+				return preg_replace_callback(
+					'#href="((?:' . preg_quote( $home, '#' ) . ')?)(/[^"]*)"#',
+					function ( $m ) {
+						return 'href="' . $m[1] . self::localize_path( $m[2] ) . '"';
+					},
+					$tag[0]
+				);
+			},
+			$html
+		);
+	}
+
+	/** Einen internen Pfad in seine EN-Form bringen; Unbekanntes bleibt unverändert. */
+	public static function localize_path( $path ) {
+		if ( 0 === strpos( $path, '//' ) ) { return $path; } // protokollrelativ = extern
+		$suffix = '';
+		if ( preg_match( '#^([^?\#]*)([?\#].*)$#', $path, $pm ) ) { $path = $pm[1]; $suffix = $pm[2]; }
+		if ( '' === $path || '/' === $path ) { return '/en/' . $suffix; }
+		if ( preg_match( '#^/(en|wp-json|wp-admin|wp-content|wp-includes|wp-login|feed|xmlrpc)([/.?]|$)#', $path ) ) {
+			return $path . $suffix;
+		}
+		$segments = array_values( array_filter( explode( '/', $path ) ) );
+		if ( ! $segments || false !== strpos( $segments[0], '.' ) ) { return $path . $suffix; }
+		$first = $segments[0];
+		// CPT-URLs: /<de-basis>/… → /en/<en-basis>/… (Detail-Slug ggf. auf EN-Slug)
+		if ( isset( self::BASES[ $first ] ) ) {
+			if ( 2 === count( $segments ) ) {
+				$slug  = $segments[1];
+				$types = array_keys( self::CPT_BASE, $first, true );
+				$p     = $types ? get_page_by_path( $slug, OBJECT, $types[0] ) : null;
+				if ( $p ) {
+					$en = get_post_meta( $p->ID, 'es_slug_en', true );
+					if ( $en ) { $slug = $en; }
+				}
+				return '/en/' . self::BASES[ $first ] . '/' . $slug . '/' . $suffix;
+			}
+			return '/en/' . self::BASES[ $first ] . '/' . $suffix;
+		}
+		// Feste Seiten: /<de-slug>/ → /en/<öffentlicher EN-Slug>/
+		if ( 1 === count( $segments ) ) {
+			$page = get_page_by_path( $first );
+			if ( $page && 'page' === $page->post_type ) {
+				if ( 'en' === get_post_meta( $page->ID, 'es_lang', true ) ) {
+					return wp_parse_url( self::en_page_url( $page->ID ), PHP_URL_PATH ) . $suffix;
+				}
+				$partner = self::translation_of( $page->ID );
+				if ( $partner && 'en' === get_post_meta( $partner, 'es_lang', true ) ) {
+					return wp_parse_url( self::en_page_url( $partner ), PHP_URL_PATH ) . $suffix;
+				}
+			}
+		}
+		return $path . $suffix;
+	}
+
 	/** Öffentliche EN-Slugs der Seitenkopien (Kunde kann später andere liefern). */
 	const PAGE_SLUGS_EN = array(
 		'home'                  => '',
@@ -444,6 +521,20 @@ class ES_Lang {
 				$copy = get_post( $existing );
 				if ( $copy && isset( self::PAGE_TITLES_EN[ $de_slug ] ) && $copy->post_title === $de->post_title && $de->post_title !== self::PAGE_TITLES_EN[ $de_slug ] ) {
 					wp_update_post( array( 'ID' => $existing, 'post_title' => self::PAGE_TITLES_EN[ $de_slug ] ) );
+				}
+				// Solange die Kopie nicht als übersetzt markiert ist, Struktur und
+				// Inhalt von der deutschen Seite nachziehen — Layout-Änderungen an
+				// DE-Seiten erreichen so auch die (noch deutsche) EN-Fassung.
+				if ( $copy && ! get_post_meta( $existing, 'es_translated', true ) ) {
+					wp_update_post( array( 'ID' => $existing, 'post_content' => $de->post_content ) );
+					foreach ( array( '_elementor_data', '_elementor_edit_mode', '_elementor_template_type', '_elementor_version', '_elementor_page_settings', '_wp_page_template' ) as $mk ) {
+						$mv = get_post_meta( $de->ID, $mk, true );
+						if ( '' !== $mv && null !== $mv && array() !== $mv ) {
+							update_post_meta( $existing, $mk, is_string( $mv ) ? wp_slash( $mv ) : $mv );
+						}
+					}
+					delete_post_meta( $existing, '_elementor_css' );
+					delete_post_meta( $existing, '_elementor_element_cache' );
 				}
 				continue;
 			}
