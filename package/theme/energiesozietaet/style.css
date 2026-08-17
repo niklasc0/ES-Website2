@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.5
+Version: 2.6.6
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -324,16 +324,23 @@ html.js .esc-card.es-reveal {
 /* Segmentform: außen rund (Kapsel-Ende), zur Mitte hin gerade Trennlinie */
 .es-header__lang span:first-child, .es-header__lang a:first-child { border-radius: 999px 0 0 999px; }
 .es-header__lang span:last-child, .es-header__lang a:last-child { border-radius: 0 999px 999px 0; }
-/* Nur das inaktive (verlinkte) Segment reagiert: akzentgrüne Kontur baut sich auf */
-.es-header__lang a {
-    border: 2px solid transparent;
-    padding: 0 12px;
-    transition: border-color 260ms var(--es-easing), color 200ms var(--es-easing);
+/* Nur das inaktive (verlinkte) Segment reagiert: akzentgrüne Kontur zeichnet sich
+   sequenziell von oben-mitte um den Außenrand nach unten-mitte (SVG-Stroke, wie
+   die Aufbau-Linie der Cards). Aktives Segment: kein Link, kein Text-Cursor. */
+.es-header__lang { user-select: none; -webkit-user-select: none; }
+.es-header__lang .is-active { cursor: default; }
+.es-header__lang a { position: relative; transition: color 200ms var(--es-easing); }
+.es-header__lang a:hover { color: var(--es-ink); }
+.es-header__lang .es-lang-draw {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    pointer-events: none; overflow: visible;
 }
-.es-header__lang a:hover {
-    border-color: var(--es-accent);
-    color: var(--es-ink);
+.es-header__lang .es-lang-draw path {
+    fill: none; stroke: var(--es-accent); stroke-width: 1px;
+    stroke-dasharray: 102; stroke-dashoffset: 102;
+    transition: stroke-dashoffset var(--es-duration-normal) var(--es-easing);
 }
+.es-header__lang a:hover .es-lang-draw path { stroke-dashoffset: 0; }
 .es-header__cta { padding: 11px 24px; font-size: 14px; }
 .es-btn-jobs {
     display: inline-flex; align-items: center; gap: 8px;

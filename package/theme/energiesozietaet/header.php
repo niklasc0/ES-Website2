@@ -76,9 +76,9 @@ $es_is_dark = false;
 				$es_switch = esc_url( ES_Lang::switch_url() ); ?>
 				<span class="es-header__lang">
 					<?php if ( es_is_en() ) : ?>
-						<a href="<?php echo $es_switch; ?>" aria-label="Zur deutschen Fassung wechseln">DE</a><span class="is-active">EN</span>
+						<a href="<?php echo $es_switch; ?>" aria-label="Zur deutschen Fassung wechseln">DE<svg class="es-lang-draw" viewBox="0 0 40 28" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M40 0.5 H14 A13.5 13.5 0 0 0 14 27.5 H40" pathLength="100" vector-effect="non-scaling-stroke" /></svg></a><span class="is-active">EN</span>
 					<?php else : ?>
-						<span class="is-active">DE</span><a href="<?php echo $es_switch; ?>" aria-label="Switch to English">EN</a>
+						<span class="is-active">DE</span><a href="<?php echo $es_switch; ?>" aria-label="Switch to English">EN<svg class="es-lang-draw" viewBox="0 0 40 28" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 0.5 H26 A13.5 13.5 0 0 1 26 27.5 H0" pathLength="100" vector-effect="non-scaling-stroke" /></svg></a>
 					<?php endif; ?>
 				</span>
 			<?php endif; ?>
