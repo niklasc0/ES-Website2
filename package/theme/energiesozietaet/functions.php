@@ -222,7 +222,12 @@ add_action( 'customize_register', 'es_customize_register' );
 
 /**
  * Gibt die Logo-URL zurück passend zur Header-Variante ('dark'|'light').
- * Fallback-Kette: spezifisches Logo → WP custom_logo → ''.
+ * Fallback-Kette: spezifisches Logo → WP custom_logo → mitgeliefertes
+ * Theme-SVG (assets/img/logo.svg) → ''. Das SVG ist das Original-Logo der
+ * Live-Site; dadurch ist das Logo nach jeder frischen Installation sofort
+ * gesetzt, ohne dass im Customizer etwas gepflegt werden muss. Die
+ * Customizer-Felder übersteuern es weiterhin. Die CSS-Text-Wortmarke
+ * (es-brand__wordmark) bleibt nur Notnagel, falls die Datei fehlt.
  */
 function es_get_header_logo_url( $variant = 'dark' ) {
 	$key = 'dark' === $variant ? 'es_logo_dark' : 'es_logo_light';
@@ -231,6 +236,9 @@ function es_get_header_logo_url( $variant = 'dark' ) {
 	if ( has_custom_logo() ) {
 		$logo_id = get_theme_mod( 'custom_logo' );
 		if ( $logo_id ) { return wp_get_attachment_image_url( $logo_id, 'full' ); }
+	}
+	if ( file_exists( ES_THEME_DIR . '/assets/img/logo.svg' ) ) {
+		return ES_THEME_URI . '/assets/img/logo.svg';
 	}
 	return '';
 }
