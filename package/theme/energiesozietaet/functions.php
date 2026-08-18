@@ -66,11 +66,16 @@ add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );
  */
 function es_theme_enqueue_assets() {
 	// Manrope (Text/UI) + Sora (Display/Headlines) – Design-Sprache des ah5/Elementra-Templates.
+	// Selbst gehostet (assets/fonts, Variable Fonts als woff2): kein Request an
+	// Google Fonts mehr. Der externe Abruf wurde von Brave/Adblockern geblockt
+	// (Logo-Wortmarke fiel auf Systemschrift zurück) und ist auch DSGVO-seitig
+	// problematisch.
+	$fonts_path = ES_THEME_DIR . '/assets/css/fonts.css';
 	wp_enqueue_style(
 		'es-fonts',
-		'https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap',
+		ES_THEME_URI . '/assets/css/fonts.css',
 		array(),
-		null
+		file_exists( $fonts_path ) ? (string) filemtime( $fonts_path ) : ES_THEME_VERSION
 	);
 	// Cache-Busting via filemtime → Browser zieht bei jedem Deploy neue Files.
 	$css_path = ES_THEME_DIR . '/style.css';
@@ -82,17 +87,12 @@ function es_theme_enqueue_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'es_theme_enqueue_assets' );
 
-/**
- * Add preconnects to Google Fonts.
- */
-function es_resource_hints( $urls, $relation_type ) {
-	if ( 'preconnect' === $relation_type ) {
-		$urls[] = array( 'href' => 'https://fonts.gstatic.com', 'crossorigin' );
-		$urls[] = 'https://fonts.googleapis.com';
-	}
-	return $urls;
-}
-add_filter( 'wp_resource_hints', 'es_resource_hints', 10, 2 );
+// Preconnects zu Google Fonts entfernt – die Schriften liegen jetzt im Theme.
+
+// Auch Elementor lädt für die Kit-Typografie (Sora/Manrope) sonst eigene
+// Google-Fonts-CSS nach; unsere lokalen @font-face-Regeln bedienen dieselben
+// Familiennamen, der externe Abruf entfällt ersatzlos.
+add_filter( 'elementor/frontend/print_google_fonts', '__return_false' );
 
 /**
  * Elementor global colors + fonts – makes every Elementor page pick up our design tokens.
