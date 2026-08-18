@@ -334,16 +334,19 @@ class ES_Lang_Import {
 
 	/**
 	 * Hochgeladene XLSX-Zeilen (Spalten 0-4) in {ref, en}-Zeilen wandeln.
-	 * Liefert array( 'rows' => …, 'invalid' => …, 'duplicates' => … ):
+	 * Liefert array( 'rows' => …, 'invalid' => …, 'duplicates' => …, 'tags' => … ):
 	 * "invalid" sind Zeilen mit eingetragener Übersetzung, aber fehlender/
 	 * veränderter Referenz (würden sonst stillschweigend verworfen),
-	 * "duplicates" doppelte Referenzen mit unterschiedlichen Übersetzungen.
+	 * "duplicates" doppelte Referenzen mit unterschiedlichen Übersetzungen,
+	 * "tags" Zeilen, deren Übersetzung andere Formatierungs-Codes enthält
+	 * als der deutsche Text daneben (vermutlich beim Übersetzen beschädigt).
 	 */
 	public static function rows_from_sheet( $sheet_rows ) {
 		$out = array();
 		$known_ref = 0;
 		$invalid = array();
 		$dupes = array();
+		$tagwarn = array();
 		$seen = array(); // ref => array( 'row' => Excel-Zeile, 'en' => Wert )
 		foreach ( $sheet_rows as $cells ) {
 			$rownum = isset( $cells['__r'] ) ? (int) $cells['__r'] : 0;
@@ -369,12 +372,66 @@ class ES_Lang_Import {
 			}
 			$seen[ $ref ] = array( 'row' => $rownum, 'en' => $en );
 			$out[] = array( 'ref' => $ref, 'en' => $en );
+			// Formatierungs-Codes gegen die Deutsch-Spalte derselben Zeile prüfen
+			$de = isset( $cells[2] ) ? trim( (string) $cells[2] ) : '';
+			if ( '' !== $de ) {
+				$note = self::tag_diff_note( $de, $en );
+				if ( null !== $note ) {
+					$shown = ( mb_strlen( $ref ) > 50 ) ? mb_substr( $ref, 0, 47 ) . '…' : $ref;
+					$tagwarn[] = 'Zeile ' . $rownum . ' (' . $shown . '): ' . $note;
+				}
+			}
 		}
 		// Keine einzige bekannte Referenz → vermutlich falsche/umgebaute Datei
 		if ( 0 === $known_ref ) {
 			return new WP_Error( 'wrong_file', 'Keine gültigen Referenzen gefunden – bitte die über „Übersetzungsdatei herunterladen" erzeugte Datei verwenden (Spalte „Referenz" darf nicht verändert werden).' );
 		}
-		return array( 'rows' => $out, 'invalid' => $invalid, 'duplicates' => $dupes );
+		return array( 'rows' => $out, 'invalid' => $invalid, 'duplicates' => $dupes, 'tags' => $tagwarn );
+	}
+
+	/**
+	 * Normalisierte Liste der Formatierungs-Codes eines Textes: Tags in
+	 * Kleinschreibung, Mehrfach-Leerraum kollabiert, "<br />" wie "<br>".
+	 */
+	protected static function tag_list( $text ) {
+		if ( ! preg_match_all( '/<[^>]+>/', (string) $text, $m ) ) { return array(); }
+		$out = array();
+		foreach ( $m[0] as $t ) {
+			$t = strtolower( preg_replace( '/\s+/', ' ', $t ) );
+			$t = preg_replace( '/\s*\/\s*>$/', '>', $t );
+			$out[] = $t;
+		}
+		return $out;
+	}
+
+	/**
+	 * Kurze Meldung, wenn die Übersetzung andere Formatierungs-Codes enthält
+	 * als der deutsche Text, sonst null. Verglichen werden die Tag-Mengen:
+	 * eine (legitim) geänderte Reihenfolge löst keine Warnung aus, fehlende,
+	 * zusätzliche oder veränderte Tags (auch href-/class-Änderungen) schon.
+	 */
+	protected static function tag_diff_note( $de, $en ) {
+		$a = self::tag_list( $de );
+		$b = self::tag_list( $en );
+		if ( $a === $b ) { return null; }
+		$ca = array_count_values( $a );
+		$cb = array_count_values( $b );
+		$missing = array();
+		$extra = array();
+		foreach ( $ca as $t => $n ) {
+			$d = $n - ( isset( $cb[ $t ] ) ? $cb[ $t ] : 0 );
+			if ( $d > 0 ) { $missing[] = $t . ( $d > 1 ? ' (' . $d . 'x)' : '' ); }
+		}
+		foreach ( $cb as $t => $n ) {
+			$d = $n - ( isset( $ca[ $t ] ) ? $ca[ $t ] : 0 );
+			if ( $d > 0 ) { $extra[] = $t . ( $d > 1 ? ' (' . $d . 'x)' : '' ); }
+		}
+		if ( ! $missing && ! $extra ) { return null; }
+		$shorten = function ( $t ) { return ( mb_strlen( $t ) > 40 ) ? mb_substr( $t, 0, 37 ) . '…>' : $t; };
+		$parts = array();
+		if ( $missing ) { $parts[] = 'fehlt ' . implode( ', ', array_map( $shorten, array_slice( $missing, 0, 5 ) ) ) . ( count( $missing ) > 5 ? ' u. a.' : '' ); }
+		if ( $extra )   { $parts[] = 'zusätzlich ' . implode( ', ', array_map( $shorten, array_slice( $extra, 0, 5 ) ) ) . ( count( $extra ) > 5 ? ' u. a.' : '' ); }
+		return implode( '; ', $parts );
 	}
 }
 
@@ -417,6 +474,7 @@ add_action( 'admin_menu', function () {
 						if ( ! is_wp_error( $result ) ) {
 							$result['invalid']    = $parsed['invalid'];
 							$result['duplicates'] = $parsed['duplicates'];
+							$result['tags']       = $parsed['tags'];
 						}
 					}
 				}
@@ -487,8 +545,8 @@ add_action( 'admin_menu', function () {
 				}
 				echo '</div>';
 				// Warnungen aus der Datei-Prüfung: Übersetzungen ohne verwertbare
-				// Referenz sowie doppelte Referenzen mit abweichendem Text.
-				if ( ! empty( $result['invalid'] ) || ! empty( $result['duplicates'] ) ) {
+				// Referenz, doppelte Referenzen sowie abweichende Formatierungs-Codes.
+				if ( ! empty( $result['invalid'] ) || ! empty( $result['duplicates'] ) || ! empty( $result['tags'] ) ) {
 					echo '<div class="notice notice-warning">';
 					if ( ! empty( $result['invalid'] ) ) {
 						echo '<p><strong>Nicht zuordenbar</strong> (Übersetzung eingetragen, aber Referenz fehlt oder wurde verändert – diese Zeilen wurden NICHT übernommen):<br>'
@@ -499,6 +557,11 @@ add_action( 'admin_menu', function () {
 						echo '<p><strong>Doppelte Referenzen:</strong><br>'
 							. esc_html( implode( ' · ', array_slice( $result['duplicates'], 0, 30 ) ) )
 							. ( count( $result['duplicates'] ) > 30 ? '<br>… und ' . ( count( $result['duplicates'] ) - 30 ) . ' weitere' : '' ) . '</p>';
+					}
+					if ( ! empty( $result['tags'] ) ) {
+						echo '<p><strong>Formatierungs-Codes weichen vom deutschen Text ab</strong> (die Zeilen wurden übernommen – bitte prüfen und ggf. eine korrigierte Datei erneut hochladen):<br>'
+							. implode( '<br>', array_map( 'esc_html', array_slice( $result['tags'], 0, 30 ) ) )
+							. ( count( $result['tags'] ) > 30 ? '<br>… und ' . ( count( $result['tags'] ) - 30 ) . ' weitere' : '' ) . '</p>';
 					}
 					echo '</div>';
 				}
