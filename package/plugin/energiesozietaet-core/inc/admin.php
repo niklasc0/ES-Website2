@@ -85,11 +85,38 @@ class ESC_Admin {
 	}
 
 	public static function notices() {
+		self::editing_hint();
 		$msg = get_transient( 'esc_import_msg' );
 		if ( ! $msg ) { return; }
 		delete_transient( 'esc_import_msg' );
 		printf( '<div class="notice notice-%1$s is-dismissible"><p>%2$s</p></div>',
 			esc_attr( $msg['type'] ), esc_html( $msg['text'] ) );
+	}
+
+	/**
+	 * Redaktions-Hinweis je Backend-Bereich: Inhalts-Datensätze (Einzelleistungen,
+	 * Team, Stellen, News, Veranstaltungen, Publikationen) werden über den
+	 * normalen Editor samt Eingabefeldern gepflegt; die festen Seiten dagegen
+	 * mit Elementor. Wird auf den Übersichts- UND Bearbeiten-Screens gezeigt.
+	 */
+	protected static function editing_hint() {
+		if ( ! function_exists( 'get_current_screen' ) ) { return; }
+		$screen = get_current_screen();
+		if ( ! $screen || ! in_array( $screen->base, array( 'edit', 'post' ), true ) ) { return; }
+		$cpts = array( 'es_einzelleistung', 'es_team', 'es_karriere', 'es_news', 'es_veranstaltung', 'es_publikation' );
+		if ( in_array( $screen->post_type, $cpts, true ) ) {
+			echo '<div class="notice notice-info"><p><strong>Hinweis zur Bearbeitung:</strong> '
+				. 'Diese Einträge werden über <em>„Bearbeiten"</em> gepflegt, also den normalen Editor und die Eingabefelder darunter. '
+				. '„Mit Elementor bearbeiten" ist hier bewusst deaktiviert: Elementor würde eine eigene Kopie über den Inhalt legen, '
+				. 'wodurch Aufklapp-Rubriken, die englische Fassung und die Übersetzungsdatei von der Anzeige abgekoppelt würden.</p></div>';
+			return;
+		}
+		if ( 'page' === $screen->post_type ) {
+			echo '<div class="notice notice-info"><p><strong>Hinweis zur Bearbeitung:</strong> '
+				. 'Die festen Seiten (Startseite, Philosophie, Leistungen usw.) werden mit <em>„Mit Elementor bearbeiten"</em> gepflegt. '
+				. 'Die englischen Kopien (Untereinträge mit dem Zusatz EN) übernehmen Änderungen der deutschen Seite automatisch, '
+				. 'solange dort noch keine Übersetzung eingespielt wurde.</p></div>';
+		}
 	}
 }
 ESC_Admin::init();

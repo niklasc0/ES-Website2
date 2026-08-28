@@ -44,7 +44,11 @@ class ESC_CPTs {
 			'show_in_rest' => true,
 			'has_archive'  => true,
 			'menu_position'=> 5,
-			'supports'     => array( 'title', 'editor', 'thumbnail', 'revisions', 'excerpt', 'page-attributes', 'elementor' ),
+			// Bewusst OHNE 'elementor': Die Inhalts-Datensätze werden über den
+			// normalen Editor + Eingabefelder gepflegt. Elementor würde eine
+			// eigene Kopie über den Inhalt legen und Aufklapp-Rubriken, EN-Felder
+			// und Übersetzungsdatei von der Anzeige abkoppeln.
+			'supports'     => array( 'title', 'editor', 'thumbnail', 'revisions', 'excerpt', 'page-attributes' ),
 			'labels'       => $labels,
 		);
 		register_post_type( $slug, array_merge( $defaults, $args ) );
@@ -59,7 +63,7 @@ class ESC_CPTs {
 			'menu_icon'    => 'dashicons-groups',
 			'rewrite'      => array( 'slug' => 'teammitglied', 'with_front' => false ),
 			'has_archive'  => false,
-			'supports'     => array( 'title', 'editor', 'thumbnail', 'revisions', 'excerpt', 'page-attributes', 'custom-fields', 'elementor' ),
+			'supports'     => array( 'title', 'editor', 'thumbnail', 'revisions', 'excerpt', 'page-attributes', 'custom-fields' ),
 		) );
 		self::cpt( 'es_einzelleistung', 'Einzelleistung', 'Einzelleistungen', array(
 			'menu_icon'    => 'dashicons-portfolio',
@@ -132,3 +136,19 @@ class ESC_CPTs {
 }
 
 ESC_CPTs::init();
+
+/**
+ * Elementor für die Inhalts-Datensätze hart abschalten: Auch wenn die CPTs in
+ * den Elementor-Einstellungen (elementor_cpt_support) angehakt wurden, wird die
+ * Unterstützung entfernt. Damit verschwindet „Mit Elementor bearbeiten" auf
+ * diesen Einträgen komplett; die festen Seiten bleiben unberührt.
+ */
+add_action( 'init', function () {
+	foreach ( array( 'es_team', 'es_einzelleistung', 'es_karriere', 'es_news', 'es_veranstaltung', 'es_publikation', 'es_linkedin' ) as $pt ) {
+		remove_post_type_support( $pt, 'elementor' );
+	}
+}, 99 );
+add_filter( 'option_elementor_cpt_support', function ( $types ) {
+	if ( ! is_array( $types ) ) { return $types; }
+	return array_values( array_diff( $types, array( 'es_team', 'es_einzelleistung', 'es_karriere', 'es_news', 'es_veranstaltung', 'es_publikation', 'es_linkedin' ) ) );
+} );
