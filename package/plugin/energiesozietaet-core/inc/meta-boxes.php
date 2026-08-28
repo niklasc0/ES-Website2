@@ -93,7 +93,7 @@ class ESC_MetaBoxes {
 				break;
 			case 'es_einzelleistung':
 				self::field( 'Untertitel / Hero (EN)', 'es_subtitle_en', get_post_meta( $post->ID, 'es_subtitle_en', true ), 'textarea' );
-				self::lines_field( 'Kernpunkte (EN) – eine Zeile = ein Bullet', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 6 );
+				self::lines_field( 'Vorteile (EN) – eine Zeile = ein Punkt', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 6 );
 				self::accordion_repeater(
 					'es_acc_en',
 					get_post_meta( $post->ID, 'es_accordion_en', true ),
@@ -227,7 +227,7 @@ class ESC_MetaBoxes {
 		// Einleitung (normaler Editor oben) → Kernpunkte → Rubriken → Abschluss.
 		$bullets = get_post_meta( $post->ID, 'es_bullets', true );
 		$txt = is_array( $bullets ) ? implode( "\n", $bullets ) : '';
-		echo '<p><label><strong>Kernpunkte (eine Zeile = ein Bullet, stehen zwischen Einleitung und Rubriken)</strong></label>';
+		echo '<p><label><strong>Vorteile (eine Zeile = ein Punkt, stehen mit grüner Überschrift „Vorteile" zwischen Einleitung und Rubriken)</strong></label>';
 		echo '<textarea name="es_bullets_raw" rows="6" style="width:100%;">' . esc_textarea( $txt ) . '</textarea></p>';
 
 		self::accordion_repeater(

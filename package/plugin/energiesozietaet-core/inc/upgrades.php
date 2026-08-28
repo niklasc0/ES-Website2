@@ -17,6 +17,46 @@ class ESC_Upgrades {
 		self::purge_cpt_elementor();
 		self::rename_leistungen();
 		self::accordion_fields();
+		self::vorteile_field();
+	}
+
+	/**
+	 * Standardisierung "Vorteile": Listen im Fließtext, die unter einer
+	 * "Vorteile"/"Ihre Vorteile"-Zeile stehen, in das Vorteile-Feld
+	 * (es_bullets) überführen; die Zeile selbst entfällt, das Frontend rendert
+	 * die standardisierte grüne Überschrift. Redundante
+	 * "Unsere Schwerpunkte und Kernkompetenzen…"-Zeilen entfallen ebenfalls,
+	 * weil über den Rubriken jetzt die Standard-Überschrift
+	 * "Unsere Leistungen zum Thema …" steht.
+	 */
+	protected static function vorteile_field() {
+		if ( get_option( 'esc_vorteile_v1' ) ) { return; }
+		$done = array();
+		$pat  = '/<p>\s*(?:Ihre\s+)?Vorteile:?\s*<\/p>\s*<ul[^>]*>(.*?)<\/ul>/isu';
+		foreach ( get_posts( array( 'post_type' => 'es_einzelleistung', 'post_status' => 'any', 'numberposts' => -1 ) ) as $p ) {
+			$c = $p->post_content;
+			$changed = false;
+			if ( ! get_post_meta( $p->ID, 'es_bullets', true ) && preg_match( $pat, $c, $m ) ) {
+				preg_match_all( '/<li[^>]*>(.*?)<\/li>/isu', $m[1], $lis );
+				$bullets = array();
+				foreach ( $lis[1] as $li ) {
+					$li = trim( wp_kses_post( $li ) );
+					if ( '' !== $li ) { $bullets[] = $li; }
+				}
+				if ( $bullets ) {
+					update_post_meta( $p->ID, 'es_bullets', $bullets );
+					$c = preg_replace( $pat, '', $c, 1 );
+					$changed = true;
+				}
+			}
+			$c2 = preg_replace( '/<p>\s*Unsere Schwerpunkte und Kernkompetenzen[^<]*<\/p>/iu', '', $c );
+			if ( $c2 !== $c && get_post_meta( $p->ID, 'es_accordion', true ) ) { $c = $c2; $changed = true; }
+			if ( $changed ) {
+				wp_update_post( wp_slash( array( 'ID' => $p->ID, 'post_content' => trim( $c ) ) ) );
+				$done[] = $p->post_name;
+			}
+		}
+		update_option( 'esc_vorteile_v1', implode( ', ', $done ) . ' am ' . current_time( 'mysql' ) );
 	}
 
 	/**

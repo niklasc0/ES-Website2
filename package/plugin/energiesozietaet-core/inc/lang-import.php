@@ -19,7 +19,10 @@ class ES_Lang_Import {
 	const FIELD_MAP = array(
 		'einzelleistung' => array(
 			'Titel' => 'es_title_en', 'Untertitel' => 'es_subtitle_en', 'Beschreibung' => 'content',
-			'Kernpunkte' => 'lines:es_bullets_en', 'Abschluss-Absatz' => 'es_closing_en',
+			// "Vorteile" ist das aktuelle Label; "Kernpunkte" bleibt für bereits
+			// verschickte Übersetzungsdateien gültig (gleiches Zielfeld).
+			'Vorteile' => 'lines:es_bullets_en', 'Kernpunkte' => 'lines:es_bullets_en',
+			'Abschluss-Absatz' => 'es_closing_en',
 		),
 		'team' => array(
 			'Rolle/Position' => 'es_role_en', 'Kurzvita' => 'content', 'Erweiterte Vita' => 'es_more_bio_en',
@@ -284,7 +287,7 @@ class ES_Lang_Import {
 
 		// Inhaltstypen (News kommen als größter Block ganz ans Dateiende)
 		$cpt_sources = array(
-			'einzelleistung' => array( 'es_einzelleistung', array( 'Titel' => 'title', 'Untertitel' => 'meta:es_subtitle', 'Beschreibung' => 'content', 'Kernpunkte' => 'lines:es_bullets', 'Abschluss-Absatz' => 'meta:es_closing' ) ),
+			'einzelleistung' => array( 'es_einzelleistung', array( 'Titel' => 'title', 'Untertitel' => 'meta:es_subtitle', 'Beschreibung' => 'content', 'Vorteile' => 'lines:es_bullets', 'Abschluss-Absatz' => 'meta:es_closing' ) ),
 			'team'           => array( 'es_team', array( 'Rolle/Position' => 'meta:es_role', 'Kurzvita' => 'content', 'Erweiterte Vita' => 'meta:es_more_bio', 'Schwerpunkte' => 'lines:es_focus_areas', 'Werdegang' => 'career:es_career' ) ),
 			'karriere'       => array( 'es_karriere', array( 'Titel' => 'title', 'Rollen-Kürzel' => 'meta:es_department', 'Über die Rolle' => 'content', 'Aufgaben' => 'lines:es_tasks', 'Profil' => 'lines:es_profile', 'Wir bieten' => 'lines:es_offer', 'Anstellungsart' => 'meta:es_employment_type' ) ),
 			'veranstaltung'  => array( 'es_veranstaltung', array( 'Titel' => 'title', 'Beschreibung' => 'content', 'Ort' => 'meta:es_location', 'Art' => 'meta:es_kind' ) ),

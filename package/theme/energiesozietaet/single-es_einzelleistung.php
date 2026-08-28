@@ -51,15 +51,20 @@ while ( have_posts() ) : the_post();
 						if ( es_is_en() && ( ! is_array( $acc ) || empty( $acc ) ) && substr_count( $rendered_content, '<h3' ) < 3 ) {
 							$acc = get_post_meta( get_the_ID(), 'es_accordion', true );
 						}
+						// Standardisierte Zwischenüberschriften (grün): "Vorteile"
+						// über den Punkten, "Unsere Leistungen zum Thema …" über
+						// den Aufklapp-Rubriken.
+						$print_vorteile = function () use ( &$bullets ) {
+							if ( ! is_array( $bullets ) || empty( $bullets ) ) { return; }
+							echo '<h2 class="es-leistung__subhead">' . esc_html( es_t( 'Vorteile', 'Benefits' ) ) . '</h2><ul>';
+							foreach ( $bullets as $b ) { echo '<li>' . wp_kses_post( $b ) . '</li>'; }
+							echo '</ul>';
+							$bullets = null;
+						};
 						if ( is_array( $acc ) && ! empty( $acc ) ) {
 							echo $rendered_content; // phpcs:ignore WordPress.Security.EscapeOutput
-							// Kernpunkte stehen zwischen Einleitung und Rubriken
-							if ( is_array( $bullets ) && ! empty( $bullets ) ) {
-								echo '<ul>';
-								foreach ( $bullets as $b ) { echo '<li>' . wp_kses_post( $b ) . '</li>'; }
-								echo '</ul>';
-								$bullets = null;
-							}
+							$print_vorteile();
+							echo '<h2 class="es-leistung__subhead">' . esc_html( es_t( 'Unsere Leistungen zum Thema', 'Our services in' ) ) . ' ' . esc_html( get_the_title() ) . '</h2>';
 							foreach ( $acc as $acc_item ) {
 								$acc_title   = trim( (string) ( $acc_item['title'] ?? '' ) );
 								$acc_content = trim( (string) ( $acc_item['content'] ?? '' ) );
@@ -68,14 +73,9 @@ while ( have_posts() ) : the_post();
 							}
 						} else {
 							echo es_accordionize( $rendered_content ); // phpcs:ignore WordPress.Security.EscapeOutput
+							$print_vorteile();
 						}
 						?>
-
-						<?php if ( is_array( $bullets ) && ! empty( $bullets ) ) : ?>
-							<ul>
-								<?php foreach ( $bullets as $b ) : ?><li><?php echo wp_kses_post( $b ); ?></li><?php endforeach; ?>
-							</ul>
-						<?php endif; ?>
 
 						<?php if ( $closing ) : ?>
 							<blockquote><?php $closing_html = wp_kses_post( wpautop( $closing ) ); echo function_exists( 'esc_link_team_names' ) ? esc_link_team_names( $closing_html ) : $closing_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></blockquote>

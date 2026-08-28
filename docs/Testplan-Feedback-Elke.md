@@ -1,11 +1,11 @@
 # Testplan: Feedback-Runde Elke (Mails vom 18./19.08.)
 
-**Stand:** 28.08.2026 · Plugin **1.6.25** · Theme **2.6.27**
+**Stand:** 28.08.2026 · Plugin **1.6.27** · Theme **2.6.28**
 **Basis:** Live-Export von test2 vom 28.08., 07:28 Uhr (Elkes Bearbeitungsstand)
 
 ## Vorbereitung auf test2
 
-1. Theme-ZIP 2.6.27 und das **volle** Plugin-ZIP 1.6.25 einspielen (nicht das slim-ZIP, der Import braucht die mitgelieferten Daten).
+1. Theme-ZIP 2.6.28 und das **volle** Plugin-ZIP 1.6.27 einspielen (nicht das slim-ZIP, der Import braucht die mitgelieferten Daten).
 2. Als Admin: Werkzeuge → Energiesozietät-Import → **Import erzwingen**.
 3. Falls ein Seiten-Cache aktiv ist (WP-Optimize o. ä.): Cache leeren.
 4. Schnellcheck: Unter Plugins muss 1.6.22 stehen, unter Design das Theme 2.6.24.
@@ -30,10 +30,10 @@ Danach die folgenden Punkte durchgehen. Die Nummern entsprechen der abgestimmten
 | Nr. | Prüfen | Wo | Erwartet |
 |---|---|---|---|
 | B9 | Schneller Zugang zu den Leistungen | /leistungen/ | Nach dem Hero kommt der Block „Unser Anspruch", direkt danach die drei Beratungsfelder; nur „Unser Beratungsansatz" steht ganz unten auf der Seite |
-| B10 | Gesellschaftsrecht aufklappbar | /leistung/gesellschaftsrecht/ | Voraussetzung: Plugin 1.6.25 aktiv (räumt die alten Elementor-Überlagerungen automatisch auf). Dann fünf Aufklapp-Rubriken (Privatisierung, Kommunalrecht und Gesellschaftsrecht, Corporate Governance, Reorganisationen, Unternehmerische Mitbestimmung), darunter der Claim „Strukturen schaffen. Entscheidungen ermöglichen." als eigener Absatz |
+| B10 | Gesellschaftsrecht aufklappbar | /leistung/gesellschaftsrecht/ | Voraussetzung: Plugin 1.6.27 aktiv (räumt die alten Elementor-Überlagerungen automatisch auf). Dann fünf Aufklapp-Rubriken (Privatisierung, Kommunalrecht und Gesellschaftsrecht, Corporate Governance, Reorganisationen, Unternehmerische Mitbestimmung), darunter der Claim „Strukturen schaffen. Entscheidungen ermöglichen." als eigener Absatz |
 | B11 | Energierecht-Kopf | /leistung/energie/ | Titel „Energierecht", Untertitel „Die Energietransformation rechtlich umsetzen, neue Märkte erschließen, die Chancen und Risiken der Regulierung beherrschen"; URL bleibt unverändert |
 | B12 | Umweltrecht-Untertitel | /leistung/umweltrecht/ | „Umweltrecht für Abfall, Wärme und Wasserstoff – von Waste-to-Energy bis Geothermie" |
-| B13 | ESG eigene Rubrik | /leistung/umweltrecht/ | Sechs Aufklapp-Rubriken, „Compliance und ESG" als eigener Punkt (Voraussetzung wie B10: Plugin 1.6.25 aktiv) |
+| B13 | ESG eigene Rubrik | /leistung/umweltrecht/ | Sechs Aufklapp-Rubriken, „Compliance und ESG" als eigener Punkt (Voraussetzung wie B10: Plugin 1.6.27 aktiv) |
 | B14 | Umweltrecht-Claim | /leistung/umweltrecht/ ganz unten | „Wir schaffen rechtliche und strategische Grundlagen, …" steht unterhalb der Rubriken, nicht mehr in einer Aufzählung |
 | B15 | Claim vollständig | Footer aller Seiten + Hero /philosophie/ | „Beratung aus Leidenschaft – Ergebnisse, die weitertragen." mit Halbgeviertstrich, im Hero wie im Footer |
 | B16 | UB-Kacheln inkl. URLs | /unternehmensberatung/ | Kacheln heißen: Investition und Transformation · Transaktion und Kooperation · Strukturen & Governance · Regulierung · Wärme · Wasserwirtschaft · Wasserstoff. Neue URLs: /leistung/investition-und-transformation/, /leistung/strukturen-governance/, /leistung/transaktion-und-kooperation/; die alten URLs leiten per 301 weiter |
@@ -49,7 +49,7 @@ Danach die folgenden Punkte durchgehen. Die Nummern entsprechen der abgestimmten
 | Redaktions-Hinweis Seiten | Seiten-Übersicht | Blaue Info-Box: Pflege mit Elementor, EN-Kopien folgen automatisch bis zur Übersetzung |
 | Elementor-Sperre | Einzelleistung öffnen | Kein „Mit Elementor bearbeiten"-Button mehr (bei „Seiten" weiterhin vorhanden) |
 | Praxistest Sperre | Umweltrecht im normalen Editor: ein Wort ändern, speichern | Änderung erscheint sofort im Frontend (vorher wurde sie von der Elementor-Kopie verschluckt) |
-| Rubriken-Felder | Einzelleistung „Umweltrecht" bearbeiten | Neue Box „Aufklapp-Rubriken": je Rubrik ein Überschrift-Feld und ein Inhalts-Feld, mit Hinzufügen/Entfernen/Umsortieren; die sechs Umweltrecht-Rubriken sind bereits aus dem Text dorthin überführt, im Editor steht nur noch die Einleitung. Reihenfolge auf der Seite und im Backend identisch: Einleitung, Kernpunkte, Rubriken, Abschluss-Absatz. Im EN-Kasten gibt es das Gegenstück; die Übersetzungsdatei führt je Rubrik zwei eigene Zeilen |
+| Rubriken-Felder | Einzelleistung „Umweltrecht" bearbeiten | Neue Box „Aufklapp-Rubriken": je Rubrik ein Überschrift-Feld und ein Inhalts-Feld, mit Hinzufügen/Entfernen/Umsortieren; die sechs Umweltrecht-Rubriken sind bereits aus dem Text dorthin überführt, im Editor steht nur noch die Einleitung. Reihenfolge auf der Seite und im Backend identisch: Einleitung, Vorteile, Rubriken, Abschluss-Absatz. Über den Vorteilen steht die grüne Überschrift „Vorteile", über den Rubriken „Unsere Leistungen zum Thema …"; sechs Leistungen (Umweltrecht, Investition und Transformation, Regulierung, Wasserstoff, Wasserwirtschaft, Wärme) wurden automatisch auf das Vorteile-Feld umgestellt. Im EN-Kasten gibt es das Gegenstück; die Übersetzungsdatei führt je Rubrik zwei eigene Zeilen |
 
 ## Teil 4 · Inhalts-Integrität (automatischer Abgleich)
 
