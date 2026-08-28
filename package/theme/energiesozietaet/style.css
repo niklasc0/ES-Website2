@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.29
+Version: 2.6.30
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -541,10 +541,22 @@ html.js .esc-card.es-reveal {
 .es-hero--split > .elementor-container { align-items: center; }
 .es-hero__side > .elementor-widget-wrap,
 .es-hero__side .elementor-widget-container { height: 100%; }
-/* Hero-Seitentext (ersetzt die früheren Kacheln): unten ausgerichtet, damit er
-   auf einer Ebene mit dem Einleitungstext der linken Spalte steht, nicht mit
-   der Überschrift. Erste Zeile bewusst KEINE Überschrift, nur leicht betont. */
-.es-hero--split .es-hero__side > .elementor-widget-wrap { display: flex; flex-direction: column; justify-content: flex-end; }
+/* Hero-Seitentext (ersetzt die früheren Kacheln): Einleitungstext und
+   Seitentext stehen in einer gemeinsamen Zeile unter der Überschrift und sind
+   oben bündig. Erste Zeile bewusst KEINE Überschrift, nur leicht betont. */
+.es-hero--split .es-hero__cols > .elementor-container { display: flex; align-items: flex-start; }
+/* Neue Hero-Struktur: eine Vollbreiten-Spalte mit innerer Text-Zeile; die
+   alte 42%-Regel für es-hero__main gilt nur noch im Zwei-Spalten-Fall. */
+.es-hero--split > .elementor-container > .es-hero__main.elementor-column:only-child { width: 100%; flex: 0 0 100%; max-width: 100%; }
+.es-hero--split .es-hero__cols .es-hero__lead-col { width: 42%; flex: 0 0 42%; max-width: 42%; }
+.es-hero--split .es-hero__cols .es-hero__side { width: 58%; flex: 0 0 58%; max-width: 58%; }
+.es-hero--split .es-hero__cols .es-hero__lead { margin-top: 0; }
+.es-hero--split .es-hero__title { max-width: 560px; }
+@media (max-width: 900px) {
+    .es-hero--split .es-hero__cols > .elementor-container { flex-direction: column; }
+    .es-hero--split .es-hero__cols .es-hero__lead-col,
+    .es-hero--split .es-hero__cols .es-hero__side { width: 100%; flex: 0 0 100%; max-width: 100%; }
+}
 .es-hero__sidetext { max-width: 640px; margin-left: auto; }
 .es-hero__sidetext .elementor-widget-container { height: auto; }
 .es-hero__sidetext p { color: var(--es-on-dark-text); font-size: var(--es-fs-body); line-height: var(--es-lh-normal); margin: 0 0 14px; text-shadow: 0 1px 14px rgba(10, 20, 22, 0.55); }
