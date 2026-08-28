@@ -105,8 +105,29 @@ class ES_Lang_Import {
 			// CPT-Referenz: <blatt>.<slug>.<Feldlabel>
 			if ( preg_match( '/^(einzelleistung|team|karriere|news|veranstaltung|publikation)\.([^.]+)\.(.+)$/u', $ref, $m ) ) {
 				$post = get_page_by_path( $m[2], OBJECT, self::CPT_OF_SHEET[ $m[1] ] );
-				$map  = self::FIELD_MAP[ $m[1] ];
-				if ( ! $post || ! isset( $map[ $m[3] ] ) ) { $stats['skipped'][] = $ref; continue; }
+				if ( ! $post ) { $stats['skipped'][] = $ref; continue; }
+				// Aufklapp-Rubriken der Einzelleistungen: "Rubrik <n> Titel|Inhalt"
+				if ( 'einzelleistung' === $m[1] && preg_match( '/^Rubrik (\d+) (Titel|Inhalt)$/u', $m[3], $rm ) ) {
+					$idx = (int) $rm[1] - 1;
+					$arr = get_post_meta( $post->ID, 'es_accordion_en', true );
+					if ( ! is_array( $arr ) ) { $arr = array(); }
+					// Gerüst aus der DE-Fassung, damit Anzahl und Reihenfolge stimmen
+					$de_acc = get_post_meta( $post->ID, 'es_accordion', true );
+					if ( is_array( $de_acc ) ) {
+						foreach ( array_keys( array_values( $de_acc ) ) as $i ) {
+							if ( ! isset( $arr[ $i ] ) ) { $arr[ $i ] = array( 'title' => '', 'content' => '' ); }
+						}
+					}
+					if ( ! isset( $arr[ $idx ] ) ) { $arr[ $idx ] = array( 'title' => '', 'content' => '' ); }
+					if ( 'Titel' === $rm[2] ) { $arr[ $idx ]['title'] = sanitize_text_field( $en ); }
+					else { $arr[ $idx ]['content'] = wp_kses_post( $en ); }
+					ksort( $arr );
+					update_post_meta( $post->ID, 'es_accordion_en', array_values( $arr ) );
+					$stats['cpt']++;
+					continue;
+				}
+				$map = self::FIELD_MAP[ $m[1] ];
+				if ( ! isset( $map[ $m[3] ] ) ) { $stats['skipped'][] = $ref; continue; }
 				self::set_cpt_field( $post->ID, $map[ $m[3] ], $en );
 				$stats['cpt']++;
 				continue;
@@ -292,6 +313,19 @@ class ES_Lang_Import {
 					elseif ( 0 === strpos( $target, 'career:' ) ) { $en = self::join_lines( get_post_meta( $po->ID, substr( $target, 7 ), true ), true ); }
 					else { $en = (string) get_post_meta( $po->ID, $target, true ); }
 					$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, $label, $de, $en, $sheet . '.' . $po->post_name . '.' . $label );
+				}
+				// Aufklapp-Rubriken der Einzelleistungen: je Rubrik zwei Zeilen
+				if ( 'einzelleistung' === $sheet ) {
+					$acc    = get_post_meta( $po->ID, 'es_accordion', true );
+					$acc_en = get_post_meta( $po->ID, 'es_accordion_en', true );
+					if ( is_array( $acc ) ) {
+						foreach ( array_values( $acc ) as $i => $arow ) {
+							$n   = $i + 1;
+							$ent = ( is_array( $acc_en ) && isset( $acc_en[ $i ] ) && is_array( $acc_en[ $i ] ) ) ? $acc_en[ $i ] : array();
+							$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, 'Rubrik ' . $n . ' · Titel', (string) ( $arow['title'] ?? '' ), (string) ( $ent['title'] ?? '' ), $sheet . '.' . $po->post_name . '.Rubrik ' . $n . ' Titel' );
+							$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, 'Rubrik ' . $n . ' · Inhalt', (string) ( $arow['content'] ?? '' ), (string) ( $ent['content'] ?? '' ), $sheet . '.' . $po->post_name . '.Rubrik ' . $n . ' Inhalt' );
+						}
+					}
 				}
 			}
 		};

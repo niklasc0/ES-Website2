@@ -269,6 +269,11 @@ class ESC_Importer {
 			}
 			update_post_meta( $id, 'es_subtitle', (string) $e['subtitle'] );
 			update_post_meta( $id, 'es_closing',  (string) $e['closing'] );
+			if ( ! empty( $e['accordion'] ) && is_array( $e['accordion'] ) ) {
+				update_post_meta( $id, 'es_accordion', $e['accordion'] );
+			} elseif ( array_key_exists( 'accordion', $e ) ) {
+				delete_post_meta( $id, 'es_accordion' );
+			}
 			if ( ! empty( $e['bullets'] ) ) { update_post_meta( $id, 'es_bullets', $e['bullets'] ); }
 			if ( ! empty( $e['beratungsfeld'] ) ) {
 				wp_set_object_terms( $id, $e['beratungsfeld'], 'es_beratungsfeld' );

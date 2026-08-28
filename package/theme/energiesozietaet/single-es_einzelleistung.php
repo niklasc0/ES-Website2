@@ -42,7 +42,27 @@ while ( have_posts() ) : the_post();
 			<div class="es-leistung__grid">
 				<div class="es-leistung__main">
 					<div class="es-article__body es-leistung__body">
-						<?php echo es_accordionize( apply_filters( 'the_content', get_the_content() ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php
+						// Aufklapp-Rubriken: bevorzugt aus dem strukturierten Feld
+						// (es_accordion / es_accordion_en). Fallback-Kette in EN:
+						// EN-Rubriken → EN-Inhalt mit h3-Automatik → DE-Rubriken.
+						$acc = get_post_meta( get_the_ID(), es_is_en() ? 'es_accordion_en' : 'es_accordion', true );
+						$rendered_content = apply_filters( 'the_content', get_the_content() );
+						if ( es_is_en() && ( ! is_array( $acc ) || empty( $acc ) ) && substr_count( $rendered_content, '<h3' ) < 3 ) {
+							$acc = get_post_meta( get_the_ID(), 'es_accordion', true );
+						}
+						if ( is_array( $acc ) && ! empty( $acc ) ) {
+							echo $rendered_content; // phpcs:ignore WordPress.Security.EscapeOutput
+							foreach ( $acc as $acc_item ) {
+								$acc_title   = trim( (string) ( $acc_item['title'] ?? '' ) );
+								$acc_content = trim( (string) ( $acc_item['content'] ?? '' ) );
+								if ( '' === $acc_title && '' === $acc_content ) { continue; }
+								echo '<details class="es-acc"><summary>' . esc_html( $acc_title ) . '</summary><div class="es-acc__body">' . wp_kses_post( wpautop( $acc_content ) ) . '</div></details>';
+							}
+						} else {
+							echo es_accordionize( $rendered_content ); // phpcs:ignore WordPress.Security.EscapeOutput
+						}
+						?>
 
 						<?php if ( is_array( $bullets ) && ! empty( $bullets ) ) : ?>
 							<ul>

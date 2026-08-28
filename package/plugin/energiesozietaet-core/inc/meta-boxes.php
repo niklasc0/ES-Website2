@@ -93,6 +93,12 @@ class ESC_MetaBoxes {
 				break;
 			case 'es_einzelleistung':
 				self::field( 'Untertitel / Hero (EN)', 'es_subtitle_en', get_post_meta( $post->ID, 'es_subtitle_en', true ), 'textarea' );
+				self::accordion_repeater(
+					'es_acc_en',
+					get_post_meta( $post->ID, 'es_accordion_en', true ),
+					'Aufklapp-Rubriken (EN)',
+					'Englische Fassung der Rubriken. Leer = die Seite zeigt die deutschen Rubriken.'
+				);
 				self::lines_field( 'Kernpunkte (EN) – eine Zeile = ein Bullet', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 6 );
 				self::field( 'Abschluss-Absatz (EN)', 'es_closing_en', get_post_meta( $post->ID, 'es_closing_en', true ), 'textarea' );
 				break;
@@ -216,14 +222,97 @@ class ESC_MetaBoxes {
 	public static function box_einzel( $post ) {
 		self::nonce();
 		self::field( 'Untertitel (Hero)',  'es_subtitle', get_post_meta( $post->ID, 'es_subtitle', true ), 'textarea' );
-		self::field( 'Abschluss-Absatz',   'es_closing',  get_post_meta( $post->ID, 'es_closing', true ),  'textarea' );
+
+		// Aufklapp-Rubriken: Reihenfolge auf der Seite ist Einleitung (normaler
+		// Editor oben) → Rubriken → Kernpunkte → Abschluss-Absatz.
+		self::accordion_repeater(
+			'es_acc',
+			get_post_meta( $post->ID, 'es_accordion', true ),
+			'Aufklapp-Rubriken',
+			'Jede Rubrik erscheint als aufklappbarer Punkt unter dem Einleitungstext. Absätze im Inhalt mit einer Leerzeile trennen; vorhandene Formatierung (z. B. Listen) bleibt erhalten.'
+		);
 
 		$bullets = get_post_meta( $post->ID, 'es_bullets', true );
 		$txt = is_array( $bullets ) ? implode( "\n", $bullets ) : '';
 		echo '<p><label><strong>Kernpunkte (eine Zeile = ein Bullet)</strong></label>';
 		echo '<textarea name="es_bullets_raw" rows="6" style="width:100%;">' . esc_textarea( $txt ) . '</textarea></p>';
 
+		self::field( 'Abschluss-Absatz (steht als Letztes auf der Seite)', 'es_closing', get_post_meta( $post->ID, 'es_closing', true ), 'textarea' );
+
 		self::field( 'Ansprechpartner (Kontaktkarte)', 'es_ansprechpartner', get_post_meta( $post->ID, 'es_ansprechpartner', true ), 'select', array( 'options' => self::team_options() ) );
+	}
+
+	/**
+	 * Wiederholfeld für Aufklapp-Rubriken: je Rubrik ein Überschrift-Feld und
+	 * ein Inhalts-Textfeld, mit Hinzufügen/Entfernen/Umsortieren.
+	 * $prefix 'es_acc' (DE) bzw. 'es_acc_en' (EN).
+	 */
+	protected static function accordion_repeater( $prefix, $rows, $label, $hint ) {
+		$rows = is_array( $rows ) ? array_values( $rows ) : array();
+		$id = esc_attr( $prefix ) . '_rep';
+		echo '<div class="esc-acc-rep" id="' . $id . '" style="margin:16px 0;padding:12px;border:1px solid #dcdcde;border-radius:4px;background:#fafafa;">';
+		echo '<p style="margin-top:0;"><strong>' . esc_html( $label ) . '</strong><br /><span style="color:#667;">' . esc_html( $hint ) . '</span></p>';
+		echo '<div class="esc-acc-rows">';
+		foreach ( $rows as $r ) {
+			self::accordion_row( $prefix, (string) ( $r['title'] ?? '' ), (string) ( $r['content'] ?? '' ) );
+		}
+		echo '</div>';
+		echo '<p style="margin-bottom:0;"><button type="button" class="button esc-acc-add">+ Rubrik hinzufügen</button></p>';
+		// Leere Vorlagenzeile für das JS (ohne name-Attribute, damit sie beim
+		// Speichern nicht mitkommt; JS setzt die Namen beim Einfügen).
+		echo '<template class="esc-acc-tpl">';
+		self::accordion_row( $prefix, '', '', true );
+		echo '</template>';
+		echo '</div>';
+		self::accordion_repeater_js();
+	}
+
+	protected static function accordion_row( $prefix, $title, $content, $tpl = false ) {
+		$nt = $tpl ? '' : ' name="' . esc_attr( $prefix ) . '_title[]"';
+		$nc = $tpl ? '' : ' name="' . esc_attr( $prefix ) . '_content[]"';
+		echo '<div class="esc-acc-row" style="border:1px solid #e2e4e7;border-radius:4px;background:#fff;padding:10px;margin-bottom:10px;">';
+		echo '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">';
+		echo '<input type="text"' . $nt . ' data-name="' . esc_attr( $prefix ) . '_title[]" value="' . esc_attr( $title ) . '" placeholder="Überschrift der Rubrik" style="flex:1;" />';
+		echo '<button type="button" class="button esc-acc-up" title="Nach oben">↑</button>';
+		echo '<button type="button" class="button esc-acc-down" title="Nach unten">↓</button>';
+		echo '<button type="button" class="button esc-acc-del" title="Rubrik entfernen">✕</button>';
+		echo '</div>';
+		echo '<textarea' . $nc . ' data-name="' . esc_attr( $prefix ) . '_content[]" rows="5" style="width:100%;" placeholder="Inhalt der Rubrik">' . esc_textarea( $content ) . '</textarea>';
+		echo '</div>';
+	}
+
+	protected static function accordion_repeater_js() {
+		static $done = false;
+		if ( $done ) { return; }
+		$done = true;
+		?>
+		<script>
+		document.addEventListener('click', function (e) {
+			var rep = e.target.closest && e.target.closest('.esc-acc-rep');
+			if (!rep) { return; }
+			var rowsBox = rep.querySelector('.esc-acc-rows');
+			if (e.target.classList.contains('esc-acc-add')) {
+				var tpl = rep.querySelector('.esc-acc-tpl');
+				var node = tpl.content.firstElementChild.cloneNode(true);
+				node.querySelectorAll('[data-name]').forEach(function (el) { el.setAttribute('name', el.getAttribute('data-name')); });
+				rowsBox.appendChild(node);
+				e.preventDefault();
+			}
+			var row = e.target.closest('.esc-acc-row');
+			if (!row) { return; }
+			if (e.target.classList.contains('esc-acc-del')) {
+				if (confirm('Diese Rubrik entfernen?')) { row.remove(); }
+				e.preventDefault();
+			} else if (e.target.classList.contains('esc-acc-up') && row.previousElementSibling) {
+				row.parentNode.insertBefore(row, row.previousElementSibling);
+				e.preventDefault();
+			} else if (e.target.classList.contains('esc-acc-down') && row.nextElementSibling) {
+				row.parentNode.insertBefore(row.nextElementSibling, row);
+				e.preventDefault();
+			}
+		});
+		</script>
+		<?php
 	}
 
 	public static function box_karriere( $post ) {
@@ -400,6 +489,21 @@ class ESC_MetaBoxes {
 				foreach ( $lines as $l ) { $l = trim( $l ); if ( $l ) { $arr[] = wp_kses_post( $l ); } }
 				update_post_meta( $post_id, $arr_key, $arr );
 			}
+		}
+		// Aufklapp-Rubriken (Einzelleistung): parallele Titel-/Inhalts-Arrays
+		foreach ( array( 'es_acc' => 'es_accordion', 'es_acc_en' => 'es_accordion_en' ) as $prefix => $meta_key ) {
+			if ( ! isset( $_POST[ $prefix . '_title' ] ) || ! is_array( $_POST[ $prefix . '_title' ] ) ) { continue; }
+			$titles   = array_map( 'wp_unslash', (array) $_POST[ $prefix . '_title' ] );
+			$contents = array_map( 'wp_unslash', (array) ( $_POST[ $prefix . '_content' ] ?? array() ) );
+			$rows = array();
+			foreach ( $titles as $i => $t ) {
+				$t = sanitize_text_field( $t );
+				$c = wp_kses_post( trim( (string) ( $contents[ $i ] ?? '' ) ) );
+				if ( '' === $t && '' === $c ) { continue; }
+				$rows[] = array( 'title' => $t, 'content' => $c );
+			}
+			if ( $rows ) { update_post_meta( $post_id, $meta_key, $rows ); }
+			else { delete_post_meta( $post_id, $meta_key ); }
 		}
 		// EN-Werdegang im selben Format wie die deutsche Fassung ({when, what})
 		if ( isset( $_POST['es_career_en_raw'] ) ) {

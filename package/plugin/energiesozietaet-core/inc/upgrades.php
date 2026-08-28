@@ -16,6 +16,62 @@ class ESC_Upgrades {
 	public static function run() {
 		self::purge_cpt_elementor();
 		self::rename_leistungen();
+		self::accordion_fields();
+	}
+
+	/**
+	 * Bestehende Aufklapp-Strukturen (drei oder mehr h3-Zwischenüberschriften
+	 * im Inhalt) in das strukturierte Rubriken-Feld überführen: Der Einleitungs-
+	 * text bleibt im Editor, die Rubriken wandern nach es_accordion (bzw.
+	 * es_accordion_en für bereits übersetzte Inhalte).
+	 */
+	protected static function accordion_fields() {
+		if ( get_option( 'esc_accordion_fields_v1' ) ) { return; }
+		$done = 0;
+		foreach ( get_posts( array( 'post_type' => 'es_einzelleistung', 'post_status' => 'any', 'numberposts' => -1 ) ) as $p ) {
+			// DE: post_content
+			if ( ! get_post_meta( $p->ID, 'es_accordion', true ) ) {
+				$split = self::split_h3( $p->post_content );
+				if ( $split ) {
+					update_post_meta( $p->ID, 'es_accordion', $split['rows'] );
+					wp_update_post( wp_slash( array( 'ID' => $p->ID, 'post_content' => $split['intro'] ) ) );
+					$done++;
+				}
+			}
+			// EN: es_content_en
+			if ( ! get_post_meta( $p->ID, 'es_accordion_en', true ) ) {
+				$en = (string) get_post_meta( $p->ID, 'es_content_en', true );
+				$split = self::split_h3( $en );
+				if ( $split ) {
+					update_post_meta( $p->ID, 'es_accordion_en', $split['rows'] );
+					update_post_meta( $p->ID, 'es_content_en', $split['intro'] );
+				}
+			}
+		}
+		update_option( 'esc_accordion_fields_v1', $done . ' überführt am ' . current_time( 'mysql' ) );
+	}
+
+	/**
+	 * Zerlegt HTML mit mindestens drei h3-Überschriften in Einleitung +
+	 * Rubriken (Spiegel der bisherigen Frontend-Automatik es_accordionize,
+	 * inklusive der Ausnahme für "Kernkompetenz"-Überschriften).
+	 */
+	protected static function split_h3( $html ) {
+		if ( substr_count( (string) $html, '<h3' ) < 3 ) { return null; }
+		$parts = preg_split( '/(<h3[^>]*>.*?<\/h3>)/s', (string) $html, -1, PREG_SPLIT_DELIM_CAPTURE );
+		$intro = $parts[0];
+		$rows = array();
+		for ( $i = 1; $i < count( $parts ); $i += 2 ) {
+			$heading = trim( wp_strip_all_tags( $parts[ $i ] ) );
+			$body    = isset( $parts[ $i + 1 ] ) ? trim( $parts[ $i + 1 ] ) : '';
+			if ( false !== stripos( $heading, 'Kernkompetenz' ) ) {
+				$intro .= $parts[ $i ] . $body;
+				continue;
+			}
+			$rows[] = array( 'title' => $heading, 'content' => $body );
+		}
+		if ( count( $rows ) < 3 ) { return null; }
+		return array( 'intro' => trim( $intro ), 'rows' => $rows );
 	}
 
 	/**
