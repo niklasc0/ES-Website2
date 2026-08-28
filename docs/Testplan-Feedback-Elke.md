@@ -67,7 +67,7 @@ Damit ist maschinell belegt, dass beim Einspielen nichts von Elkes Inhalten verl
 
 ## Offene Entscheidungen
 
-1. **UB-Kachel-Zuordnung:** „Erneuerbare Energien" wurde zu „Investition und Transformation", „Projektmanagement" zu „Strukturen & Governance" (inhaltlich beste Passung, aber bitte von Elke bestätigen lassen; die Texte hinter den Kacheln sind noch die bisherigen).
+1. **UB-Kachel-Texte:** Die Zuordnung ist final getauscht („Erneuerbare Energien" ist jetzt „Strukturen und Governance", „Projektmanagement" ist „Investition und Transformation", jeweils mit „und" statt „&"). Die Texte hinter den Kacheln sind aber noch die bisherigen; insbesondere sollte Elke den Text von „Strukturen und Governance" an den neuen Titel anpassen.
 2. **Formulierung:** Aus „Beratung auf den Punkt aus?" wurde „Wie sieht Beratung auf den Punkt aus?" (Deutung eines mutmaßlichen Tippfehlers, bitte gegenlesen).
 3. **Schriftgrößen:** Entscheidung Kicker 11 gegen 13 px, Text 16 gegen 17 px steht aus; Umsetzung dann per Handgriff unter Design → Typografie.
 4. **Philosophie-Ende:** Umgesetzt als „Seite endet mit dem dunklen Politikberatungs-Abschnitt". Falls Elke stattdessen das Zitat als Schluss meinte, ist das eine kleine Nacharbeit.
