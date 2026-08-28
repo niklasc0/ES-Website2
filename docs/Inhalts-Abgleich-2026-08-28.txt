@@ -1,0 +1,56 @@
+Verglichene Einträge: 171  |  byte-identisch: 161  |  nur Kodierung/Whitespace: 1
+
+── BEAUFTRAGTE ÄNDERUNGEN (nachgewiesen) ──
+INHALT es_einzelleistung:bau-und-planungsrecht (beauftragt geändert), Wort-Diff angezeigt vs. neu:
+      (textgleich, nur Markup bereinigt)
+META es_einzelleistung:bau-und-planungsrecht.es_closing: "" → "Damit werden Bauprojekte rechtssicher vorbereitet, Konfliktrisiken reduziert und" (beauftragt)
+TITEL es_einzelleistung:energie: "Energie" → "Energierecht" (beauftragt)
+INHALT es_einzelleistung:energie (beauftragt geändert), Wort-Diff angezeigt vs. neu:
+      - "Behörden.Wir"  →  + "Behörden. Wir"
+META es_einzelleistung:energie.es_closing: "" → "Energierecht mit Weitblick – für eine sichere, verlässliche und zukunftsorientie" (beauftragt)
+META es_einzelleistung:energie.es_subtitle: "Die Transformation unserer Energieversorgung ist eine der gr" → "Die Energietransformation rechtlich umsetzen, neue Märkte erschließen, die Chanc" (beauftragt)
+TITEL es_einzelleistung:erneuerbare-energien: "Erneuerbare Energien" → "Investition und Transformation" (beauftragt)
+INHALT es_einzelleistung:gesellschaftsrecht (beauftragt geändert), Wort-Diff angezeigt vs. neu:
+      (textgleich, nur Markup bereinigt)
+META es_einzelleistung:gesellschaftsrecht.es_closing: "" → "Strukturen schaffen. Entscheidungen ermöglichen." (beauftragt)
+INHALT es_einzelleistung:kommunalwirtschaft (beauftragt geändert), Wort-Diff angezeigt vs. neu:
+      (textgleich, nur Markup bereinigt)
+META es_einzelleistung:kommunalwirtschaft.es_closing: "" → "Daseinsvorsorge rechtssicher weiterentwickeln." (beauftragt)
+TITEL es_einzelleistung:kooperation-und-transaktion: "Kooperation und Transaktion" → "Transaktion und Kooperation" (beauftragt)
+TITEL es_einzelleistung:projektmanagement: "Projektmanagement" → "Strukturen & Governance" (beauftragt)
+INHALT es_einzelleistung:umweltrecht (beauftragt geändert), Wort-Diff angezeigt vs. neu:
+      (textgleich, nur Markup bereinigt)
+META es_einzelleistung:umweltrecht.es_closing: "" → "Wir schaffen rechtliche und strategische Grundlagen, die ökologische und wirtsch" (beauftragt)
+META es_einzelleistung:umweltrecht.es_subtitle: "Rechtsberatung für eine nachhaltige und innovative Zukunft" → "Umweltrecht für Abfall, Wärme und Wasserstoff – von Waste-to-Energy bis Geotherm" (beauftragt)
+INHALT page:leistungen (beauftragt geändert), Wort-Diff angezeigt vs. neu:
+      - "Interdisziplinäre Beratung."  →  + "InterdisziplinäreBeratung."
+      - "Pragmatisches Vorgehen Unser Beratungsansatz."  →  + ""
+      - "Unternehmensberatung.-"  →  + "Unternehmensberatung. Pragmatisches Vorgehen Unser Beratungsansatz. Wie sieht"
+      - "umsetzsetzen"  →  + "umzusetzen"
+      - "due"  →  + "die"
+      - "unser"  →  + "und"
+      - "Zur Rechtsberatung → [es_field_image field="rechtsberatung"]"  →  + ""
+      - "[es_einzelleistungen beratungsfeld="rechtsberatung" columns="3" link="1"]"  →  + ""
+      - "Zur Steuerberatung → [es_field_image field="steuerberatung"]"  →  + ""
+      - "[es_einzelleistungen beratungsfeld="steuerberatung" columns="3" link="1"]"  →  + ""
+      - "Zur Unternehmensberatung → [es_field_image field="unternehmensberatung"]"  →  + ""
+      - "[es_einzelleistungen beratungsfeld="unternehmensberatung" columns="3" link="1"]"  →  + ""
+INHALT page:philosophie (beauftragt geändert), Wort-Diff angezeigt vs. neu:
+      - "mit Leidenschaft, Ergebnisse,"  →  + "aus Leidenschaft,Ergebnisse,"
+      - "komplex Ihre"  →  + "komplexIhre"
+      - "komplexen Umfeld. bewegen sich in einem extrem"  →  + ""
+      - ""  →  + "Wie wir arbeiten Lösungen entstehengemeinsam mit Ihnen."
+      - ""  →  + "Unser Startpunkt Ihr Zielbildfest im Blick."
+      - "Wachsende Aufgaben und Transformations-anforderungen Steigende rechtliche, regulatorische und finanzielle Anforderungen Hohe Investitionsbedarfe und begrenzte Ressourcen Unterschiedliche Interessen vo"  →  + ""
+      - "[es_mandanten items="Was wir tun, tun wir mit Leidenschaft.|Als Energiesozietät vereinen wir jahrzehntelange Großkanzleierfahrung mit den Vorteilen einer schlagkräftigen, kleinen Einheit („Boutique“)."  →  + ""
+      - "Interdisziplinär Ein Team aus drei Perspektiven. Unser Team von Ingenieuren, Kaufleuten, Rechtsanwälten und Steuerberatern erarbeitet mit Ihnen ganzheitliche, tragfähige Lösungen als Grundlage für ein"  →  + ""
+      - "im politischen Prozess Akzeptanz"  →  + "impolitischen ProzessAkzeptanz"
+ELEMENTOR-ÜBERLAGERUNG es_einzelleistung:umweltrecht: entfernt (beauftragt)
+ELEMENTOR-ÜBERLAGERUNG es_einzelleistung:gesellschaftsrecht: entfernt (beauftragt)
+ELEMENTOR-ÜBERLAGERUNG es_einzelleistung:energie: entfernt (beauftragt)
+ELEMENTOR-ÜBERLAGERUNG es_einzelleistung:kommunalwirtschaft: entfernt (beauftragt)
+MENÜ vorher: Philosophie > Leistungen > Team > Publikationen > News > Veranstaltungen > Stellenangebote
+MENÜ nachher: Philosophie > Team > Leistungen > Publikationen > News > Veranstaltungen > Stellenangebote
+
+── UNERWARTETE ABWEICHUNGEN ──
+KEINE. Alle übrigen Inhalte sind unverändert.
