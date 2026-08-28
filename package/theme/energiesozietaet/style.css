@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.28
+Version: 2.6.29
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -541,6 +541,15 @@ html.js .esc-card.es-reveal {
 .es-hero--split > .elementor-container { align-items: center; }
 .es-hero__side > .elementor-widget-wrap,
 .es-hero__side .elementor-widget-container { height: 100%; }
+/* Hero-Seitentext (ersetzt die früheren Kacheln): unten ausgerichtet, damit er
+   auf einer Ebene mit dem Einleitungstext der linken Spalte steht, nicht mit
+   der Überschrift. Erste Zeile bewusst KEINE Überschrift, nur leicht betont. */
+.es-hero--split .es-hero__side > .elementor-widget-wrap { display: flex; flex-direction: column; justify-content: flex-end; }
+.es-hero__sidetext { max-width: 640px; margin-left: auto; }
+.es-hero__sidetext .elementor-widget-container { height: auto; }
+.es-hero__sidetext p { color: var(--es-on-dark-text); font-size: var(--es-fs-body); line-height: var(--es-lh-normal); margin: 0 0 14px; text-shadow: 0 1px 14px rgba(10, 20, 22, 0.55); }
+.es-hero__sidetext p:last-child { margin-bottom: 0; }
+.es-hero__sidetext p.es-hero__side-intro { color: var(--es-on-dark-title); font-weight: var(--es-fw-medium); }
 /* Spaltenbreiten hart erzwingen (Elementor-Col-CSS greift hier nicht immer;
    ohne feste Basis kollabiert die Card-Spalte auf Content-Breite). ah5: ~40/60. */
 @media (min-width: 1025px) {
