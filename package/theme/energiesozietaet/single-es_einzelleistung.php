@@ -53,6 +53,13 @@ while ( have_posts() ) : the_post();
 						}
 						if ( is_array( $acc ) && ! empty( $acc ) ) {
 							echo $rendered_content; // phpcs:ignore WordPress.Security.EscapeOutput
+							// Kernpunkte stehen zwischen Einleitung und Rubriken
+							if ( is_array( $bullets ) && ! empty( $bullets ) ) {
+								echo '<ul>';
+								foreach ( $bullets as $b ) { echo '<li>' . wp_kses_post( $b ) . '</li>'; }
+								echo '</ul>';
+								$bullets = null;
+							}
 							foreach ( $acc as $acc_item ) {
 								$acc_title   = trim( (string) ( $acc_item['title'] ?? '' ) );
 								$acc_content = trim( (string) ( $acc_item['content'] ?? '' ) );

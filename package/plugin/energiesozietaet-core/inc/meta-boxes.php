@@ -93,13 +93,13 @@ class ESC_MetaBoxes {
 				break;
 			case 'es_einzelleistung':
 				self::field( 'Untertitel / Hero (EN)', 'es_subtitle_en', get_post_meta( $post->ID, 'es_subtitle_en', true ), 'textarea' );
+				self::lines_field( 'Kernpunkte (EN) – eine Zeile = ein Bullet', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 6 );
 				self::accordion_repeater(
 					'es_acc_en',
 					get_post_meta( $post->ID, 'es_accordion_en', true ),
 					'Aufklapp-Rubriken (EN)',
 					'Englische Fassung der Rubriken. Leer = die Seite zeigt die deutschen Rubriken.'
 				);
-				self::lines_field( 'Kernpunkte (EN) – eine Zeile = ein Bullet', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 6 );
 				self::field( 'Abschluss-Absatz (EN)', 'es_closing_en', get_post_meta( $post->ID, 'es_closing_en', true ), 'textarea' );
 				break;
 			case 'es_karriere':
@@ -223,19 +223,19 @@ class ESC_MetaBoxes {
 		self::nonce();
 		self::field( 'Untertitel (Hero)',  'es_subtitle', get_post_meta( $post->ID, 'es_subtitle', true ), 'textarea' );
 
-		// Aufklapp-Rubriken: Reihenfolge auf der Seite ist Einleitung (normaler
-		// Editor oben) → Rubriken → Kernpunkte → Abschluss-Absatz.
+		// Reihenfolge auf der Seite (und hier im Backend identisch):
+		// Einleitung (normaler Editor oben) → Kernpunkte → Rubriken → Abschluss.
+		$bullets = get_post_meta( $post->ID, 'es_bullets', true );
+		$txt = is_array( $bullets ) ? implode( "\n", $bullets ) : '';
+		echo '<p><label><strong>Kernpunkte (eine Zeile = ein Bullet, stehen zwischen Einleitung und Rubriken)</strong></label>';
+		echo '<textarea name="es_bullets_raw" rows="6" style="width:100%;">' . esc_textarea( $txt ) . '</textarea></p>';
+
 		self::accordion_repeater(
 			'es_acc',
 			get_post_meta( $post->ID, 'es_accordion', true ),
 			'Aufklapp-Rubriken',
-			'Jede Rubrik erscheint als aufklappbarer Punkt unter dem Einleitungstext. Absätze im Inhalt mit einer Leerzeile trennen; vorhandene Formatierung (z. B. Listen) bleibt erhalten.'
+			'Jede Rubrik erscheint als aufklappbarer Punkt unter Einleitung und Kernpunkten. Absätze im Inhalt mit einer Leerzeile trennen; vorhandene Formatierung (z. B. Listen) bleibt erhalten.'
 		);
-
-		$bullets = get_post_meta( $post->ID, 'es_bullets', true );
-		$txt = is_array( $bullets ) ? implode( "\n", $bullets ) : '';
-		echo '<p><label><strong>Kernpunkte (eine Zeile = ein Bullet)</strong></label>';
-		echo '<textarea name="es_bullets_raw" rows="6" style="width:100%;">' . esc_textarea( $txt ) . '</textarea></p>';
 
 		self::field( 'Abschluss-Absatz (steht als Letztes auf der Seite)', 'es_closing', get_post_meta( $post->ID, 'es_closing', true ), 'textarea' );
 
