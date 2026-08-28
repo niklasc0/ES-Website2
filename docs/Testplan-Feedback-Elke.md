@@ -1,11 +1,11 @@
 # Testplan: Feedback-Runde Elke (Mails vom 18./19.08.)
 
-**Stand:** 28.08.2026 · Plugin **1.6.22** · Theme **2.6.24**
+**Stand:** 28.08.2026 · Plugin **1.6.23** · Theme **2.6.25**
 **Basis:** Live-Export von test2 vom 28.08., 07:28 Uhr (Elkes Bearbeitungsstand)
 
 ## Vorbereitung auf test2
 
-1. Theme-ZIP 2.6.24 und das **volle** Plugin-ZIP 1.6.22 einspielen (nicht das slim-ZIP, der Import braucht die mitgelieferten Daten).
+1. Theme-ZIP 2.6.25 und das **volle** Plugin-ZIP 1.6.23 einspielen (nicht das slim-ZIP, der Import braucht die mitgelieferten Daten).
 2. Als Admin: Werkzeuge → Energiesozietät-Import → **Import erzwingen**.
 3. Falls ein Seiten-Cache aktiv ist (WP-Optimize o. ä.): Cache leeren.
 4. Schnellcheck: Unter Plugins muss 1.6.22 stehen, unter Design das Theme 2.6.24.
@@ -16,29 +16,29 @@ Danach die folgenden Punkte durchgehen. Die Nummern entsprechen der abgestimmten
 
 | Nr. | Prüfen | Wo | Erwartet |
 |---|---|---|---|
-| A1 | Ansprechpartner-Fotos | Unten auf /rechtsberatung/ (Leiste) und in der Kontakt-Karte einer Einzelleistung mit zugewiesenem Ansprechpartner | Fotos spürbar größer (68 px), aber nicht dominant |
-| A2 | Zitat-Section Startseite | Startseite, Abschnitt „Unser Anspruch" | Foto von Sven deutlich größer (112 px), „Partner"-Zeile in normaler Textgröße |
+| A1 | Ansprechpartner-Fotos | Unten auf /rechtsberatung/ (Leiste) und in der Kontakt-Karte einer Einzelleistung mit zugewiesenem Ansprechpartner | Fotos deutlich größer (84 px) |
+| A2 | Zitat-Section Startseite | Startseite, Abschnitt „Unser Anspruch" | Foto von Sven deutlich größer (148 px), „Partner"-Zeile in normaler Textgröße |
 | A3 | Rück-Navigation | Einzelleistungs-Seite, rechte Spalte unter der Kontakt-Karte | „← Alle Leistungen: …" in normaler Textgröße, gut auffindbar |
 | A4 | Akzentgrün | überall | Unverändert (bewusst nicht angefasst) |
 | A5 | Schriftgrößen | Design → Typografie | Zentrale Größen wirken auf Kicker und Fließtext; Entscheidung über größere Werte steht noch aus (Varianten-Screenshots liegen Dir vor) |
 | A6 | Steuer-Band auf /leistungen/ | Abschnitt 02/03 Steuerberatung | Dunkles Grau (Slate) statt Schwarz, weißer Text bleibt gut lesbar; wirkt nicht mehr wie das Seitenende |
-| A7 | Footer-Kontaktblock | Footer jeder Seite | „Energiesozietät GmbH", darunter abgesetzt „Recht \| Steuern \| Beratung", dann die drei Standortadressen einzeilig untereinander, zuletzt die Mailadresse; links der vollständige Claim „Beratung aus Leidenschaft - Ergebnisse, die weitertragen." |
+| A7 | Footer-Kontaktblock | Footer jeder Seite | „Energiesozietät GmbH", darunter abgesetzt „Recht \| Steuern \| Beratung", dann die drei Standortadressen einzeilig untereinander, zuletzt die Mailadresse; links der vollständige Claim „Beratung aus Leidenschaft – Ergebnisse, die weitertragen." |
 | A8 | Menü-Reihenfolge | Hauptmenü DE und EN | Philosophie · **Team** · Leistungen · … (Team vor Leistungen) |
 
 ## Teil 2 · Inhalt und Struktur (B-Punkte)
 
 | Nr. | Prüfen | Wo | Erwartet |
 |---|---|---|---|
-| B9 | Intro-Block geteilt | /leistungen/ oben | Zwei getrennte Blöcke: „Unser Anspruch / Beratungsleistungen, die Komplexität handhabbar machen." mit zwei Absätzen, danach „Pragmatisches Vorgehen / Unser Beratungsansatz." mit dem dritten Absatz |
-| B10 | Gesellschaftsrecht aufklappbar | /leistung/gesellschaftsrecht/ | Fünf Aufklapp-Rubriken (Privatisierung, Kommunalrecht und Gesellschaftsrecht, Corporate Governance, Reorganisationen, Unternehmerische Mitbestimmung), darunter der Claim „Strukturen schaffen. Entscheidungen ermöglichen." als eigener Absatz |
+| B9 | Schneller Zugang zu den Leistungen | /leistungen/ | Direkt nach dem Hero kommen die drei Beratungsfelder; die beiden Textblöcke „Unser Anspruch" und „Pragmatisches Vorgehen" stehen jetzt ganz unten auf der Seite |
+| B10 | Gesellschaftsrecht aufklappbar | /leistung/gesellschaftsrecht/ | Voraussetzung: Plugin 1.6.23 aktiv (räumt die alten Elementor-Überlagerungen automatisch auf). Dann fünf Aufklapp-Rubriken (Privatisierung, Kommunalrecht und Gesellschaftsrecht, Corporate Governance, Reorganisationen, Unternehmerische Mitbestimmung), darunter der Claim „Strukturen schaffen. Entscheidungen ermöglichen." als eigener Absatz |
 | B11 | Energierecht-Kopf | /leistung/energie/ | Titel „Energierecht", Untertitel „Die Energietransformation rechtlich umsetzen, neue Märkte erschließen, die Chancen und Risiken der Regulierung beherrschen"; URL bleibt unverändert |
 | B12 | Umweltrecht-Untertitel | /leistung/umweltrecht/ | „Umweltrecht für Abfall, Wärme und Wasserstoff – von Waste-to-Energy bis Geothermie" |
-| B13 | ESG eigene Rubrik | /leistung/umweltrecht/ | Sechs Aufklapp-Rubriken, „Compliance und ESG" als eigener Punkt |
+| B13 | ESG eigene Rubrik | /leistung/umweltrecht/ | Sechs Aufklapp-Rubriken, „Compliance und ESG" als eigener Punkt (Voraussetzung wie B10: Plugin 1.6.23 aktiv) |
 | B14 | Umweltrecht-Claim | /leistung/umweltrecht/ ganz unten | „Wir schaffen rechtliche und strategische Grundlagen, …" steht unterhalb der Rubriken, nicht mehr in einer Aufzählung |
-| B15 | Claim vollständig | Footer aller Seiten + Hero /philosophie/ | „Beratung aus Leidenschaft" ist überall wieder Teil des Claims |
-| B16 | UB-Kacheln | /unternehmensberatung/ und /leistungen/ unten | Kacheln heißen: Investition und Transformation · Transaktion und Kooperation · Strukturen & Governance · Regulierung · Wärme · Wasserwirtschaft · Wasserstoff (URLs unverändert) |
-| B17 | Philosophie-Umbau | /philosophie/ | Reihenfolge: Hero → „Ihre Aufgabe" → Herausforderungen als kompakte nummerierte Liste (keine Kärtchen mehr) → „Wie wir arbeiten / Lösungen entstehen gemeinsam mit Ihnen." → „Unser Startpunkt / Ihr Zielbild fest im Blick." → Erfahrungs-Block → Zitat → dunkler Politikberatungs-Abschluss. „Ein Team aus drei Perspektiven" und „Wen wir beraten" sind entfernt |
-| Bonus | Bau-/Planungsrecht | /leistung/bau-und-planungsrecht/ | Der Satz „Damit werden Bauprojekte rechtssicher vorbereitet …" steht unter der Liste, nicht mehr im letzten Listenpunkt |
+| B15 | Claim vollständig | Footer aller Seiten + Hero /philosophie/ | „Beratung aus Leidenschaft – Ergebnisse, die weitertragen." mit Halbgeviertstrich, im Hero wie im Footer |
+| B16 | UB-Kacheln inkl. URLs | /unternehmensberatung/ | Kacheln heißen: Investition und Transformation · Transaktion und Kooperation · Strukturen & Governance · Regulierung · Wärme · Wasserwirtschaft · Wasserstoff. Neue URLs: /leistung/investition-und-transformation/, /leistung/strukturen-governance/, /leistung/transaktion-und-kooperation/; die alten URLs leiten per 301 weiter |
+| B17 | Philosophie-Umbau | /philosophie/ | Reihenfolge: Hero → „Ihre Aufgabe" → Herausforderungen als kompakte nummerierte Liste (keine Kärtchen mehr) → „Wie wir arbeiten / Lösungen entstehen gemeinsam mit Ihnen." → „Unser Startpunkt / Ihr Zielbild fest im Blick." → Erfahrungs-Block → Zitat → dunkler Politikberatungs-Abschluss. „Ein Team aus drei Perspektiven" und „Wen wir beraten" sind entfernt; kompakter Abstand über der nummerierten Liste; der Politikberatungs-Abschluss ist im helleren Slate-Grau gehalten und hebt sich damit vom Footer ab |
+| Bonus | Real Estate | /leistung/real-estate/ | Leistung heißt „Real Estate" (vorher Bau- und Planungsrecht), alte URL leitet per 301 weiter; der Satz „Damit werden Bauprojekte rechtssicher vorbereitet …" steht unter der Liste |
 
 ## Teil 3 · Backend
 

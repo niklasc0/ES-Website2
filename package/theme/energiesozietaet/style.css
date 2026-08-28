@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.24
+Version: 2.6.25
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -1462,7 +1462,7 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-ansprech { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
 .es-ansprech__people { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; flex: 1; }
 .es-ansprech__people > a { display: flex; align-items: center; gap: 14px; color: var(--es-ink); }
-.es-ansprech__photo { width: 68px; height: 68px; border-radius: 999px; overflow: hidden; background: var(--es-paper-warm); flex-shrink: 0; }
+.es-ansprech__photo { width: 84px; height: 84px; border-radius: 999px; overflow: hidden; background: var(--es-paper-warm); flex-shrink: 0; }
 .es-ansprech__photo img { width: 100%; height: 100%; object-fit: cover; }
 .es-ansprech__name { font-size: var(--es-fs-body); font-weight: 500; }
 .es-ansprech__role { font-size: var(--es-fs-meta); color: var(--es-text-mute); margin-top: 2px; }
@@ -2564,7 +2564,7 @@ a, span, p, li {
     display: flex; align-items: center; gap: 16px; margin-top: 24px;
 }
 .es-gf-quote .es-gf-quote__photo {
-    width: 112px; height: 112px; border-radius: 999px; overflow: hidden;
+    width: 148px; height: 148px; border-radius: 999px; overflow: hidden;
     background: var(--es-paper-warm); flex-shrink: 0;
 }
 .es-gf-quote .es-gf-quote__photo img { width: 100%; height: 100%; object-fit: cover; }
@@ -3944,7 +3944,7 @@ html:not(.es-btt-on) .es-btt { display: none !important; }
 .es-leistung__card-title { font-size: var(--es-fs-heading-sub); line-height: 1.2; font-weight: var(--es-fw-regular); letter-spacing: -0.02em; margin: 0 0 12px; color: var(--es-paper); }
 .es-leistung__card-text { font-size: var(--es-fs-body); line-height: 1.6; color: rgba(255,255,255,0.7); margin: 0 0 24px; }
 .es-leistung__card-person { display: flex; align-items: center; gap: 14px; margin: 4px 0 20px; }
-.es-leistung__card-photo { width: 68px; height: 68px; border-radius: 999px; overflow: hidden; flex-shrink: 0; background: rgba(255,255,255,0.08); }
+.es-leistung__card-photo { width: 84px; height: 84px; border-radius: 999px; overflow: hidden; flex-shrink: 0; background: rgba(255,255,255,0.08); }
 .es-leistung__card-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .es-leistung__card-name { font-size: var(--es-fs-heading-sub); font-weight: var(--es-fw-medium); color: var(--es-paper); line-height: 1.25; }
 .es-leistung__card-role { font-size: var(--es-fs-meta); color: rgba(255,255,255,0.6); margin-top: 3px; }

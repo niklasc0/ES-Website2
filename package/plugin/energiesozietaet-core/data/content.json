@@ -801,16 +801,6 @@
  ],
  "einzelleistungen": [
   {
-   "id": 4199,
-   "title": "Bau- und Planungsrecht",
-   "slug": "bau-und-planungsrecht",
-   "beratungsfeld": "rechtsberatung",
-   "subtitle": "Komplexe Vorhaben sind unsere Stärke.",
-   "description": "<p>Wir beraten und vertreten die öffentliche Hand und private Investoren bei komplexen Bauvorhaben – von der Gestaltung rechtssicherer Projektverträge bis zur Prüfung und Gestaltung der planungsrechtlichen Rahmenbedingungen.</p><ul><li>Beratung bei Bauleitplanverfahren und städtebaulichen Verträgen</li><li>Prüfung und Gestaltung von Genehmigungs- und Beteiligungsverfahren</li><li>Rechtliche Begleitung von Bauvorhaben, einschließlich Nachbarschutz und Umweltrecht</li><li>Vertretung in Widerspruchs- und Klageverfahren vor Behörden und Gerichten</li><li>Beratung bei Ausschreibungen, Vergaben und Vertragsgestaltung im Bauwesen</li></ul>",
-   "bullets": [],
-   "closing": "Damit werden Bauprojekte rechtssicher vorbereitet, Konfliktrisiken reduziert und nachhaltige Planungsentscheidungen ermöglicht."
-  },
-  {
    "id": 4195,
    "title": "Energierecht",
    "slug": "energie",
@@ -853,7 +843,7 @@
   {
    "id": 4207,
    "title": "Investition und Transformation",
-   "slug": "erneuerbare-energien",
+   "slug": "investition-und-transformation",
    "beratungsfeld": "unternehmensberatung",
    "subtitle": "Fundament für Versorgungssicherheit und Klimaschutz.",
    "description": "<p>Erneuerbare Energien sind nicht nur Pflicht, sondern auch die größte Chance für nachhaltiges Wachstum. Photovoltaik, Windenergie, Biomasse und Speicherlösungen sichern die Energieversorgung der Zukunft und eröffnen Investoren sowie Stadtwerken neue Geschäftsmodelle mit stabilen Renditen.</p><p>Ihre Vorteile:</p><ul><li>Attraktive Geschäftsmodelle durch Bürgerbeteiligungen, Pacht- und Betriebsführungsmodelle</li><li>Finanzielle Optimierung durch maßgeschneiderte Business Cases und Finanzierungsstrukturen</li><li>Technologische Sicherheit durch Gutachten, Machbarkeitsstudien und Benchmarking</li><li>Rechtliche Absicherung durch Vertrags- und Regulierungsberatung Wir begleiten Sie von der Projektidee bis zur erfolgreichen Umsetzung – interdisziplinär, praxisnah und renditestark.</li></ul>",
@@ -879,6 +869,16 @@
    "description": "<p>Komplexe Abrechnungen schnell und korrekt durchführen.</p><p>Das deutsche Lohn- und Gehaltssystem zählt zu den weltweit komplexesten und erfordert fundierte Kenntnisse der bundes-, regionalen und branchenspezifischen Vorgaben. Unternehmen müssen dauerhaft Änderungen im Steuer-, Arbeits- und Sozialversicherungsrecht verfolgen und korrekt umsetzen. Sonderregelungen oder Ausnahmen in einzelnen Branchen oder durch Tarifverträge erhöhen die Komplexität. Eine hohe Fehleranfälligkeit ist die Folge.</p><p>Wir übernehmen das gerne für Sie:</p><ul><li>Zuverlässige und fristgerechte Lohn- und Gehaltsabrechnung</li><li>Abwicklung aller Meldungen an Sozialversicherung und Finanzverwaltung</li><li>Individuelle Betreuung Ihrer Mitarbeitenden</li><li>Begleitung und Beratung bei Lohnsteuer-Außenprüfungen und Sozialversicherungsprüfungen</li></ul>",
    "bullets": [],
    "closing": ""
+  },
+  {
+   "id": 4199,
+   "title": "Real Estate",
+   "slug": "real-estate",
+   "beratungsfeld": "rechtsberatung",
+   "subtitle": "Komplexe Vorhaben sind unsere Stärke.",
+   "description": "<p>Wir beraten und vertreten die öffentliche Hand und private Investoren bei komplexen Bauvorhaben – von der Gestaltung rechtssicherer Projektverträge bis zur Prüfung und Gestaltung der planungsrechtlichen Rahmenbedingungen.</p><ul><li>Beratung bei Bauleitplanverfahren und städtebaulichen Verträgen</li><li>Prüfung und Gestaltung von Genehmigungs- und Beteiligungsverfahren</li><li>Rechtliche Begleitung von Bauvorhaben, einschließlich Nachbarschutz und Umweltrecht</li><li>Vertretung in Widerspruchs- und Klageverfahren vor Behörden und Gerichten</li><li>Beratung bei Ausschreibungen, Vergaben und Vertragsgestaltung im Bauwesen</li></ul>",
+   "bullets": [],
+   "closing": "Damit werden Bauprojekte rechtssicher vorbereitet, Konfliktrisiken reduziert und nachhaltige Planungsentscheidungen ermöglicht."
   },
   {
    "id": 4210,
@@ -912,8 +912,8 @@
   },
   {
    "id": 4213,
-   "title": "Strukturen & Governance",
-   "slug": "projektmanagement",
+   "title": "Strukturen &amp; Governance",
+   "slug": "strukturen-governance",
    "beratungsfeld": "unternehmensberatung",
    "subtitle": "Transformation anstoßen, entwickeln und umsetzen.",
    "description": "<p>In den nächsten Jahren und Jahrzehnten werden Kommunen und kommunale Unternehmen zahlreiche komplexe Projekte durchführen müssen, die mit hohen Investitionen verbunden sind, umfangreiche organisatorische Veränderungen bewirken, die Zusammenarbeit im Konzern Stadt neu definieren und vielerlei rechtliche und steuerliche Optimierungsfragen beinhalten.</p><p>Mit unserem Angebot \"Projektmanagement\" bieten wir Leistungen an, die in großen Unternehmen die Zentralbereiche Strategie, Unternehmensentwicklung oder M&amp;A übernehmen. In mittleren und kleinen Unternehmen sind diese Projekte meist direkt bei der Geschäftsführung angesiedelt, die für solche Projekte selten mit ausreichend Boardmitteln ausgestattet ist, sie effizient und effektiv neben den vielfältigen Aufgaben eines Geschäftsführers vorantreiben zu können.</p><p>Wir übernehmen die Projektleitung für Sie, steuern Projekte nach innen sowie nach außen mit allen Projektbeteiligten und sorgen für einen möglichst reibungsfreien Projektablauf. Wir planen den Projektablauf und sind Sparringspartner für sämtliche Fragestellungen. Darüber hinaus begleiten wir die Entscheidungsprozesse auf den verschiedenen Ebenen in Verwaltung und Politik.</p><p>Ein großer Vorteil unserer Projektmanagementleistung besteht in der Kombination mit unserer strategisch-wirtschaftlichen und regulatorischen Beratung, Rechts- und Steuerberatung als integrierte Beratungsleistung.</p>",
@@ -933,7 +933,7 @@
   {
    "id": 4212,
    "title": "Transaktion und Kooperation",
-   "slug": "kooperation-und-transaktion",
+   "slug": "transaktion-und-kooperation",
    "beratungsfeld": "unternehmensberatung",
    "subtitle": "Stärken zusammenbringen - Chancen steigern.",
    "description": "<p>Wir begleiten Energieversorger, Stadtwerke und Investoren bei strategischen Partnerschaften, Joint Ventures, Fusionen und Beteiligungen.</p><p>Durch unsere Branchenexpertise und interdisziplinäre Beratung sorgen wir für einen reibungslosen Projektablauf von der Analyse über die Modellentwicklung, die Due Diligence und die Bewertung bis hin zur vertraglichen Gestaltung und Vertragsverhandlung mit dem Kooperations- oder Transaktionspartner. Sie können sich dabei verlassen auf</p><ul><li>unser tiefes Marktverständnis,</li><li>unsere fundierte regulatorische Kompetenz und</li><li>unsere große Erfahrung in der Entwicklung von Modellen, die die Akzeptanz auf den verschiedenen kommunalen Entscheidungsebenen finden.  So entwickeln wir maßgeschneiderte Lösungen, Handlungsrahmen erweitern, Geschäftsmodelle sichern und die Kooperationspartner Zukunftsfähigkeit machen.</li></ul>",

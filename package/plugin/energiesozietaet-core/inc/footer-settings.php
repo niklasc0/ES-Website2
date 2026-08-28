@@ -43,6 +43,15 @@ class ESC_Footer_Settings {
 			if ( $changed ) { update_option( self::OPT, $opts ); }
 		}
 		update_option( 'esc_footer_contact_block_v1', 1 );
+		// v2: Claim-Typografie – Halbgeviertstrich statt Bindestrich (Kundenwunsch)
+		if ( ! get_option( 'esc_footer_contact_block_v2' ) ) {
+			$opts = (array) get_option( self::OPT, array() );
+			if ( isset( $opts['brand_claim'] ) && 'Beratung aus Leidenschaft - Ergebnisse, die weitertragen.' === trim( (string) $opts['brand_claim'] ) ) {
+				unset( $opts['brand_claim'] ); // neuer Default greift
+				update_option( self::OPT, $opts );
+			}
+			update_option( 'esc_footer_contact_block_v2', 1 );
+		}
 	}
 
 	/**
@@ -76,7 +85,7 @@ class ESC_Footer_Settings {
 
 			'brand_name'    => 'Energiesozietät GmbH',
 			'brand_sub'     => 'Recht · Steuern · Beratung',
-			'brand_claim'   => 'Beratung aus Leidenschaft - Ergebnisse, die weitertragen.',
+			'brand_claim'   => 'Beratung aus Leidenschaft – Ergebnisse, die weitertragen.',
 			'badges'        => "BVÖD\nForum Contracting\nVKU",
 
 			// Spalte 1 (Adresse) + Spalte 2 (Navigation) erscheinen im Grid;

@@ -262,6 +262,11 @@ class ESC_Importer {
 				'post_excerpt' => wp_trim_words( wp_strip_all_tags( (string) $e['description'] ), 24, '…' ),
 			) );
 			if ( ! $id ) { continue; }
+			// Eventuelle Elementor-Überlagerung entfernen – die regulären Felder
+			// sind die einzige Quelle der Anzeige (siehe inc/upgrades.php).
+			foreach ( array( '_elementor_data', '_elementor_edit_mode', '_elementor_css', '_elementor_element_cache' ) as $mk ) {
+				delete_post_meta( $id, $mk );
+			}
 			update_post_meta( $id, 'es_subtitle', (string) $e['subtitle'] );
 			update_post_meta( $id, 'es_closing',  (string) $e['closing'] );
 			if ( ! empty( $e['bullets'] ) ) { update_post_meta( $id, 'es_bullets', $e['bullets'] ); }
