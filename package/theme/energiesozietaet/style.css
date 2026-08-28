@@ -21,6 +21,7 @@ Tags: elementor, business, one-column, custom-colors, custom-menu, featured-imag
     --es-ink-line:     #283538;  /* Hairline auf Dunkel */
     --es-paper:        #FFFFFF;
     --es-paper-warm:   #1D2D2D;  /* dunkle Stripe-Fläche (ah5 alt-bg-2) – trägt die On-Dark-Logik */
+    --es-slate:        #4C5B60;  /* hellere dunkle Fläche (Kundenwunsch: Steuer-Band nicht schwarz) */
     --es-paper-cool:   #F5F5F5;  /* helle Alt-Fläche (helle Stripe) */
     --es-text:         #151E20;  /* Fließtext auf Hell */
     --es-text-mute:    #899092;  /* Sekundärtext */
@@ -464,6 +465,7 @@ html.js .esc-card.es-reveal {
 .es-own-warm.es-round-bottom::before  { background: var(--es-paper-warm); }
 .es-own-cool.es-round-bottom::before  { background: var(--es-paper-cool); }
 .es-own-paper.es-round-bottom::before { background: var(--es-paper); }
+.es-own-slate.es-round-bottom::before { background: var(--es-slate); }
 /* Inhalt liegt über der Füllung */
 .es-stage-sec > .elementor-container { position: relative; z-index: 1; }
 /* Untergrund = Farbe der NÄCHSTEN Sektion → Ecken-Dreiecke */
@@ -471,6 +473,7 @@ html.js .esc-card.es-reveal {
 .es-stage-sec:has(+ .es-own-warm)  { background: var(--es-paper-warm); }
 .es-stage-sec:has(+ .es-own-cool)  { background: var(--es-paper-cool); }
 .es-stage-sec:has(+ .es-own-paper) { background: var(--es-paper); }
+.es-stage-sec:has(+ .es-own-slate) { background: var(--es-slate); }
 /* Letzte Content-Sektion: Untergrund = Footer-Ink → die gerundeten Ecken
    zeigen die Footerfarbe (paper- und warm-Panels runden sichtbar in den
    Footer, KEINE weißen Eck-Schnipsel). */
@@ -486,6 +489,7 @@ html.js .esc-card.es-reveal {
 .es-stage-sec:has(+ .elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile + .es-own-warm)  { background: var(--es-paper-warm); }
 .es-stage-sec:has(+ .elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile + .es-own-cool)  { background: var(--es-paper-cool); }
 .es-stage-sec:has(+ .elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile + .es-own-paper) { background: var(--es-paper); }
+.es-stage-sec:has(+ .elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile + .es-own-slate) { background: var(--es-slate); }
 /* … und die letzte SICHTBARE Sektion (danach nur noch versteckte) rundet in
    den Footer-Ink, inkl. Ink-Sonderfall wie oben. */
 .es-stage-sec:not(:has(~ .es-stage-sec:not(.elementor-hidden-desktop.elementor-hidden-tablet.elementor-hidden-mobile))) { background: var(--es-ink); }

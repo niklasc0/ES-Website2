@@ -462,7 +462,7 @@ class ESC_Importer {
 
 		// Kontakt + Karriere leben in den Header-Buttons rechts – nicht im Hauptmenü.
 		$order = array(
-			'philosophie', 'leistungen', 'team', 'publikationen', 'news', 'veranstaltungen', 'karriere',
+			'philosophie', 'team', 'leistungen', 'publikationen', 'news', 'veranstaltungen', 'karriere',
 		);
 		$leistungen_children = array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' );
 
