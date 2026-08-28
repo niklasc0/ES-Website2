@@ -304,6 +304,7 @@ function es_fallback_menu() {
 	if ( function_exists( 'es_is_en' ) && es_is_en() ) {
 		echo '<ul class="es-nav__list">';
 		printf( '<li><a href="%s">Philosophy</a></li>', esc_url( home_url( '/en/philosophy/' ) ) );
+		printf( '<li><a href="%s">Team</a></li>', esc_url( home_url( '/en/team/' ) ) );
 		// Services mit Unterpunkten – Struktur wie das deutsche Menü
 		printf( '<li class="menu-item-has-children"><a href="%s">Services</a><ul class="sub-menu">', esc_url( home_url( '/en/services/' ) ) );
 		foreach ( array(
@@ -315,7 +316,6 @@ function es_fallback_menu() {
 		}
 		echo '</ul></li>';
 		$items = array(
-			home_url( '/en/team/' )          => 'Team',
 			home_url( '/en/publications/' )  => 'Publications',
 			home_url( '/en/news/' )          => 'News',
 			home_url( '/en/events/' )        => 'Events',
@@ -330,8 +330,8 @@ function es_fallback_menu() {
 	// Kontakt + Karriere leben in den Header-Buttons rechts – nicht im Hauptmenü.
 	$items = array(
 		home_url( '/philosophie/' )     => __( 'Philosophie', 'energiesozietaet' ),
-		home_url( '/leistungen/' )      => __( 'Leistungen', 'energiesozietaet' ),
 		home_url( '/team/' )            => __( 'Team', 'energiesozietaet' ),
+		home_url( '/leistungen/' )      => __( 'Leistungen', 'energiesozietaet' ),
 		home_url( '/publikationen/' )   => __( 'Publikationen', 'energiesozietaet' ),
 		home_url( '/news/' )            => __( 'News', 'energiesozietaet' ),
 		home_url( '/veranstaltungen/' ) => __( 'Veranstaltungen', 'energiesozietaet' ),

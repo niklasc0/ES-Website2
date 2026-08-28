@@ -42,6 +42,7 @@ for ( $i = 1; $i <= 2; $i++ ) {
 	if ( $h === '' ) { continue; }
 	$columns[] = array(
 		'heading' => $h,
+		'sub'     => trim( (string) $g( "col{$i}_sub" ) ),
 		'links'   => call_user_func( $parse_links, $g( "col{$i}_lines" ) ),
 	);
 }
@@ -93,6 +94,9 @@ $legal_links = call_user_func( $parse_links, $g( 'col3_lines' ) );
 				<?php foreach ( $columns as $idx => $c ) : ?>
 					<div class="es-footer__col es-footer__col--<?php echo (int) ( $idx + 1 ); ?>">
 						<h4><?php echo esc_html( $c['heading'] ); ?></h4>
+						<?php if ( '' !== $c['sub'] ) : ?>
+							<div class="es-footer__col-sub"><?php echo esc_html( $c['sub'] ); ?></div>
+						<?php endif; ?>
 						<ul>
 							<?php foreach ( $c['links'] as $link ) : ?>
 								<li>

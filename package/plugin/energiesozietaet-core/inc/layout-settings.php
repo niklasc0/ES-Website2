@@ -19,6 +19,7 @@ class ESC_Layout_Settings {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'wp_head',    array( __CLASS__, 'inline_flags' ), 6 );
 		add_action( 'wp_footer',  array( __CLASS__, 'render_back_to_top' ) );
+		add_filter( 'elementor/frontend/builder_content_data', array( __CLASS__, 'strip_pubs' ), 10, 2 );
 	}
 
 	public static function defaults() {
@@ -28,6 +29,10 @@ class ESC_Layout_Settings {
 			'btt_threshold' => 400,
 			'hero_scroll'   => 1,
 			'team_filter'   => 0,
+			// Publikationen-Bereich auf den drei Beratungsfeld-Oberseiten
+			'pubs_rechtsberatung'      => 1,
+			'pubs_steuerberatung'      => 1,
+			'pubs_unternehmensberatung' => 1,
 		);
 	}
 
@@ -41,13 +46,53 @@ class ESC_Layout_Settings {
 	}
 
 	public static function sanitize( $input ) {
+		// Elementor-Element-Cache leeren, damit ein umgeschalteter
+		// Publikationen-Bereich sofort (ohne Cache-Reste) greift.
+		global $wpdb;
+		$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_element_cache'" );
 		return array(
 			'header_sticky' => empty( $input['header_sticky'] ) ? 0 : 1,
 			'back_to_top'   => empty( $input['back_to_top']   ) ? 0 : 1,
 			'btt_threshold' => max( 50, min( 5000, (int) ( $input['btt_threshold'] ?? 400 ) ) ),
 			'hero_scroll'   => empty( $input['hero_scroll']   ) ? 0 : 1,
 			'team_filter'   => empty( $input['team_filter']   ) ? 0 : 1,
+			'pubs_rechtsberatung'       => empty( $input['pubs_rechtsberatung'] ) ? 0 : 1,
+			'pubs_steuerberatung'       => empty( $input['pubs_steuerberatung'] ) ? 0 : 1,
+			'pubs_unternehmensberatung' => empty( $input['pubs_unternehmensberatung'] ) ? 0 : 1,
 		);
+	}
+
+	/**
+	 * Entfernt die Publikationen-Sektion einer Beratungsfeld-Oberseite beim
+	 * Rendern, wenn sie in den Einstellungen abgeschaltet ist. Greift auch für
+	 * die englischen Seitenkopien (Zuordnung über die DE-Partnerseite).
+	 */
+	public static function strip_pubs( $data, $post_id ) {
+		if ( ! is_array( $data ) || ! $post_id ) { return $data; }
+		$post = get_post( $post_id );
+		if ( ! $post || 'page' !== $post->post_type ) { return $data; }
+		$slug = $post->post_name;
+		if ( 'en' === get_post_meta( $post->ID, 'es_lang', true ) ) {
+			$de_id = (int) get_post_meta( $post->ID, 'es_translation_of', true );
+			if ( $de_id ) { $slug = (string) get_post_field( 'post_name', $de_id ); }
+		}
+		if ( ! in_array( $slug, array( 'rechtsberatung', 'steuerberatung', 'unternehmensberatung' ), true ) ) { return $data; }
+		if ( self::get( 'pubs_' . $slug ) ) { return $data; }
+		return array_values( array_filter( $data, function ( $el ) {
+			return ! self::contains_pub_shortcode( $el );
+		} ) );
+	}
+
+	/** Enthält das Element (rekursiv) ein Publikations-Shortcode-Widget? */
+	protected static function contains_pub_shortcode( $el ) {
+		if ( ! is_array( $el ) ) { return false; }
+		if ( isset( $el['settings']['shortcode'] ) && false !== strpos( (string) $el['settings']['shortcode'], '[es_pub' ) ) { return true; }
+		if ( ! empty( $el['elements'] ) ) {
+			foreach ( $el['elements'] as $child ) {
+				if ( self::contains_pub_shortcode( $child ) ) { return true; }
+			}
+		}
+		return false;
 	}
 
 	public static function menu() {
@@ -104,6 +149,12 @@ class ESC_Layout_Settings {
 					</td></tr>
 					<tr><th scope="row">Scroll-Down-Indikator im Hero (Startseite)</th><td>
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[hero_scroll]' ); ?>" value="1" <?php checked( self::get( 'hero_scroll' ), 1 ); ?>> Kleiner Hinweis rechts unten im Hero, der zum Weiterscrollen einlädt.</label>
+					</td></tr>
+					<tr><th scope="row">Publikationen auf Beratungsfeld-Seiten</th><td>
+						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[pubs_rechtsberatung]' ); ?>" value="1" <?php checked( self::get( 'pubs_rechtsberatung' ), 1 ); ?>> Rechtsberatung</label><br>
+						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[pubs_steuerberatung]' ); ?>" value="1" <?php checked( self::get( 'pubs_steuerberatung' ), 1 ); ?>> Steuerberatung</label><br>
+						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[pubs_unternehmensberatung]' ); ?>" value="1" <?php checked( self::get( 'pubs_unternehmensberatung' ), 1 ); ?>> Unternehmensberatung</label>
+						<p class="description">Abgehakte Seiten zeigen ihren Publikationen-Bereich; ohne Haken wird er samt Sektion ausgeblendet (gilt auch für die englische Fassung der Seite).</p>
 					</td></tr>
 					<tr><th scope="row">Team-Filter</th><td>
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[team_filter]' ); ?>" value="1" <?php checked( self::get( 'team_filter' ), 1 ); ?>> Filter-Pills (nach Beratungsfeld) über der Team-Übersicht anzeigen.</label>

@@ -16,6 +16,33 @@ class ESC_Footer_Settings {
 		add_action( 'admin_init', array( __CLASS__, 'register' ) );
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'init', array( __CLASS__, 'maybe_relativize_urls' ) );
+		add_action( 'init', array( __CLASS__, 'maybe_upgrade_contact_block' ) );
+	}
+
+	/**
+	 * Einmalig: Kontaktblock-Neuordnung (Kundenwunsch). Ersetzt NUR exakt die
+	 * alten Standardwerte durch die neuen (Unterzeile "Recht | Steuern |
+	 * Beratung", Adressen einzeilig untereinander, Mail zuletzt, Claim wieder
+	 * vollständig). Individuell angepasste Werte bleiben unangetastet.
+	 */
+	public static function maybe_upgrade_contact_block() {
+		if ( get_option( 'esc_footer_contact_block_v1' ) ) { return; }
+		$opts = (array) get_option( self::OPT, array() );
+		if ( $opts ) {
+			$changed = false;
+			$norm = function ( $s ) { return trim( str_replace( "\r", '', (string) $s ) ); };
+			$old_lines = "Recht Steuern Beratung\nRoßstraße 92 | Kennedyhaus\n40476 Düsseldorf\ninfo@energiesozietaet.de\nCaffamacherreihe 8 | 20355 Hamburg\nJungbuschstraße 6 | 68159 Mannheim";
+			if ( isset( $opts['col1_lines'] ) && $norm( $opts['col1_lines'] ) === $old_lines && empty( $opts['col1_sub'] ) ) {
+				unset( $opts['col1_lines'] ); // neuer Default greift
+				$changed = true;
+			}
+			if ( isset( $opts['brand_claim'] ) && 'Ergebnisse, die weitertragen.' === trim( (string) $opts['brand_claim'] ) ) {
+				unset( $opts['brand_claim'] ); // neuer Default greift
+				$changed = true;
+			}
+			if ( $changed ) { update_option( self::OPT, $opts ); }
+		}
+		update_option( 'esc_footer_contact_block_v1', 1 );
 	}
 
 	/**
@@ -49,13 +76,16 @@ class ESC_Footer_Settings {
 
 			'brand_name'    => 'Energiesozietät GmbH',
 			'brand_sub'     => 'Recht · Steuern · Beratung',
-			'brand_claim'   => 'Ergebnisse, die weitertragen.',
+			'brand_claim'   => 'Beratung aus Leidenschaft - Ergebnisse, die weitertragen.',
 			'badges'        => "BVÖD\nForum Contracting\nVKU",
 
 			// Spalte 1 (Adresse) + Spalte 2 (Navigation) erscheinen im Grid;
 			// Spalte 3 (Rechtliches) speist nur die zentrierte Copyright-Leiste.
 			'col1_heading' => 'Energiesozietät GmbH',
-			'col1_lines'   => "Recht Steuern Beratung\nRoßstraße 92 | Kennedyhaus\n40476 Düsseldorf\ninfo@energiesozietaet.de\nCaffamacherreihe 8 | 20355 Hamburg\nJungbuschstraße 6 | 68159 Mannheim",
+			'col1_sub'     => 'Recht | Steuern | Beratung',
+			'col1_lines'   => "Roßstraße 92 · Kennedyhaus · 40476 Düsseldorf\nCaffamacherreihe 8 · 20355 Hamburg\nJungbuschstraße 6 · 68159 Mannheim\ninfo@energiesozietaet.de | mailto:info@energiesozietaet.de",
+			'col2_sub'     => '',
+			'col3_sub'     => '',
 			'col2_heading' => 'Navigation',
 			'col2_lines'   => "Home | /\nPhilosophie | /philosophie/\nLeistungen | /leistungen/\nTeam | /team/\nPublikationen | /publikationen/\nKarriere | /karriere/\nNews | /news/\nVeranstaltungen | /veranstaltungen/\nKontakt | /kontakt/",
 			'col3_heading' => 'Rechtliches',
@@ -70,7 +100,7 @@ class ESC_Footer_Settings {
 		return array(
 			'cta_eyebrow', 'cta_title', 'cta_subtitle', 'cta_btn1_label', 'cta_btn2_label',
 			'brand_sub', 'brand_claim',
-			'col1_heading', 'col1_lines', 'col2_heading', 'col2_lines', 'col3_heading', 'col3_lines',
+			'col1_heading', 'col1_sub', 'col1_lines', 'col2_heading', 'col2_sub', 'col2_lines', 'col3_heading', 'col3_sub', 'col3_lines',
 			'copyright',
 		);
 	}
@@ -104,10 +134,11 @@ class ESC_Footer_Settings {
 			if ( '' === $ln ) { continue; }
 			$parts = array_map( 'trim', explode( '|', $ln, 2 ) );
 			$url   = $parts[1] ?? '';
-			// Nur echte Ziele verlinken – bei Adresszeilen wie
-			// "Caffamacherreihe 8 | 20355 Hamburg" ist die Pipe nur Texttrenner.
+			// Nur echte Ziele verlinken. Ist der Teil hinter der ersten Pipe keine
+			// URL (z. B. "Recht | Steuern | Beratung"), ist die Pipe nur Text:
+			// Zeile unverändert anzeigen.
 			if ( $url && ! preg_match( '#^(https?://|/|\#|mailto:|tel:)#i', $url ) ) {
-				$out[] = array( 'label' => $parts[0] . ' · ' . $url, 'url' => '' );
+				$out[] = array( 'label' => $ln, 'url' => '' );
 				continue;
 			}
 			$out[] = array( 'label' => $parts[0], 'url' => $url );
@@ -237,6 +268,7 @@ class ESC_Footer_Settings {
 					<table class="form-table"><tbody>
 						<?php
 						self::input(    "col{$i}_heading", 'Überschrift' );
+						self::input(    "col{$i}_sub",     'Unterzeile (optional)', 'Erscheint abgesetzt direkt unter der Überschrift, z. B. <code>Recht | Steuern | Beratung</code>.' );
 						self::textarea( "col{$i}_lines",   'Zeilen · Format „Label | URL"', 'Eine Zeile pro Eintrag – Format <code>Text | URL</code>. URL optional.', 5 );
 						?>
 					</tbody></table>
