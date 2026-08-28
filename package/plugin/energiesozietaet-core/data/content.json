@@ -866,19 +866,14 @@
    "closing": ""
   },
   {
-   "id": 4207,
+   "id": 4213,
    "title": "Investition und Transformation",
    "slug": "investition-und-transformation",
    "beratungsfeld": "unternehmensberatung",
-   "subtitle": "Fundament für Versorgungssicherheit und Klimaschutz.",
-   "description": "<p>Erneuerbare Energien sind nicht nur Pflicht, sondern auch die größte Chance für nachhaltiges Wachstum. Photovoltaik, Windenergie, Biomasse und Speicherlösungen sichern die Energieversorgung der Zukunft und eröffnen Investoren sowie Stadtwerken neue Geschäftsmodelle mit stabilen Renditen.</p>",
+   "subtitle": "Transformation anstoßen, entwickeln und umsetzen.",
+   "description": "<p>In den nächsten Jahren und Jahrzehnten werden Kommunen und kommunale Unternehmen zahlreiche komplexe Projekte durchführen müssen, die mit hohen Investitionen verbunden sind, umfangreiche organisatorische Veränderungen bewirken, die Zusammenarbeit im Konzern Stadt neu definieren und vielerlei rechtliche und steuerliche Optimierungsfragen beinhalten.</p><p>Mit unserem Angebot \"Projektmanagement\" bieten wir Leistungen an, die in großen Unternehmen die Zentralbereiche Strategie, Unternehmensentwicklung oder M&amp;A übernehmen. In mittleren und kleinen Unternehmen sind diese Projekte meist direkt bei der Geschäftsführung angesiedelt, die für solche Projekte selten mit ausreichend Boardmitteln ausgestattet ist, sie effizient und effektiv neben den vielfältigen Aufgaben eines Geschäftsführers vorantreiben zu können.</p><p>Wir übernehmen die Projektleitung für Sie, steuern Projekte nach innen sowie nach außen mit allen Projektbeteiligten und sorgen für einen möglichst reibungsfreien Projektablauf. Wir planen den Projektablauf und sind Sparringspartner für sämtliche Fragestellungen. Darüber hinaus begleiten wir die Entscheidungsprozesse auf den verschiedenen Ebenen in Verwaltung und Politik.</p><p>Ein großer Vorteil unserer Projektmanagementleistung besteht in der Kombination mit unserer strategisch-wirtschaftlichen und regulatorischen Beratung, Rechts- und Steuerberatung als integrierte Beratungsleistung.</p>",
    "accordion": [],
-   "bullets": [
-    "Attraktive Geschäftsmodelle durch Bürgerbeteiligungen, Pacht- und Betriebsführungsmodelle",
-    "Finanzielle Optimierung durch maßgeschneiderte Business Cases und Finanzierungsstrukturen",
-    "Technologische Sicherheit durch Gutachten, Machbarkeitsstudien und Benchmarking",
-    "Rechtliche Absicherung durch Vertrags- und Regulierungsberatung Wir begleiten Sie von der Projektidee bis zur erfolgreichen Umsetzung – interdisziplinär, praxisnah und renditestark."
-   ],
+   "bullets": [],
    "closing": ""
   },
   {
@@ -953,14 +948,19 @@
    "closing": ""
   },
   {
-   "id": 4213,
-   "title": "Strukturen &amp; Governance",
-   "slug": "strukturen-governance",
+   "id": 4207,
+   "title": "Strukturen und Governance",
+   "slug": "strukturen-und-governance",
    "beratungsfeld": "unternehmensberatung",
-   "subtitle": "Transformation anstoßen, entwickeln und umsetzen.",
-   "description": "<p>In den nächsten Jahren und Jahrzehnten werden Kommunen und kommunale Unternehmen zahlreiche komplexe Projekte durchführen müssen, die mit hohen Investitionen verbunden sind, umfangreiche organisatorische Veränderungen bewirken, die Zusammenarbeit im Konzern Stadt neu definieren und vielerlei rechtliche und steuerliche Optimierungsfragen beinhalten.</p><p>Mit unserem Angebot \"Projektmanagement\" bieten wir Leistungen an, die in großen Unternehmen die Zentralbereiche Strategie, Unternehmensentwicklung oder M&amp;A übernehmen. In mittleren und kleinen Unternehmen sind diese Projekte meist direkt bei der Geschäftsführung angesiedelt, die für solche Projekte selten mit ausreichend Boardmitteln ausgestattet ist, sie effizient und effektiv neben den vielfältigen Aufgaben eines Geschäftsführers vorantreiben zu können.</p><p>Wir übernehmen die Projektleitung für Sie, steuern Projekte nach innen sowie nach außen mit allen Projektbeteiligten und sorgen für einen möglichst reibungsfreien Projektablauf. Wir planen den Projektablauf und sind Sparringspartner für sämtliche Fragestellungen. Darüber hinaus begleiten wir die Entscheidungsprozesse auf den verschiedenen Ebenen in Verwaltung und Politik.</p><p>Ein großer Vorteil unserer Projektmanagementleistung besteht in der Kombination mit unserer strategisch-wirtschaftlichen und regulatorischen Beratung, Rechts- und Steuerberatung als integrierte Beratungsleistung.</p>",
+   "subtitle": "Fundament für Versorgungssicherheit und Klimaschutz.",
+   "description": "<p>Erneuerbare Energien sind nicht nur Pflicht, sondern auch die größte Chance für nachhaltiges Wachstum. Photovoltaik, Windenergie, Biomasse und Speicherlösungen sichern die Energieversorgung der Zukunft und eröffnen Investoren sowie Stadtwerken neue Geschäftsmodelle mit stabilen Renditen.</p>",
    "accordion": [],
-   "bullets": [],
+   "bullets": [
+    "Attraktive Geschäftsmodelle durch Bürgerbeteiligungen, Pacht- und Betriebsführungsmodelle",
+    "Finanzielle Optimierung durch maßgeschneiderte Business Cases und Finanzierungsstrukturen",
+    "Technologische Sicherheit durch Gutachten, Machbarkeitsstudien und Benchmarking",
+    "Rechtliche Absicherung durch Vertrags- und Regulierungsberatung Wir begleiten Sie von der Projektidee bis zur erfolgreichen Umsetzung – interdisziplinär, praxisnah und renditestark."
+   ],
    "closing": ""
   },
   {

@@ -16,8 +16,38 @@ class ESC_Upgrades {
 	public static function run() {
 		self::purge_cpt_elementor();
 		self::rename_leistungen();
+		self::rename_leistungen_swap();
 		self::accordion_fields();
 		self::vorteile_field();
+	}
+
+	/**
+	 * Korrektur der UB-Kachel-Zuordnung: Die Titel "Investition und
+	 * Transformation" und "Strukturen und Governance" werden zwischen den
+	 * beiden Einträgen getauscht (passt besser zu den Texten), das "&" wird
+	 * durch "und" ersetzt. Identifikation über die alten Slugs, damit die
+	 * Migration unabhängig vom Zwischenstand funktioniert.
+	 */
+	protected static function rename_leistungen_swap() {
+		if ( get_option( 'esc_rename_leistungen_v2' ) ) { return; }
+		$find_by_old_slug = function ( $old ) {
+			$posts = get_posts( array(
+				'post_type' => 'es_einzelleistung', 'post_status' => 'any', 'numberposts' => 1,
+				'meta_key' => '_wp_old_slug', 'meta_value' => $old,
+			) );
+			return $posts ? $posts[0] : null;
+		};
+		$a = $find_by_old_slug( 'erneuerbare-energien' );  // bisher: Investition und Transformation
+		$b = $find_by_old_slug( 'projektmanagement' );     // bisher: Strukturen & Governance
+		$done = 'nichts zu tun';
+		if ( $a && $b && 'investition-und-transformation' === $a->post_name ) {
+			wp_update_post( wp_slash( array( 'ID' => $a->ID, 'post_name' => 'strukturen-und-governance', 'post_title' => 'Strukturen und Governance' ) ) );
+			wp_update_post( wp_slash( array( 'ID' => $b->ID, 'post_name' => 'investition-und-transformation', 'post_title' => 'Investition und Transformation' ) ) );
+			add_post_meta( $b->ID, '_wp_old_slug', 'strukturen-governance' );
+			flush_rewrite_rules();
+			$done = 'getauscht';
+		}
+		update_option( 'esc_rename_leistungen_v2', $done . ' am ' . current_time( 'mysql' ) );
 	}
 
 	/**
