@@ -51,12 +51,12 @@ while ( have_posts() ) : the_post();
 						if ( es_is_en() && ( ! is_array( $acc ) || empty( $acc ) ) && substr_count( $rendered_content, '<h3' ) < 3 ) {
 							$acc = get_post_meta( get_the_ID(), 'es_accordion', true );
 						}
-						// Standardisierte Zwischenüberschriften (grün): "Vorteile"
-						// über den Punkten, "Unsere Leistungen zum Thema …" über
-						// den Aufklapp-Rubriken.
+						// Standardisierte Zwischenüberschriften (grün):
+						// "Schwerpunkte unserer Beratung" über den Punkten,
+						// "Unsere Leistungen zum Thema …" über den Aufklapp-Rubriken.
 						$print_vorteile = function () use ( &$bullets ) {
 							if ( ! is_array( $bullets ) || empty( $bullets ) ) { return; }
-							echo '<h2 class="es-leistung__subhead">' . esc_html( es_t( 'Vorteile', 'Benefits' ) ) . '</h2><ul>';
+							echo '<h2 class="es-leistung__subhead">' . esc_html( es_t( 'Schwerpunkte unserer Beratung', 'Focus areas of our advice' ) ) . '</h2><ul>';
 							foreach ( $bullets as $b ) { echo '<li>' . wp_kses_post( $b ) . '</li>'; }
 							echo '</ul>';
 							$bullets = null;

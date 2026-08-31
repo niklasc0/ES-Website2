@@ -19,8 +19,10 @@ class ES_Lang_Import {
 	const FIELD_MAP = array(
 		'einzelleistung' => array(
 			'Titel' => 'es_title_en', 'Untertitel' => 'es_subtitle_en', 'Beschreibung' => 'content',
-			// "Vorteile" ist das aktuelle Label; "Kernpunkte" bleibt für bereits
-			// verschickte Übersetzungsdateien gültig (gleiches Zielfeld).
+			// "Schwerpunkte unserer Beratung" ist das aktuelle Label; "Vorteile"
+			// und "Kernpunkte" bleiben für bereits verschickte
+			// Übersetzungsdateien gültig (gleiches Zielfeld).
+			'Schwerpunkte unserer Beratung' => 'lines:es_bullets_en',
 			'Vorteile' => 'lines:es_bullets_en', 'Kernpunkte' => 'lines:es_bullets_en',
 			'Abschluss-Absatz' => 'es_closing_en',
 		),
@@ -123,7 +125,7 @@ class ES_Lang_Import {
 					}
 					if ( ! isset( $arr[ $idx ] ) ) { $arr[ $idx ] = array( 'title' => '', 'content' => '' ); }
 					if ( 'Titel' === $rm[2] ) { $arr[ $idx ]['title'] = sanitize_text_field( $en ); }
-					else { $arr[ $idx ]['content'] = wp_kses_post( $en ); }
+					else { $arr[ $idx ]['content'] = wp_kses_post( ESC_MetaBoxes::acc_text_to_html( $en ) ); }
 					ksort( $arr );
 					update_post_meta( $post->ID, 'es_accordion_en', array_values( $arr ) );
 					$stats['cpt']++;
@@ -287,7 +289,7 @@ class ES_Lang_Import {
 
 		// Inhaltstypen (News kommen als größter Block ganz ans Dateiende)
 		$cpt_sources = array(
-			'einzelleistung' => array( 'es_einzelleistung', array( 'Titel' => 'title', 'Untertitel' => 'meta:es_subtitle', 'Beschreibung' => 'content', 'Vorteile' => 'lines:es_bullets', 'Abschluss-Absatz' => 'meta:es_closing' ) ),
+			'einzelleistung' => array( 'es_einzelleistung', array( 'Titel' => 'title', 'Untertitel' => 'meta:es_subtitle', 'Beschreibung' => 'content', 'Schwerpunkte unserer Beratung' => 'lines:es_bullets', 'Abschluss-Absatz' => 'meta:es_closing' ) ),
 			'team'           => array( 'es_team', array( 'Rolle/Position' => 'meta:es_role', 'Kurzvita' => 'content', 'Erweiterte Vita' => 'meta:es_more_bio', 'Schwerpunkte' => 'lines:es_focus_areas', 'Werdegang' => 'career:es_career' ) ),
 			'karriere'       => array( 'es_karriere', array( 'Titel' => 'title', 'Rollen-Kürzel' => 'meta:es_department', 'Über die Rolle' => 'content', 'Aufgaben' => 'lines:es_tasks', 'Profil' => 'lines:es_profile', 'Wir bieten' => 'lines:es_offer', 'Anstellungsart' => 'meta:es_employment_type' ) ),
 			'veranstaltung'  => array( 'es_veranstaltung', array( 'Titel' => 'title', 'Beschreibung' => 'content', 'Ort' => 'meta:es_location', 'Art' => 'meta:es_kind' ) ),
@@ -317,7 +319,10 @@ class ES_Lang_Import {
 					else { $en = (string) get_post_meta( $po->ID, $target, true ); }
 					$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, $label, $de, $en, $sheet . '.' . $po->post_name . '.' . $label );
 				}
-				// Aufklapp-Rubriken der Einzelleistungen: je Rubrik zwei Zeilen
+				// Aufklapp-Rubriken der Einzelleistungen: je Rubrik zwei Zeilen.
+				// Inhalte gehen in der Klartext-Schreibweise raus (Leerzeile =
+				// Absatz, "- " = Listenpunkt), damit der Kunde ohne
+				// Formatierungs-Codes übersetzen kann.
 				if ( 'einzelleistung' === $sheet ) {
 					$acc    = get_post_meta( $po->ID, 'es_accordion', true );
 					$acc_en = get_post_meta( $po->ID, 'es_accordion_en', true );
@@ -326,7 +331,7 @@ class ES_Lang_Import {
 							$n   = $i + 1;
 							$ent = ( is_array( $acc_en ) && isset( $acc_en[ $i ] ) && is_array( $acc_en[ $i ] ) ) ? $acc_en[ $i ] : array();
 							$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, 'Rubrik ' . $n . ' · Titel', (string) ( $arow['title'] ?? '' ), (string) ( $ent['title'] ?? '' ), $sheet . '.' . $po->post_name . '.Rubrik ' . $n . ' Titel' );
-							$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, 'Rubrik ' . $n . ' · Inhalt', (string) ( $arow['content'] ?? '' ), (string) ( $ent['content'] ?? '' ), $sheet . '.' . $po->post_name . '.Rubrik ' . $n . ' Inhalt' );
+							$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, 'Rubrik ' . $n . ' · Inhalt', ESC_MetaBoxes::acc_html_to_text( (string) ( $arow['content'] ?? '' ) ), ESC_MetaBoxes::acc_html_to_text( (string) ( $ent['content'] ?? '' ) ), $sheet . '.' . $po->post_name . '.Rubrik ' . $n . ' Inhalt' );
 						}
 					}
 				}

@@ -93,12 +93,12 @@ class ESC_MetaBoxes {
 				break;
 			case 'es_einzelleistung':
 				self::field( 'Untertitel / Hero (EN)', 'es_subtitle_en', get_post_meta( $post->ID, 'es_subtitle_en', true ), 'textarea' );
-				self::lines_field( 'Vorteile (EN) – eine Zeile = ein Punkt', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 6 );
+				self::lines_field( 'Schwerpunkte unserer Beratung (EN) – eine Zeile = ein Punkt', 'es_bullets_en_raw', $post->ID, 'es_bullets_en', 6 );
 				self::accordion_repeater(
 					'es_acc_en',
 					get_post_meta( $post->ID, 'es_accordion_en', true ),
 					'Aufklapp-Rubriken (EN)',
-					'Englische Fassung der Rubriken. Leer = die Seite zeigt die deutschen Rubriken.'
+					'Englische Fassung der Rubriken (Bedienung wie im deutschen Kasten). Leer = die Seite zeigt die deutschen Rubriken.'
 				);
 				self::field( 'Abschluss-Absatz (EN)', 'es_closing_en', get_post_meta( $post->ID, 'es_closing_en', true ), 'textarea' );
 				break;
@@ -224,22 +224,76 @@ class ESC_MetaBoxes {
 		self::field( 'Untertitel (Hero)',  'es_subtitle', get_post_meta( $post->ID, 'es_subtitle', true ), 'textarea' );
 
 		// Reihenfolge auf der Seite (und hier im Backend identisch):
-		// Einleitung (normaler Editor oben) → Kernpunkte → Rubriken → Abschluss.
+		// Einleitung (normaler Editor oben) → Schwerpunkte → Rubriken → Abschluss.
 		$bullets = get_post_meta( $post->ID, 'es_bullets', true );
 		$txt = is_array( $bullets ) ? implode( "\n", $bullets ) : '';
-		echo '<p><label><strong>Vorteile (eine Zeile = ein Punkt, stehen mit grüner Überschrift „Vorteile" zwischen Einleitung und Rubriken)</strong></label>';
+		echo '<p><label><strong>Schwerpunkte unserer Beratung (eine Zeile = ein Punkt, stehen mit grüner Überschrift „Schwerpunkte unserer Beratung" zwischen Einleitung und Rubriken)</strong></label>';
 		echo '<textarea name="es_bullets_raw" rows="6" style="width:100%;">' . esc_textarea( $txt ) . '</textarea></p>';
 
 		self::accordion_repeater(
 			'es_acc',
 			get_post_meta( $post->ID, 'es_accordion', true ),
 			'Aufklapp-Rubriken',
-			'Jede Rubrik erscheint als aufklappbarer Punkt unter Einleitung und Kernpunkten. Absätze im Inhalt mit einer Leerzeile trennen; vorhandene Formatierung (z. B. Listen) bleibt erhalten.'
+			'Jede Rubrik erscheint als aufklappbarer Punkt unter Einleitung und Schwerpunkten. Absätze mit einer Leerzeile trennen, Aufzählungspunkte als eigene Zeilen mit „- " beginnen; Formatierungs-Codes sind nicht nötig.'
 		);
 
 		self::field( 'Abschluss-Absatz (steht als Letztes auf der Seite)', 'es_closing', get_post_meta( $post->ID, 'es_closing', true ), 'textarea' );
 
 		self::field( 'Ansprechpartner (Kontaktkarte)', 'es_ansprechpartner', get_post_meta( $post->ID, 'es_ansprechpartner', true ), 'select', array( 'options' => self::team_options() ) );
+	}
+
+	/**
+	 * Rubrik-Inhalt (gespeichertes HTML) in die Klartext-Schreibweise der
+	 * Eingabefelder wandeln: Absätze durch Leerzeilen getrennt, Listenpunkte
+	 * als Zeilen mit "- ". Enthält der Inhalt andere Formatierung als einfache
+	 * Absätze/Listen (z. B. Links), bleibt er unverändert stehen, damit beim
+	 * Speichern nichts verloren geht.
+	 */
+	public static function acc_html_to_text( $html ) {
+		$html = (string) $html;
+		if ( '' === trim( $html ) ) { return ''; }
+		if ( preg_match_all( '/<\s*\/?\s*([a-z0-9]+)/i', $html, $m ) ) {
+			foreach ( $m[1] as $tag ) {
+				if ( ! in_array( strtolower( $tag ), array( 'p', 'ul', 'li', 'br' ), true ) ) { return $html; }
+			}
+		}
+		$txt = preg_replace( '/<br\s*\/?\s*>/i', "\n", $html );
+		$txt = preg_replace( '/<li[^>]*>\s*/i', '- ', $txt );
+		$txt = preg_replace( '/\s*<\/li>/i', "\n", $txt );
+		$txt = preg_replace( '/<\/(p|ul)>/i', "\n\n", $txt );
+		$txt = wp_strip_all_tags( $txt );
+		$txt = html_entity_decode( $txt, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		$txt = preg_replace( "/\n{3,}/", "\n\n", $txt );
+		return trim( $txt );
+	}
+
+	/**
+	 * Gegenstück zu acc_html_to_text: Klartext aus den Eingabefeldern in das
+	 * gespeicherte HTML wandeln (Zeile = Absatz, "- "-Zeilen = Liste,
+	 * Leerzeilen trennen Blöcke). Enthält die Eingabe bereits HTML-Tags,
+	 * wird sie unverändert übernommen.
+	 */
+	public static function acc_text_to_html( $text ) {
+		$text = trim( str_replace( "\r\n", "\n", (string) $text ) );
+		if ( '' === $text ) { return ''; }
+		if ( preg_match( '/<[a-z][^>]*>/i', $text ) ) { return $text; }
+		$out  = '';
+		$list = array();
+		$flush = function () use ( &$out, &$list ) {
+			if ( $list ) {
+				$out .= '<ul><li>' . implode( '</li><li>', $list ) . '</li></ul>';
+				$list = array();
+			}
+		};
+		foreach ( explode( "\n", $text ) as $line ) {
+			$line = trim( $line );
+			if ( '' === $line ) { $flush(); continue; }
+			if ( preg_match( '/^[-*•]\s+(.*)$/u', $line, $m ) ) { $list[] = trim( $m[1] ); continue; }
+			$flush();
+			$out .= '<p>' . $line . '</p>';
+		}
+		$flush();
+		return $out;
 	}
 
 	/**
@@ -277,7 +331,7 @@ class ESC_MetaBoxes {
 		echo '<button type="button" class="button esc-acc-down" title="Nach unten">↓</button>';
 		echo '<button type="button" class="button esc-acc-del" title="Rubrik entfernen">✕</button>';
 		echo '</div>';
-		echo '<textarea' . $nc . ' data-name="' . esc_attr( $prefix ) . '_content[]" rows="5" style="width:100%;" placeholder="Inhalt der Rubrik">' . esc_textarea( $content ) . '</textarea>';
+		echo '<textarea' . $nc . ' data-name="' . esc_attr( $prefix ) . '_content[]" rows="5" style="width:100%;" placeholder="Inhalt der Rubrik">' . esc_textarea( self::acc_html_to_text( $content ) ) . '</textarea>';
 		echo '</div>';
 	}
 
@@ -498,7 +552,7 @@ class ESC_MetaBoxes {
 			$rows = array();
 			foreach ( $titles as $i => $t ) {
 				$t = sanitize_text_field( $t );
-				$c = wp_kses_post( trim( (string) ( $contents[ $i ] ?? '' ) ) );
+				$c = wp_kses_post( self::acc_text_to_html( (string) ( $contents[ $i ] ?? '' ) ) );
 				if ( '' === $t && '' === $c ) { continue; }
 				$rows[] = array( 'title' => $t, 'content' => $c );
 			}
