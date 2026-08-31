@@ -111,8 +111,8 @@ class ES_Lang_Import {
 			if ( preg_match( '/^(einzelleistung|team|karriere|news|veranstaltung|publikation)\.([^.]+)\.(.+)$/u', $ref, $m ) ) {
 				$post = get_page_by_path( $m[2], OBJECT, self::CPT_OF_SHEET[ $m[1] ] );
 				if ( ! $post ) { $stats['skipped'][] = $ref; continue; }
-				// Aufklapp-Rubriken der Einzelleistungen: "Rubrik <n> Titel|Inhalt"
-				if ( 'einzelleistung' === $m[1] && preg_match( '/^Rubrik (\d+) (Titel|Inhalt)$/u', $m[3], $rm ) ) {
+				// Aufklapp-Rubriken der Einzelleistungen: "Rubrik <n> Titel|Teaser|Inhalt"
+				if ( 'einzelleistung' === $m[1] && preg_match( '/^Rubrik (\d+) (Titel|Teaser|Inhalt)$/u', $m[3], $rm ) ) {
 					$idx = (int) $rm[1] - 1;
 					$arr = get_post_meta( $post->ID, 'es_accordion_en', true );
 					if ( ! is_array( $arr ) ) { $arr = array(); }
@@ -125,6 +125,7 @@ class ES_Lang_Import {
 					}
 					if ( ! isset( $arr[ $idx ] ) ) { $arr[ $idx ] = array( 'title' => '', 'content' => '' ); }
 					if ( 'Titel' === $rm[2] ) { $arr[ $idx ]['title'] = sanitize_text_field( $en ); }
+					elseif ( 'Teaser' === $rm[2] ) { $arr[ $idx ]['teaser'] = sanitize_text_field( $en ); }
 					else { $arr[ $idx ]['content'] = wp_kses_post( ESC_MetaBoxes::acc_text_to_html( $en ) ); }
 					ksort( $arr );
 					update_post_meta( $post->ID, 'es_accordion_en', array_values( $arr ) );
@@ -331,6 +332,9 @@ class ES_Lang_Import {
 							$n   = $i + 1;
 							$ent = ( is_array( $acc_en ) && isset( $acc_en[ $i ] ) && is_array( $acc_en[ $i ] ) ) ? $acc_en[ $i ] : array();
 							$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, 'Rubrik ' . $n . ' · Titel', (string) ( $arow['title'] ?? '' ), (string) ( $ent['title'] ?? '' ), $sheet . '.' . $po->post_name . '.Rubrik ' . $n . ' Titel' );
+							if ( '' !== trim( (string) ( $arow['teaser'] ?? '' ) ) ) {
+								$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, 'Rubrik ' . $n . ' · Teaser', (string) $arow['teaser'], (string) ( $ent['teaser'] ?? '' ), $sheet . '.' . $po->post_name . '.Rubrik ' . $n . ' Teaser' );
+							}
 							$rows[] = array( $area_names[ $sheet ] . ': ' . $po->post_title, 'Rubrik ' . $n . ' · Inhalt', ESC_MetaBoxes::acc_html_to_text( (string) ( $arow['content'] ?? '' ) ), ESC_MetaBoxes::acc_html_to_text( (string) ( $ent['content'] ?? '' ) ), $sheet . '.' . $po->post_name . '.Rubrik ' . $n . ' Inhalt' );
 						}
 					}

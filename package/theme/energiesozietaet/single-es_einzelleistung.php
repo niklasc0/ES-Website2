@@ -67,9 +67,14 @@ while ( have_posts() ) : the_post();
 							echo '<h2 class="es-leistung__subhead">' . esc_html( es_t( 'Unsere Leistungen zum Thema', 'Our services in' ) ) . ' ' . esc_html( get_the_title() ) . '</h2>';
 							foreach ( $acc as $acc_item ) {
 								$acc_title   = trim( (string) ( $acc_item['title'] ?? '' ) );
+								$acc_teaser  = trim( (string) ( $acc_item['teaser'] ?? '' ) );
 								$acc_content = trim( (string) ( $acc_item['content'] ?? '' ) );
-								if ( '' === $acc_title && '' === $acc_content ) { continue; }
-								echo '<details class="es-acc"><summary>' . esc_html( $acc_title ) . '</summary><div class="es-acc__body">' . wp_kses_post( wpautop( $acc_content ) ) . '</div></details>';
+								if ( '' === $acc_title && '' === $acc_teaser && '' === $acc_content ) { continue; }
+								// Optionaler Kurztext: steht im summary und ist damit
+								// auch im zugeklappten Zustand sichtbar.
+								echo '<details class="es-acc' . ( $acc_teaser ? ' es-acc--teaser' : '' ) . '"><summary>' . esc_html( $acc_title );
+								if ( $acc_teaser ) { echo '<span class="es-acc__teaser">' . esc_html( $acc_teaser ) . '</span>'; }
+								echo '</summary><div class="es-acc__body">' . wp_kses_post( wpautop( $acc_content ) ) . '</div></details>';
 							}
 						} else {
 							echo es_accordionize( $rendered_content ); // phpcs:ignore WordPress.Security.EscapeOutput

@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.31
+Version: 2.6.32
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -4212,6 +4212,15 @@ a.es-team-link:hover { color: var(--es-accent-ink, #4a6b00); text-decoration-col
 }
 .es-acc[open] summary::after { content: "–"; background: var(--es-accent); border-color: var(--es-accent); }
 .es-acc summary:hover::after { border-color: var(--es-ink); }
+/* Optionaler Kurztext unter dem Rubrik-Titel (auch zugeklappt sichtbar);
+   das +/–-Symbol bleibt dann auf Höhe der Titelzeile. */
+.es-acc__teaser {
+    display: block; margin-top: 6px; max-width: 62ch;
+    font-size: var(--es-fs-body); font-weight: var(--es-fw-regular);
+    letter-spacing: 0; line-height: var(--es-lh-normal);
+    color: var(--es-text-mute);
+}
+.es-acc--teaser summary::after { top: 36px; }
 .es-acc__body { padding: 0 0 24px; }
 .es-acc:last-of-type { border-bottom: var(--es-border); }
 

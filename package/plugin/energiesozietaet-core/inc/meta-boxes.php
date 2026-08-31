@@ -234,7 +234,7 @@ class ESC_MetaBoxes {
 			'es_acc',
 			get_post_meta( $post->ID, 'es_accordion', true ),
 			'Aufklapp-Rubriken',
-			'Jede Rubrik erscheint als aufklappbarer Punkt unter Einleitung und Schwerpunkten. Absätze mit einer Leerzeile trennen, Aufzählungspunkte als eigene Zeilen mit „- " beginnen; Formatierungs-Codes sind nicht nötig.'
+			'Jede Rubrik erscheint als aufklappbarer Punkt unter Einleitung und Schwerpunkten; der optionale Kurztext steht sichtbar unter dem Titel. Absätze mit einer Leerzeile trennen, Aufzählungspunkte als eigene Zeilen mit „- " beginnen; Formatierungs-Codes sind nicht nötig.'
 		);
 
 		self::field( 'Abschluss-Absatz (steht als Letztes auf der Seite)', 'es_closing', get_post_meta( $post->ID, 'es_closing', true ), 'textarea' );
@@ -308,21 +308,22 @@ class ESC_MetaBoxes {
 		echo '<p style="margin-top:0;"><strong>' . esc_html( $label ) . '</strong><br /><span style="color:#667;">' . esc_html( $hint ) . '</span></p>';
 		echo '<div class="esc-acc-rows">';
 		foreach ( $rows as $r ) {
-			self::accordion_row( $prefix, (string) ( $r['title'] ?? '' ), (string) ( $r['content'] ?? '' ) );
+			self::accordion_row( $prefix, (string) ( $r['title'] ?? '' ), (string) ( $r['teaser'] ?? '' ), (string) ( $r['content'] ?? '' ) );
 		}
 		echo '</div>';
 		echo '<p style="margin-bottom:0;"><button type="button" class="button esc-acc-add">+ Rubrik hinzufügen</button></p>';
 		// Leere Vorlagenzeile für das JS (ohne name-Attribute, damit sie beim
 		// Speichern nicht mitkommt; JS setzt die Namen beim Einfügen).
 		echo '<template class="esc-acc-tpl">';
-		self::accordion_row( $prefix, '', '', true );
+		self::accordion_row( $prefix, '', '', '', true );
 		echo '</template>';
 		echo '</div>';
 		self::accordion_repeater_js();
 	}
 
-	protected static function accordion_row( $prefix, $title, $content, $tpl = false ) {
+	protected static function accordion_row( $prefix, $title, $teaser, $content, $tpl = false ) {
 		$nt = $tpl ? '' : ' name="' . esc_attr( $prefix ) . '_title[]"';
+		$nz = $tpl ? '' : ' name="' . esc_attr( $prefix ) . '_teaser[]"';
 		$nc = $tpl ? '' : ' name="' . esc_attr( $prefix ) . '_content[]"';
 		echo '<div class="esc-acc-row" style="border:1px solid #e2e4e7;border-radius:4px;background:#fff;padding:10px;margin-bottom:10px;">';
 		echo '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">';
@@ -331,6 +332,7 @@ class ESC_MetaBoxes {
 		echo '<button type="button" class="button esc-acc-down" title="Nach unten">↓</button>';
 		echo '<button type="button" class="button esc-acc-del" title="Rubrik entfernen">✕</button>';
 		echo '</div>';
+		echo '<textarea' . $nz . ' data-name="' . esc_attr( $prefix ) . '_teaser[]" rows="2" style="width:100%;margin-bottom:6px;" placeholder="Kurztext/Teaser (optional, steht unter dem Titel und ist ohne Aufklappen sichtbar)">' . esc_textarea( $teaser ) . '</textarea>';
 		echo '<textarea' . $nc . ' data-name="' . esc_attr( $prefix ) . '_content[]" rows="5" style="width:100%;" placeholder="Inhalt der Rubrik">' . esc_textarea( self::acc_html_to_text( $content ) ) . '</textarea>';
 		echo '</div>';
 	}
@@ -544,17 +546,24 @@ class ESC_MetaBoxes {
 				update_post_meta( $post_id, $arr_key, $arr );
 			}
 		}
-		// Aufklapp-Rubriken (Einzelleistung): parallele Titel-/Inhalts-Arrays
+		// Aufklapp-Rubriken (Einzelleistung): parallele Titel-/Teaser-/Inhalts-Arrays
 		foreach ( array( 'es_acc' => 'es_accordion', 'es_acc_en' => 'es_accordion_en' ) as $prefix => $meta_key ) {
 			if ( ! isset( $_POST[ $prefix . '_title' ] ) || ! is_array( $_POST[ $prefix . '_title' ] ) ) { continue; }
 			$titles   = array_map( 'wp_unslash', (array) $_POST[ $prefix . '_title' ] );
+			$teasers  = array_map( 'wp_unslash', (array) ( $_POST[ $prefix . '_teaser' ] ?? array() ) );
 			$contents = array_map( 'wp_unslash', (array) ( $_POST[ $prefix . '_content' ] ?? array() ) );
 			$rows = array();
 			foreach ( $titles as $i => $t ) {
 				$t = sanitize_text_field( $t );
+				$z = sanitize_text_field( (string) ( $teasers[ $i ] ?? '' ) );
 				$c = wp_kses_post( self::acc_text_to_html( (string) ( $contents[ $i ] ?? '' ) ) );
-				if ( '' === $t && '' === $c ) { continue; }
-				$rows[] = array( 'title' => $t, 'content' => $c );
+				if ( '' === $t && '' === $z && '' === $c ) { continue; }
+				$row = array( 'title' => $t );
+				// Optionaler Kurztext: nur speichern, wenn befüllt, damit Rubriken
+				// ohne Teaser identisch zu den Import-Daten bleiben.
+				if ( '' !== $z ) { $row['teaser'] = $z; }
+				$row['content'] = $c;
+				$rows[] = $row;
 			}
 			if ( $rows ) { update_post_meta( $post_id, $meta_key, $rows ); }
 			else { delete_post_meta( $post_id, $meta_key ); }
