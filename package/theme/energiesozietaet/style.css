@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.32
+Version: 2.6.33
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -550,12 +550,19 @@ html.js .esc-card.es-reveal {
 .es-hero--split > .elementor-container > .es-hero__main.elementor-column:only-child { width: 100%; flex: 0 0 100%; max-width: 100%; }
 .es-hero--split .es-hero__cols .es-hero__lead-col { width: 42%; flex: 0 0 42%; max-width: 42%; }
 .es-hero--split .es-hero__cols .es-hero__side { width: 58%; flex: 0 0 58%; max-width: 58%; }
-.es-hero--split .es-hero__cols .es-hero__lead { margin-top: 0; }
+.es-hero--split .es-hero__cols .es-hero__lead { margin-top: 0; width: 100%; max-width: 100%; }
 .es-hero--split .es-hero__title { max-width: 560px; }
+/* Aeussere Spalten-Gutter entfernen, damit die Textzeile links mit
+   Kicker/Titel und rechts mit der Inhaltskante fluchtet; der Abstand
+   ZWISCHEN den Spalten bleibt ueber die inneren Gutter erhalten. */
+.es-hero--split .es-hero__cols .es-hero__lead-col > .elementor-widget-wrap { padding-left: 0; }
+.es-hero--split .es-hero__cols .es-hero__side > .elementor-widget-wrap { padding-right: 0; }
 @media (max-width: 900px) {
     .es-hero--split .es-hero__cols > .elementor-container { flex-direction: column; }
     .es-hero--split .es-hero__cols .es-hero__lead-col,
     .es-hero--split .es-hero__cols .es-hero__side { width: 100%; flex: 0 0 100%; max-width: 100%; }
+    .es-hero--split .es-hero__cols .es-hero__lead-col > .elementor-widget-wrap,
+    .es-hero--split .es-hero__cols .es-hero__side > .elementor-widget-wrap { padding-left: 0; padding-right: 0; }
 }
 .es-hero__sidetext { max-width: 640px; margin-left: auto; }
 .es-hero__sidetext .elementor-widget-container { height: auto; }
