@@ -27,6 +27,7 @@ class ESC_MetaBoxes {
 		add_meta_box( 'esc_karriere',      'Karriere-Details',        array( __CLASS__, 'box_karriere' ),     'es_karriere',       'normal', 'default' );
 		add_meta_box( 'esc_veranstaltung', 'Veranstaltungs-Details',  array( __CLASS__, 'box_veranst' ),      'es_veranstaltung',  'normal', 'default' );
 		add_meta_box( 'esc_publikation',   'Publikations-Details',    array( __CLASS__, 'box_publikation' ),  'es_publikation',    'normal', 'default' );
+		add_meta_box( 'esc_news',          'Beitrags-Details',        array( __CLASS__, 'box_news' ),         'es_news',           'normal', 'default' );
 		// Englische Fassung – für alle Inhaltstypen
 		foreach ( array( 'es_news', 'es_team', 'es_einzelleistung', 'es_karriere', 'es_veranstaltung', 'es_publikation' ) as $pt ) {
 			add_meta_box( 'esc_lang_en', 'Englische Fassung (EN)', array( __CLASS__, 'box_lang_en' ), $pt, 'normal', 'default' );
@@ -427,6 +428,7 @@ class ESC_MetaBoxes {
 		self::field( 'Kategorie (z.B. Aufsatz, Buch, Kommentar)', 'es_cat',    get_post_meta( $post->ID, 'es_cat', true ) );
 		self::field( 'Fundstelle / Quelle',                        'es_source', get_post_meta( $post->ID, 'es_source', true ) );
 		self::field( 'Veröffentlichungsdatum',                     'es_publication_date', get_post_meta( $post->ID, 'es_publication_date', true ), 'date' );
+		echo '<p class="description" style="margin:-8px 0 16px;font-style:normal;">Steuert die Jahres-Gruppierung und Reihenfolge der Publikationsliste. Das WordPress-Beitragsdatum (rechte Seitenleiste) wird beim Speichern automatisch angeglichen.</p>';
 		self::field( 'Externer Link (Zur Publikation)',            'es_link',   get_post_meta( $post->ID, 'es_link', true ), 'url' );
 		self::field( 'Autor:innen (Freitext, Fallback)',           'es_author', get_post_meta( $post->ID, 'es_author', true ) );
 
@@ -450,6 +452,13 @@ class ESC_MetaBoxes {
 			echo '</label>';
 		}
 		echo '</p>';
+	}
+
+	public static function box_news( $post ) {
+		self::nonce();
+		$val = ( 'auto-draft' === $post->post_status ) ? '' : substr( $post->post_date, 0, 10 );
+		self::field( 'Veröffentlichungsdatum', 'es_news_date', $val, 'date' );
+		echo '<p class="description" style="margin:-8px 0 4px;font-style:normal;">Steuert Datumsanzeige und Reihenfolge des Beitrags. Das WordPress-Beitragsdatum (rechte Seitenleiste) wird beim Speichern automatisch angeglichen; leer = heutiges Datum.</p>';
 	}
 
 	public static function save( $post_id, $post ) {
@@ -591,6 +600,28 @@ class ESC_MetaBoxes {
 		if ( 'es_publikation' === $post->post_type ) {
 			$fields = isset( $_POST['es_fields'] ) && is_array( $_POST['es_fields'] ) ? array_values( array_intersect( array_keys( self::FIELDS ), array_map( 'sanitize_text_field', wp_unslash( $_POST['es_fields'] ) ) ) ) : array();
 			update_post_meta( $post_id, 'es_fields', $fields );
+		}
+
+		// Veröffentlichungsdatum → WordPress-Beitragsdatum: Das Eingabefeld
+		// steuert bei Publikationen (Jahres-Gruppierung, Reihenfolge) und News
+		// (Datumsanzeige, Reihenfolge) das Beitragsdatum; die rechte
+		// Seitenleiste muss nicht mehr separat angepasst werden.
+		$sync_date = '';
+		if ( 'es_publikation' === $post->post_type ) {
+			$sync_date = (string) get_post_meta( $post_id, 'es_publication_date', true );
+		} elseif ( 'es_news' === $post->post_type && isset( $_POST['es_news_date'] ) ) {
+			$sync_date = sanitize_text_field( wp_unslash( $_POST['es_news_date'] ) );
+		}
+		if ( $sync_date && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $sync_date ) && substr( $post->post_date, 0, 10 ) !== $sync_date ) {
+			$new_date = $sync_date . substr( $post->post_date, 10 ); // Uhrzeit beibehalten
+			// Direkt in der Datenbank, um eine save_post-Rekursion zu vermeiden.
+			global $wpdb;
+			$wpdb->update(
+				$wpdb->posts,
+				array( 'post_date' => $new_date, 'post_date_gmt' => get_gmt_from_date( $new_date ) ),
+				array( 'ID' => $post_id )
+			);
+			clean_post_cache( $post_id );
 		}
 	}
 }
