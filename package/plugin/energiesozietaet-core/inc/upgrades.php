@@ -19,6 +19,34 @@ class ESC_Upgrades {
 		self::rename_leistungen_swap();
 		self::accordion_fields();
 		self::vorteile_field();
+		self::pubdate_sync();
+	}
+
+	/**
+	 * Einmalige Angleichung: Publikationen, deren Feld "Veröffentlichungsdatum"
+	 * vom WordPress-Beitragsdatum abweicht (z. B. neu angelegte Einträge, die
+	 * das Erstellungsdatum tragen), bekommen das Beitragsdatum aus dem Feld.
+	 * Für neue Speichervorgänge übernimmt das dieselbe Logik in
+	 * ESC_MetaBoxes::save automatisch.
+	 */
+	protected static function pubdate_sync() {
+		if ( get_option( 'esc_pubdate_sync_v1' ) ) { return; }
+		global $wpdb;
+		$done = 0;
+		foreach ( get_posts( array( 'post_type' => 'es_publikation', 'post_status' => 'any', 'numberposts' => -1 ) ) as $p ) {
+			$pd = (string) get_post_meta( $p->ID, 'es_publication_date', true );
+			if ( ! $pd || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $pd ) ) { continue; }
+			if ( substr( $p->post_date, 0, 10 ) === $pd ) { continue; }
+			$new_date = $pd . substr( $p->post_date, 10 );
+			$wpdb->update(
+				$wpdb->posts,
+				array( 'post_date' => $new_date, 'post_date_gmt' => get_gmt_from_date( $new_date ) ),
+				array( 'ID' => $p->ID )
+			);
+			clean_post_cache( $p->ID );
+			$done++;
+		}
+		update_option( 'esc_pubdate_sync_v1', $done . ' angeglichen am ' . current_time( 'mysql' ) );
 	}
 
 	/**
