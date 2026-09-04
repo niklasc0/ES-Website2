@@ -20,6 +20,50 @@ class ESC_Upgrades {
 		self::accordion_fields();
 		self::vorteile_field();
 		self::pubdate_sync();
+		self::page_setup();
+	}
+
+	/**
+	 * Einmalige Seiten-Einstellungen (Kundenwunsch 04.09.):
+	 * - Beitragsbilder der drei Beratungsfeld-Seiten setzen (BEV fuer Rechts-,
+	 *   Buecher-Foyer fuer Steuer-, VNE fuer Unternehmensberatung); die
+	 *   [es_field_image]-Kacheln auf /leistungen/ zeigen dann die Fotos statt
+	 *   der Platzhalter. Zuordnung ueber den Dateinamen in der Mediathek.
+	 * - Das versehentlich an der Leistungen-Seite haengende Gruppenfoto
+	 *   entfernen (es war fuer die Rechtsberatungs-Kachel gedacht).
+	 * - "Publikationen und Fachbeitraege" auf Steuer- und Unternehmensberatung
+	 *   ausblenden (dort sind keine Publikationen zugeordnet).
+	 */
+	protected static function page_setup() {
+		if ( get_option( 'esc_page_setup_v1' ) ) { return; }
+		global $wpdb;
+		$find_attachment = function ( $basename ) use ( $wpdb ) {
+			return (int) $wpdb->get_var( $wpdb->prepare(
+				"SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s ORDER BY post_id ASC LIMIT 1",
+				'%' . $wpdb->esc_like( $basename )
+			) );
+		};
+		$images = array(
+			'rechtsberatung'       => 'Andi-Werner-Foto-6537-web_Bernhardine_Emil_Vanessa.jpg',
+			'steuerberatung'       => 'Andi-Werner-Foto-5815-web_Bucher-Foyer.jpg',
+			'unternehmensberatung' => 'Andi-Werner-Foto-5401-web_Vanessa_Niklas_Elke.jpg',
+		);
+		$done = array();
+		foreach ( $images as $slug => $file ) {
+			$page = get_page_by_path( $slug );
+			$att  = $find_attachment( $file );
+			if ( $page && $att ) {
+				set_post_thumbnail( $page->ID, $att );
+				$done[] = $slug;
+			}
+		}
+		$leistungen = get_page_by_path( 'leistungen' );
+		if ( $leistungen ) { delete_post_thumbnail( $leistungen->ID ); }
+		$layout = (array) get_option( 'esc_layout', array() );
+		$layout['pubs_steuerberatung']       = 0;
+		$layout['pubs_unternehmensberatung'] = 0;
+		update_option( 'esc_layout', $layout );
+		update_option( 'esc_page_setup_v1', implode( ', ', $done ) . ' am ' . current_time( 'mysql' ) );
 	}
 
 	/**
