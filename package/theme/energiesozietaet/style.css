@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.36
+Version: 2.6.37
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -561,8 +561,13 @@ html.js .esc-card.es-reveal {
     .es-hero--split .es-hero__cols > .elementor-container { flex-direction: column; }
     .es-hero--split .es-hero__cols .es-hero__lead-col,
     .es-hero--split .es-hero__cols .es-hero__side { width: 100%; flex: 0 0 100%; max-width: 100%; }
+    /* Elementor setzt auf Mobil eigene Gutter (Container 24px + Spalten-Wrap
+       22px); dadurch rueckten die Texte ~46px rechts vom Titel ein. Nur die
+       horizontalen Abstaende neutralisieren, die vertikalen bleiben als
+       Abstand zwischen den gestapelten Bloecken erhalten. */
+    .es-hero--split .es-hero__cols > .elementor-container { padding-left: 0 !important; padding-right: 0 !important; }
     .es-hero--split .es-hero__cols .es-hero__lead-col > .elementor-widget-wrap,
-    .es-hero--split .es-hero__cols .es-hero__side > .elementor-widget-wrap { padding-left: 0; padding-right: 0; }
+    .es-hero--split .es-hero__cols .es-hero__side > .elementor-widget-wrap { padding-left: 0 !important; padding-right: 0 !important; }
 }
 .es-hero__sidetext { max-width: 640px; margin-left: auto; }
 .es-hero__sidetext .elementor-widget-container { height: auto; }

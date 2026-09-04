@@ -1,14 +1,14 @@
 # Testplan: Feedback-Runde Elke (Mails vom 18./19.08.)
 
-**Stand:** 31.08.2026 · Plugin **1.6.36** · Theme **2.6.36**
-**Basis:** Live-Export von test2 vom 01.09., 10:38 Uhr. Elkes Arbeitsstand ist vollständig eingearbeitet (18 überarbeitete Einzelleistungen, 3 neue Teammitglieder, 3 neue und 2 bearbeitete Publikationen, aktualisierte Kurzvita, Impressum, Wasserstoff-Leistung entfernt); „Import erzwingen" überschreibt davon nichts mehr.
+**Stand:** 31.08.2026 · Plugin **1.6.37** · Theme **2.6.37**
+**Basis:** Live-Export von test2 vom 04.09., 08:53 Uhr. Elkes Arbeitsstand ist vollständig eingearbeitet (u. a. 24 Team-Profile, 9 Leistungen, Seiten Home/Philosophie/Leistungen/Beratungsfelder/Publikationen, gelöschte Vergaberecht-Stelle, Impressum und Datenschutzerklärung); „Import erzwingen" überschreibt davon nichts mehr.
 
 ## Vorbereitung auf test2
 
-1. Theme-ZIP 2.6.36 und das **volle** Plugin-ZIP 1.6.36 einspielen (nicht das slim-ZIP, der Import braucht die mitgelieferten Daten).
+1. Theme-ZIP 2.6.37 und das **volle** Plugin-ZIP 1.6.37 einspielen (nicht das slim-ZIP, der Import braucht die mitgelieferten Daten).
 2. Als Admin: Werkzeuge → Energiesozietät-Import → **Import erzwingen**.
 3. Falls ein Seiten-Cache aktiv ist (WP-Optimize o. ä.): Cache leeren.
-4. Schnellcheck: Unter Plugins muss 1.6.36 stehen, unter Design das Theme 2.6.36.
+4. Schnellcheck: Unter Plugins muss 1.6.37 stehen, unter Design das Theme 2.6.37.
 
 Danach die folgenden Punkte durchgehen. Die Nummern entsprechen der abgestimmten Liste zu Elkes Mails.
 
@@ -31,10 +31,10 @@ Danach die folgenden Punkte durchgehen. Die Nummern entsprechen der abgestimmten
 | Nr. | Prüfen | Wo | Erwartet |
 |---|---|---|---|
 | B9 | Schneller Zugang zu den Leistungen | /leistungen/ | Nach dem Hero kommt der Block „Unser Anspruch", direkt danach die drei Beratungsfelder; nur „Unser Beratungsansatz" steht ganz unten auf der Seite |
-| B10 | Gesellschaftsrecht aufklappbar | /leistung/gesellschaftsrecht/ | Voraussetzung: Plugin 1.6.36 aktiv (räumt die alten Elementor-Überlagerungen automatisch auf). Dann fünf Aufklapp-Rubriken (Privatisierung, Kommunalrecht und Gesellschaftsrecht, Corporate Governance, Reorganisationen, Unternehmerische Mitbestimmung), darunter der Claim „Strukturen schaffen. Entscheidungen ermöglichen." als eigener Absatz |
+| B10 | Gesellschaftsrecht aufklappbar | /leistung/gesellschaftsrecht/ | Voraussetzung: Plugin 1.6.37 aktiv (räumt die alten Elementor-Überlagerungen automatisch auf). Dann fünf Aufklapp-Rubriken (Privatisierung, Kommunalrecht und Gesellschaftsrecht, Corporate Governance, Reorganisationen, Unternehmerische Mitbestimmung), darunter der Claim „Strukturen schaffen. Entscheidungen ermöglichen." als eigener Absatz |
 | B11 | Energierecht-Kopf | /leistung/energie/ | Titel „Energierecht", Untertitel „Die Energietransformation rechtlich umsetzen, neue Märkte erschließen, die Chancen und Risiken der Regulierung beherrschen"; URL bleibt unverändert |
 | B12 | Umweltrecht-Untertitel | /leistung/umweltrecht/ | „Umweltrecht für Abfall, Wärme und Wasserstoff – von Waste-to-Energy bis Geothermie" |
-| B13 | ESG eigene Rubrik | /leistung/umweltrecht/ | Sechs Aufklapp-Rubriken, „Compliance und ESG" als eigener Punkt (Voraussetzung wie B10: Plugin 1.6.36 aktiv) |
+| B13 | ESG eigene Rubrik | /leistung/umweltrecht/ | Sechs Aufklapp-Rubriken, „Compliance und ESG" als eigener Punkt (Voraussetzung wie B10: Plugin 1.6.37 aktiv) |
 | B14 | Umweltrecht-Claim | /leistung/umweltrecht/ ganz unten | „Wir schaffen rechtliche und strategische Grundlagen, …" steht unterhalb der Rubriken, nicht mehr in einer Aufzählung |
 | B15 | Claim vollständig | Footer aller Seiten + Hero /philosophie/ | „Beratung aus Leidenschaft – Ergebnisse, die weitertragen." mit Halbgeviertstrich, im Hero wie im Footer |
 | B16 | UB-Kacheln inkl. URLs | /unternehmensberatung/ | Kacheln heißen: Investition und Transformation (ehemals Projektmanagement) · Transaktion und Kooperation · Strukturen und Governance (ehemals Erneuerbare Energien) · Regulierung · Wärme · Wasserwirtschaft · Wasserstoff. Neue URLs: /leistung/investition-und-transformation/, /leistung/strukturen-und-governance/, /leistung/transaktion-und-kooperation/; alle alten URLs leiten per 301 weiter |
