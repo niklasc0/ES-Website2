@@ -4,7 +4,7 @@ Theme URI: https://energiesozietaet.de/
 Author: Energiesozietät
 Author URI: https://energiesozietaet.de/
 Description: Editorial WordPress-Theme für die Energiesozietät. Minimalistisch, sans-only, hairline-borders statt Schatten, Akzent #95D708. Nach Design-Mockup "ES.Website.3".
-Version: 2.6.42
+Version: 2.6.43
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -1486,10 +1486,10 @@ html.es-header-sticky .es-team-single__col-left { top: calc(var(--es-header-h, 7
 .es-mandanten li:nth-child(-n+2) { border-top: var(--es-border); }
 .es-mandanten li:nth-child(2n) { padding-right: 0; padding-left: 32px; border-left: var(--es-border); }
 .es-mandanten li { display: flex; align-items: center; gap: 14px; }
-/* Bei ungerader Anzahl bekommt die leere Zelle unten rechts ebenfalls
-   Mittel- und Abschlusslinie, damit das Raster über die volle Breite schließt */
+/* Bei ungerader Anzahl läuft die Mittellinie bis nach unten durch; die
+   Abschlusslinie endet bewusst nach der linken Hälfte (kein leeres Feld) */
 .es-mandanten:has(li:last-child:nth-child(odd))::after {
-    content: ""; border-left: var(--es-border); border-bottom: var(--es-border);
+    content: ""; border-left: var(--es-border);
 }
 .es-mandanten__num { font-family: var(--es-font-mono); font-size: var(--es-fs-meta); color: var(--es-text-soft); letter-spacing: 0.08em; }
 @media (max-width: 700px) {

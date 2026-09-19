@@ -12,6 +12,8 @@ class ESC_Admin {
 		add_action( 'admin_menu',   array( __CLASS__, 'menu' ) );
 		add_action( 'admin_init',   array( __CLASS__, 'maybe_run_import' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'notices' ) );
+		add_filter( 'page_row_actions', array( __CLASS__, 'page_row_actions' ), 20, 2 );
+		add_action( 'load-post.php', array( __CLASS__, 'redirect_page_to_elementor' ) );
 	}
 
 	public static function menu() {
@@ -81,6 +83,43 @@ class ESC_Admin {
 			'text' => $msg,
 		), 60 );
 		wp_safe_redirect( admin_url( 'tools.php?page=esc-importer' ) );
+		exit;
+	}
+
+	/** Seite, die mit Elementor gebaut ist (nur die gehören in den Elementor-Editor). */
+	protected static function elementor_managed( $post ) {
+		return $post instanceof WP_Post
+			&& 'page' === $post->post_type
+			&& 'builder' === get_post_meta( $post->ID, '_elementor_edit_mode', true );
+	}
+
+	/**
+	 * In der Seiten-Übersicht den einfachen „Bearbeiten"-Link bei
+	 * Elementor-Seiten ausblenden, für alle Rollen unterhalb Administrator.
+	 * Der normale Editor zeigt diese Seiten ohne Formatierung an und verleitet
+	 * dazu, die Elementor-Fassung zu überschreiben; gepflegt werden sie über
+	 * „Mit Elementor bearbeiten". Schnellbearbeitung (Titel, Slug, Status)
+	 * bleibt verfügbar, Administratoren sehen weiterhin beide Wege.
+	 */
+	public static function page_row_actions( $actions, $post ) {
+		if ( self::elementor_managed( $post ) && ! current_user_can( 'manage_options' ) ) {
+			unset( $actions['edit'] );
+		}
+		return $actions;
+	}
+
+	/**
+	 * Sicherheitsnetz für denselben Fall: Landet ein Nicht-Admin doch im
+	 * normalen Editor einer Elementor-Seite (z. B. per Klick auf den
+	 * Seitentitel oder über einen alten Link), geht es direkt in den
+	 * Elementor-Editor weiter.
+	 */
+	public static function redirect_page_to_elementor() {
+		if ( current_user_can( 'manage_options' ) || ! did_action( 'elementor/loaded' ) ) { return; }
+		if ( 'edit' !== ( $_GET['action'] ?? '' ) ) { return; }
+		$post = get_post( isset( $_GET['post'] ) ? (int) $_GET['post'] : 0 );
+		if ( ! self::elementor_managed( $post ) || ! current_user_can( 'edit_post', $post->ID ) ) { return; }
+		wp_safe_redirect( admin_url( 'post.php?post=' . $post->ID . '&action=elementor' ) );
 		exit;
 	}
 
