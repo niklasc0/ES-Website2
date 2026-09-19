@@ -84,9 +84,37 @@ class ESC_Importer {
 		// Sicherheitsnetz: doppelt-encodete UTF-8-Sequenzen reparieren
 		// (z.B. 'Ã¤' → 'ä'). Tritt auf, wenn die Quelle aus latin1-mb4 stammt.
 		$json = self::fix_mojibake( $json );
+		$json = self::localize_domain( $json );
 		$data = json_decode( $json, true );
 		if ( ! is_array( $data ) ) { return new WP_Error( 'esc_bad_data', 'content.json ist fehlerhaft.' ); }
 		return $data;
+	}
+
+	/** Hostname der Staging-Umgebung, auf der die Import-Daten exportiert wurden. */
+	const STAGING_HOST = '1229160.eu15.myftpupload.com';
+
+	/**
+	 * Ersetzt die Staging-Domain in rohen Import-Dateien durch die Domain der
+	 * laufenden Installation. Auf der Staging-Umgebung selbst ein No-Op, damit
+	 * bleibt der Import dort weiterhin byte-stabil. Berücksichtigt neben der
+	 * Klartext-Form auch die JSON-Escapings \/ und \\\/ (Elementor-Daten sind
+	 * JSON im JSON).
+	 */
+	protected static function localize_domain( $text ) {
+		$home = untrailingslashit( home_url() );
+		if ( '' === (string) $text || false !== strpos( $home, self::STAGING_HOST ) ) { return $text; }
+		if ( false === strpos( $text, self::STAGING_HOST ) ) { return $text; }
+		foreach ( array( 'https://', 'http://' ) as $scheme ) {
+			$old = $scheme . self::STAGING_HOST;
+			$new = $home;
+			for ( $level = 0; $level < 3; $level++ ) {
+				$text = str_replace( $old, $new, $text );
+				// Eine JSON-String-Escaping-Ebene tiefer: \ wird \\, / wird \/.
+				$old = str_replace( array( '\\', '/' ), array( '\\\\', '\\/' ), $old );
+				$new = str_replace( array( '\\', '/' ), array( '\\\\', '\\/' ), $new );
+			}
+		}
+		return $text;
 	}
 
 	/**
@@ -414,7 +442,8 @@ class ESC_Importer {
 	protected static function page_snapshot( $slug ) {
 		$file = ESC_DIR . 'data/pages/' . $slug . '.json';
 		if ( ! file_exists( $file ) ) { return null; }
-		$snap = json_decode( (string) file_get_contents( $file ), true );
+		$raw  = self::localize_domain( (string) file_get_contents( $file ) );
+		$snap = json_decode( $raw, true );
 		return is_array( $snap ) ? $snap : null;
 	}
 

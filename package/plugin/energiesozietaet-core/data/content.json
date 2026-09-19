@@ -317,7 +317,7 @@
    "name": "Jörg Bittscheidt",
    "slug": "jorg-bittscheidt",
    "role": "Rechtsanwalt | Partner",
-   "bio": "Jörg ist seit 30 Jahren als Rechtsanwalt. Er arbeitete zunächst in zwei mittelständischen Kanzleien , wo er in allgemeinen zivilrechtlichen Fragen beriet. Ab 2003 war er für Big4-Gesellschaften tätig. 2025 wechselte er zur Energiesozietät.\n\nJörg ist spezialisiert auf die Beratung Kommunen, Stadtwerken und anderen kommunalen Unternehmen auf den Gebieten des Steuer- und Gesellschaftsrechts. Seine Schwerpunkte liegen in der Neu- und Umstrukturierungen von kommunalen Gesellschaftsstrukturen als Teil von interdisziplinären Gestaltungsprojekten. Außerdem begleitet er bei Betriebsprüfungen und führt finanzgerichtliche Prozesse.\n\nJörg studierte Rechtswissenschaften an der Universität zu Köln und ist seit 1997 als Rechtsanwalt zugelassen.",
+   "bio": "Jörg studierte Rechtswissenschaften an der Universität zu Köln und ist seit 1997 als Rechtsanwalt zugelassen. Er arbeitete zunächst in zwei mittelständischen Kanzleien, wo er in allgemeinen zivilrechtlichen Fragen beriet. Ab 2003 war er für Big4-Gesellschaften tätig. 2025 wechselte er zur Energiesozietät.\n\nJörg ist spezialisiert auf die Beratung von Kommunen, Stadtwerken und anderen kommunalen Unternehmen auf den Gebieten des Steuer- und Gesellschaftsrechts. Seine Schwerpunkte liegen in der Neu- und Umstrukturierungen von kommunalen Gesellschaftsstrukturen als Teil von interdisziplinären Gestaltungsprojekten. Außerdem begleitet er bei Betriebsprüfungen und führt finanzgerichtliche Prozesse.",
    "more_bio": "",
    "focus_areas": [
     {
@@ -668,15 +668,11 @@
    "more_bio": "",
    "focus_areas": [
     {
-     "title": "Energie- und Energiewirtschaftsrecht",
+     "title": "Litigation",
      "content": ""
     },
     {
-     "title": "Umweltrecht",
-     "content": ""
-    },
-    {
-     "title": "Öffentliches Wirtschaftsrecht",
+     "title": "Gesellschaftsrecht",
      "content": ""
     },
     {
@@ -684,7 +680,11 @@
      "content": ""
     },
     {
-     "title": "Gesellschaftsrecht",
+     "title": "Energie- und Energiewirtschaftsrecht",
+     "content": ""
+    },
+    {
+     "title": "Öffentliches Wirtschaftsrecht",
      "content": ""
     }
    ],
@@ -947,6 +947,21 @@
    "phone": "0211 159232 222",
    "location": "Mannheim",
    "career": []
+  },
+  {
+   "id": 5463,
+   "name": "Daniela Urban",
+   "slug": "daniela-urban",
+   "role": "Rechtsfachwirtin",
+   "bio": "Daniela hat im Jahre 2010 ihr Studium zur Rechtsfachwirtin erfolgreich abgeschlossen. Sie unterstützt mit ihrer langjährigen Erfahrung im juristischen Bereich die Rechtanwälte bei allen typischerweise anfallenden juristischen Aufgaben und übernimmt darüber hinaus zahlreiche organisatorische Aufgaben in der Energiesozietät. Die regelmäßige Teilnahme an Fortbildungen ermöglicht es Daniela, ihr Fachwissen stets auf dem neuesten Stand zu halten.",
+   "more_bio": "",
+   "focus_areas": [],
+   "image_file": "team/daniela-urban.jpg",
+   "field": "kanzlei",
+   "email": "daniela.urban@energiesozietaet.de",
+   "phone": "0211 159232-223",
+   "location": "Mannheim",
+   "career": []
   }
  ],
  "einzelleistungen": [
@@ -978,27 +993,17 @@
    "slug": "gesellschaftsrecht",
    "beratungsfeld": "rechtsberatung",
    "subtitle": "Strukturelle Veränderungen benötigen einen gesellschaftsrechtlichen Rahmen.",
-   "description": "<p>Gesellschaftsrechtliche Fragen sind selten reine Formalitäten. Gesellschaftsrechtliche Regelungen entscheiden darüber, wie ein Unternehmen gesteuert werden kann, wer Verantwortung trägt, wie Beteiligte zusammenwirken und ob Wachstum, Transformation oder Kooperation verlässlich umgesetzt werden kann. Wir unterstützen Unternehmen, kommunale Beteiligungen, Investoren oder Projektgesellschaften bei der Gestaltung und Weiterentwicklung von Gesellschafts-, Beteiligungs- und Governancestrukturen.</p>",
+   "description": "Gesellschaftsrechtliche Fragen sind selten reine Formalitäten. Gesellschaftsrechtliche Regelungen entscheiden darüber, wie ein Unternehmen gesteuert werden kann, wer Verantwortung trägt, wie Beteiligte zusammenwirken und ob Wachstum, Transformation oder Kooperation verlässlich umgesetzt werden kann.\n\nWir beraten mittelständische Unternehmen, insbesondere auch kommunale Unternehmen, ihre Gesellschafter, Unternehmer und Investoren in sämtlichen Fragen des Gesellschafts- und Umwandlungsrechts. Unsere Beratung umfasst die Strukturierung und Durchführung von Unternehmenskäufen und -verkäufen sowie Umwandlungen (M&amp;A), Finanzierungsformen mit Eigen- und Fremdkapitalcharakter, die Gestaltung von Kooperationen und Joint Ventures, die Umstrukturierung von (kommunalen) Konzernen oder von Unternehmen sowie die Beratung von Organen und Organmitgliedern (Vorstände, Geschäftsführer, Aufsichtsräte).",
    "accordion": [
     {
-     "title": "Privatisierung von Unternehmen der öffentlichen Hand",
-     "content": "<p>Wir beraten Kommunen bei der Auslagerung ihrer Aufgaben in privatrechtliche Gesellschaften. Das beginnt bei der Frage, in welcher Rechtsform die Aufgabe künftig wahrgenommen werden soll. Hier besteht insbesondere die grundsätzliche Wahl zwischen einer Kapitalgesellschaft oder einer Personengesellschaft. Neben Fragen der Steuerung durch die Kommunen (Governance) sind auch kommunalrechtliche Vorgaben bei der Ausgestaltung der Gesellschaftsverträge zu beachten. Daneben dürfen auch die strategisch-betriebswirtschaftlichen und steuerlichen Folgen einer Umorganisation und der späteren Leistungsbeziehungen zur Kommune nicht außer Betracht gelassen werden.</p>"
+     "title": "Gesellschaftsrecht für mittelständische und kommunale Unternehmen",
+     "teaser": "Strukturen gestalten, Transaktionen steuern, Governance sichern",
+     "content": "<p>Das Gesellschaftsrecht bildet den Rahmen, in dem mittelständische und kommunale Unternehmen ihre Strukturen, Beteiligungen und Transaktionen rechtssicher gestalten. Wir beraten mittelständische Unternehmen, kommunale Unternehmen, ihre Gesellschafter, Unternehmer sowie Investoren in allen Fragen des Gesellschafts- und Umwandlungsrechts – von der Gründung über Wachstums- und Finanzierungsrunden bis zu komplexen Umstrukturierungen und M&amp;A-Prozessen.</p><p>Ein besonderer Schwerpunkt liegt auf Transaktionen und Strukturentscheidungen mit Beteiligung der öffentlichen Hand: Wir verbinden gesellschaftsrechtliche Expertise mit kommunalrechtlichen, steuerlichen und strategischen Anforderungen und entwickeln Lösungen, die sowohl rechtlich tragfähig als auch politisch und wirtschaftlich anschlussfähig sind.</p><ul><li>Strukturierung und Durchführung von Unternehmenskäufen und -verkäufen (M&amp;A), Umwandlungen, Joint Ventures und Kooperationen – inklusive Due Diligence, Vertragsgestaltung und Gremienbeschlüssen.</li><li>Spezialisierte Beratung bei Beteiligungskäufen und -veräußerungen von Kommunen und öffentlichen Unternehmen, einschließlich Rechtsformwahl und Corporate Governance.</li><li>Spezialisierte Beratung bei der Gründung, Weiterentwicklung oder Reorganisation von kommunalen Holdings.</li><li>Gestaltung von Eigen- und Mezzanine-Kapitalinstrumenten, Beteiligungsmodellen und Wachstumsfinanzierungen, abgestimmt auf die jeweiligen unternehmerischen Ziele und regulatorischen Rahmenbedingungen.</li><li>Beratung von Vorständen, Geschäftsführungen und Aufsichtsräten zu Rechten, Pflichten, Haftungsfragen und zur Einbindung in Beteiligungs- und Steuerungsstrukturen.</li></ul><p>Gesellschaftsrecht mit Weitblick – Strukturen, die Unternehmen und Kommunen tragen.</p>"
     },
     {
-     "title": "Kommunalrecht und Gesellschaftsrecht",
-     "content": "<p>Aus dem Kommunalrecht ergeben sich bestimmte Vorschriften für eine zulässige wirtschaftliche Betätigung der Gemeinden durch Unternehmen in Privatrechtsform. Regelmäßig sollen z.B. auch bei nicht mitbestimmten GmbHs Aufsichtsräte eingerichtet werden. Hier kommt es dann für die von der Kommune entsandten Mitglieder des Aufsichtsrats immer wieder zu einem Widerspruch zwischen der gesellschaftsrechtlichen Pflicht zur eigenverantwortlichen und sorgfältigen Wahrnehmung des Mandats und dem im Kommunalrecht verankerten Weisungsrecht der Kommunen. Ein weiterer Widerspruch ergibt sich aus der gesellschaftsrechtlichen Pflicht zur Verschwiegenheit einerseits und der kommunalrechtlichen Pflicht zur Berichterstattung an die Kommune. Hier gilt es, in der Satzung der Gesellschaft eine ausgewogene Regelung zu finden.</p>"
-    },
-    {
-     "title": "Corporate Governance",
-     "content": "<p>Unter Corporate Governance versteht man einen rechtlichen und faktischen Ordnungsrahmen, der sicherstellen soll, dass Unternehmen verantwortungsvoll, transparent und im Interesse aller Stakeholder geführt werden.</p><p>Eine gute Governance ist gekennzeichnet durch</p><ul><li>Ordentliche und gute Unternehmensführung: Förderung strukturierter Prozesse und effizienter Entscheidungsfindung innerhalb des Unternehmens.</li><li>Transparenz: Sicherstellung nachvollziehbarer und offener Unternehmensprozesse, um Informationsasymmetrien zwischen den Stakeholdern zu reduzieren und Vertrauen zu schaffen.</li><li>Interessenwahrung: Berücksichtigung der legitimen Interessen aller relevanten Stakeholder – also nicht nur der Anteilseigner, sondern auch der Mitarbeitenden, Kunden und weiterer Anspruchsgruppen.</li><li>Nachhaltigkeit: Ausrichtung auf ein regelkonformes und nachhaltiges Wirtschaften, einschließlich gesellschaftlicher und ökologischer Verantwortung.</li><li>Reduzierung von Risiken: Implementierung von Mechanismen zum verbesserten Risikomanagement, z.B. klare Verantwortlichkeiten, Kontrollmechanismen oder Verflechtung von Entscheidungen.</li><li>Reduktion von Interessenkonflikten: Durch klare Regeln und Strukturen zum Ausgleich von Interessen.</li><li>Förderung von Compliance: Corporate Governance schafft den Rahmen für regelkonformes Handeln und die Einhaltung von Gesetzen und Richtlinien.</li><li>Rahmen für Führung und Überwachung: Abstecken des Ordnungsrahmens für Leitung und Kontrolle im Unternehmen. Der Deutsche Corporate Governance Kodex ist ein Regelwerk, das entsprechende Empfehlungen und Anregungen für börsennotierte Unternehmen enthält. Daneben kann es auch für nicht börsennotierte Unternehmen als Anregung für eigene Regelungen dienen.</li></ul>"
-    },
-    {
-     "title": "Reorganisationen, Kooperationen und Umstrukturierungen",
-     "content": "<p>Steigende Herausforderungen für kommunale Unternehmen können dazu führen, dass neue Strukturen geschaffen werden müssen. Gemeinsam mit Kommunen und Unternehmen erarbeiten wir ein Zielmodell und entwickeln den Transaktionspfad. Dabei behalten wir immer auch die strategisch-betriebswirtschaftlichen und steuerlichen Folgen mit im Blick.</p><p>Wir erstellen außerdem für Sie die notwendigen Verträge und Vorlagen für die Gremienbeschlüsse.</p>"
-    },
-    {
-     "title": "Unternehmerische Mitbestimmung",
-     "content": "<p>Je nach Anzahl der Arbeitnehmer in einem Unternehmen oder einem Konzern haben die Arbeitnehmer das Recht, gewählte Vertreter in den Aufsichtsrat zu entsenden. Bei GmbHs kann dies dazu führen, dass überhaupt ein Aufsichtsrat erstmalig gebildet werden muss.</p><p>Wir beraten Sie bei der ggf. nötigen Anpassung der Satzung und klären, welche Regelungen nunmehr gelten.</p>"
+     "title": "Kommunalrecht für Kommunen, Stadtwerke und Beteiligungsholdings",
+     "teaser": "Moderne kommunale Daseinsvorsorge mit rechtssicheren Strukturen wirtschaftlich tragfähig gestalten",
+     "content": "<p>Die wirtschaftliche Betätigung von Kommunen über Stadtwerke, Netzgesellschaften oder Beteiligungsholdings unterliegt strengen kommunalrechtlichen Spielregeln. Gründung, Erwerb und Veränderung von Beteiligungen stehen unter dem Vorbehalt der Kommunalaufsicht und müssen sich an Daseinsvorsorge, Subsidiarität und Governance-Anforderungen messen lassen.</p><p>Wir begleiten Kommunen, Stadtwerke und kommunale Unternehmen bei der Konzeption, Prüfung und Umsetzung ihrer Beteiligungsmodelle – von der rechtlichen Zulässigkeit über die Ausgestaltung von Gesellschaftsverträgen, Aufsichtsorganen und Zustimmungsvorbehalten bis hin zum laufenden Corporate Housekeeping und der Vorbereitung von Gremiensitzungen. Dabei adressieren wir bewusst die typischen Spannungsfelder zwischen kommunaler Steuerung, gesellschaftsrechtlicher Treuepflicht und Verschwiegenheit.</p><ul><li>Klare Beteiligungs- und Governance-Konzepte, die Daseinsvorsorge, Subsidiarität und kommunale Einflussrechte verbindlich abbilden.</li><li>Konkrete Regelungsvorschläge für Gesellschaftsverträge, Geschäftsordnungen und Zustimmungskataloge – abgestimmt mit Kommunalaufsicht und Rechnungsprüfung.</li><li>Schulungen für Aufsichtsräte zu Rechten, Pflichten und Haftungsfragen sowie zur Rolle im Spannungsfeld zwischen Kommune und Gesellschaft.</li><li>Kommunalrecht erfordert eine integrierte Beratung aus Recht, Wirtschaft und Steuern: Wir entwickeln Modelle, die wirtschaftlich tragfähig, steuerlich optimal und rechtssicher gestaltet sind.</li></ul><p>Kommunale Beteiligungen rechtssicher gestalten – Governance, die Daseinsvorsorge ermöglicht.</p>"
     }
    ],
    "bullets": [],

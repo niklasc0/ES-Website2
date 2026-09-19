@@ -1,14 +1,14 @@
 # Testplan: Feedback-Runde Elke (Mails vom 18./19.08.)
 
-**Stand:** 31.08.2026 · Plugin **1.6.40** · Theme **2.6.40**
-**Basis:** Live-Export von test2 vom 04.09., 08:53 Uhr. Elkes Arbeitsstand ist vollständig eingearbeitet (u. a. 24 Team-Profile, 9 Leistungen, Seiten Home/Philosophie/Leistungen/Beratungsfelder/Publikationen, gelöschte Vergaberecht-Stelle, Impressum und Datenschutzerklärung); „Import erzwingen" überschreibt davon nichts mehr.
+**Stand:** 19.09.2026 · Plugin **1.6.41** · Theme **2.6.41**
+**Basis:** Live-Export von test2 vom 19.09., 21:04 Uhr. Der komplette Arbeitsstand ist eingearbeitet, zuletzt: neues Teamprofil Daniela Urban (mit Foto), überarbeitetes Gesellschaftsrecht (neue Einleitung, zwei Rubriken mit Teaser-Zeilen), neue Bio von Jörg Bittscheidt, angepasste Schwerpunkte von Niklas Celecki; „Import erzwingen" überschreibt davon nichts mehr.
 
 ## Vorbereitung auf test2
 
-1. Theme-ZIP 2.6.40 und das **volle** Plugin-ZIP 1.6.40 einspielen (nicht das slim-ZIP, der Import braucht die mitgelieferten Daten).
+1. Theme-ZIP 2.6.41 und das **volle** Plugin-ZIP 1.6.41 einspielen (nicht das slim-ZIP, der Import braucht die mitgelieferten Daten).
 2. Als Admin: Werkzeuge → Energiesozietät-Import → **Import erzwingen**.
 3. Falls ein Seiten-Cache aktiv ist (WP-Optimize o. ä.): Cache leeren.
-4. Schnellcheck: Unter Plugins muss 1.6.40 stehen, unter Design das Theme 2.6.40.
+4. Schnellcheck: Unter Plugins muss 1.6.41 stehen, unter Design das Theme 2.6.41.
 
 Danach die folgenden Punkte durchgehen. Die Nummern entsprechen der abgestimmten Liste zu Elkes Mails.
 
@@ -31,10 +31,10 @@ Danach die folgenden Punkte durchgehen. Die Nummern entsprechen der abgestimmten
 | Nr. | Prüfen | Wo | Erwartet |
 |---|---|---|---|
 | B9 | Schneller Zugang zu den Leistungen | /leistungen/ | Nach dem Hero kommt der Block „Unser Anspruch", direkt danach die drei Beratungsfelder; nur „Unser Beratungsansatz" steht ganz unten auf der Seite |
-| B10 | Gesellschaftsrecht aufklappbar | /leistung/gesellschaftsrecht/ | Voraussetzung: Plugin 1.6.40 aktiv (räumt die alten Elementor-Überlagerungen automatisch auf). Dann fünf Aufklapp-Rubriken (Privatisierung, Kommunalrecht und Gesellschaftsrecht, Corporate Governance, Reorganisationen, Unternehmerische Mitbestimmung), darunter der Claim „Strukturen schaffen. Entscheidungen ermöglichen." als eigener Absatz |
+| B10 | Gesellschaftsrecht aufklappbar | /leistung/gesellschaftsrecht/ | Voraussetzung: Plugin 1.6.41 aktiv (räumt die alten Elementor-Überlagerungen automatisch auf). Dann zwei Aufklapp-Rubriken (Stand 19.09.: „Gesellschaftsrecht für mittelständische und kommunale Unternehmen" und „Kommunalrecht für Kommunen, Stadtwerke und Beteiligungsholdings"), beide mit sichtbarer Teaser-Zeile unter dem Titel; darunter der Claim „Strukturen schaffen. Entscheidungen ermöglichen." als eigener Absatz |
 | B11 | Energierecht-Kopf | /leistung/energie/ | Titel „Energierecht", Untertitel „Die Energietransformation rechtlich umsetzen, neue Märkte erschließen, die Chancen und Risiken der Regulierung beherrschen"; URL bleibt unverändert |
 | B12 | Umweltrecht-Untertitel | /leistung/umweltrecht/ | „Umweltrecht für Abfall, Wärme und Wasserstoff – von Waste-to-Energy bis Geothermie" |
-| B13 | ESG eigene Rubrik | /leistung/umweltrecht/ | Sechs Aufklapp-Rubriken, „Compliance und ESG" als eigener Punkt (Voraussetzung wie B10: Plugin 1.6.40 aktiv) |
+| B13 | ESG eigene Rubrik | /leistung/umweltrecht/ | Sechs Aufklapp-Rubriken, „Compliance und ESG" als eigener Punkt (Voraussetzung wie B10: Plugin 1.6.41 aktiv) |
 | B14 | Umweltrecht-Claim | /leistung/umweltrecht/ ganz unten | „Wir schaffen rechtliche und strategische Grundlagen, …" steht unterhalb der Rubriken, nicht mehr in einer Aufzählung |
 | B15 | Claim vollständig | Footer aller Seiten + Hero /philosophie/ | „Beratung aus Leidenschaft – Ergebnisse, die weitertragen." mit Halbgeviertstrich, im Hero wie im Footer |
 | B16 | UB-Kacheln inkl. URLs | /unternehmensberatung/ | Kacheln heißen: Investition und Transformation (ehemals Projektmanagement) · Transaktion und Kooperation · Strukturen und Governance (ehemals Erneuerbare Energien) · Regulierung · Wärme · Wasserwirtschaft · Wasserstoff. Neue URLs: /leistung/investition-und-transformation/, /leistung/strukturen-und-governance/, /leistung/transaktion-und-kooperation/; alle alten URLs leiten per 301 weiter |
@@ -45,7 +45,7 @@ Danach die folgenden Punkte durchgehen. Die Nummern entsprechen der abgestimmten
 
 | Prüfen | Wo | Erwartet |
 |---|---|---|
-| Publikationen-Schalter | Design → Layout | Drei Checkboxen „Publikationen auf Beratungsfeld-Seiten"; Haken entfernen blendet den Bereich auf der jeweiligen Seite (DE und EN) komplett aus. Seit 1.6.40 sind Steuer- und Unternehmensberatung standardmäßig abgehakt (dort sind keine Publikationen zugeordnet) |
+| Publikationen-Schalter | Design → Layout | Drei Checkboxen „Publikationen auf Beratungsfeld-Seiten"; Haken entfernen blendet den Bereich auf der jeweiligen Seite (DE und EN) komplett aus. Seit 1.6.41 sind Steuer- und Unternehmensberatung standardmäßig abgehakt (dort sind keine Publikationen zugeordnet) |
 | Redaktions-Hinweis CPTs | z. B. Einzelleistungen-Übersicht | Blaue Info-Box: Pflege über „Bearbeiten", Elementor dort bewusst deaktiviert |
 | Redaktions-Hinweis Seiten | Seiten-Übersicht | Blaue Info-Box: Pflege mit Elementor, EN-Kopien folgen automatisch bis zur Übersetzung |
 | Elementor-Sperre | Einzelleistung öffnen | Kein „Mit Elementor bearbeiten"-Button mehr (bei „Seiten" weiterhin vorhanden) |
@@ -64,7 +64,15 @@ Der Abgleich wurde maschinell durchgeführt: Elkes unangetasteter Live-Export vo
 - Kein einziger sonstiger Eintrag weicht ab: **0 unerwartete Abweichungen.**
 - Zusätzlich wurde der Import-Roundtrip verifiziert: „Import erzwingen" auf dem Zielstand reproduziert exakt denselben Stand (Fingerprint-Vergleich über alle Inhaltstypen, Seiten und das Menü).
 
-Damit ist maschinell belegt, dass beim Einspielen nichts von Elkes Inhalten verloren geht. Auf test2 selbst reicht als Stichprobe: News-Anzahl (78), Team-Anzahl (23), zwei oder drei von Elke zuletzt bearbeitete Seiten öffnen.
+Damit ist maschinell belegt, dass beim Einspielen nichts von Elkes Inhalten verloren geht. Auf test2 selbst reicht als Stichprobe: News-Anzahl (78), Team-Anzahl (27, inkl. Daniela Urban), zwei oder drei von Elke zuletzt bearbeitete Seiten öffnen.
+
+## Teil 5 · Go-live-Vorbereitung (neu in 1.6.41)
+
+| Prüfen | Wo | Erwartet |
+|---|---|---|
+| Domain-Härtung des Imports | Nur relevant nach dem Go-live | Beim Import werden alle test2-Adressen (1229160.eu15.myftpupload.com) in den mitgelieferten Inhalten und Seiten-Vorlagen automatisch durch die Domain der laufenden Installation ersetzt. Auf test2 selbst passiert dabei nichts (Import bleibt byte-stabil), auf energiesozietaet.de zeigen alle internen Links sofort auf die richtige Domain |
+| 301-Weiterleitungen alte Website | Nach dem Go-live, z. B. energiesozietaet.de/team/detail/sven-joachim-otto | Alle URLs der alten TYPO3-Website leiten dauerhaft (301) auf die passende neue Seite weiter. Abgedeckt und maschinell getestet: alle 39 Seiten, alle 28 Team-Profile und alle 79 News-Artikel aus der Sitemap der alten Website (147 URLs, jede landet direkt auf einer existierenden Zielseite). Alte Profile ohne Nachfolger landen auf /team/, unbekannte News auf /news/, /datenschutz auf /datenschutzerklaerung/, /sitemap.xml auf /wp-sitemap.xml. Bestehende Seiten sind nicht betroffen (greift nur bei „Seite nicht gefunden") |
+| Suchmaschinen-Freigabe | Einstellungen → Lesen (auf Produktion) | Nach dem Go-live den Haken „Suchmaschinen davon abhalten …" entfernen; erst dann funktionieren /wp-sitemap.xml und die Indexierung. Auf test2 bleibt der Haken bewusst gesetzt |
 
 ## Offene Entscheidungen
 
