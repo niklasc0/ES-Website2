@@ -20,7 +20,7 @@ while ( have_posts() ) : the_post();
 	$career   = es_meta( 'es_career' );
 	$more_bio = es_meta( 'es_more_bio' );
 	$thumb_id = get_post_thumbnail_id();
-	$vcard    = add_query_arg( array( 'es_vcard' => $post_id ), home_url( '/' ) );
+	$vcard    = home_url( '/vcf/' . get_post_field( 'post_name', $post_id ) . '.vcf' );
 
 	// Related Publications via es_author_ids
 	$related_pubs = new WP_Query( array(

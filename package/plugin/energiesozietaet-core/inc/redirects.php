@@ -87,8 +87,18 @@ class ESC_Redirects {
 	}
 
 	protected static function resolve_team( $old_slug ) {
+		return self::permalink_path( self::resolve_team_slug( $old_slug ), 'es_team' ) ?: '/team/';
+	}
+
+	/**
+	 * Öffentlicher Helfer: findet zu einem (auch alten) Team-Slug den
+	 * aktuellen Slug oder null. Wird außer von den Weiterleitungen auch vom
+	 * vCard-Download des Themes genutzt (QR-Codes der gedruckten
+	 * Visitenkarten tragen teils noch die alten Slugs).
+	 */
+	public static function resolve_team_slug( $old_slug ) {
 		$old_slug = self::TEAM_ALIASES[ $old_slug ] ?? $old_slug;
-		return self::permalink_path( self::match_slug( $old_slug, 'es_team' ), 'es_team' ) ?: '/team/';
+		return self::match_slug( $old_slug, 'es_team' );
 	}
 
 	protected static function resolve_news( $old_slug ) {

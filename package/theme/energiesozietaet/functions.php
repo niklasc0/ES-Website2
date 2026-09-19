@@ -245,34 +245,67 @@ function es_get_header_logo_url( $variant = 'dark' ) {
 
 /**
  * vCard-Download für Team-Mitglieder.
- * Route: /?es_vcard=<post_id>
+ * Routen: /vcf/<slug>.vcf (steht als QR-Code auf den gedruckten
+ * Visitenkarten; akzeptiert auch die alten Slugs der TYPO3-Website)
+ * und /?es_vcard=<post_id> (Button auf der Profilseite).
  */
 function es_vcard_handler() {
-	if ( empty( $_GET['es_vcard'] ) ) { return; }
-	$id = (int) $_GET['es_vcard'];
-	$p  = get_post( $id );
-	if ( ! $p || 'es_team' !== $p->post_type ) { return; }
+	$p = null;
+	if ( ! empty( $_GET['es_vcard'] ) ) {
+		$p = get_post( (int) $_GET['es_vcard'] );
+	} else {
+		$path = (string) parse_url( (string) ( $_SERVER['REQUEST_URI'] ?? '' ), PHP_URL_PATH );
+		if ( ! preg_match( '#^/vcf/([A-Za-z0-9-]+)\.vcf$#', $path, $m ) ) { return; }
+		$slug  = strtolower( $m[1] );
+		$posts = get_posts( array( 'name' => $slug, 'post_type' => 'es_team', 'post_status' => 'publish', 'numberposts' => 1 ) );
+		if ( ! $posts && class_exists( 'ESC_Redirects' ) ) {
+			$neu = ESC_Redirects::resolve_team_slug( $slug );
+			if ( $neu ) {
+				$posts = get_posts( array( 'name' => $neu, 'post_type' => 'es_team', 'post_status' => 'publish', 'numberposts' => 1 ) );
+			}
+		}
+		if ( ! $posts ) {
+			// Karte einer nicht (mehr) vorhandenen Person: zur Team-Seite.
+			wp_safe_redirect( home_url( '/team/' ), 302 );
+			exit;
+		}
+		$p = $posts[0];
+	}
+	if ( ! $p || 'es_team' !== $p->post_type || 'publish' !== $p->post_status ) { return; }
 
+	// Name in Titel-Präfix, Vor- und Nachname zerlegen (z.B. "Prof. Dr. Sven-Joachim Otto").
 	$name_parts = explode( ' ', trim( get_the_title( $p ) ) );
-	$given      = array_shift( $name_parts );
-	$family     = implode( ' ', $name_parts );
-	$role       = (string) get_post_meta( $id, 'es_role', true );
-	$email      = (string) get_post_meta( $id, 'es_email', true );
-	$phone      = (string) get_post_meta( $id, 'es_phone', true );
-	$location   = (string) get_post_meta( $id, 'es_location', true );
+	$prefix     = array();
+	while ( $name_parts && preg_match( '/^(Prof|Dr)\.?$/u', $name_parts[0] ) ) {
+		$prefix[] = rtrim( array_shift( $name_parts ), '.' ) . '.';
+	}
+	$given    = $name_parts ? array_shift( $name_parts ) : '';
+	$family   = implode( ' ', $name_parts );
+	$role     = (string) get_post_meta( $p->ID, 'es_role', true );
+	$email    = (string) get_post_meta( $p->ID, 'es_email', true );
+	$phone    = (string) get_post_meta( $p->ID, 'es_phone', true );
+	$location = (string) get_post_meta( $p->ID, 'es_location', true );
+
+	// Standort-Adressen (vCard-ADR: PLZ und Ort getauschte Feldreihenfolge beachten).
+	$adressen = array(
+		'Düsseldorf' => ';;Roßstraße 92 / Kennedyhaus;Düsseldorf;;40476;Deutschland',
+		'Hamburg'    => ';;Caffamacherreihe 8;Hamburg;;20355;Deutschland',
+		'Mannheim'   => ';;Jungbuschstraße 6;Mannheim;;68159;Deutschland',
+	);
+	$adr = $adressen[ trim( $location ) ] ?? $adressen['Düsseldorf'];
 
 	$vcard  = "BEGIN:VCARD\r\nVERSION:3.0\r\n";
-	$vcard .= "N:" . $family . ';' . $given . ";;;\r\n";
-	$vcard .= "FN:" . get_the_title( $p ) . "\r\n";
+	$vcard .= 'N:' . $family . ';' . $given . ';;' . implode( ' ', $prefix ) . ";\r\n";
+	$vcard .= 'FN:' . get_the_title( $p ) . "\r\n";
 	$vcard .= "ORG:Energiesozietät GmbH\r\n";
-	if ( $role ) { $vcard .= "TITLE:" . $role . "\r\n"; }
-	if ( $email ) { $vcard .= "EMAIL;TYPE=WORK:" . $email . "\r\n"; }
-	if ( $phone ) { $vcard .= "TEL;TYPE=WORK,VOICE:" . $phone . "\r\n"; }
-	$vcard .= "ADR;TYPE=WORK:;;Roßstraße 92 / Kennedyhaus;Düsseldorf;;40476;Deutschland\r\n";
-	$vcard .= "URL:" . home_url( '/teammitglied/' . $p->post_name . '/' ) . "\r\n";
+	if ( $role ) { $vcard .= 'TITLE:' . $role . "\r\n"; }
+	if ( $email ) { $vcard .= 'EMAIL;TYPE=WORK:' . $email . "\r\n"; }
+	if ( $phone ) { $vcard .= 'TEL;TYPE=WORK,VOICE:' . $phone . "\r\n"; }
+	$vcard .= 'ADR;TYPE=WORK:' . $adr . "\r\n";
+	$vcard .= 'URL:' . home_url( '/teammitglied/' . $p->post_name . '/' ) . "\r\n";
 	$vcard .= "END:VCARD\r\n";
 
-	$filename = sanitize_file_name( sanitize_title( get_the_title( $p ) ) . '.vcf' );
+	$filename = sanitize_file_name( $p->post_name . '.vcf' );
 	header( 'Content-Type: text/vcard; charset=UTF-8' );
 	header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
 	echo $vcard;
