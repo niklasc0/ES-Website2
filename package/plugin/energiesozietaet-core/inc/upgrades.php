@@ -21,6 +21,7 @@ class ESC_Upgrades {
 		self::vorteile_field();
 		self::pubdate_sync();
 		self::page_setup();
+		self::event_dates();
 	}
 
 	/**
@@ -91,6 +92,30 @@ class ESC_Upgrades {
 			$done++;
 		}
 		update_option( 'esc_pubdate_sync_v1', $done . ' angeglichen am ' . current_time( 'mysql' ) );
+	}
+
+	/**
+	 * Einmalige Korrektur der Veranstaltungs-Termine: Drei Alt-Veranstaltungen
+	 * trugen aus der Migration den Platzhalter 29.01.2026 als Startdatum; die
+	 * echten Termine stehen in den Beschreibungstexten. Korrigiert wird nur,
+	 * wenn noch der Platzhalter gespeichert ist (manuelle Pflege gewinnt).
+	 */
+	protected static function event_dates() {
+		if ( get_option( 'esc_event_dates_v1' ) ) { return; }
+		$fixes = array(
+			'finale-umsetzung-und-anwendung-des-%c2%a7-2b-ustg-fuer-kommunale-betriebe-und-die-zentralverwaltung-kommunalwirtschaft-eu' => '2024-09-11',
+			'internationales-energiewirtschaftliches-symposion-der-energiesozietaet-gmbh-vom-11-13-september-24' => '2024-09-11',
+			'oktoberfest-im-schottenhamel-festzelt' => '2024-10-06',
+		);
+		$done = 0;
+		foreach ( $fixes as $slug => $date ) {
+			$posts = get_posts( array( 'name' => $slug, 'post_type' => 'es_veranstaltung', 'post_status' => 'any', 'numberposts' => 1 ) );
+			if ( ! $posts ) { continue; }
+			if ( '2026-01-29' !== (string) get_post_meta( $posts[0]->ID, 'es_start_date', true ) ) { continue; }
+			update_post_meta( $posts[0]->ID, 'es_start_date', $date );
+			$done++;
+		}
+		update_option( 'esc_event_dates_v1', $done . ' korrigiert am ' . current_time( 'mysql' ) );
 	}
 
 	/**
