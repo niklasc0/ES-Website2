@@ -29,6 +29,8 @@ class ESC_Layout_Settings {
 			'btt_threshold' => 400,
 			'hero_scroll'   => 1,
 			'team_filter'   => 0,
+			// Sprachumschalter (DE/EN) im Header
+			'lang_switch'   => 1,
 			// Publikationen-Bereich auf den drei Beratungsfeld-Oberseiten
 			'pubs_rechtsberatung'      => 1,
 			'pubs_steuerberatung'      => 1,
@@ -56,6 +58,7 @@ class ESC_Layout_Settings {
 			'btt_threshold' => max( 50, min( 5000, (int) ( $input['btt_threshold'] ?? 400 ) ) ),
 			'hero_scroll'   => empty( $input['hero_scroll']   ) ? 0 : 1,
 			'team_filter'   => empty( $input['team_filter']   ) ? 0 : 1,
+			'lang_switch'   => empty( $input['lang_switch']   ) ? 0 : 1,
 			'pubs_rechtsberatung'       => empty( $input['pubs_rechtsberatung'] ) ? 0 : 1,
 			'pubs_steuerberatung'       => empty( $input['pubs_steuerberatung'] ) ? 0 : 1,
 			'pubs_unternehmensberatung' => empty( $input['pubs_unternehmensberatung'] ) ? 0 : 1,
@@ -155,6 +158,10 @@ class ESC_Layout_Settings {
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[pubs_steuerberatung]' ); ?>" value="1" <?php checked( self::get( 'pubs_steuerberatung' ), 1 ); ?>> Steuerberatung</label><br>
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[pubs_unternehmensberatung]' ); ?>" value="1" <?php checked( self::get( 'pubs_unternehmensberatung' ), 1 ); ?>> Unternehmensberatung</label>
 						<p class="description">Abgehakte Seiten zeigen ihren Publikationen-Bereich; ohne Haken wird er samt Sektion ausgeblendet (gilt auch für die englische Fassung der Seite).</p>
+					</td></tr>
+					<tr><th scope="row">Sprachumschalter (DE/EN)</th><td>
+						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[lang_switch]' ); ?>" value="1" <?php checked( self::get( 'lang_switch' ), 1 ); ?>> DE/EN-Umschalter im Header anzeigen.</label>
+						<p class="description">Ohne Haken verschwindet der Umschalter aus dem Header (Desktop und Mobil). Die englischen Seiten bleiben über direkte /en/-Links erreichbar; sinnvoll, solange die Übersetzungen noch nicht eingespielt sind.</p>
 					</td></tr>
 					<tr><th scope="row">Team-Filter</th><td>
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[team_filter]' ); ?>" value="1" <?php checked( self::get( 'team_filter' ), 1 ); ?>> Filter-Pills (nach Beratungsfeld) über der Team-Übersicht anzeigen.</label>

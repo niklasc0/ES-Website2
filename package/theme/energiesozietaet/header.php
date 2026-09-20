@@ -72,7 +72,10 @@ $es_is_dark = false;
 			<a class="es-btn es-btn--ghost es-header__cta" href="<?php echo esc_url( home_url( es_t( '/kontakt/', '/en/contact/' ) ) ); ?>">
 				<?php echo esc_html( es_t( 'Kontakt', 'Contact' ) ); ?>
 			</a>
-			<?php if ( class_exists( 'ES_Lang' ) ) :
+			<?php
+			// Sprachumschalter nur, wenn er unter Design → Layout nicht abgeschaltet ist.
+			$es_lang_switch_on = ! class_exists( 'ESC_Layout_Settings' ) || ESC_Layout_Settings::get( 'lang_switch' );
+			if ( class_exists( 'ES_Lang' ) && $es_lang_switch_on ) :
 				$es_switch = esc_url( ES_Lang::switch_url() ); ?>
 				<span class="es-header__lang">
 					<?php if ( es_is_en() ) : ?>
