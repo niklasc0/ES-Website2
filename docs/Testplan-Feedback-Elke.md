@@ -46,6 +46,7 @@ Danach die folgenden Punkte durchgehen. Die Nummern entsprechen der abgestimmten
 | Prüfen | Wo | Erwartet |
 |---|---|---|
 | Publikationen-Schalter | Design → Layout | Drei Checkboxen „Publikationen auf Beratungsfeld-Seiten"; Haken entfernen blendet den Bereich auf der jeweiligen Seite (DE und EN) komplett aus. Seit 1.6.43 sind Steuer- und Unternehmensberatung standardmäßig abgehakt (dort sind keine Publikationen zugeordnet) |
+| Veranstaltungs-Automatik | /veranstaltungen/ + Veranstaltungen-Übersicht im Backend | Die Liste zeigt nur heutige und kommende Termine; vergangene bleiben im Backend erhalten (Spalte „Termin" kennzeichnet „Vergangen – ausgeblendet" bzw. „Kommend – sichtbar"). Ohne kommende Termine erscheint der Hinweis „Aktuell sind keine Veranstaltungen geplant …" mit News-Link (DE und EN) |
 | Sprachumschalter | Design → Layout | Checkbox „DE/EN-Umschalter im Header anzeigen"; ohne Haken verschwindet der Umschalter (Desktop und Mobil), die /en/-Seiten bleiben direkt erreichbar |
 | Redaktions-Hinweis CPTs | z. B. Einzelleistungen-Übersicht | Blaue Info-Box: Pflege über „Bearbeiten", Elementor dort bewusst deaktiviert |
 | Redaktions-Hinweis Seiten | Seiten-Übersicht | Blaue Info-Box: Pflege mit Elementor, EN-Kopien folgen automatisch bis zur Übersetzung |

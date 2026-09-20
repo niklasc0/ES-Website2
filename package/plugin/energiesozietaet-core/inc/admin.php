@@ -14,6 +14,8 @@ class ESC_Admin {
 		add_action( 'admin_notices', array( __CLASS__, 'notices' ) );
 		add_filter( 'page_row_actions', array( __CLASS__, 'page_row_actions' ), 20, 2 );
 		add_action( 'load-post.php', array( __CLASS__, 'redirect_page_to_elementor' ) );
+		add_filter( 'manage_es_veranstaltung_posts_columns', array( __CLASS__, 'event_columns' ) );
+		add_action( 'manage_es_veranstaltung_posts_custom_column', array( __CLASS__, 'event_column' ), 10, 2 );
 	}
 
 	public static function menu() {
@@ -84,6 +86,31 @@ class ESC_Admin {
 		), 60 );
 		wp_safe_redirect( admin_url( 'tools.php?page=esc-importer' ) );
 		exit;
+	}
+
+	/**
+	 * Veranstaltungs-Übersicht: Termin-Spalte mit Kennzeichnung, ob die
+	 * Veranstaltung noch bevorsteht. Vergangene bleiben im Backend erhalten,
+	 * werden auf der Website aber automatisch ausgeblendet.
+	 */
+	public static function event_columns( $cols ) {
+		$neu = array();
+		foreach ( $cols as $k => $label ) {
+			$neu[ $k ] = $label;
+			if ( 'title' === $k ) { $neu['es_termin'] = 'Termin'; }
+		}
+		return $neu;
+	}
+
+	public static function event_column( $col, $post_id ) {
+		if ( 'es_termin' !== $col ) { return; }
+		$start = (string) get_post_meta( $post_id, 'es_start_date', true );
+		if ( ! $start ) { echo '<span style="color:#a00;">kein Datum – wird nicht angezeigt</span>'; return; }
+		$vergangen = $start < current_time( 'Y-m-d' );
+		echo esc_html( date_i18n( 'd.m.Y', strtotime( $start ) ) ) . ' &middot; ';
+		echo $vergangen
+			? '<span style="color:#787c82;">Vergangen – auf der Website ausgeblendet</span>'
+			: '<span style="color:#00730a;font-weight:600;">Kommend – sichtbar</span>';
 	}
 
 	/** Seite, die mit Elementor gebaut ist (nur die gehören in den Elementor-Editor). */

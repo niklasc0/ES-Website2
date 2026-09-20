@@ -482,15 +482,39 @@ class ESC_Shortcodes {
 	}
 
 	public static function veranstaltungen( $atts ) {
-		$atts = shortcode_atts( array( 'layout' => 'row', 'columns' => 2, 'limit' => -1 ), $atts, 'es_veranstaltungen' );
-		$q = new WP_Query( array(
+		$atts = shortcode_atts( array( 'layout' => 'row', 'columns' => 2, 'limit' => -1, 'zeitraum' => 'kommend' ), $atts, 'es_veranstaltungen' );
+		// Standard: nur heutige und kommende Termine. Vergangene Veranstaltungen
+		// bleiben im Backend erhalten, verschwinden aber automatisch aus der
+		// Liste ([es_veranstaltungen zeitraum="alle"] zeigt weiterhin alles).
+		$args = array(
 			'post_type' => 'es_veranstaltung',
 			'posts_per_page' => (int) $atts['limit'],
 			'meta_key'  => 'es_start_date',
 			'orderby'   => 'meta_value',
 			'order'     => 'ASC',
-		) );
-		if ( ! $q->have_posts() ) { return ''; }
+		);
+		if ( 'alle' !== $atts['zeitraum'] ) {
+			$args['meta_query'] = array( array(
+				'key'     => 'es_start_date',
+				'value'   => current_time( 'Y-m-d' ),
+				'compare' => '>=',
+				'type'    => 'DATE',
+			) );
+		}
+		$q = new WP_Query( $args );
+		if ( ! $q->have_posts() ) {
+			// Leer-Zustand im Stil der ruhigen Intro-Absätze (Publikationen-Seite).
+			return '<div class="esc-event-empty"><p>'
+				. esc_html( es_t( 'Aktuell sind keine Veranstaltungen geplant.', 'There are currently no upcoming events.' ) ) . ' '
+				. sprintf(
+					esc_html( es_t(
+						'Berichte über vergangene Veranstaltungen und weitere Neuigkeiten aus der Energiesozietät finden Sie in unseren %s.',
+						'Reports on past events and further news from Energiesozietät can be found in our %s.'
+					) ),
+					'<a href="' . esc_url( home_url( es_t( '/news/', '/en/news/' ) ) ) . '">' . esc_html( es_t( 'News', 'news section' ) ) . '</a>'
+				)
+				. '</p></div>';
+		}
 		ob_start();
 		if ( 'row' === $atts['layout'] ) : ?>
 			<div class="esc-event-list" style="border-top:1px solid #DADEC5;">
