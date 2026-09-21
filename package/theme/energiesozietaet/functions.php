@@ -258,7 +258,12 @@ function es_vcard_handler() {
 		// Website): /vcard-download?...tx_tmenergies_personvcard[person]=<uid>
 		$tx  = isset( $_GET['tx_tmenergies_personvcard'] ) && is_array( $_GET['tx_tmenergies_personvcard'] ) ? $_GET['tx_tmenergies_personvcard'] : array();
 		$uid = isset( $tx['person'] ) ? (int) $tx['person'] : 0;
+		// Die Tabelle liefert den ALTEN Slug; resolve_team_slug setzt ihn auf
+		// den heutigen um (Titel-Praefixe, Umlaut-Schreibweisen, Tippfehler).
 		$slug = ( class_exists( 'ESC_Redirects' ) && isset( ESC_Redirects::TYPO3_PERSON_IDS[ $uid ] ) ) ? ESC_Redirects::TYPO3_PERSON_IDS[ $uid ] : '';
+		if ( $slug && class_exists( 'ESC_Redirects' ) ) {
+			$slug = ESC_Redirects::resolve_team_slug( $slug ) ?: $slug;
+		}
 		$posts = $slug ? get_posts( array( 'name' => $slug, 'post_type' => 'es_team', 'post_status' => 'publish', 'numberposts' => 1 ) ) : array();
 		if ( ! $posts ) {
 			wp_safe_redirect( home_url( '/team/' ), 302 );

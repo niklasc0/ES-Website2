@@ -25,11 +25,47 @@ class ESC_Redirects {
 
 	/**
 	 * TYPO3-Personen-Nummern (tx_tmenergies_personvcard[person]=<uid>) aus den
-	 * QR-Codes der NEUEN gedruckten Visitenkarten, zugeordnet zu den heutigen
-	 * Team-Slugs. Unbekannte Nummern leiten auf die Team-Seite.
+	 * QR-Codes der NEUEN gedruckten Visitenkarten, zugeordnet zum jeweiligen
+	 * ALTEN Team-Slug (Quelle: Personen-Tabelle der alten TYPO3-Website).
+	 * Die Umsetzung auf den heutigen Slug uebernimmt resolve_team_slug();
+	 * Nummern ohne aktives Teammitglied leiten auf die Team-Seite.
 	 */
 	const TYPO3_PERSON_IDS = array(
+		2  => 'elke-beermann',
+		3  => 'joerg-geerlings',
+		4  => 'guido-kolbeck',
+		5  => 'stephanie-dohm',
+		6  => 'bermhardine-kleinhenz-jeannot',
+		7  => 'sven-joachim-otto',
+		10 => 'torsten-stockem',
+		11 => 'nina-jonen',
+		12 => 'emil-kindler',
+		13 => 'nina-opitz',
+		14 => 'eirini-karalouka',
+		15 => 'yvonne-niethe',
+		16 => 'jana-fengler',
+		17 => 'stanislaw-chernin',
+		18 => 'jochen-heide',
+		21 => 'ines-stefen',
+		22 => 'fabian-blazek',
+		23 => 'miriam-thoenissen',
 		24 => 'niklas-celecki',
+		25 => 'vanessa-wolfschaffner',
+		27 => 'torsten-stockem',
+		29 => 'daniel-buergermeister',
+		30 => 'christopher-siebler',
+		31 => 'heike-otto',
+		32 => 'joerg-bittscheidt',
+		35 => 'el-medina-demir',
+		37 => 'daniel-stuhlmann-msc',
+		38 => 'hartmut-mueller',
+		39 => 'denise-baumann',
+		40 => 'frank-stein',
+		41 => 'erbo-heinrich',
+		43 => 'peter-pichl',
+		44 => 'jill-emmy-vaupel',
+		46 => 'julian-fuehrung',
+		47 => 'daniela-urban',
 	);
 
 	/** Alte Leistungs-Slugs ohne Entsprechung: Ziel ist die passende Bereichsseite. */
