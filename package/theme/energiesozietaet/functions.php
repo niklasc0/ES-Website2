@@ -253,6 +253,18 @@ function es_vcard_handler() {
 	$p = null;
 	if ( ! empty( $_GET['es_vcard'] ) ) {
 		$p = get_post( (int) $_GET['es_vcard'] );
+	} elseif ( 'vcard-download' === trim( (string) parse_url( (string) ( $_SERVER['REQUEST_URI'] ?? '' ), PHP_URL_PATH ), '/' ) ) {
+		// QR-Codes der NEUEN gedruckten Visitenkarten (TYPO3-URL der alten
+		// Website): /vcard-download?...tx_tmenergies_personvcard[person]=<uid>
+		$tx  = isset( $_GET['tx_tmenergies_personvcard'] ) && is_array( $_GET['tx_tmenergies_personvcard'] ) ? $_GET['tx_tmenergies_personvcard'] : array();
+		$uid = isset( $tx['person'] ) ? (int) $tx['person'] : 0;
+		$slug = ( class_exists( 'ESC_Redirects' ) && isset( ESC_Redirects::TYPO3_PERSON_IDS[ $uid ] ) ) ? ESC_Redirects::TYPO3_PERSON_IDS[ $uid ] : '';
+		$posts = $slug ? get_posts( array( 'name' => $slug, 'post_type' => 'es_team', 'post_status' => 'publish', 'numberposts' => 1 ) ) : array();
+		if ( ! $posts ) {
+			wp_safe_redirect( home_url( '/team/' ), 302 );
+			exit;
+		}
+		$p = $posts[0];
 	} else {
 		$path = (string) parse_url( (string) ( $_SERVER['REQUEST_URI'] ?? '' ), PHP_URL_PATH );
 		if ( ! preg_match( '#^/vcf/([A-Za-z0-9-]+)\.vcf$#', $path, $m ) ) { return; }

@@ -23,6 +23,15 @@ class ESC_Redirects {
 		'julian-fuehrung'               => 'julian-fuehring',
 	);
 
+	/**
+	 * TYPO3-Personen-Nummern (tx_tmenergies_personvcard[person]=<uid>) aus den
+	 * QR-Codes der NEUEN gedruckten Visitenkarten, zugeordnet zu den heutigen
+	 * Team-Slugs. Unbekannte Nummern leiten auf die Team-Seite.
+	 */
+	const TYPO3_PERSON_IDS = array(
+		24 => 'niklas-celecki',
+	);
+
 	/** Alte Leistungs-Slugs ohne Entsprechung: Ziel ist die passende Bereichsseite. */
 	const SERVICE_FALLBACKS = array(
 		'steuerrecht'          => '/steuerberatung/',
