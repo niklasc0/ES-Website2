@@ -3,7 +3,12 @@
  * Kontaktformular – Shortcode [es_kontakt_form] + Submit-Handler + Settings.
  *
  * Backend-konfigurierbar: Empfänger, Subject, Erfolgs-/Fehlertext, Pflichtfelder,
- * Themen-Optionen. Anti-Spam: Honeypot + Nonce + simples Time-Trap.
+ * Themen-Optionen, Aufbewahrungsfrist. Jede Anfrage wird vor dem Versand im
+ * Backend gespeichert (ESC_Contact_Inbox). Bewusst ohne Nonce: das Host-CDN
+ * cacht die Kontaktseite bis zu 31 Tage, ein Nonce im gecachten HTML ist nach
+ * spätestens 24 Stunden ungültig. Spam-Erkennung über Honeypot und ein per
+ * JavaScript gesetztes Zeitfeld; nur Anfragen mit beiden Signalen gelten als
+ * Spam (gespeichert, nicht gemailt).
  *
  * @package Energiesozietaet_Core
  */
@@ -12,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 class ESC_Contact_Form {
 
 	const OPT      = 'esc_contact';
-	const NONCE    = 'esc_contact_form';
 	const FORM_ID  = 'es-kontakt-form';
 
 	public static function init() {
@@ -32,6 +36,7 @@ class ESC_Contact_Form {
 			'topics'       => "Rechtsberatung\nSteuerberatung\nUnternehmensberatung\nKarriere\nPresse\nSonstiges",
 			'show_company' => 1,
 			'show_topic'   => 1,
+			'retention_days' => 0,
 		);
 	}
 
@@ -55,6 +60,7 @@ class ESC_Contact_Form {
 			'topics'       => sanitize_textarea_field( $input['topics'] ?? $d['topics'] ),
 			'show_company' => empty( $input['show_company'] ) ? 0 : 1,
 			'show_topic'   => empty( $input['show_topic'] )   ? 0 : 1,
+			'retention_days' => max( 0, min( 3650, (int) ( $input['retention_days'] ?? 0 ) ) ),
 		);
 	}
 
@@ -76,6 +82,7 @@ class ESC_Contact_Form {
 		<div class="wrap">
 			<h1>Kontaktformular</h1>
 			<p>Konfiguration für das Formular auf der Kontakt-Seite. Das Formular wird über den Shortcode <code>[es_kontakt_form]</code> eingebunden.</p>
+			<p>Jede Anfrage wird zusätzlich zur E-Mail im Backend gespeichert: <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=es_anfrage' ) ); ?>">Kontaktanfragen ansehen</a>.</p>
 			<form method="post" action="options.php">
 				<?php settings_fields( 'esc_contact_group' ); ?>
 				<table class="form-table"><tbody>
@@ -101,6 +108,10 @@ class ESC_Contact_Form {
 						<textarea name="<?php echo esc_attr( self::OPT . '[topics]' ); ?>" rows="6" style="width:100%;max-width:480px;"><?php echo esc_textarea( self::get( 'topics' ) ); ?></textarea>
 						<p class="description">Eine Option pro Zeile – wird als Pill-Auswahl gerendert.</p>
 					</td></tr>
+					<tr><th scope="row"><label>Aufbewahrung gespeicherter Anfragen</label></th><td>
+						<input type="number" min="0" max="3650" name="<?php echo esc_attr( self::OPT . '[retention_days]' ); ?>" value="<?php echo esc_attr( (int) self::get( 'retention_days' ) ); ?>" style="width:100px;"> Tage
+						<p class="description">Gespeicherte Anfragen werden nach dieser Frist automatisch gelöscht; 0 = nie automatisch löschen. Spam wird unabhängig davon nach 30 Tagen gelöscht.</p>
+					</td></tr>
 					<tr><th scope="row">Optionale Felder</th><td>
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[show_company]' ); ?>" value="1" <?php checked( self::get( 'show_company' ), 1 ); ?>> Feld „Unternehmen / Organisation" anzeigen</label><br>
 						<label><input type="checkbox" name="<?php echo esc_attr( self::OPT . '[show_topic]' ); ?>" value="1" <?php checked( self::get( 'show_topic' ), 1 ); ?>> Themen-Auswahl anzeigen</label>
@@ -112,107 +123,132 @@ class ESC_Contact_Form {
 		<?php
 	}
 
-	/** Submit-Handler: prüft Nonce, Honeypot, sendet Mail, redirect mit Flash. */
+	/** Pflichtfelder: Schlüssel => Bezeichnung (auch für die Fehlermeldung). */
+	const REQUIRED = array(
+		'vorname'   => 'Vorname',
+		'nachname'  => 'Nachname',
+		'email'     => 'E-Mail',
+		'nachricht' => 'Nachricht',
+		'consent'   => 'Datenschutz-Zustimmung',
+	);
+
+	/** Submit-Handler: speichert die Anfrage, versendet die Mail, leitet mit Statusparameter zurück. */
 	public static function maybe_handle_submit() {
 		if ( empty( $_POST['esc_contact_submit'] ) ) { return; }
-		if ( ! isset( $_POST['esc_contact_nonce'] ) || ! wp_verify_nonce( $_POST['esc_contact_nonce'], self::NONCE ) ) { return; }
 
-		// Honeypot: das Feld 'website' muss leer sein
-		if ( ! empty( $_POST['website'] ) ) {
-			self::flash( 'error', self::get( 'error_msg' ) );
-			self::redirect_back();
-		}
-		// Time-Trap: zu schnell abgesendet → Bot
-		$started = (int) ( $_POST['esc_started'] ?? 0 );
-		if ( $started && ( time() - $started ) < 2 ) {
-			self::flash( 'error', self::get( 'error_msg' ) );
-			self::redirect_back();
-		}
-
-		$opts    = self::get();
-		$vorname = sanitize_text_field( wp_unslash( $_POST['vorname']   ?? '' ) );
-		$nachn   = sanitize_text_field( wp_unslash( $_POST['nachname']  ?? '' ) );
-		$email   = sanitize_email(      wp_unslash( $_POST['email']     ?? '' ) );
-		$org     = sanitize_text_field( wp_unslash( $_POST['org']       ?? '' ) );
-		$thema   = sanitize_text_field( wp_unslash( $_POST['thema']     ?? '' ) );
-		$msg     = sanitize_textarea_field( wp_unslash( $_POST['nachricht'] ?? '' ) );
+		$opts = self::get();
+		$d    = array(
+			'vorname'   => sanitize_text_field( wp_unslash( $_POST['vorname']   ?? '' ) ),
+			'nachname'  => sanitize_text_field( wp_unslash( $_POST['nachname']  ?? '' ) ),
+			'email'     => sanitize_email(      wp_unslash( $_POST['email']     ?? '' ) ),
+			'org'       => sanitize_text_field( wp_unslash( $_POST['org']       ?? '' ) ),
+			'thema'     => sanitize_text_field( wp_unslash( $_POST['thema']     ?? '' ) ),
+			'nachricht' => sanitize_textarea_field( wp_unslash( $_POST['nachricht'] ?? '' ) ),
+			'sprache'   => false !== strpos( (string) wp_get_referer(), '/en/' ) ? 'en' : 'de',
+		);
 		$consent = ! empty( $_POST['consent'] );
 
-		$errors = array();
-		if ( ! $vorname ) { $errors[] = 'Vorname'; }
-		if ( ! $nachn )   { $errors[] = 'Nachname'; }
-		if ( ! is_email( $email ) ) { $errors[] = 'E-Mail'; }
-		if ( ! $msg )     { $errors[] = 'Nachricht'; }
-		if ( ! $consent ) { $errors[] = 'Datenschutz-Zustimmung'; }
-		if ( $errors ) {
-			self::flash( 'error', 'Bitte ausfüllen: ' . implode( ', ', $errors ) . '.' );
-			self::redirect_back();
+		$missing = array();
+		foreach ( array_keys( self::REQUIRED ) as $k ) {
+			if ( 'consent' === $k ) {
+				if ( ! $consent ) { $missing[] = $k; }
+			} elseif ( 'email' === $k ) {
+				if ( ! is_email( $d['email'] ) ) { $missing[] = $k; }
+			} elseif ( '' === $d[ $k ] ) {
+				$missing[] = $k;
+			}
 		}
+		if ( $missing ) { self::redirect_back( 'unvollstaendig', $missing ); }
+
+		// Spam-Signale. Erst beide zusammen gelten als Bot; ein einzelnes
+		// Signal (z. B. Browser-Autofill im Honeypot, JavaScript blockiert)
+		// wird nur markiert, die Anfrage geht trotzdem normal raus.
+		$signals = array();
+		if ( '' !== trim( (string) ( $_POST['website'] ?? '' ) ) ) { $signals[] = 'verstecktes Feld ausgefüllt'; }
+		$human = trim( (string) ( $_POST['esc_human'] ?? '' ) );
+		if ( '' === $human || ! ctype_digit( $human ) ) {
+			$signals[] = 'ohne JavaScript abgesendet';
+		} elseif ( (int) $human < 2 ) {
+			$signals[] = 'in unter 2 Sekunden abgesendet';
+		}
+		$is_spam = count( $signals ) >= 2;
+
+		$id = class_exists( 'ESC_Contact_Inbox' ) ? ESC_Contact_Inbox::store( $d, $is_spam ? 'spam' : 'neu', $signals ) : 0;
+		if ( $is_spam ) { self::redirect_back( 'gesendet' ); }
 
 		$subject = strtr( (string) $opts['subject'], array(
-			'[thema]' => $thema ?: 'Sonstiges',
-			'[name]'  => trim( $vorname . ' ' . $nachn ),
+			'[thema]' => $d['thema'] ?: 'Sonstiges',
+			'[name]'  => trim( $d['vorname'] . ' ' . $d['nachname'] ),
 		) );
+		if ( $signals ) { $subject = '[Spamverdacht] ' . $subject; }
 
 		$body  = "Neue Nachricht über das Kontaktformular:\n\n";
-		$body .= "Name:        $vorname $nachn\n";
-		$body .= "E-Mail:      $email\n";
-		if ( $org )   { $body .= "Unternehmen: $org\n"; }
-		if ( $thema ) { $body .= "Thema:       $thema\n"; }
-		$body .= "\nNachricht:\n$msg\n";
+		$body .= 'Name:        ' . $d['vorname'] . ' ' . $d['nachname'] . "\n";
+		$body .= 'E-Mail:      ' . $d['email'] . "\n";
+		if ( $d['org'] )   { $body .= 'Unternehmen: ' . $d['org'] . "\n"; }
+		if ( $d['thema'] ) { $body .= 'Thema:       ' . $d['thema'] . "\n"; }
+		$body .= "\nNachricht:\n" . $d['nachricht'] . "\n";
+		if ( $id ) {
+			$body .= "\n--\nDiese Anfrage ist zusätzlich im Website-Backend unter „Kontaktanfragen“ gespeichert:\n" . admin_url( 'post.php?post=' . $id . '&action=edit' ) . "\n";
+		}
 
 		$headers = array(
 			'Content-Type: text/plain; charset=UTF-8',
-			'Reply-To: ' . sprintf( '%s %s <%s>', $vorname, $nachn, $email ),
+			'Reply-To: ' . sprintf( '%s %s <%s>', $d['vorname'], $d['nachname'], $d['email'] ),
 		);
+		$fail = '';
+		$catch = function ( $err ) use ( &$fail ) { $fail = $err->get_error_message(); };
+		add_action( 'wp_mail_failed', $catch );
 		$ok = wp_mail( $opts['recipient'], $subject, $body, $headers );
-		if ( $ok ) {
-			self::flash( 'success', $opts['success_msg'] );
-		} else {
-			self::flash( 'error', $opts['error_msg'] );
-		}
-		self::redirect_back();
+		remove_action( 'wp_mail_failed', $catch );
+		if ( $id && class_exists( 'ESC_Contact_Inbox' ) ) { ESC_Contact_Inbox::set_mail_result( $id, $ok, $fail ); }
+
+		// Gespeichert gilt als eingegangen, auch wenn die Mail scheitert.
+		self::redirect_back( ( $ok || $id ) ? 'gesendet' : 'fehler' );
 	}
 
-	protected static function flash( $type, $msg ) {
-		$key = 'esc_contact_flash_' . wp_get_session_token();
-		set_transient( $key, array( 'type' => $type, 'msg' => $msg ), 60 );
-		setcookie( 'esc_contact_flash', $key, time() + 60, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );
-	}
-
-	protected static function consume_flash() {
-		if ( empty( $_COOKIE['esc_contact_flash'] ) ) { return null; }
-		$key = sanitize_text_field( wp_unslash( $_COOKIE['esc_contact_flash'] ) );
-		$flash = get_transient( $key );
-		delete_transient( $key );
-		setcookie( 'esc_contact_flash', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );
-		return is_array( $flash ) ? $flash : null;
-	}
-
-	protected static function redirect_back() {
+	/**
+	 * Zurück zur Formularseite. Der Status steht als URL-Parameter in der
+	 * Adresse und nicht in Cookie/Transient: so stimmt die Rückmeldung auch
+	 * dann, wenn das CDN die Seite aus dem Cache ausliefert.
+	 */
+	protected static function redirect_back( $status, array $fields = array() ) {
 		$ref = wp_get_referer();
 		if ( ! $ref ) { $ref = home_url( '/kontakt/' ); }
-		// Anchor zum Formular-Anker
-		$ref = remove_query_arg( array( 'esc_status' ), $ref );
-		wp_safe_redirect( $ref . '#' . self::FORM_ID );
+		$ref  = remove_query_arg( array( 'anfrage', 'felder', 'esc_status' ), $ref );
+		$args = array( 'anfrage' => $status );
+		if ( $fields ) { $args['felder'] = implode( ',', $fields ); }
+		wp_safe_redirect( add_query_arg( $args, $ref ) . '#' . self::FORM_ID, 303 );
 		exit;
+	}
+
+	/** Rückmeldung aus dem URL-Parameter. */
+	protected static function status_message( array $opts ) {
+		$status = isset( $_GET['anfrage'] ) ? sanitize_key( wp_unslash( $_GET['anfrage'] ) ) : '';
+		if ( 'gesendet' === $status ) { return array( 'type' => 'success', 'msg' => $opts['success_msg'] ); }
+		if ( 'fehler' === $status )   { return array( 'type' => 'error', 'msg' => $opts['error_msg'] ); }
+		if ( 'unvollstaendig' === $status ) {
+			$keys   = array_filter( array_map( 'sanitize_key', explode( ',', (string) wp_unslash( $_GET['felder'] ?? '' ) ) ) );
+			$labels = array_values( array_intersect_key( self::REQUIRED, array_flip( $keys ) ) );
+			return array( 'type' => 'error', 'msg' => 'Bitte ausfüllen: ' . esc_html( implode( ', ', $labels ?: array_values( self::REQUIRED ) ) ) . '.' );
+		}
+		return null;
 	}
 
 	/** [es_kontakt_form] – Frontend-Markup. */
 	public static function render() {
 		$opts   = self::get();
-		$flash  = self::consume_flash();
+		$flash  = self::status_message( $opts );
 		$topics = array_filter( array_map( 'trim', preg_split( '/\r?\n/', (string) $opts['topics'] ) ) );
 		ob_start(); ?>
-		<form id="<?php echo esc_attr( self::FORM_ID ); ?>" class="es-kontakt-form" method="post" action="<?php echo esc_url( home_url() ); ?>#<?php echo esc_attr( self::FORM_ID ); ?>" novalidate>
+		<form id="<?php echo esc_attr( self::FORM_ID ); ?>" class="es-kontakt-form" method="post" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<?php if ( $flash ) : ?>
 				<div class="es-kontakt-form__flash es-kontakt-form__flash--<?php echo esc_attr( $flash['type'] ); ?>">
 					<?php echo wp_kses_post( $flash['msg'] ); ?>
 				</div>
 			<?php endif; ?>
 			<input type="hidden" name="esc_contact_submit" value="1">
-			<input type="hidden" name="esc_started" value="<?php echo (int) time(); ?>">
-			<?php wp_nonce_field( self::NONCE, 'esc_contact_nonce' ); ?>
+			<input type="hidden" name="esc_human" value="">
 			<input type="text" name="website" value="" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:0;width:0;opacity:0;" aria-hidden="true">
 
 			<div class="es-kontakt-form__row">
@@ -242,6 +278,17 @@ class ESC_Contact_Form {
 				<button class="es-btn es-btn--primary" type="submit">Nachricht senden →</button>
 			</div>
 		</form>
+		<script>
+		(function () {
+			var f = document.getElementById('<?php echo esc_js( self::FORM_ID ); ?>');
+			if (!f) { return; }
+			var t0 = Date.now();
+			f.addEventListener('submit', function () {
+				var h = f.querySelector('input[name="esc_human"]');
+				if (h) { h.value = String(Math.round((Date.now() - t0) / 1000)); }
+			});
+		})();
+		</script>
 		<?php
 		return ob_get_clean();
 	}
