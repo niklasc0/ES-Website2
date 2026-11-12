@@ -3,8 +3,10 @@
  * Kontaktanfragen-Eingang: Jede Anfrage aus dem Kontaktformular wird VOR dem
  * Mailversand als privater Eintrag gespeichert (Backend „Kontaktanfragen"),
  * damit keine Anfrage verloren geht, auch wenn die Mail nicht ankommt.
- * Sichtbar nur für Administratoren und Redakteure; Spam wird nach 30 Tagen,
- * alle übrigen Anfragen optional nach einer einstellbaren Frist gelöscht.
+ * Sichtbar nur für Administratoren und Redakteure. Als Spam aussortierte
+ * Anfragen werden täglich um 7 Uhr gesammelt an den Formular-Empfänger
+ * gemeldet und nach 30 Tagen gelöscht; alle übrigen Anfragen optional nach
+ * einer einstellbaren Frist.
  *
  * @package Energiesozietaet_Core
  */
@@ -14,6 +16,8 @@ class ESC_Contact_Inbox {
 
 	const PT        = 'es_anfrage';
 	const CRON      = 'esc_anfragen_cleanup';
+	const DIGEST    = 'esc_anfragen_digest';
+	const DIGEST_MAX = 50;
 	const SPAM_DAYS = 30;
 	const CAPS_OPT  = 'esc_anfrage_caps_v1';
 
@@ -29,6 +33,7 @@ class ESC_Contact_Inbox {
 		add_filter( 'post_row_actions', array( __CLASS__, 'row_actions' ), 10, 2 );
 		add_action( 'admin_menu', array( __CLASS__, 'menu_badge' ), 99 );
 		add_action( self::CRON, array( __CLASS__, 'cleanup' ) );
+		add_action( self::DIGEST, array( __CLASS__, 'spam_digest' ) );
 	}
 
 	public static function register() {
@@ -150,12 +155,14 @@ class ESC_Contact_Inbox {
 		$map    = array(
 			'zugestellt' => array( '#00730a', 'An den Mailserver übergeben' ),
 			'fehler'     => array( '#b32d2e', 'Mailversand fehlgeschlagen' ),
-			'spam'       => array( '#787c82', 'Spam (nicht gemailt)' ),
+			'spam'       => array( '#787c82', 'Als Spam aussortiert (nicht einzeln gemailt)' ),
 			'offen'      => array( '#996800', 'Mailversand nicht abgeschlossen' ),
 		);
 		list( $color, $label ) = $map[ $status ] ?? $map['offen'];
 		$html = '<span style="color:' . esc_attr( $color ) . ';font-weight:600;">' . esc_html( $label ) . '</span>';
-		if ( $grund ) { $html .= '<br><small>Spamverdacht: ' . esc_html( $grund ) . '</small>'; }
+		if ( $grund ) { $html .= '<br><small>Spam-Merkmale: ' . esc_html( $grund ) . '</small>'; }
+		$digest = (string) get_post_meta( $id, '_esc_digest', true );
+		if ( $digest ) { $html .= '<br><small>Gemeldet in der Zusammenfassung vom ' . esc_html( mysql2date( 'd.m.Y', $digest ) ) . '</small>'; }
 		if ( $info )  { $html .= '<br><small>' . esc_html( $info ) . '</small>'; }
 		return $html;
 	}
@@ -244,6 +251,63 @@ class ESC_Contact_Inbox {
 		if ( ! wp_next_scheduled( self::CRON ) ) {
 			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', self::CRON );
 		}
+		if ( ! wp_next_scheduled( self::DIGEST ) ) {
+			$next = new DateTimeImmutable( 'today 07:00', wp_timezone() );
+			if ( $next->getTimestamp() <= time() ) { $next = $next->modify( '+1 day' ); }
+			wp_schedule_event( $next->getTimestamp(), 'daily', self::DIGEST );
+		}
+	}
+
+	/**
+	 * Tägliche Kontroll-Mail mit allen seit der letzten Meldung aussortierten
+	 * Anfragen, damit eine fälschlich aussortierte echte Anfrage auffällt.
+	 * Geht nur an den internen Formular-Empfänger; ohne neue Fälle keine Mail.
+	 */
+	public static function spam_digest() {
+		$ids = get_posts( array(
+			'post_type'   => self::PT,
+			'post_status' => 'private',
+			'numberposts' => self::DIGEST_MAX + 1,
+			'fields'      => 'ids',
+			'orderby'     => 'date',
+			'order'       => 'ASC',
+			'meta_query'  => array(
+				'relation' => 'AND',
+				array( 'key' => '_esc_status', 'value' => 'spam' ),
+				array( 'key' => '_esc_digest', 'compare' => 'NOT EXISTS' ),
+			),
+		) );
+		if ( ! $ids || ! class_exists( 'ESC_Contact_Form' ) ) { return; }
+		$more = count( $ids ) > self::DIGEST_MAX;
+		$ids  = array_slice( $ids, 0, self::DIGEST_MAX );
+		$n    = count( $ids );
+
+		$body  = 'Das Kontaktformular der Website hat seit der letzten Zusammenfassung ' . $n . ( 1 === $n ? ' Anfrage' : ' Anfragen' ) . " automatisch als Spam aussortiert. Diese wurden nicht einzeln per E-Mail zugestellt.\n\n";
+		$body .= "Bitte kurz prüfen, ob eine echte Anfrage dabei ist. In dem Fall einfach direkt an die angegebene E-Mail-Adresse schreiben.\n\n";
+		$body .= "Aussortiert wird nur, wenn zwei technische Merkmale zusammenkommen: Das für Besucher unsichtbare Prüffeld wurde ausgefüllt, und das Formular wurde ohne JavaScript abgeschickt. Beides ist typisch für automatisierte Programme, bei Menschen im normalen Browser kommt es praktisch nicht vor.\n";
+		foreach ( $ids as $i => $id ) {
+			$p   = get_post( $id );
+			$msg = (string) $p->post_content;
+			if ( mb_strlen( $msg ) > 600 ) { $msg = mb_substr( $msg, 0, 600 ) . ' […]'; }
+			$m    = function ( $k ) use ( $id ) { return (string) get_post_meta( $id, '_esc_' . $k, true ); };
+			$body .= "\n----------------------------------------\n";
+			$body .= ( $i + 1 ) . ') ' . get_the_date( 'd.m.Y, H:i', $p ) . " Uhr\n";
+			$body .= 'Name:        ' . trim( $m( 'vorname' ) . ' ' . $m( 'nachname' ) ) . "\n";
+			$body .= 'E-Mail:      ' . $m( 'email' ) . "\n";
+			if ( $m( 'org' ) )   { $body .= 'Unternehmen: ' . $m( 'org' ) . "\n"; }
+			if ( $m( 'thema' ) ) { $body .= 'Thema:       ' . $m( 'thema' ) . "\n"; }
+			$body .= "Nachricht:\n" . $msg . "\n";
+		}
+		$body .= "\n----------------------------------------\n";
+		if ( $more ) { $body .= "Weitere aussortierte Anfragen folgen in der nächsten Zusammenfassung.\n"; }
+		$body .= "Alle gespeicherten Anfragen im Website-Backend: " . admin_url( 'edit.php?post_type=' . self::PT ) . "\n";
+		$body .= 'Aussortierte Anfragen werden nach ' . self::SPAM_DAYS . " Tagen automatisch gelöscht.\n";
+
+		$subject = 'Kontaktformular: ' . $n . ( 1 === $n ? ' aussortierte Anfrage' : ' aussortierte Anfragen' ) . ' zur Kontrolle';
+		$ok = wp_mail( ESC_Contact_Form::get( 'recipient' ), $subject, $body, array( 'Content-Type: text/plain; charset=UTF-8' ) );
+		if ( ! $ok ) { return; }
+		$now = current_time( 'mysql' );
+		foreach ( $ids as $id ) { update_post_meta( $id, '_esc_digest', $now ); }
 	}
 
 	/** Spam nach 30 Tagen löschen, übrige Anfragen nach der eingestellten Frist (0 = nie). */

@@ -6,9 +6,11 @@
  * Themen-Optionen, Aufbewahrungsfrist. Jede Anfrage wird vor dem Versand im
  * Backend gespeichert (ESC_Contact_Inbox). Bewusst ohne Nonce: das Host-CDN
  * cacht die Kontaktseite bis zu 31 Tage, ein Nonce im gecachten HTML ist nach
- * spätestens 24 Stunden ungültig. Spam-Erkennung über Honeypot und ein per
- * JavaScript gesetztes Zeitfeld; nur Anfragen mit beiden Signalen gelten als
- * Spam (gespeichert, nicht gemailt).
+ * spätestens 24 Stunden ungültig. Spam-Erkennung über ein unsichtbares
+ * Prüffeld und ein per JavaScript gesetztes Zeitfeld; nur Anfragen mit beiden
+ * Signalen werden aussortiert (gespeichert, nicht einzeln gemailt, aber in
+ * einer täglichen Zusammenfassung gemeldet). Die Anfrage-Mail enthält nur die
+ * Angaben des Absenders, weil sie beim Antworten im Verlauf mitzitiert wird.
  *
  * @package Energiesozietaet_Core
  */
@@ -82,7 +84,7 @@ class ESC_Contact_Form {
 		<div class="wrap">
 			<h1>Kontaktformular</h1>
 			<p>Konfiguration für das Formular auf der Kontakt-Seite. Das Formular wird über den Shortcode <code>[es_kontakt_form]</code> eingebunden.</p>
-			<p>Jede Anfrage wird zusätzlich zur E-Mail im Backend gespeichert: <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=es_anfrage' ) ); ?>">Kontaktanfragen ansehen</a>.</p>
+			<p>Jede Anfrage wird zusätzlich zur E-Mail im Backend gespeichert: <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=es_anfrage' ) ); ?>">Kontaktanfragen ansehen</a>. Als Spam aussortierte Anfragen werden nicht einzeln gemailt, sondern täglich um 7 Uhr gesammelt zur Kontrolle an die Empfänger-Adresse geschickt (nur an Tagen, an denen etwas aussortiert wurde).</p>
 			<form method="post" action="options.php">
 				<?php settings_fields( 'esc_contact_group' ); ?>
 				<table class="form-table"><tbody>
@@ -164,7 +166,10 @@ class ESC_Contact_Form {
 		// Signal (z. B. Browser-Autofill im Honeypot, JavaScript blockiert)
 		// wird nur markiert, die Anfrage geht trotzdem normal raus.
 		$signals = array();
-		if ( '' !== trim( (string) ( $_POST['website'] ?? '' ) ) ) { $signals[] = 'verstecktes Feld ausgefüllt'; }
+		// Prüffeld ohne sprechenden Namen, damit kein Browser-Autofill es befüllt
+		// ("website" nur noch für Seiten aus dem Cache vor 1.6.53).
+		$hp = (string) ( $_POST['esc_feld'] ?? ( $_POST['website'] ?? '' ) );
+		if ( '' !== trim( $hp ) ) { $signals[] = 'unsichtbares Prüffeld ausgefüllt'; }
 		$human = trim( (string) ( $_POST['esc_human'] ?? '' ) );
 		if ( '' === $human || ! ctype_digit( $human ) ) {
 			$signals[] = 'ohne JavaScript abgesendet';
@@ -180,7 +185,6 @@ class ESC_Contact_Form {
 			'[thema]' => $d['thema'] ?: 'Sonstiges',
 			'[name]'  => trim( $d['vorname'] . ' ' . $d['nachname'] ),
 		) );
-		if ( $signals ) { $subject = '[Spamverdacht] ' . $subject; }
 
 		$body  = "Neue Nachricht über das Kontaktformular:\n\n";
 		$body .= 'Name:        ' . $d['vorname'] . ' ' . $d['nachname'] . "\n";
@@ -188,9 +192,6 @@ class ESC_Contact_Form {
 		if ( $d['org'] )   { $body .= 'Unternehmen: ' . $d['org'] . "\n"; }
 		if ( $d['thema'] ) { $body .= 'Thema:       ' . $d['thema'] . "\n"; }
 		$body .= "\nNachricht:\n" . $d['nachricht'] . "\n";
-		if ( $id ) {
-			$body .= "\n--\nDiese Anfrage ist zusätzlich im Website-Backend unter „Kontaktanfragen“ gespeichert:\n" . admin_url( 'post.php?post=' . $id . '&action=edit' ) . "\n";
-		}
 
 		$headers = array(
 			'Content-Type: text/plain; charset=UTF-8',
@@ -249,7 +250,7 @@ class ESC_Contact_Form {
 			<?php endif; ?>
 			<input type="hidden" name="esc_contact_submit" value="1">
 			<input type="hidden" name="esc_human" value="">
-			<input type="text" name="website" value="" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:0;width:0;opacity:0;" aria-hidden="true">
+			<input type="text" name="esc_feld" value="" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:0;width:0;opacity:0;" aria-hidden="true">
 
 			<div class="es-kontakt-form__row">
 				<label><span>Vorname *</span><input type="text" name="vorname" required></label>
