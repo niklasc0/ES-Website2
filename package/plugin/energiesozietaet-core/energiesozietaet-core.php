@@ -3,7 +3,7 @@
  * Plugin Name:       Energiesozietät Core
  * Plugin URI:        https://energiesozietaet.de/
  * Description:       Custom Post Types (Team, Einzelleistungen, Karriere, Veranstaltungen, News, Publikationen), Taxonomie Beratungsfeld, Grid-Shortcodes, Meta-Felder, Zweisprachigkeit (DE/EN) und Content-Importer für die Energiesozietät-Website.
- * Version:           1.6.53
+ * Version:           1.6.54
  * Author:            Energiesozietät
  * License:           GPL v2 or later
  * Text Domain:       energiesozietaet-core
@@ -40,6 +40,7 @@ require_once ESC_DIR . 'inc/karriere-settings.php';
 require_once ESC_DIR . 'inc/typography-settings.php';
 require_once ESC_DIR . 'inc/elementor-globals.php';
 require_once ESC_DIR . 'inc/layout-settings.php';
+require_once ESC_DIR . 'inc/mail-m365.php';
 require_once ESC_DIR . 'inc/contact-inbox.php';
 require_once ESC_DIR . 'inc/contact-form.php';
 require_once ESC_DIR . 'inc/linkedin.php';

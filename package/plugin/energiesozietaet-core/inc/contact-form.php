@@ -202,7 +202,17 @@ class ESC_Contact_Form {
 		add_action( 'wp_mail_failed', $catch );
 		$ok = wp_mail( $opts['recipient'], $subject, $body, $headers );
 		remove_action( 'wp_mail_failed', $catch );
-		if ( $id && class_exists( 'ESC_Contact_Inbox' ) ) { ESC_Contact_Inbox::set_mail_result( $id, $ok, $fail ); }
+		if ( $id && class_exists( 'ESC_Contact_Inbox' ) ) {
+			$route = class_exists( 'ESC_Mail_M365' ) ? ESC_Mail_M365::$last_route : '';
+			if ( 'm365' === $route ) {
+				$info = 'über Microsoft 365';
+			} elseif ( 'fallback' === $route ) {
+				$info = 'über das Mail-Relais des Hosters (Microsoft 365 fehlgeschlagen: ' . ESC_Mail_M365::$last_error . ')';
+			} else {
+				$info = 'über das Mail-Relais des Hosters';
+			}
+			ESC_Contact_Inbox::set_mail_result( $id, $ok, $fail ? $fail : $info );
+		}
 
 		// Gespeichert gilt als eingegangen, auch wenn die Mail scheitert.
 		self::redirect_back( ( $ok || $id ) ? 'gesendet' : 'fehler' );
